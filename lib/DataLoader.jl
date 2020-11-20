@@ -55,7 +55,7 @@ function load_jhhs(
 	beds = casesdata.beds .* pct_beds_available
 
 	adj = (data.dist_matrix .<= travel_threshold_hours)
-	node_locations = Dict(hospitals[i] => data.locations_latlong[i] for i in 1:N)
+	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
 
 	extent = (extent_type = :states, extent_regions = ["Maryland"])
 

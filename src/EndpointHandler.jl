@@ -65,7 +65,7 @@ function handle_patients_request(
 		:node_locations    => data.node_locations,
 		:pct_beds_available     => bed_avail,
 		:travel_threshold_hours => max_travel,
-		# :node_type => string(alloc_level),
+		:node_type => "hospital",
 		# :region    => region,
 		# :subregion => subregion,
 		:extent    => data.extent,
