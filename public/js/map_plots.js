@@ -2,8 +2,11 @@ const mapHeight = 650;
 const mapWidth  = 1000;
 
 const mapPlotMargin = ({top: 25, right:  0, bottom:  0, left:  0});
-const mapPadding    = ({top: 10, right: 10, bottom: 10, left: 10});
+const mapPadding    = ({top: -200, right: -250, bottom: -200, left: -400});
 const mapMargin     = ({top: 25, right: 10, bottom: 10, left: 10});
+
+const pointSizeMult = 0.75;
+const ticknessMult = 0.5;
 
 const mapPlotFont = "CMU Serif";
 
@@ -315,7 +318,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 		.style("transform-box", "fill-box")
 		.attr("d", (d,i) => {
 			const l = rawdata.config.node_locations[d];
-			const r = nodeSizeScale(i);
+			const r = nodeSizeScale(i) * pointSizeMult;
 			const _p = p.pointRadius(r);
 			return _p({type: "Point", coordinates: [l.long, l.lat]});
 		});
@@ -384,7 +387,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			.attr("d", d => p(d))
 			.style("fill", "none")
 			.style("stroke", linkColor)
-			.style("stroke-width", d => linkWidthScale(d.weight))
+			.style("stroke-width", d => linkWidthScale(d.weight) * thicknessMult)
 			.attr("stroke-linecap", "butt")
 			.attr("marker-end", "url(#arrow)");
 	}
@@ -425,7 +428,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 				.attr("d", d => p(d))
 				.style("fill", "none")
 				.style("stroke", linkColor)
-				.style("stroke-width", d => linkWidthScale(d.weight))
+				.style("stroke-width", d => linkWidthScale(d.weight) * ticknessMult)
 				.attr("stroke-linecap", "butt")
 				.attr("marker-end", "url(#arrow)");
 		}
