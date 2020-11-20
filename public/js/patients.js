@@ -598,6 +598,8 @@ function ajaxErrorHandler() {
 }
 
 function validateForm() {
+	return true;
+
 	const regionSelect = document.getElementById("form-region");
 	const region = regionSelect.options[regionSelect.selectedIndex].text;
 
