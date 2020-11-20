@@ -1,0 +1,93 @@
+.section {
+	width: 80%;
+	max-width: 950px;
+	margin: auto;
+	padding-top: 0.5em !important;
+}
+
+.container {
+	padding-top: 1em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid lightgray;
+}
+
+.table-container {
+	max-height: 80vh;
+	overflow-y: scroll !important;
+}
+
+.date {
+	text-align: center;
+	line-height: 1em !important;
+}
+
+.field:not(:last-child) {
+	margin-bottom: 0px !important;
+}
+
+#form-submit {
+	line-height: 1em;
+}
+
+th, td {
+	text-align: right !important;
+}
+
+th {
+	white-space: pre;
+}
+
+.info-icon {
+	height: 1em;
+	margin-left: 3px;
+}
+
+#metrics-table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.metric-name-elem {
+	font-weight: bold;
+	text-align: left !important;
+}
+
+.metric-value-elem {
+	font-family: monospace;
+	width: 25%;
+}
+
+#result-area {
+	padding: 0;
+}
+
+.results-section {
+	border: 1px solid lightgray;
+	padding: 15px;
+}
+
+.results-section-header {
+	border-bottom: 1px solid lightgray;
+	display: flex;
+    flex-direction: row;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.results-section-header-text {
+	margin-bottom: 0 !important;
+	padding: 5px;
+}
+
+.results-section-content {
+	margin-top: 15px;
+}
+
+.section-toggle-button {
+	height: 100%;
+	align-self: center;
+	padding: 3px;
+}
+
+.section-toggle-icon {
+}

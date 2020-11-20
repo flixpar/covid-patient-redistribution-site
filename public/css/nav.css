@@ -1,0 +1,10 @@
+.navbar {
+	border-bottom: 1px solid lightgray;
+	margin-bottom: 10px;
+}
+
+#navbar-brand-img {
+	height: 2rem;
+	max-height: 2rem;
+	margin-right: 5px;
+}

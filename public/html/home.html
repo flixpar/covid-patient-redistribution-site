@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>COVID-19 Resource Allocation</title>
+
+	<link rel="stylesheet" href="/css/nav.css">
+	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+
+	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="/js/menu.js"></script>
+</head>
+
+<body>
+
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a id="navbar-brand" class="navbar-item" href="/">
+				<span id="navbar-brand-text">Home</span>
+			</a>
+
+			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbar-menu" class="navbar-menu">
+			<div class="navbar-start">
+				<a href="/patients" class="navbar-item">Interactive Patient Transfer</a>
+				<a href="/casestudies" class="navbar-item">Case Study Reports</a>
+				<a href="/about" class="navbar-item">About</a>
+			</div>
+
+			<div class="navbar-end">
+				<a href="https://github.com/flixpar/covid-resource-allocation-site" class="navbar-item">GitHub</a>
+			</div>
+		</div>
+	</nav>
+
+	<section class="section">
+
+		<div class="container">
+			<h1 class="title">COVID-19 Resource and Demand Redistribution for Hospital Systems</h1>
+			<p>
+				<b>Introduction.</b> The arrival of the COVID-19 pandemic has put a significant strain on healthcare capacity around the globe. To mitigate the pressure, healthcare facilities responded by both reducing demand through canceling elective procedures and also increasing capacity by creating new COVID-19-suitable beds and calling additional personnel. While these measures have proven effective, delays in elective care may result in adverse effects for patients. Additionally, increasing COVID-19 capacity is costly, slow, and may not be feasible for all healthcare centers. At the same time, healthcare centers have made efforts to optimize the use of complementary resources, including extending the use of Personal Protective Equipment (PPE). A compounding organizational drawback to conventional healthcare center responses is that often they are organized at individual healthcare centers-level rather than at a system-level. We aim to take a step toward a more coherent response from the system of healthcare entities in times of chronic demand surge.
+				<br><br>
+				<b>Healthcare Load-Balancing.</b> Our models find the optimal COVID-19 resource sharing among a system of healthcare facilities based on the current and forecasted load for each hospital. Examples of healthcare facilities systems include hospitals that belong to the same health systems, hospitals that are geographically close to each other, or any other collection of healthcare facilities and hospitals that have come together to combat COVID-19 patient surges. While resource sharing can be achieved for ventilators, PPE, nurses, or other critical staff, here we focus on sharing the available COVID-19 capacity by optimally distributing patients among hospitals in the systems.
+				<br><br>
+				<b>Patient Transfers.</b> Our goal is to transfer patients from areas that are (or soon will be) overloaded to areas that are (and expected to remain) under capacity. These transfers must be done with care so that locations receiving patients do not later run out of capacity by accepting too many patients. The operational constraints and overheads of transferring patients between two facilities also need to be considered for each pair of hospitals. Our models recommend the optimal number of patients to be transferred between each pair of hospitals (each day) to best utilize the available capacity. The results also provide insight into the minimum required capacity at each hospital and enable an early warning if extra beds are needed.
+				<br><br>
+				<b>Our Approach.</b> We consider a system of hospitals, their patient-load, their current and surge capacity (including the available staff and PPE), operational and transfer constraints, and a forecast of patient arrival for each hospital. We use mixed-integer optimization models to find the best load-balance with the minimum total patient transfers. Our models return a time series (for each day in the time window) of the optimal number of patient transfers between the hospitals. The transfers are recommended to happen upon the arrival of the patients to the system, typically the Emergency Department.
+				<br><br>
+				<b>Additional Information.</b> Our <a href="/html/presentation.html">talk</a> at the INFORMS 2020 Annual Meeting explains our approach. Our <a href="https://arxiv.org/abs/2011.03528">paper</a> details the technical aspects of our methodology. Our <a href="https://github.com/flixpar/covid-resource-allocation">GitHub repository</a> implements our models and case studies.
+				<br><br>
+				<b>Case Study Reports.</b> We provide the results for a set of case studies in the US as listed below. All the data used in these case studies are publicly available. Please see our full report <a href="https://arxiv.org/abs/2011.03528">here</a>.
+				<div class="content" style="margin-bottom: 0;">
+					<ul>
+						<li>State Level
+							<ul>
+								<li>Northeast region</li>
+								<li>South region</li>
+							</ul>
+						</li>
+						<li>County Level
+							<ul>
+								<li>New Jersey</li>
+								<li>New York</li>
+								<li>Florida</li>
+							</ul>
+						</li>
+						<li>Trauma Service Area Level
+							<ul>
+								<li>Texas</li>
+							</ul>
+						</li>
+						<li>Hospital Level
+							<ul>
+								<li>New Jersey</li>
+								<li>New York</li>
+								<li>Florida</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<br>
+				<b>Try it out.</b> We provide an interactive tool where you can change the parameters of our models for our case studies and explore the range of possible results for yourself. To explore more, visit our <a href="/patients">Interactive Tool page</a>.
+				<br><br>
+				<b>Inquiries.</b> Please contact us at &lt;kghobad1 at jhu.edu&gt; for more information or to inquire about applying our model to your hospital system.
+				<br><br>
+				<b>Contact Info.</b> To learn more about our team or contact us, please visit our <a href="/about">About</a> page.
+			</p>
+		</div>
+
+	</section>
+
+</body>
+
+</html>
