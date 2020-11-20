@@ -8,12 +8,7 @@ using Distributions
 using Dates
 using LinearAlgebra
 
-using BedsData
-using ForecastData
-using NurseData
-using GeographicData
-
-export load_hospital_level
+export load_jhhs
 
 basepath = joinpath(dirname(@__FILE__), "../")
 
@@ -34,19 +29,15 @@ function load_jhhs(
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
-	N = data.N
+	N = length(data.location_names)
 	T = (end_date - start_date).value + 1
 
-	hospitals = data.hospital_names_full
-	hospitals_abbrev = data.hospital_names_abbrev
+	hospitals = data.location_names
+	hospitals_abbrev = data.location_names_short
 
-	if patient_type == :icu
-		casesdata = data.data_icu
-	elseif patient_type == :ward
-		casesdata = data.data_ward
-	else
-		casesdata = data.data_combined
-	end
+	scenario = :pessimistic
+	bedtype = (patient_type == :all) ? :allbeds : patient_type
+	casesdata = data.casesdata[scenario,bedtype]
 
 	start_date_idx = (start_date - data.start_date).value + 1
 	end_date_idx   = (end_date   - data.start_date).value + 1
@@ -58,13 +49,13 @@ function load_jhhs(
 
 	discharged = Array{Float64,2}(undef, N, T)
 	for i in 1:N
-		discharged[i,:] = initial[i] .* (pdf.(casesdata.discharged_los, 0:T-1))
+		discharged[i,:] = initial[i] .* (pdf.(casesdata.los_dist, 0:T-1))
 	end
 
 	beds = casesdata.beds .* pct_beds_available
 
 	adj = (data.dist_matrix .<= travel_threshold_hours)
-	node_locations = Dict(hospitals[i] => data.locations_latlong[j] for (i,j) in enumerate(loc_inds))
+	node_locations = Dict(hospitals[i] => data.locations_latlong[i] for i in 1:N)
 
 	extent = (extent_type = :states, extent_regions = ["Maryland"])
 
