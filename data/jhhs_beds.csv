@@ -1,0 +1,6 @@
+﻿hospital,icu_covid_baseline,ward_covid_baseline,icu_covid_rampup,ward_covid_rampup,icu_covid_surge,ward_covid_surge,icu_covid_surgeplus,ward_covid_surgeplus,icu_covid_max,ward_covid_max
+JHH,21,13,53,53,80,53,80,53,106,180
+BMC,4,12,14,12,14,67,14,67,34,67
+HCGH,6,21,6,38,6,44,6,44,30,119
+SH,10,9,22,42,22,75,22,75,30,139
+SMH,2,10,2,10,12,23,12,23,24,100
