@@ -33,7 +33,6 @@ function load_jhhs(
 	hospitals = data.location_names
 	hospitals_abbrev = data.location_names_short
 
-	scenario = :pessimistic
 	bedtype = (patient_type == :all) ? :allbeds : patient_type
 	casesdata = data.casesdata[scenario,bedtype]
 

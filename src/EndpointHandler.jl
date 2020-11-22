@@ -27,24 +27,26 @@ function handle_patients_request(
 		los::String,
 	)
 	@info "Handle Patients Request"
-	@info scenario
+	@info "Scenario: $(scenario)"
 
 	@assert patient_type in [:regular, :icu, :all]
 
 	data = load_jhhs(scenario, patient_type, start_date, end_date)
 
-	model = patient_allocation(
+	los_dist = los_dist_default(patient_type)
+
+	model = patient_redistribution(
 		data.beds,
 		data.initial,
 		data.discharged,
 		data.admitted,
 		data.adj,
-		los=11,
+		los_dist,
 		sent_penalty=0.01,
-		smoothness_penalty=0.01,
-		no_artificial_overflow=true,
-		no_worse_overflow=true,
-		bed_mult=0.95,
+		# smoothness_penalty=0.01,
+		# no_artificial_overflow=true,
+		# no_worse_overflow=true,
+		# capacity_cushion=0.1,
 		verbose=false
 	)
 	sent = value.(model[:sent])
