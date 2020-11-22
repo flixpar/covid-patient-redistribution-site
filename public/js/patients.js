@@ -508,29 +508,21 @@ function ajaxErrorHandler() {
 	container.innerHTML = "";
 }
 
+function setDefaultDates() {
+	let start_date = new Date();
+	let end_date   = new Date();
+	end_date.setMonth(end_date.getMonth() + 2);
+	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
+	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
+}
+setDefaultDates();
+
 function validateForm() {
-	return true;
+	const data_start_date = "2020-03-25";
+	const data_end_date   = "2021-06-30";
 
-	const regionSelect = document.getElementById("form-region");
-	const region = regionSelect.options[regionSelect.selectedIndex].text;
-
-	let start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
-	let end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
-	let data_start_date, data_end_date;
-
-	if (region == "Northeast") {
-		data_start_date = "2020-04-01";
-		data_end_date   = "2020-10-28";
-	} else if (region == "South") {
-		data_start_date = "2020-04-15";
-		data_end_date   = "2020-10-28";
-	} else if (region == "New Jersey") {
-		data_start_date = "2020-04-05";
-		data_end_date   = "2020-08-05";
-	} else {
-		alert(`Invalid region selection: ${region}`);
-		return false;
-	}
+	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
+	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
 
 	const dates_valid = (new Date(data_start_date) <= start_date) && (end_date < new Date(data_end_date));
 	if (!dates_valid) {
@@ -579,10 +571,6 @@ function createInfo(parentElement, content) {
 const tooltip_content = {
 	"form-start-date": "Date to start the patient allocation model.",
 	"form-end-date"  : "Date to end the patient allocation model.",
-	"form-states"    : "States to include in the patient allocation model.",
-	"form-forecast"  : "Forecasting model to predict the number of patients.",
-	"form-max-travel": "Maximum number of travel hours that a patient can be transfered.",
-	"form-bed-avail" : "Percent of hosptal beds available for COVID-19 patients.",
 	"form-los"       : "Expected number of days that a patient will have to stay in the hospital.",
 	"form-patient-type": "Restrict focus to patients requiring a certain level of care.",
 };
