@@ -18,8 +18,12 @@ export handle_patients_request
 function handle_patients_request(
 		scenario::Symbol,
 		patient_type::Symbol,
+
+		objective::Symbol,
+
 		start_date::Date,
 		end_date::Date,
+
 		los::String,
 	)
 	@info "Handle Patients Request"

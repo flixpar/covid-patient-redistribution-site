@@ -26,14 +26,20 @@ route("/about") do
 end
 
 route("/api/patients/summary", method=POST) do
-	scenario = Symbol(lowercase(@params(:scenario)))
-	patient_type = Symbol(@params(:patient_type))
+	str_to_symbol(s) = Symbol(replace(lowercase(s), " " => "_"))
+
+	scenario = str_to_symbol(@params(:scenario))
+	patient_type = str_to_symbol(@params(:patient_type))
+	objective = str_to_symbol(@params(:objective))
+
 	start_date = Date(@params(:start_date))
 	end_date   = Date(@params(:end_date))
+
 	los = @params(:los)
 
 	handle_patients_request(
 		scenario, patient_type,
+		objective,
 		start_date, end_date,
 		los,
 	)

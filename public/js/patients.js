@@ -552,6 +552,7 @@ function sendUpdateQuery() {
 		data: {
 			scenario: $("#form-scenario")[0].value,
 			patient_type: $("#form-patient-type")[0].value,
+			objective: $("#form-objective")[0].value,
 			start_date: $("#form-start-date")[0].value,
 			end_date: $("#form-end-date")[0].value,
 			los: $("#form-los")[0].value,
