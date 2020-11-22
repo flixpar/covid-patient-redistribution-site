@@ -9,6 +9,7 @@ using Dates
 using LinearAlgebra
 
 export load_jhhs
+export los_dist_default
 
 basepath = joinpath(dirname(@__FILE__), "../")
 
@@ -67,6 +68,16 @@ function load_jhhs(
 		node_names_abbrev = hospitals_abbrev,
 		extent = extent,
 	)
+end
+
+function los_dist_default(bedtype::Symbol)
+	if bedtype == :icu
+		return Gamma(0.9875, 12.8990)
+	elseif bedtype == :ward
+		return Gamma(1.825, 3.772)
+	else
+		return Gamma(1.723, 4.154)
+	end
 end
 
 end
