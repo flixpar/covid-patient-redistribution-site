@@ -8,3 +8,10 @@
 	max-height: 2rem;
 	margin-right: 5px;
 }
+
+@media screen and (min-width: 1024px) {
+	#navbar-main {
+		justify-content: center;
+		width: 100%;
+	}
+}
