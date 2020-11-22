@@ -243,7 +243,7 @@ function makeColorScale() {
 		.attr("text-anchor", "start")
 		.style("font-family", font)
 		.style("font-size", "10px")
-		.text("Active Patients (Without Sending)");
+		.text("Active Patients (Without Transfers)");
 
 	// beds
 	const offset2 = offset1 + 185;

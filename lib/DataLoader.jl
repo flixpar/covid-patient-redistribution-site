@@ -50,6 +50,7 @@ function load_jhhs(
 	end
 
 	beds = Float64.(casesdata.beds)
+	capacity = casesdata.capacity
 
 	adj = (data.dist_matrix .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
@@ -61,6 +62,7 @@ function load_jhhs(
 		discharged = discharged,
 		admitted = admitted,
 		beds = beds,
+		capacity = capacity,
 		adj = adj,
 		node_locations = node_locations,
 		node_names = hospitals,

@@ -36,8 +36,8 @@ function createLoadPlots(rawdata, add_description=true) {
 	let row2 = document.createElement("div");
 	table.appendChild(row1);
 	table.appendChild(row2);
-	row1.appendChild(loadSentPlot);
 	row1.appendChild(loadNoSentPlot);
+	row1.appendChild(loadSentPlot);
 	row2.appendChild(legend);
 
 	row1.style.display = "flex";
