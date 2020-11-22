@@ -25,12 +25,13 @@ function convertData(table, location_names) {
 
 function buildRidgePlot(data, resource) {
 
-	const margin = {top: 40, right: 120, bottom: 30, left: 100};
+	const margin = {top: 60, right: 120, bottom: 30, left: 100};
 	const scaleFactor = 0.8;
 	const width = 1000;
 	const heght_scale = 60;
 
-	const height = data.series.length * heght_scale
+	const height = data.series.length * heght_scale;
+	const colorscale_height = Math.min(300, 0.8 * height);
 
 	let title = "";
 	let colorLabel = "";
@@ -70,7 +71,7 @@ function buildRidgePlot(data, resource) {
 
 	const colorbarScale = d3.scalePoint()
 		.domain(d3.range(Math.round(maxElem), -Math.round(maxElem)-1, -Math.round(maxElem/1)))
-		.range([(height/2) - (300/2), (height/2) + (300/2)]);
+		.range([(height/2) - (colorscale_height/2), (height/2) + (colorscale_height/2)]);
 	colorAxis = g => g
 		.attr("transform", `translate(${width-margin.right+50},0)`)
 		.style("font-size","11px")
@@ -110,7 +111,7 @@ function buildRidgePlot(data, resource) {
 
 	svg.append("text")
 		.attr("x", width-80)
-		.attr("y", (height/2) - (300/2) - 20)
+		.attr("y", (height/2) - (colorscale_height/2) - 10)
 		.attr("text-anchor", "middle")
 		.style("font-family", "Helvetica")
 		.style("font-size", "12px")
@@ -158,9 +159,9 @@ function buildRidgePlot(data, resource) {
 			.attr("stop-color", d => color(d));
 		svg.append("rect")
 			.attr("x", width - margin.right + 30)
-			.attr("y", (height/2) - (300/2))
+			.attr("y", (height/2) - (colorscale_height/2))
 			.attr("width", 20)
-			.attr("height", 300)
+			.attr("height", colorscale_height)
 			.style("fill", "url(#linear-gradient)");
 
 	return svg.node();
