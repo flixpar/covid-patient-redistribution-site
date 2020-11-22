@@ -297,36 +297,65 @@ function createLoadPlotsLegend(location_names) {
 
 	const maxNameLength = d3.max(location_names, x => x.length);
 	const rowHeight = 20;
-	const colWidth = (maxNameLength * 8) + 10;
+	const colWidth = (maxNameLength * 8) + 10 + 10;
 
-	const nCols = Math.floor(600 / colWidth);
-	const nRows = Math.ceil(N / nCols);
+	const totalWidth = 0.66 * document.getElementById("results-container").offsetWidth;
+
+	const maxCols = Math.floor(totalWidth / colWidth);
+	const nRows = Math.ceil(N / maxCols);
+	const nCols = Math.min(maxCols, N);
+
+	const actualWidth = colWidth * nCols;
+	const marginLeft  = (totalWidth - actualWidth) / 2;
+	const marginTop   = 2;
+
+	const debug = false;
 
 	const colorscale = d3.scaleSequential(d3.interpolateRainbow).domain([0,N]);
 
-	const svg = d3.create("svg").attr("viewBox", [0, 0, nCols*colWidth, nRows*rowHeight]);
+	const svg = d3.create("svg").attr("viewBox", [0, 0, maxCols*colWidth, nRows*rowHeight]);
 
 	for (let i = 0; i < nRows; i++) {
 		for (let j = 0; j < nCols; j++) {
 			const k = (i*nCols) + j;
-			if (k > N) continue;
+			if (k >= N) continue;
 
 			svg.append("rect")
-				.attr("x", 2 + ( colWidth * j))
-				.attr("y", 2 + (rowHeight * i))
+				.attr("x", marginLeft + ( colWidth * j))
+				.attr("y", marginTop  + (rowHeight * i))
 				.attr("width", 10)
 				.attr("height", 10)
 				.attr("fill", colorscale(k))
 				.attr("stroke", "none");
 
 			svg.append("text")
-				.attr("x", 18 + ( colWidth * j))
-				.attr("y", 10 + (rowHeight * i))
+				.attr("x", marginLeft + 14 + ( colWidth * j))
+				.attr("y", marginTop  +  8 + (rowHeight * i))
 				.attr("text-anchor", "start")
 				.style("font-family", loadPlotsLegendFont)
 				.style("font-size", "10px")
 				.text(location_names[k]);
+
+			if (debug) {
+				svg.append("rect")
+					.attr("x", marginLeft + ( colWidth * j))
+					.attr("y", marginTop  + (rowHeight * i))
+					.attr("width", colWidth)
+					.attr("height", 10)
+					.attr("fill", "none")
+					.attr("stroke", "gray");
+			}
 		}
+	}
+
+	if (debug) {
+		svg.append("rect")
+			.attr("x", marginLeft)
+			.attr("y", marginTop)
+			.attr("width", nCols * colWidth)
+			.attr("height", 10)
+			.attr("fill", "none")
+			.attr("stroke", "black");
 	}
 
 	return svg.node();
