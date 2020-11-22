@@ -8,7 +8,8 @@ const titleFontSize = "22px";
 
 const active_color = "#17AC7B";
 const active_null_color = "#15ACF8";
-const beds_color = "red";
+
+const capacityColors = ["gold", "darkorange", "red", "black"];
 
 const lineWidth = 4;
 const bedsLineWidth = 8;
@@ -16,9 +17,10 @@ const bedsLineWidth = 8;
 const addPoints = true;
 
 
-function createActivePlot(active, active_null, beds, config, add_description=true) {
-	const N = beds.length;
+function createActivePlot(active, active_null, capacity, config, add_description=true) {
+	const N = capacity.length;
 	const T = config.dates.length;
+	const C = capacity[0].length;
 
 	const ncols = 3;
 	const nrows = Math.ceil(N / ncols);
@@ -40,11 +42,14 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 
 	let active_data = [];
 	let active_null_data = [];
-	let beds_data = [];
+	let capacity_data = [];
 	for (let i = 0; i < N; i++) {
 		active_data[i] = [];
 		active_null_data[i] = [];
-		beds_data[i] = [];
+		capacity_data[i] = [];
+		for (let c = 0; c < C; c++) {
+			capacity_data[i][c] = [];
+		}
 
 		for (let t = 0; t < T; t++) {
 			const d = new Date(Date.parse(config.dates[t]));
@@ -56,16 +61,18 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 				"date": d,
 				"value": active_null[i][t],
 			};
-			beds_data[i][t] = {
-				"date": d,
-				"value": beds[i],
-			};
+			for (let c = 0; c < C; c++) {
+				capacity_data[i][c][t] = {
+					"date": d,
+					"value": capacity[i][c],
+				};
+			}
 		}
 	}
 	const data = {
 		"active": active_data,
 		"active_null": active_null_data,
-		"beds": beds_data,
+		"capacity": capacity_data,
 	};
 
 	const x = d3.scaleUtc()
@@ -102,7 +109,7 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 
 		const maxActive = d3.max(active[i]);
 		const maxActiveNull = d3.max(active_null[i]);
-		const maxY = d3.max([maxActive, maxActiveNull, beds[i]]);
+		const maxY = d3.max([maxActive, maxActiveNull, capacity[i][C-1]]);
 
 		const y = d3.scaleLinear()
 			.domain([0, maxY]).nice()
@@ -137,6 +144,17 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 		svg.append("g")
 			.call(yAxis);
 
+		for (let c = 0; c < C; c++) {
+			svg.append("path")
+			.datum(data["capacity"][i][c])
+			.attr("fill", "none")
+			.attr("stroke", capacityColors[c])
+			.attr("stroke-width", bedsLineWidth)
+			.attr("stroke-linejoin", "round")
+			.attr("stroke-linecap", "square")
+			.attr("d", line);
+		}
+
 		svg.append("path")
 			.datum(data["active"][i])
 			.attr("fill", "none")
@@ -153,15 +171,6 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 			.attr("stroke-width", lineWidth)
 			.attr("stroke-linejoin", "round")
 			.attr("stroke-linecap", "round")
-			.attr("d", line);
-
-		svg.append("path")
-			.datum(data["beds"][i])
-			.attr("fill", "none")
-			.attr("stroke", beds_color)
-			.attr("stroke-width", bedsLineWidth)
-			.attr("stroke-linejoin", "round")
-			.attr("stroke-linecap", "square")
 			.attr("d", line);
 
 		if (addPoints) {
@@ -198,76 +207,64 @@ function createActivePlot(active, active_null, beds, config, add_description=tru
 		section.appendChild(description);
 	}
 
-	const colorscaleElem = makeColorScale();
-	section.appendChild(colorscaleElem);
+	const activeLabels = ["Active Patients", "Active Patients (Without Transfers)"];
+	const activeColors = [active_color, active_null_color];
+	const patientsColorscaleElem = makeHorizontalColorScale(activeLabels, activeColors);
+	section.appendChild(patientsColorscaleElem);
+
+	const capacityNames = [
+		"Baseline Capacity",
+		"Ramp-Up Capacity",
+		"Surge Capacity",
+		"Max Capacity",
+	];
+	const capacityColorscaleElem = makeHorizontalColorScale(capacityNames, capacityColors);
+	section.appendChild(capacityColorscaleElem);
 
 	section.appendChild(table);
 }
 
-function makeColorScale() {
+function makeHorizontalColorScale(labels, colors) {
+	const C = labels.length;
+
+	const totalWidth = 0.5 * document.getElementById("results-container").offsetWidth;
+
+	const maxLabelLength = d3.max(labels, x => x.length);
+	const colWidth = (maxLabelLength * 4.5) + 14 + 20;
+
+	const actualWidth = colWidth * C;
+	const marginLeft  = (totalWidth - actualWidth) / 2;
+
 	const svg = d3.create("svg")
-			.attr("viewBox", [0, 0, 350, 20]);
+		.attr("viewBox", [0, 0, totalWidth, 20]);
 
-	// active
+	for (let c = 0; c < C; c++) {
 
-	svg.append("rect")
-		.attr("x", 2)
-		.attr("y", 2)
-		.attr("width", 10)
-		.attr("height", 10)
-		.attr("fill", active_color)
-		.attr("stroke", "none");
+		const offset = c * colWidth;
 
-	svg.append("text")
-		.attr("x", 18)
-		.attr("y", 10)
-		.attr("text-anchor", "start")
-		.style("font-family", font)
-		.style("font-size", "10px")
-		.text("Active Patients");
+		svg.append("rect")
+			.attr("x", marginLeft + 2 + offset)
+			.attr("y", 2)
+			.attr("width", 10)
+			.attr("height", 10)
+			.attr("fill", colors[c])
+			.attr("stroke", "none");
 
-	// active null
-	const offset1 = 100;
+		svg.append("text")
+			.attr("x", marginLeft + 18 + offset)
+			.attr("y", 10)
+			.attr("text-anchor", "start")
+			.style("font-family", font)
+			.style("font-size", "10px")
+			.text(labels[c]);
 
-	svg.append("rect")
-		.attr("x", 2+offset1)
-		.attr("y", 2)
-		.attr("width", 10)
-		.attr("height", 10)
-		.attr("fill", active_null_color)
-		.attr("stroke", "none");
-
-	svg.append("text")
-		.attr("x", 18+offset1)
-		.attr("y", 10)
-		.attr("text-anchor", "start")
-		.style("font-family", font)
-		.style("font-size", "10px")
-		.text("Active Patients (Without Transfers)");
-
-	// beds
-	const offset2 = offset1 + 185;
-
-	svg.append("rect")
-		.attr("x", 2+offset2)
-		.attr("y", 2)
-		.attr("width", 10)
-		.attr("height", 10)
-		.attr("fill", beds_color)
-		.attr("stroke", "none");
-
-	svg.append("text")
-		.attr("x", 18+offset2)
-		.attr("y", 10)
-		.attr("text-anchor", "start")
-		.style("font-family", font)
-		.style("font-size", "10px")
-		.text("Capacity");
+	}
 
 	let colorscale = svg.node();
 
 	let colorscaleElem = document.createElement("div");
 	colorscaleElem.className = "column is-6 is-offset-3";
+	colorscaleElem.style.padding = "0";
 	colorscaleElem.appendChild(colorscale);
 
 	return colorscaleElem;

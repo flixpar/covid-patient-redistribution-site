@@ -19,6 +19,7 @@ function handleResponse(response, status, xhr) {
 	const net_sent     = response.net_sent;
 	const sent         = response.sent;
 	const beds         = response.beds;
+	const capacity     = response.capacity;
 	const active_patients = response.active;
 	const active_patients_nosent = response.active_null;
 	const config       = response.config;
@@ -45,7 +46,7 @@ function handleResponse(response, status, xhr) {
 
 	createMap(response, "overflow_dynamic");
 
-	createActivePlot(active_patients, active_patients_nosent, beds, config);
+	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createParallelPlot(sent_matrix, "patients");

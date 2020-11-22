@@ -42,7 +42,7 @@ function handle_patients_request(
 
 	if objective == :minoverflow
 		model = patient_redistribution(
-			data.beds,
+			data.capacity,
 			data.initial,
 			data.discharged,
 			data.admitted,
@@ -97,6 +97,7 @@ function handle_patients_request(
 		:net_sent => results.netsent,
 		:sent => permutedims(sent, (3,2,1)),
 		:beds => data.beds,
+		:capacity => permutedims(data.capacity, (2,1)),
 		:active => permutedims(results.active_patients, (2,1)),
 		:active_null => permutedims(results.active_patients_nosent, (2,1)),
 		:total_patients => sum(data.initial) + sum(data.admitted),
