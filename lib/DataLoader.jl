@@ -14,15 +14,12 @@ basepath = joinpath(dirname(@__FILE__), "../")
 
 
 function load_jhhs(
+		scenario::Symbol,
+		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
-		patient_type::Symbol,
-		pct_beds_available::Real,
-		travel_threshold_hours::Real,
 	)
 	@assert(start_date < end_date)
-	@assert(0 < pct_beds_available <= 1)
-	@assert(0 < travel_threshold_hours)
 	@assert(patient_type in [:icu, :ward, :all])
 
 	data = deserialize("data/data_jhhs.jlser")
@@ -52,9 +49,9 @@ function load_jhhs(
 		discharged[i,:] = initial[i] .* (pdf.(casesdata.los_dist, 0:T-1))
 	end
 
-	beds = casesdata.beds .* pct_beds_available
+	beds = Float64.(casesdata.beds)
 
-	adj = (data.dist_matrix .<= travel_threshold_hours)
+	adj = (data.dist_matrix .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
 
 	extent = (extent_type = :states, extent_regions = ["Maryland"])

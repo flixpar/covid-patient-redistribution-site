@@ -58,22 +58,23 @@
 			<form id="form" class="form" autocomplete="off">
 
 				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-level">Allocation Level</label>
+					<label class="label column is-one-third" for="form-scenario">Scenario</label>
 					<div class="select is-fullwidth">
-						<select id="form-level">
-							<option selected>State</option>
-							<option>County</option>
-							<option>Hospital</option>
+						<select id="form-scenario">
+							<option>Moderate</option>
+							<option selected>Pessimistic</option>
+							<option>Catastrophic</option>
 						</select>
 					</div>
 				</div>
 
-				<div class="field is-horizontal" id="form-region-container">
-					<label class="label column is-one-third" for="form-region">Region</label>
+				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-patient-type">Patient Type</label>
 					<div class="select is-fullwidth">
-						<select id="form-region">
-							<option>Northeast</option>
-							<option>South</option>
+						<select id="form-patient-type">
+							<option value="all" selected>All</option>
+							<option value="icu">ICU</option>
+							<option value="regular">Ward</option>
 						</select>
 					</div>
 				</div>
@@ -89,33 +90,12 @@
 				</div>
 
 				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-patient-type">Patient Type</label>
-					<div class="select is-fullwidth">
-						<select id="form-patient-type">
-							<option value="all" selected>All</option>
-							<option value="icu">ICU</option>
-							<option value="regular">Ward</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-max-travel">Max Travel Time</label>
-					<input type="number" id="form-max-travel" value="4" step="1" class="input column is-two-thirds">
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-bed-avail">Percent Beds Available</label>
-					<input type="number" id="form-bed-avail" value="1.0" step="0.05" class="input column is-two-thirds">
-				</div>
-
-				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-los">Length of Stay</label>
 					<div class="select is-fullwidth">
 						<select id="form-los">
 							<option value="8">8 Days</option>
-							<option value="11" selected>11 Days</option>
-							<option value="default_dist">Distribution</option>
+							<option value="11">11 Days</option>
+							<option value="default_dist" selected>Default Distribution</option>
 						</select>
 					</div>
 				</div>
@@ -126,7 +106,7 @@
 			</form>
 		</div>
 
-		<div class="container">
+		<div class="container" id="results-container">
 			<div id="progressbar-area" class="column is-10 is-offset-1">
 				<div class="notification">
 					Updating...

@@ -22,18 +22,15 @@ route("/about") do
 end
 
 route("/api/patients/summary", method=POST) do
+	scenario = Symbol(lowercase(@params(:scenario)))
+	patient_type = Symbol(@params(:patient_type))
 	start_date = Date(@params(:start_date))
 	end_date   = Date(@params(:end_date))
-	bed_avail = parse(Float64, @params(:bed_avail))
-	max_travel_hours = parse(Float64, @params(:max_travel_hours))
-	patient_type = Symbol(@params(:patient_type))
 	los = @params(:los)
 
 	handle_patients_request(
+		scenario, patient_type,
 		start_date, end_date,
-		bed_avail,
-		max_travel_hours,
-		patient_type,
 		los,
 	)
 end

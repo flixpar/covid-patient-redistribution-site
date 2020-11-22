@@ -16,18 +16,18 @@ export handle_patients_request
 
 
 function handle_patients_request(
+		scenario::Symbol,
+		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
-		bed_avail::Real,
-		max_travel::Real,
-		patient_type::Symbol,
 		los::String,
-)
+	)
 	@info "Handle Patients Request"
+	@info scenario
 
 	@assert patient_type in [:regular, :icu, :all]
 
-	data = load_jhhs(start_date, end_date, patient_type, bed_avail, max_travel)
+	data = load_jhhs(scenario, patient_type, start_date, end_date)
 
 	model = patient_allocation(
 		data.beds,
@@ -63,11 +63,8 @@ function handle_patients_request(
 		:node_names => data.node_names,
 		:node_names_abbrev => data.node_names_abbrev,
 		:node_locations    => data.node_locations,
-		:pct_beds_available     => bed_avail,
-		:travel_threshold_hours => max_travel,
 		:node_type => "hospital",
-		# :region    => region,
-		# :subregion => subregion,
+		:region    => "jhhs",
 		:extent    => data.extent,
 	)
 

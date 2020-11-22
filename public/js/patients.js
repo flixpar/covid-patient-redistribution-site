@@ -493,95 +493,6 @@ function createStatsSummary(rawdata, add_description=true) {
 	section.appendChild(table);
 }
 
-function updateRegionOptions() {
-	let regionSelect = document.getElementById("form-region");
-	regionSelect.innerHTML = "";
-
-	const newLevel = document.getElementById("form-level").value;
-	let newOptions = [];
-	if (newLevel == "State") {
-		newOptions = ["Northeast", "South"];
-	} else if (newLevel == "County") {
-		newOptions = [];
-	} else if (newLevel == "Hospital") {
-		newOptions = ["New Jersey"];
-	}
-
-	newOptions.forEach(opt => {
-		let sel = document.createElement("option");
-		sel.text = opt;
-		sel.value = opt.toLowerCase().replace(" ", "_");
-		regionSelect.appendChild(sel);
-	});
-
-	updateSubregionOptions();
-}
-document.getElementById("form-level").addEventListener("change", updateRegionOptions);
-
-function updateSubregionOptions() {
-	const newLevel = document.getElementById("form-level").value;
-	const newRegion = document.getElementById("form-region").value;
-
-	if (newLevel == "County" && newRegion == "Texas") {
-		const tsaNames = "ABCDEFGHIJKLMNOPQRSTUV".split('').map(x => "Trauma Service Area " + x);
-		const tsaCodes = "abcdefghijklmnopqrstuv".split('').map(x => "tsa_" + x);
-		addSubregions(tsaNames, tsaCodes, "Trauma Service Area Q");
-	} else {
-		removeSubregions();
-	}
-}
-function addSubregions(subregionNames, subregionCodes=null, defaultSubregion=null) {
-	let subregionSelect = document.getElementById("form-subregion");
-	if (subregionSelect == null) {
-		subregionSelect = createSubregionSelect();
-	}
-	subregionSelect.innerHTML = "";
-
-	subregionNames.forEach((s,i) => {
-		let opt = document.createElement("option");
-		opt.text = s;
-		opt.value = subregionCodes == null ? s.toLowerCase().replace(" ", "_") : subregionCodes[i];
-		if (s == defaultSubregion) {
-			opt.selected = true;
-		}
-		subregionSelect.appendChild(opt);
-	});
-}
-function createSubregionSelect() {
-	let wrapper = document.createElement("div");
-	wrapper.className = "field is-horizontal";
-	wrapper.id = "form-subregion-container";
-
-	let label = document.createElement("label");
-	label.className = "label column is-one-third";
-	label.htmlFor = "form-subregion";
-	label.textContent = "Subregion";
-
-	let selectDiv = document.createElement("div");
-	selectDiv.className = "select is-fullwidth";
-
-	let subregionSelect = document.createElement("select");
-	subregionSelect.id = "form-subregion";
-
-	wrapper.appendChild(label);
-	wrapper.appendChild(selectDiv);
-	selectDiv.appendChild(subregionSelect);
-
-	let regionSelectContainer = document.getElementById("form-region-container");
-	regionSelectContainer.after(wrapper);
-
-	return subregionSelect;
-}
-function removeSubregions() {
-	let subregionSelect = document.getElementById("form-subregion-container");
-	if (subregionSelect != null) {
-		subregionSelect.parentElement.removeChild(subregionSelect);
-	}
-}
-updateSubregionOptions();
-document.getElementById("form-region").addEventListener("change", updateSubregionOptions);
-
-
 function showProgressbar() {
 	$("#progressbar-area").show();
 	container.innerHTML = "";
@@ -639,14 +550,10 @@ function sendUpdateQuery() {
 		url: "/api/patients/summary",
 		type: "post",
 		data: {
-			alloc_level: $("#form-level")[0].value,
-			region: $("#form-region")[0].value,
-			subregion: $("#form-subregion").length ? $("#form-subregion")[0].value : null,
+			scenario: $("#form-scenario")[0].value,
+			patient_type: $("#form-patient-type")[0].value,
 			start_date: $("#form-start-date")[0].value,
 			end_date: $("#form-end-date")[0].value,
-			max_travel_hours: $("#form-max-travel")[0].value,
-			bed_avail: $("#form-bed-avail")[0].value,
-			patient_type: $("#form-patient-type")[0].value,
 			los: $("#form-los")[0].value,
 		},
 		success: handleResponse,
