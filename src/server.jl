@@ -39,9 +39,8 @@ route("/api/patients/summary", method=POST) do
 
 	handle_patients_request(
 		scenario, patient_type,
-		objective,
+		objective, los,
 		start_date, end_date,
-		los,
 	)
 end
 

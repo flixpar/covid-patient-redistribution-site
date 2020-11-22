@@ -75,8 +75,19 @@
 					<label class="label column is-one-third" for="form-objective">Objective</label>
 					<div class="select is-fullwidth">
 						<select id="form-objective">
-							<option>Minimize Surge Capacity</option>
-							<option>Load Balance</option>
+							<option value="minoverflow">Minimize Surge Capacity</option>
+							<option value="loadbalance">Load Balance</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-los">Length of Stay</label>
+					<div class="select is-fullwidth">
+						<select id="form-los">
+							<option value="8">8 Days</option>
+							<option value="11">11 Days</option>
+							<option value="default_dist" selected>Default Distribution</option>
 						</select>
 					</div>
 				</div>
@@ -89,17 +100,6 @@
 				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-end-date">End Date</label>
 					<input type="date" id="form-end-date" value="2020-12-20" class="input date column is-two-thirds">
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-los">Length of Stay</label>
-					<div class="select is-fullwidth">
-						<select id="form-los">
-							<option value="8">8 Days</option>
-							<option value="11">11 Days</option>
-							<option value="default_dist" selected>Default Distribution</option>
-						</select>
-					</div>
 				</div>
 
 				<div class="field is-horizontal">

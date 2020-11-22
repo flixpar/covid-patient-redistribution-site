@@ -20,11 +20,10 @@ function handle_patients_request(
 		patient_type::Symbol,
 
 		objective::Symbol,
+		los_param::String,
 
 		start_date::Date,
 		end_date::Date,
-
-		los::String,
 	)
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario)"
@@ -33,22 +32,39 @@ function handle_patients_request(
 
 	data = load_jhhs(scenario, patient_type, start_date, end_date)
 
-	los_dist = los_dist_default(patient_type)
+	if los_param == "default_dist"
+		los_dist = los_dist_default(patient_type)
+	elseif !isnothing(tryparse(Int, los_param))
+		los_dist = tryparse(Int, los_param)
+	else
+		error("Invalid los distribution selection: $(los_param)")
+	end
 
-	model = patient_redistribution(
-		data.beds,
-		data.initial,
-		data.discharged,
-		data.admitted,
-		data.adj,
-		los_dist,
-		sent_penalty=0.01,
-		# smoothness_penalty=0.01,
-		# no_artificial_overflow=true,
-		# no_worse_overflow=true,
-		# capacity_cushion=0.1,
-		verbose=false
-	)
+	if objective == :minoverflow
+		model = patient_redistribution(
+			data.beds,
+			data.initial,
+			data.discharged,
+			data.admitted,
+			data.adj,
+			los_dist,
+			sent_penalty=0.01,
+			verbose=false
+		)
+	elseif objective == :loadbalance
+		model = patient_loadbalance(
+			data.beds,
+			data.initial,
+			data.discharged,
+			data.admitted,
+			data.adj,
+			los_dist,
+			sent_penalty=0.01,
+			verbose=false
+		)
+	else
+		error("Invalid objective: $(objective)")
+	end
 	sent = value.(model[:sent])
 
 	results = PatientAllocationResults.results_all(
