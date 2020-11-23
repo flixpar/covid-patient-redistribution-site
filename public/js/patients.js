@@ -540,7 +540,7 @@ function sendUpdateQuery() {
 	}
 	console.log("Querying server...");
 	$.ajax({
-		url: "/api/patients/summary",
+		url: "/api/patients",
 		type: "post",
 		data: {
 			scenario: $("#form-scenario")[0].value,

@@ -25,7 +25,7 @@ route("/about") do
 	serve_static_file("html/about.html")
 end
 
-route("/api/patients/summary", method=POST) do
+route("/api/patients", method=POST) do
 	str_to_symbol(s) = Symbol(replace(lowercase(s), " " => "_"))
 
 	scenario = str_to_symbol(@params(:scenario))
