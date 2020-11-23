@@ -22,6 +22,8 @@ const overflowmapDescription = `
 The daily required surge capacity with optimal patient transfers (right figure) is compared with the historical data (left figure) for every day during the selected time window. The green color indicates an area is within capacity and the red color shows the level of additional capacity required. The darker the red, the more capacity is needed. The goal is to keep the entire region in green, if possible, or light red. The arrows show the optimal patient transfers, with widths corresponding to the number of patients transferred.
 `;
 
+const dashboardDescription = ``;
+
 const metricsDescription = `
 <div class="content" style="margin-bottom: 1em;">
 There are two primary metrics by which we evaluate the potential results of making patient transfers.
