@@ -33,6 +33,11 @@ function createJHHSDashboard(response, add_description=true) {
 
 	const fig = makeJHHSDashboard(response);
 	section.appendChild(fig);
+
+	const capacityNames = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"];
+	const capacityColorscaleElem = makeHorizontalColorScale(capacityNames, dashboardCapacityColors);
+	capacityColorscaleElem.style.marginTop = "20px";
+	section.appendChild(capacityColorscaleElem);
 }
 
 function makeJHHSDashboard(response) {
