@@ -42,7 +42,8 @@ function makeTransfersBreakdownPlot(response) {
 	const N = response.config.node_names.length;
 
 	const innerHeight = tfrFigureSize.height - (tfrFigureMargin.top + tfrFigureMargin.bottom) - N*(plotMargin.top + plotMargin.bottom);
-	const plotSize = {width: tfrFigureSize.width, height: innerHeight / N};
+	const innerWidth = tfrFigureSize.width - (tfrFigureMargin.left + tfrFigureMargin.right) - (plotMargin.left + plotMargin.right);
+	const plotSize = {width: innerWidth, height: innerHeight / N};
 
 	for (let i = 0; i < N; i++) {
 		let g = svg.append("g").attr("transform", `translate(${tfrFigureMargin.left+plotMargin.left}, ${tfrFigureMargin.top + (i * (plotSize.height + plotMargin.top + plotMargin.bottom))})`);
