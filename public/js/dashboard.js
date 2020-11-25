@@ -1,4 +1,4 @@
-const dashboardMargin = {left: 25, right: 5, top: 5, bottom: 5};
+const dashboardMargin = {left: 40, right: 5, top: 5, bottom: 5};
 
 const dashboardContainerWidth = 600;
 const dashboardSize = {"width": dashboardContainerWidth, "height": 0.7*dashboardContainerWidth};
@@ -159,7 +159,7 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 
 function makeYAxis(svg, xScale, yScale, plotSize, plotMargin) {
 	const yAxis = g => g
-	.attr("transform", `translate(20,0)`)
+	.attr("transform", `translate(30,0)`)
 	.style("font-family", dashboardAxisFont)
 	.style("font-size", dashboardAxisFontSize)
 	.call(d3.axisRight(yScale)
@@ -182,6 +182,12 @@ function makeYAxis(svg, xScale, yScale, plotSize, plotMargin) {
 
 	svg.append("g")
 		.call(yAxis);
+
+	svg.append("text")
+		.attr("transform", `translate(8,${dashboardSize.height/2}) rotate(-90)`)
+		.attr("font-family", dashboardDefaultFont)
+		.attr("font-size", 10)
+		.text("Beds");
 
 	return svg;
 }
