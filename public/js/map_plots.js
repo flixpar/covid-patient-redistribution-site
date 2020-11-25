@@ -261,8 +261,10 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 		colorRegions = false;
 	}
 
+	const C = rawdata.capacity[0].length;
+
 	const linkWidthScale = getLinkWidthScale(links);
-	const nodeSizeScale  = getNodeSizeScale(rawdata.beds, colorRegions);
+	const nodeSizeScale  = getNodeSizeScale(rawdata.capacity.map(c => c[C-1]), colorRegions);
 
 	if (debugMap) {
 		svg.append("rect")
@@ -466,19 +468,20 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 ////////////////////////////
 
 function extractDataStatic(rawdata) {
-	const N = rawdata.beds.length;
+	const N = rawdata.capacity.length;
+	const C = rawdata.capacity[0].length;
 
-	const max_load = d3.range(N).map(i => d3.max(rawdata.active[i]) / rawdata.beds[i]);
-	const max_load_null = d3.range(N).map(i => d3.max(rawdata.active_null[i]) / rawdata.beds[i]);
+	const max_load = d3.range(N).map(i => d3.max(rawdata.active[i]) / rawdata.capacity[i][C-1]);
+	const max_load_null = d3.range(N).map(i => d3.max(rawdata.active_null[i]) / rawdata.capacity[i][C-1]);
 
-	const mean_load = d3.range(N).map(i => d3.mean(rawdata.active[i]) / rawdata.beds[i]);
-	const mean_load_null = d3.range(N).map(i => d3.mean(rawdata.active_null[i]) / rawdata.beds[i]);
+	const mean_load = d3.range(N).map(i => d3.mean(rawdata.active[i]) / rawdata.capacity[i][C-1]);
+	const mean_load_null = d3.range(N).map(i => d3.mean(rawdata.active_null[i]) / rawdata.capacity[i][C-1]);
 
-	const median_load = d3.range(N).map(i => d3.median(rawdata.active[i]) / rawdata.beds[i]);
-	const median_load_null = d3.range(N).map(i => d3.median(rawdata.active_null[i]) / rawdata.beds[i]);
+	const median_load = d3.range(N).map(i => d3.median(rawdata.active[i]) / rawdata.capacity[i][C-1]);
+	const median_load_null = d3.range(N).map(i => d3.median(rawdata.active_null[i]) / rawdata.capacity[i][C-1]);
 
-	const overflow = d3.range(N).map(i => d3.sum(rawdata.active[i], x => Math.max(0,x-rawdata.beds[i])));
-	const overflow_null = d3.range(N).map(i => d3.sum(rawdata.active_null[i], x => Math.max(0,x-rawdata.beds[i])));
+	const overflow = d3.range(N).map(i => d3.sum(rawdata.active[i], x => Math.max(0,x-rawdata.capacity[i][C-1])));
+	const overflow_null = d3.range(N).map(i => d3.sum(rawdata.active_null[i], x => Math.max(0,x-rawdata.capacity[i][C-1])));
 
 	return {
 		max_load: max_load,
@@ -493,8 +496,9 @@ function extractDataStatic(rawdata) {
 }
 
 function extractDataDynamic(rawdata) {
-	const N = rawdata.beds.length;
+	const N = rawdata.capacity.length;
 	const T = rawdata.config.dates.length;
+	const C = rawdata.capacity[0].length;
 
 	let load_data = [];
 	let load_null_data = [];
@@ -502,10 +506,10 @@ function extractDataDynamic(rawdata) {
 	let overflow_null_data = [];
 
 	for (let i = 0; i < N; i++) {
-		load_data[i]      = d3.range(T).map(t => rawdata.active[i][t]      / rawdata.beds[i]);
-		load_null_data[i] = d3.range(T).map(t => rawdata.active_null[i][t] / rawdata.beds[i]);
-		overflow_data[i]      = d3.range(T).map(t => Math.max(0, rawdata.active[i][t]      - rawdata.beds[i]));
-		overflow_null_data[i] = d3.range(T).map(t => Math.max(0, rawdata.active_null[i][t] - rawdata.beds[i]));
+		load_data[i]      = d3.range(T).map(t => rawdata.active[i][t]      / rawdata.capacity[i][C-1]);
+		load_null_data[i] = d3.range(T).map(t => rawdata.active_null[i][t] / rawdata.capacity[i][C-1]);
+		overflow_data[i]      = d3.range(T).map(t => Math.max(0, rawdata.active[i][t]      - rawdata.capacity[i][C-1]));
+		overflow_null_data[i] = d3.range(T).map(t => Math.max(0, rawdata.active_null[i][t] - rawdata.capacity[i][C-1]));
 	}
 
 	return {
