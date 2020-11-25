@@ -28,7 +28,7 @@ function handle_patients_request(
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario)"
 
-	@assert patient_type in [:regular, :icu, :all]
+	@assert patient_type in [:ward, :icu, :all]
 
 	data = load_jhhs(scenario, patient_type, start_date, end_date)
 
