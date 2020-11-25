@@ -38,6 +38,9 @@ function createJHHSDashboard(response, add_description=true) {
 	const capacityColorscaleElem = makeHorizontalColorScale(capacityNames, dashboardCapacityColors);
 	capacityColorscaleElem.style.marginTop = "20px";
 	section.appendChild(capacityColorscaleElem);
+
+	let hr = document.createElement("hr");
+	section.appendChild(hr);
 }
 
 function makeJHHSDashboard(response) {

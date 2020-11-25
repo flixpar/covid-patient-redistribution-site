@@ -47,6 +47,7 @@ function handleResponse(response, status, xhr) {
 	createMap(response, "overflow_dynamic");
 
 	createJHHSDashboard(response);
+	createTransfersBreakdownPlot(response);
 
 	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
@@ -66,7 +67,7 @@ function handleResponse(response, status, xhr) {
 function makeSections() {
 	const sectionInfo = [
 		{title: "Case Study",                             identifier: "casestudy-info",      showDefault: true},
-		{title: "COVID Patients",                         identifier: "results-dashboard",   showDefault: true},
+		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
 		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},

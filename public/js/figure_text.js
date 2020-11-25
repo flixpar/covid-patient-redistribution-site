@@ -24,6 +24,8 @@ The daily required surge capacity with optimal patient transfers (right figure) 
 
 const dashboardDescription = ``;
 
+const transfersDescription = ``;
+
 const metricsDescription = `
 <div class="content" style="margin-bottom: 1em;">
 There are two primary metrics by which we evaluate the potential results of making patient transfers.
