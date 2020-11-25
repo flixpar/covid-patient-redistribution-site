@@ -195,8 +195,22 @@ function createActivePlot(active, active_null, capacity, config, add_description
 				.attr("r", lineWidth+2);
 		}
 
-		svg.node().style.width = "100%";
-		tableEntries[i].appendChild(svg.node());
+		let svgNode = svg.node();
+
+		const tooltip = new Tooltip(x,y);
+		svg.append(() => tooltip.node);
+
+		svgNode.addEventListener("mousemove", event => {
+			const tdWidth = svgNode.clientWidth;
+			const z = (event.offsetX / tdWidth) * activePlotWidth;
+			const w = event.offsetY * (activePlotWidth / tdWidth);
+			const d = bisect([data["active"][i], data["active_null"][i]], x.invert(z), y.invert(w));
+			tooltip.show(d);
+		});
+		svgNode.addEventListener("mouseleave", () => tooltip.hide());
+
+		svgNode.style.width = "100%";
+		tableEntries[i].appendChild(svgNode);
 	}
 
 	const section = document.getElementById("section-results-active");
@@ -268,4 +282,61 @@ function makeHorizontalColorScale(labels, colors) {
 	colorscaleElem.appendChild(colorscale);
 
 	return colorscaleElem;
+}
+
+const bisectDate = d3.bisector(d => d.date).left;
+function bisect(lines, date, yval) {
+	const line1 = lines[0];
+	const i = bisectDate(line1, date, 1);
+	const a = line1[i - 1], b = line1[i];
+	const d = date - a.date > b.date - date ? b.date : a.date;
+	const v = lines.map(l => l.findIndex(x => x.date == d));
+	const j = d3.minIndex(v.map((x,k) => Math.abs(lines[k][x].value - yval)));
+	return lines[j][v[j]];
+}
+
+class Tooltip {
+	constructor(x,y) {
+		this._x = x;
+		this._y = y;
+
+		let tmpSVG = d3.create("svg");
+		let tmpNode = tmpSVG.append("g")
+			.attr("pointer-events", "none")
+			.attr("display", "none")
+			.attr("font-family", font)
+			.attr("font-size", "20px")
+			.attr("text-anchor", "middle");
+
+		tmpNode.append("rect")
+			.attr("x", -60)
+			.attr("y", -60)
+			.attr("width", 120)
+			.attr("height", 50)
+			.attr("fill", "white")
+			.attr("rx", "3")
+			.attr("stroke", "gray");
+
+		this._date = tmpNode.append("text").attr("y", "-40").node();
+		this._yval = tmpNode.append("text").attr("y", "-15").node();
+
+		tmpNode.append("circle")
+			.attr("stroke", "black")
+			.attr("fill", "none")
+			.attr("r", 6);
+
+		this.node = tmpNode.node();
+
+	}
+
+	show(d) {
+		this.node.removeAttribute("display");
+		this.node.setAttribute("transform", `translate(${this._x(d.date)},${this._y(d.value)})`);
+		this._date.textContent = d3.timeFormat("%Y-%m-%d")(d.date);
+		this._yval.textContent = d.value.toFixed(0);
+	}
+
+	hide() {
+		this.node.setAttribute("display", "none");
+	}
 }
