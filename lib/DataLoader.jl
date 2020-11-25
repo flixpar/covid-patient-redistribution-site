@@ -47,6 +47,9 @@ function load_jhhs(
 	discharged = Array{Float64,2}(undef, N, T)
 	for i in 1:N
 		discharged[i,:] = initial[i] .* (pdf.(casesdata.los_dist, 0:T-1))
+		if isinf(discharged[i,1])
+			discharged[i,1] = 0.0
+		end
 	end
 
 	beds = Float64.(casesdata.beds)
