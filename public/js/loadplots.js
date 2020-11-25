@@ -35,14 +35,14 @@ function createLoadPlots(rawdata, add_description=true) {
 	}
 
 	const loadPlots = makeLoadPlots(rawdata);
-	section.appendChild(loadPlots);
+	loadPlots.id = "loadplots";
 
-	const hr = document.createElement("hr");
-	section.appendChild(hr);
+	section.appendChild(loadPlots);
+	createCapacityOption("loadplots", rawdata);
 }
 
-function makeLoadPlots(rawdata) {
-	const loadData = extractLoadData(rawdata);
+function makeLoadPlots(rawdata, capacityLevel=3) {
+	const loadData = extractLoadData(rawdata, capacityLevel);
 
 	const betweenMargin = 50;
 	const labelsWidth = 45;
@@ -417,8 +417,8 @@ function makeLoadLabels(svg, yScale, maxY) {
 	return svg;
 }
 
-function extractLoadData(rawdata) {
-	const N = rawdata.beds.length;
+function extractLoadData(rawdata, capacityLevel=3) {
+	const N = rawdata.capacity.length;
 	const T = rawdata.config.dates.length;
 
 	let load_data = [];
@@ -430,16 +430,16 @@ function extractLoadData(rawdata) {
 
 		for (let t = 0; t < T; t++) {
 			const d = new Date(Date.parse(rawdata.config.dates[t]));
-			if (rawdata.beds[i] == 0) {
+			if (rawdata.capacity[i][capacityLevel] == 0) {
 				continue;
 			}
 			load_data[i][t] = {
 				"date": d,
-				"value": rawdata.active[i][t] / rawdata.beds[i],
+				"value": rawdata.active[i][t] / rawdata.capacity[i][capacityLevel],
 			};
 			load_null_data[i][t] = {
 				"date": d,
-				"value": rawdata.active_null[i][t] / rawdata.beds[i],
+				"value": rawdata.active_null[i][t] / rawdata.capacity[i][capacityLevel],
 			};
 		}
 	}
@@ -450,7 +450,7 @@ function extractLoadData(rawdata) {
 	};
 }
 
-function extractOverallLoadData(rawdata, capacityLevel) {
+function extractOverallLoadData(rawdata, capacityLevel=3) {
 	const N = rawdata.beds.length;
 	const T = rawdata.config.dates.length;
 
@@ -499,6 +499,18 @@ function createCapacityOption(plotName, rawdata) {
 
 			document.getElementById("overallloadplot").replaceWith(overallLoadPlot);
 			overallLoadPlot.id = "overallloadplot";
+		});
+	} else if (plotName == "loadplots") {
+		capacitySelect.addEventListener("change", e => {
+			e.preventDefault();
+
+			const sel = e.target;
+			const capacityLevel = sel.options[sel.selectedIndex].value;
+
+			const loadPlots = makeLoadPlots(rawdata, capacityLevel);
+
+			document.getElementById("loadplots").replaceWith(loadPlots);
+			loadPlots.id = "loadplots";
 		});
 	}
 
