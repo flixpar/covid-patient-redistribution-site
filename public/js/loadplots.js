@@ -5,9 +5,6 @@ const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
 
 function createOverallLoadPlot(rawdata, add_description=true) {
-	const overallData = extractOverallLoadData(rawdata);
-	const overallLoadPlot = _createOverallLoadPlot(overallData);
-
 	const section = document.getElementById("section-results-load");
 
 	if (add_description) {
@@ -16,7 +13,12 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 		section.appendChild(description);
 	}
 
+	const overallData = extractOverallLoadData(rawdata, 3);
+	const overallLoadPlot = _createOverallLoadPlot(overallData);
+	overallLoadPlot.id = "overallloadplot";
+
 	section.appendChild(overallLoadPlot);
+	createCapacityOption("overallloadplot", rawdata);
 
 	const hr = document.createElement("hr");
 	section.appendChild(hr);
@@ -394,12 +396,12 @@ function extractLoadData(rawdata) {
 	};
 }
 
-function extractOverallLoadData(rawdata) {
+function extractOverallLoadData(rawdata, capacityLevel) {
 	const N = rawdata.beds.length;
 	const T = rawdata.config.dates.length;
 
 	let overall_load = [];
-	const totBeds = d3.sum(rawdata.beds);
+	const totBeds = d3.sum(rawdata.capacity, x => x[capacityLevel]);
 	const activeNullByDay = d3.transpose(rawdata.active_null);
 	for (let t = 0; t < T; t++) {
 		const d = new Date(Date.parse(rawdata.config.dates[t]));
@@ -410,4 +412,49 @@ function extractOverallLoadData(rawdata) {
 	}
 
 	return overall_load;
+}
+
+function createCapacityOption(plotName, rawdata) {
+	let capacitySelect = document.createElement("select");
+	capacitySelect.id = plotName + "-capacitylevel";
+
+	const capacityNames = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"];
+	for (let c = 0; c < capacityNames.length; c++) {
+		let opt = document.createElement("option");
+		opt.text = capacityNames[c];
+		opt.value = c;
+		if (c == 3) {
+			opt.selected = true;
+		}
+		capacitySelect.appendChild(opt);
+	}
+
+	let capacitySelectLabel = document.createElement("label");
+	capacitySelectLabel.innerHTML = "Capacity Level:";
+	capacitySelectLabel.for = plotName + "-capacitylevel";
+
+	if (plotName == "overallloadplot") {
+		capacitySelect.addEventListener("change", e => {
+			e.preventDefault();
+
+			const sel = e.target;
+			const capacityLevel = sel.options[sel.selectedIndex].value;
+
+			const overallData = extractOverallLoadData(rawdata, capacityLevel);
+			const overallLoadPlot = _createOverallLoadPlot(overallData);
+
+			document.getElementById("overallloadplot").replaceWith(overallLoadPlot);
+			overallLoadPlot.id = "overallloadplot";
+		});
+	}
+
+	const section = document.getElementById("section-results-load");
+
+	let capacitySelectField = document.createElement("div");
+	capacitySelectField.style.textAlign = "center";
+	capacitySelectLabel.style.marginRight = "20px";
+
+	capacitySelectField.appendChild(capacitySelectLabel);
+	capacitySelectField.appendChild(capacitySelect);
+	section.appendChild(capacitySelectField);
 }
