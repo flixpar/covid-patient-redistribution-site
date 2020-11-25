@@ -581,6 +581,12 @@ const tooltip_content = {
 	"form-end-date"  : "Date to end the patient allocation model.",
 	"form-los"       : "Expected number of days that a patient will have to stay in the hospital.",
 	"form-patient-type": "Restrict focus to patients requiring a certain level of care.",
+	"form-scenario": "Forecast scenario to use.",
+	"form-objective": "Primary objective for the optimization model.",
+	"form-weights": "Preferences for where to transfer patients to if the system runs out of capacity.",
+	"form-surgepreferences": "Preference for where to create additional capacity if it is necessary.",
+	"form-utilization": "Percentage of the total capacity that can be used in practice.",
+	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",
 };
 $("#form label").each((i, el) => {
 	const k = el.getAttribute("for");
