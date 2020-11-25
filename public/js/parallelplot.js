@@ -2,8 +2,8 @@ const sankeyHeight = 600;
 const sankeyWidth = 1000;
 const sankeyMargins = {top: 25, bottom: 5, left: 30, right: 30};
 
-function createParallelPlot(table, resource, add_description=true) {
-	const graph = toGraph(table, false);
+function createParallelPlot(response, resource, add_description=true) {
+	const graph = toGraph(response, false);
 	const fig = buildChart(graph, resource);
 
 	const section = document.getElementById("section-results-transfers");
@@ -149,15 +149,20 @@ function toSankey(graph) {
 	});
 }
 
-function toGraph(table, excludeSelf=false) {
-	const locNames = Object.keys(table);
-	const N = locNames.length;
+function toGraph(response, excludeSelf=false) {
+	const N = response.config.node_names.length;
+	const locNames = response.config.node_names;
+	const locInd = d3.range(N);
 
-	const srcNames = locNames.filter(locName => {
-		return d3.sum(table[locName]) > 0;
+	const totalSent = locInd.map(i => locInd.map(j => {
+		return d3.sum(response.sent[i][j]);
+	}));
+
+	const srcNames = locNames.filter((_,i) => {
+		return d3.sum(totalSent[i]) > 0;
 	});
-	const dstNames = locNames.filter((_, locIdx) => {
-		return d3.sum(locNames.map(l => table[l][locIdx])) > 0;
+	const dstNames = locNames.filter((_, i) => {
+		return d3.sum(locInd.map(j => totalSent[j][i])) > 0;
 	});
 
 	const srcNodes = srcNames.map(colName => {return {name: colName+"-src"}});
@@ -167,7 +172,7 @@ function toGraph(table, excludeSelf=false) {
 	let links = [];
 	locNames.forEach((locName, i) => {
 		for (let j = 0; j < N; j++) {
-			const v = table[locName][j];
+			const v = totalSent[i][j];
 			if (v == 0) {continue;}
 			if (excludeSelf && i == j) {continue;}
 			links.push({source: locName+"-src", target: locNames[j]+"-dst", value: v});
