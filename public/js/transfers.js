@@ -120,14 +120,14 @@ function makeTransfersBreakdownSubplot(svg, response, locIdx, plotSize) {
 	svg.append("text")
 		.style("text-anchor", "center")
 		.style("font-family", "monospace")
-		.style("font-size", 8)
+		.style("font-size", "8px")
 		.attr("transform", `translate(-25,${y(maxY/2)+20}) rotate(-90)`)
 		.text("Transfers");
 
 	svg.append("text")
 		.style("text-anchor", "center")
 		.style("font-family", "monospace")
-		.style("font-size", 9)
+		.style("font-size", "9px")
 		.attr("transform", `translate(-60,${y(maxY/2)})`)
 		.text(response.config.node_names[locIdx]);
 

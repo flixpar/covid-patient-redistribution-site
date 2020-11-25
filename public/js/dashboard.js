@@ -123,7 +123,7 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 		.attr("y", 5)
 		.attr("text-anchor", "middle")
 		.style("font-family", dashboardDefaultFont)
-		.style("font-size", dashboardTitleFontSize)
+		.style("font-size", dashboardTitleFontSize+"px")
 		.text(response.config.node_names[locIdx]);
 
 	const line = d3.line()
