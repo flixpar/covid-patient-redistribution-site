@@ -49,6 +49,7 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
+			smoothness_penalty=0.01,
 			verbose=false
 		)
 	elseif objective == :loadbalance
@@ -60,6 +61,7 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
+			smoothness_penalty=0.01,
 			verbose=false
 		)
 	else
@@ -75,7 +77,7 @@ function handle_patients_request(
 		data.admitted,
 		data.node_names,
 		start_date,
-		11,
+		los_dist,
 	)
 
 	config = Dict(
