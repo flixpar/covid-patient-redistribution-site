@@ -82,6 +82,43 @@
 				</div>
 
 				<div class="field is-horizontal">
+					<label class="label column is-one-third">Transfer Preference (Under Construction)</label>
+					<div class="form-weights-container">
+						<div class="input-range-container">
+							<label for="form-weights-bmc">BMC</label>
+							<input id="form-weights-bmc" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
+						</div>
+						<div class="input-range-container">
+							<label for="form-weights-hcgh">HCGH</label>
+							<input id="form-weights-hcgh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
+						</div>
+						<div class="input-range-container">
+							<label for="form-weights-jhh">JHH</label>
+							<input id="form-weights-jhh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
+						</div>
+						<div class="input-range-container">
+							<label for="form-weights-sh">SH</label>
+							<input id="form-weights-sh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
+						</div>
+						<div class="input-range-container">
+							<label for="form-weights-smh">SMH</label>
+							<input id="form-weights-smh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
+						</div>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-surgepreferences">Preferences (Under Construction)</label>
+					<div class="select is-fullwidth">
+						<select id="form-surgepreferences">
+							<option value="distributed">Create surge capacity anywhere</option>
+							<option value="centralized_jhh">Create surge capacity at JHH</option>
+							<option value="centralized_bcc">Create surge capacity at Baltimore Convention Center</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-utilization">Capacity Utilization</label>
 					<div class="select is-fullwidth">
 						<select id="form-utilization">
@@ -92,6 +129,18 @@
 							<option value="0.80">80%</option>
 							<option value="0.75">75%</option>
 							<option value="0.70">70%</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-uncertainty">Forecast Uncertainty (Under Construction)</label>
+					<div class="select is-fullwidth">
+						<select id="form-uncertainty">
+							<option>High</option>
+							<option selected>Default</option>
+							<option>Low</option>
+							<option>None</option>
 						</select>
 					</div>
 				</div>

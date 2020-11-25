@@ -91,3 +91,22 @@ th {
 
 .section-toggle-icon {
 }
+
+.form-weights-container {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.input-range-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+input[type="range"] {
+	writing-mode: bt-lr;
+	-webkit-appearance: slider-vertical;
+	width: 30px;
+}
