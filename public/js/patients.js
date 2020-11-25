@@ -70,9 +70,9 @@ function makeSections() {
 		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
-		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
+		{title: "Required Surge Capacity (Animated Map)", identifier: "results-overflowmap", showDefault: true},
 		{title: "Number of Active COVID Patients",        identifier: "results-active",      showDefault: false},
-		{title: "Required Surge Capacity (Animated Map)", identifier: "results-overflowmap", showDefault: false},
+		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
 		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
 	]
 
