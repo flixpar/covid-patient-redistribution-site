@@ -63,13 +63,17 @@ function makeTransfersBreakdownPlot(response) {
 }
 
 function makeTransfersBreakdownSubplot(svg, response, locIdx, plotSize) {
+	const N = response.config.node_names.length;
+	const T = response.config.dates.length;
 
 	const dates = response.config.dates.map(d => new Date(d));
 	const x = d3.scaleUtc()
 		.domain(d3.extent(dates))
 		.range([0, plotSize.width]);
 
-	const maxY = d3.max(response.sent.flat().flat());
+	const maxY = d3.max(d3.range(N).map(i => d3.range(T).map(t => {
+		return d3.sum(response.sent[i], x => x[t]);
+	})).flat());
 	const y = d3.scaleLinear()
 		.domain([0, maxY]).nice()
 		.range([plotSize.height, 0]);
@@ -130,9 +134,6 @@ function makeTransfersBreakdownSubplot(svg, response, locIdx, plotSize) {
 		.style("font-size", "9px")
 		.attr("transform", `translate(-60,${y(maxY/2)})`)
 		.text(response.config.node_names[locIdx]);
-
-	const N = response.config.node_names.length;
-	const T = response.config.dates.length;
 
 	const data = d3.range(T).map(t => {
 		let vals = d3.cumsum(response.sent[locIdx], a => a[t]);
