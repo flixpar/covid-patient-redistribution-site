@@ -31,15 +31,15 @@ route("/api/patients", method=POST) do
 	scenario = str_to_symbol(@params(:scenario))
 	patient_type = str_to_symbol(@params(:patient_type))
 	objective = str_to_symbol(@params(:objective))
+	capacity_util = parse(Float64, @params(:utilization))
+	los = @params(:los)
 
 	start_date = Date(@params(:start_date))
 	end_date   = Date(@params(:end_date))
 
-	los = @params(:los)
-
 	handle_patients_request(
 		scenario, patient_type,
-		objective, los,
+		objective, capacity_util, los,
 		start_date, end_date,
 	)
 end

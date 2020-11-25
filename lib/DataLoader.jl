@@ -52,7 +52,7 @@ function load_jhhs(
 		end
 	end
 
-	beds = Float64.(casesdata.beds)
+	beds = casesdata.beds
 	capacity = casesdata.capacity
 
 	adj = (data.dist_matrix .<= 1)

@@ -19,7 +19,7 @@ function results_all(
 )
 	N, _, T = size(sent)
 
-	if use_rounding
+	if use_rounding && !isa(beds[1], Int)
 		beds = round.(Int, beds, RoundUp)
 	end
 

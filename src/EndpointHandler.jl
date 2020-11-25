@@ -18,19 +18,21 @@ export handle_patients_request
 function handle_patients_request(
 		scenario::Symbol,
 		patient_type::Symbol,
-
 		objective::Symbol,
+		capacity_util::Float64,
 		los_param::String,
 
 		start_date::Date,
 		end_date::Date,
 	)
 	@info "Handle Patients Request"
-	@info "Scenario: $(scenario)"
+	@info "Scenario: $(scenario), Patient type: $(patient_type)"
 
 	@assert patient_type in [:ward, :icu, :all]
 
 	data = load_jhhs(scenario, patient_type, start_date, end_date)
+
+	default_capacity_level = 4
 
 	if los_param == "default_dist"
 		los_dist = los_dist_default(patient_type)
@@ -50,11 +52,12 @@ function handle_patients_request(
 			los_dist,
 			sent_penalty=0.01,
 			smoothness_penalty=0.01,
+			capacity_cushion=(1.0-capacity_util),
 			verbose=false
 		)
 	elseif objective == :loadbalance
 		model = patient_loadbalance(
-			data.beds,
+			data.capacity[:,default_capacity_level],
 			data.initial,
 			data.discharged,
 			data.admitted,
@@ -62,6 +65,7 @@ function handle_patients_request(
 			los_dist,
 			sent_penalty=0.01,
 			smoothness_penalty=0.01,
+			capacity_cushion=(1.0-capacity_util),
 			verbose=false
 		)
 	else
@@ -71,7 +75,7 @@ function handle_patients_request(
 
 	results = PatientAllocationResults.results_all(
 		sent,
-		data.beds,
+		data.capacity[:,default_capacity_level],
 		data.initial,
 		data.discharged,
 		data.admitted,
@@ -90,6 +94,8 @@ function handle_patients_request(
 		:node_type => "hospital",
 		:region    => "jhhs",
 		:extent    => data.extent,
+		:capacity_util => capacity_util,
+		:default_capacity_level => default_capacity_level,
 	)
 
 	outcomes = Dict(
