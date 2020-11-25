@@ -4,6 +4,7 @@ const loadPlotsMargin = ({top: 35, right: 30, bottom: 30, left: 50})
 const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
 
+
 function createOverallLoadPlot(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-load");
 
@@ -14,7 +15,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	}
 
 	const overallData = extractOverallLoadData(rawdata, 3);
-	const overallLoadPlot = _createOverallLoadPlot(overallData);
+	const overallLoadPlot = makeOverallLoadPlot(overallData);
 	overallLoadPlot.id = "overallloadplot";
 
 	section.appendChild(overallLoadPlot);
@@ -25,28 +26,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 }
 
 function createLoadPlots(rawdata, add_description=true) {
-	const loadData = extractLoadData(rawdata);
-
-	const loadSentPlot = _createLoadPlot(loadData.load, "COVID Patient Load by Location (With Transfers)");
-	const loadNoSentPlot = _createLoadPlot(loadData.load_null, "COVID Patient Load by Location (Without Transfers)");
-	const legend = createLoadPlotsLegend(rawdata.config.node_names);
-
 	const section = document.getElementById("section-results-load");
-
-	let table = document.createElement("div");
-	let row1 = document.createElement("div");
-	let row2 = document.createElement("div");
-	table.appendChild(row1);
-	table.appendChild(row2);
-	row1.appendChild(loadNoSentPlot);
-	row1.appendChild(loadSentPlot);
-	row2.appendChild(legend);
-
-	row1.style.display = "flex";
-	row1.style.flexDirection = "row";
-	loadSentPlot.style.width = "50%";
-	loadNoSentPlot.style.width = "50%";
-	row2.className = "column is-8 is-offset-2";
 
 	if (add_description) {
 		let description = document.createElement("p");
@@ -54,38 +34,56 @@ function createLoadPlots(rawdata, add_description=true) {
 		section.appendChild(description);
 	}
 
-	section.appendChild(table);
+	const loadPlots = makeLoadPlots(rawdata);
+	section.appendChild(loadPlots);
 
 	const hr = document.createElement("hr");
 	section.appendChild(hr);
 }
 
-function _createLoadPlot(load, title="COVID Patient Load by Location") {
-	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth, loadPlotsHeight]);
+function makeLoadPlots(rawdata) {
+	const loadData = extractLoadData(rawdata);
 
-	svg.append("text")
-		.attr("x", loadPlotsWidth/2)
-		.attr("y", 20)
-		.attr("text-anchor", "middle")
-		.style("font-family", loadPlotsFont)
-		.style("font-size", "22px")
-		.text(title);
+	const betweenMargin = 50;
+	const labelsWidth = 45;
 
-	const maxLoadVal = d3.max(load, x => d3.max(x, y => y.value))
+	const totalWidth = 2*loadPlotsWidth + loadPlotsMargin.left + loadPlotsMargin.right + betweenMargin + labelsWidth;
+	const totalHeight = loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom;
+	let legendHeight;
+
+	let svg = d3.create("svg").attr("viewBox", [0, 0, totalWidth, totalHeight]);
+
+	let g1 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left}, ${loadPlotsMargin.top})`);
+	let g2 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + loadPlotsWidth}, ${loadPlotsMargin.top})`);
+	let g3 = svg.append("g").attr("transform", `translate(0, ${loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom})`);
+	let g4 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + 2*loadPlotsWidth}, ${loadPlotsMargin.top})`);
+
+	const maxLoadVal = d3.max(loadData.load_null, x => d3.max(x, y => y.value))
 	const maxY = Math.min(5.0, Math.max(2.0, Math.ceil(maxLoadVal)));
-	// const maxY = 3.0;
 
-	const y = d3.scaleLinear()
+	const yScale = d3.scaleLinear()
 		.domain([0, maxY]).nice()
-		.range([loadPlotsHeight - loadPlotsMargin.bottom, loadPlotsMargin.top])
+		.range([loadPlotsHeight, 0]);
+
+	g1 = makeLoadPlot(g1, loadData.load_null, yScale, maxY, "COVID Patient Load by Location (Without Transfers)");
+	g2 = makeLoadPlot(g2, loadData.load, yScale, maxY, "COVID Patient Load by Location (With Transfers)");
+	g3, legendHeight = makeLoadPlotsLegend(g3, rawdata.config.node_names, totalWidth);
+	g4 = makeLoadLabels(g4, yScale, maxY);
+
+	svg.attr("viewBox", [0, 0, totalWidth, totalHeight+legendHeight]);
+
+	return svg.node();
+}
+
+function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Location") {
 
 	const yAxis = svg => svg
-		.attr("transform", `translate(${loadPlotsMargin.left},0)`)
+		.attr("transform", `translate(0,0)`)
 		.style("font-family", loadPlotsFont)
 		.style("font-size", "18px")
-		.call(d3.axisRight(y)
+		.call(d3.axisRight(yScale)
 			.ticks(5)
-			.tickSize(loadPlotsWidth - loadPlotsMargin.left - loadPlotsMargin.right)
+			.tickSize(loadPlotsWidth)
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
@@ -102,15 +100,15 @@ function _createLoadPlot(load, title="COVID Patient Load by Location") {
 
 	const x = d3.scaleUtc()
 		.domain(d3.extent(dates))
-		.range([loadPlotsMargin.left, loadPlotsWidth - loadPlotsMargin.right]);
+		.range([0, loadPlotsWidth]);
 
 	const xAxis = g => g
-		.attr("transform", `translate(0,${loadPlotsHeight - loadPlotsMargin.bottom})`)
+		.attr("transform", `translate(0,${loadPlotsHeight})`)
 		.style("font-family", loadPlotsFont)
 		.style("font-size", "16px")
 		.call(d3.axisBottom(x)
-			.ticks(d3.timeWeek.every(1))
-			.tickSize(-(loadPlotsHeight - loadPlotsMargin.top - loadPlotsMargin.bottom))
+			.ticks(d3.utcWeek.every(1))
+			.tickSize(-loadPlotsHeight)
 			.tickFormat(d3.timeFormat("%m/%d"))
 		)
 		.call(g => g.select(".domain").remove())
@@ -124,25 +122,25 @@ function _createLoadPlot(load, title="COVID Patient Load by Location") {
 	const line = d3.line()
 		.defined(d => !isNaN(d.value))
 		.x(d => x(d.date))
-		.y(d => y(d.value))
+		.y(d => yScale(d.value))
 
 	svg.append("g").call(xAxis);
 	svg.append("g").call(yAxis);
 
 	svg.append("rect")
-		.attr("x", loadPlotsMargin.left)
-		.attr("y", y(1.0))
-		.attr("width", loadPlotsWidth-loadPlotsMargin.right-loadPlotsMargin.left)
-		.attr("height", y(0.0)-y(1.0))
+		.attr("x", 0)
+		.attr("y", yScale(1.0))
+		.attr("width", loadPlotsWidth)
+		.attr("height", yScale(0.0)-yScale(1.0))
 		.attr("stroke", "none")
 		.attr("fill", "green")
 		.attr("opacity", 0.2);
 
 	svg.append("rect")
-		.attr("x", loadPlotsMargin.left)
-		.attr("y", y(maxY))
-		.attr("width", loadPlotsWidth-loadPlotsMargin.right-loadPlotsMargin.left)
-		.attr("height", y(1.0)-y(maxY))
+		.attr("x", 0)
+		.attr("y", yScale(maxY))
+		.attr("width", loadPlotsWidth)
+		.attr("height", yScale(1.0)-yScale(maxY))
 		.attr("stroke", "none")
 		.attr("fill", "red")
 		.attr("opacity", 0.2);
@@ -161,23 +159,40 @@ function _createLoadPlot(load, title="COVID Patient Load by Location") {
 			.enter().append("svg:circle")
 			.attr("fill", colorscale(i))
 			.attr("cx", d => x(d.date))
-			.attr("cy", d => y(d.value))
+			.attr("cy", d => yScale(d.value))
 			.attr("r", 3);
 
 	}
 
 	svg.append("line")
-		.attr("x1", loadPlotsMargin.left)
-		.attr("x2", loadPlotsWidth-loadPlotsMargin.right)
-		.attr("y1", y(1.0))
-		.attr("y2", y(1.0))
+		.attr("x1", 0)
+		.attr("x2", loadPlotsWidth)
+		.attr("y1", yScale(1.0))
+		.attr("y2", yScale(1.0))
 		.attr("stroke-width", 6)
 		.attr("stroke", "red");
 
-	return svg.node();
+	svg.append("rect")
+		.attr("x", 0)
+		.attr("y", -loadPlotsMargin.top)
+		.attr("width", loadPlotsWidth)
+		.attr("height", loadPlotsMargin.top)
+		.attr("stroke", "none")
+		.attr("fill", "white")
+		.attr("opacity", 1.0);
+
+	svg.append("text")
+		.attr("x", loadPlotsWidth/2)
+		.attr("y", -10)
+		.attr("text-anchor", "middle")
+		.style("font-family", loadPlotsFont)
+		.style("font-size", "22px")
+		.text(title);
+
+	return svg;
 }
 
-function _createOverallLoadPlot(overall_load) {
+function makeOverallLoadPlot(overall_load) {
 	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth, loadPlotsHeight]);
 
 	svg.append("text")
@@ -294,14 +309,12 @@ function _createOverallLoadPlot(overall_load) {
 	return svg.node();
 }
 
-function createLoadPlotsLegend(location_names) {
+function makeLoadPlotsLegend(svg, location_names, totalWidth) {
 	const N = location_names.length;
 
 	const maxNameLength = d3.max(location_names, x => x.length);
 	const rowHeight = 20;
-	const colWidth = (maxNameLength * 8) + 10 + 10;
-
-	const totalWidth = 0.66 * document.getElementById("results-container").offsetWidth;
+	const colWidth = (maxNameLength * 16) + 10 + 10;
 
 	const maxCols = Math.floor(totalWidth / colWidth);
 	const nRows = Math.ceil(N / maxCols);
@@ -309,13 +322,13 @@ function createLoadPlotsLegend(location_names) {
 
 	const actualWidth = colWidth * nCols;
 	const marginLeft  = (totalWidth - actualWidth) / 2;
-	const marginTop   = 2;
+	const marginTop   = 10;
+
+	const totalHeight = (nRows * rowHeight) + marginTop + 5;
 
 	const debug = false;
 
 	const colorscale = d3.scaleSequential(d3.interpolateRainbow).domain([0,N]);
-
-	const svg = d3.create("svg").attr("viewBox", [0, 0, maxCols*colWidth, nRows*rowHeight]);
 
 	for (let i = 0; i < nRows; i++) {
 		for (let j = 0; j < nCols; j++) {
@@ -325,17 +338,19 @@ function createLoadPlotsLegend(location_names) {
 			svg.append("rect")
 				.attr("x", marginLeft + ( colWidth * j))
 				.attr("y", marginTop  + (rowHeight * i))
-				.attr("width", 10)
-				.attr("height", 10)
+				.attr("width", 20)
+				.attr("height", 20)
+				.attr("rx", 3)
+				.attr("ry", 3)
 				.attr("fill", colorscale(k))
 				.attr("stroke", "none");
 
 			svg.append("text")
-				.attr("x", marginLeft + 14 + ( colWidth * j))
-				.attr("y", marginTop  +  8 + (rowHeight * i))
+				.attr("x", marginLeft + 24 + ( colWidth * j))
+				.attr("y", marginTop  + 16 + (rowHeight * i))
 				.attr("text-anchor", "start")
 				.style("font-family", loadPlotsLegendFont)
-				.style("font-size", "10px")
+				.style("font-size", "20px")
 				.text(location_names[k]);
 
 			if (debug) {
@@ -360,7 +375,46 @@ function createLoadPlotsLegend(location_names) {
 			.attr("stroke", "black");
 	}
 
-	return svg.node();
+	return svg, totalHeight;
+}
+
+function makeLoadLabels(svg, yScale, maxY) {
+
+	const gap = 0.15;
+
+	svg.append("line")
+		.attr("x1", 20)
+		.attr("x2", 20)
+		.attr("y1", yScale(0))
+		.attr("y2", yScale(1 - gap/2))
+		.attr("stroke", "green")
+		.attr("stroke-width", 2);
+
+	svg.append("line")
+		.attr("x1", 20)
+		.attr("x2", 20)
+		.attr("y1", yScale(1 + gap/2))
+		.attr("y2", yScale(maxY))
+		.attr("stroke", "red")
+		.attr("stroke-width", 2);
+
+	const q1 = yScale(0.5) - 50;
+	svg.append("text")
+		.style("text-anchor", "center")
+		.attr("transform", `translate(40,${q1}) rotate(90)`)
+		.style("fill", "green")
+		.style("font-family", loadPlotsFont)
+		.text("Under Capacity");
+
+	const q2 = yScale((1 + maxY)/2) - 50;
+	svg.append("text")
+		.style("text-anchor", "center")
+		.attr("transform", `translate(40,${q2}) rotate(90)`)
+		.style("fill", "red")
+		.style("font-family", loadPlotsFont)
+		.text("Over Capacity");
+
+	return svg;
 }
 
 function extractLoadData(rawdata) {
@@ -441,7 +495,7 @@ function createCapacityOption(plotName, rawdata) {
 			const capacityLevel = sel.options[sel.selectedIndex].value;
 
 			const overallData = extractOverallLoadData(rawdata, capacityLevel);
-			const overallLoadPlot = _createOverallLoadPlot(overallData);
+			const overallLoadPlot = makeOverallLoadPlot(overallData);
 
 			document.getElementById("overallloadplot").replaceWith(overallLoadPlot);
 			overallLoadPlot.id = "overallloadplot";
