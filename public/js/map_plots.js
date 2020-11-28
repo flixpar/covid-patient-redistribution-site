@@ -115,7 +115,7 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 ////// Plot Components /////
 ////////////////////////////
 
-function makeGroupedChoropleth(make_dynamic, rawdata, _data1, _data2, _links, _colorscale, _geometries, _plot_title, _colorbar_label) {
+function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, geometries, plot_title, colorbar_label) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 0.45 * mapWidth;
@@ -125,9 +125,9 @@ function makeGroupedChoropleth(make_dynamic, rawdata, _data1, _data2, _links, _c
 	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 	let g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 2*plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, rawdata, _data1,   null, _colorscale, _geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)");
-	g2 = makeMap(g2, rawdata, _data2, _links, _colorscale, _geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)");
-	g3 = makeColorbar(g3, _colorscale, _colorbar_label);
+	g1 = makeMap(g1, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)");
+	g2 = makeMap(g2, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)");
+	g3 = makeColorbar(g3, colorscale, colorbar_label);
 
 	if (debugMap) {
 		svg.append("rect")
@@ -146,12 +146,12 @@ function makeGroupedChoropleth(make_dynamic, rawdata, _data1, _data2, _links, _c
 		.attr("text-anchor", "middle")
 		.style("font-family", mapPlotFont)
 		.style("font-size", "20px")
-		.text(_plot_title);
+		.text(plot_title);
 
 	return svg.node();
 }
 
-function makeSingleChoropleth(make_dynamic, rawdata, _data1, _links, _colorscale, _geometries, _plot_title) {
+function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, plot_title) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 0.9 * mapWidth;
@@ -159,13 +159,13 @@ function makeSingleChoropleth(make_dynamic, rawdata, _data1, _links, _colorscale
 	let g1 = svg.append("g");
 	let g2 = svg.append("g").attr("transform", `translate(${plotWidth},0)`);
 
-	g1 = makeMap(g1, rawdata, _data1, _links, _colorscale, _geometries, plotWidth, mapHeight, make_dynamic, _plot_title);
-	g2 = makeColorbar(g2, _colorscale, "Required Surge Capacity (Bed-Days)");
+	g1 = makeMap(g1, rawdata, data1, links, colorscale, geometries, plotWidth, mapHeight, make_dynamic, plot_title);
+	g2 = makeColorbar(g2, colorscale, "Required Surge Capacity (Bed-Days)");
 
 	return svg.node();
 }
 
-function makeColorbar(svg, _colorscale, _colorbarLabel=null) {
+function makeColorbar(svg, colorscale, colorbarLabel=null) {
 	const cbarHeight = 0.8 * mapHeight;
 
 	const randomID = Math.random().toString(36).substring(7);
@@ -179,12 +179,12 @@ function makeColorbar(svg, _colorscale, _colorbarLabel=null) {
 		.attr("y1", 1)
 		.attr("y2", 0);
 	linearGradient.selectAll("stop")
-		.data(_colorscale.ticks())
+		.data(colorscale.ticks())
 		.join("stop")
-		.attr("offset", d => d / _colorscale.maxValue)
-		.attr("stop-color", d => _colorscale(d));
+		.attr("offset", d => d / colorscale.maxValue)
+		.attr("stop-color", d => colorscale(d));
 	const colorbarScale = d3.scaleLinear()
-		.domain([0, _colorscale.maxValue])
+		.domain([0, colorscale.maxValue])
 		.range([(mapHeight/2) + (cbarHeight/2), (mapHeight/2) - (cbarHeight/2)]);
 
 	svg.append("rect")
@@ -201,13 +201,13 @@ function makeColorbar(svg, _colorscale, _colorbarLabel=null) {
 		.call(g => g.select(".domain").remove());
 	svg.append("g").call(colorAxis);
 
-	if (_colorbarLabel != null) {
+	if (colorbarLabel != null) {
 		svg.append("text")
 			.attr("text-anchor", "middle")
 			.attr("transform", `rotate(90) translate(${mapHeight/2},-65)`)
 			.style("font-family", mapPlotFont)
 			.style("font-size", "13px")
-			.text(_colorbarLabel);
+			.text(colorbarLabel);
 	}
 
 	return svg;
@@ -221,8 +221,8 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 
 	if (dynamic) {
 		while (mapPlotIntervals.length != 0) {
-			let _interval = mapPlotIntervals.pop();
-			_interval.stop();
+			let interval = mapPlotIntervals.pop();
+			interval.stop();
 		}
 	}
 
@@ -444,10 +444,10 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 		for (const i of d3.range(T)) {
 			d3.timeout(() => {
 				animate(i);
-				let _interval = d3.interval(() => {
+				let interval = d3.interval(() => {
 					animate(i);
 				}, mapAnimationTime + mapAnimationDelayTime);
-				mapPlotIntervals.push(_interval);
+				mapPlotIntervals.push(interval);
 			}, delay(dates[i]));
 		}
 
@@ -589,10 +589,10 @@ function loadGeometry(load_counties=false) {
 				url: geo_url,
 				type: "GET",
 				dataType: "json",
-				success: function(_geometry) {
-					let data = {states: topojson.feature(_geometry, _geometry.objects.states), counties: null};
+				success: function(geometry) {
+					let data = {states: topojson.feature(geometry, geometry.objects.states), counties: null};
 					if (load_counties) {
-						data["counties"] = topojson.feature(_geometry, _geometry.objects.counties);
+						data["counties"] = topojson.feature(geometry, geometry.objects.counties);
 					}
 					storedGeometry = data;
 					resolve(data);
@@ -645,7 +645,7 @@ function getOverflowColorscale(data) {
 	const maxValue = d3.max(data.flat());
 	const overflow_thresh = 5;
 
-	function _overflowColorscale(x) {
+	function overflowColorscale(x) {
 		if (x >= 0 && x <= overflow_thresh) {
 			return "green";
 		} else if (x > overflow_thresh) {
@@ -656,18 +656,18 @@ function getOverflowColorscale(data) {
 	}
 
 	const tickSize = maxValue / 100;
-	_overflowColorscale.ticks = function() {
+	overflowColorscale.ticks = function() {
 		return d3.range(0.0, maxValue+tickSize, tickSize)
 	}
-	_overflowColorscale.maxValue = maxValue;
+	overflowColorscale.maxValue = maxValue;
 
-	return _overflowColorscale;
+	return overflowColorscale;
 }
 
 function getLoadColorscale(data) {
 	const maxValue = Math.min(4.0, d3.max(data.flat()));
 
-	function _colorscale(x) {
+	function colorscale(x) {
 		if (x >= 0 && x <= 1) {
 			return "green";
 		} else if (x > 1) {
@@ -678,12 +678,12 @@ function getLoadColorscale(data) {
 	}
 
 	const tickSize = maxValue / 500;
-	_colorscale.ticks = function() {
+	colorscale.ticks = function() {
 		return d3.range(0.0, maxValue+tickSize, tickSize)
 	}
-	_colorscale.maxValue = maxValue;
+	colorscale.maxValue = maxValue;
 
-	return _colorscale;
+	return colorscale;
 }
 
 function getLinkWidthScale(links) {
@@ -691,7 +691,7 @@ function getLinkWidthScale(links) {
 	const m = linksNull ? 1 : d3.max(links.flat(), l => l.weight);
 	const z = 0, r1 = 1.05, r2 = 8.5, r3 = 3.0, r4 = -0.06;
 	const q = 10.0;
-	function _sizeScale(w) {
+	function sizeScale(w) {
 		if (linksNull || w <= z) {
 			return 0.0;
 		} else {
@@ -700,7 +700,7 @@ function getLinkWidthScale(links) {
 			return w * q;
 		}
 	}
-	return _sizeScale;
+	return sizeScale;
 }
 
 function getNodeSizeScale(beds, colorRegions) {
@@ -715,7 +715,7 @@ function getNodeSizeScale(beds, colorRegions) {
 	ys = ys.map(y => y * q / s);
 	ys = ys.map(y => Math.max(Math.min(y, 40), 2));
 
-	function _sizeScale(i) {
+	function sizeScale(i) {
 		if (colorRegions) {
 			return 4;
 		} else {
@@ -723,5 +723,5 @@ function getNodeSizeScale(beds, colorRegions) {
 		}
 	}
 
-	return _sizeScale;
+	return sizeScale;
 }
