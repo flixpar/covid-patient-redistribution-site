@@ -2,13 +2,16 @@ const mapHeight = 650;
 const mapWidth  = 1000;
 
 const mapPlotMargin = ({top: 25, right:  0, bottom:  0, left:  0});
-const mapPadding    = ({top: -200, right: -250, bottom: -200, left: -400});
-const mapMargin     = ({top: 25, right: 10, bottom: 10, left: 10});
+const mapPadding    = ({top: 20, right: 20, bottom: 20, left: 20});
+const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 10});
+
+const styleID = "flixpar/cki265uhk0zjr19tlq0es9v0l";
+const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kxeWh3cXMwYjY1MnJsbGk5cjlpaHl4In0.my1R6Ozh-LMXfo3jlqzOqA";
 
 const pointSizeMult = 0.75;
 const thicknessMult = 0.5;
 
-const mapPlotFont = "CMU Serif";
+const mapPlotFont = "sans-serif";
 
 const mapAnimationTime = 30000;
 const mapAnimationDelayTime = 2000;
@@ -18,6 +21,7 @@ const debugMap = false;
 let mapPlotIntervals = [];
 
 let storedGeometry = null;
+
 
 function createMap(rawdata, metric, transfers="both", add_description=true) {
 	let data1, data2;
@@ -227,11 +231,13 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 		}
 	}
 
+	const colorRegions = false;
+
 	const dates = rawdata.config.dates.map(d => new Date(Date.parse(d)))
 	const T = dates.length;
 
 	const selected_extent = getExtent(rawdata.config, geometries);
-	let map_projection = d3.geoAlbers().fitExtent(
+	let map_projection = d3.geoMercator().fitExtent(
 		[
 			[mapMargin.left+mapPadding.left, mapMargin.top+mapPadding.top],
 			[plotWidth-mapMargin.right-mapPadding.right, plotHeight-mapMargin.bottom-mapPadding.bottom]
@@ -244,23 +250,48 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 	]);
 	let p = d3.geoPath().projection(map_projection);
 
-	let primaryGeometries, secondaryGeometries;
-	let colorRegions = true;
-	if (rawdata.config.node_type.indexOf("state") >= 0) {
-		primaryGeometries = geometries.states;
-		secondaryGeometries = null;
-	} else if (rawdata.config.node_type.indexOf("county") >= 0) {
-		primaryGeometries = geometries.counties;
-		secondaryGeometries = null;
-	} else if (rawdata.config.node_type.indexOf("hospital") >= 0) {
-		primaryGeometries = geometries.states;
-		secondaryGeometries = null;
-		colorRegions = false;
-	} else {
-		primaryGeometries = geometries.states;
-		secondaryGeometries = geometries.counties;
-		colorRegions = false;
-	}
+	const tile = d3.tile()
+		.scale(map_projection.scale() * 2 * Math.PI)
+		.translate(map_projection([0, 0]).map(Math.round))
+		.extent([
+			[mapMargin.left, mapMargin.top],
+			[plotWidth-mapMargin.right, plotHeight-mapMargin.bottom]
+		])
+		.clamp(true);
+	const tiles = tile();
+
+	const randomID = Math.random().toString(36).substring(7);
+	const clipId = "clip-rect-def" + "-" + randomID;
+	const clipRectId = "clip-rect" + "-" + randomID;
+
+	svg.append("defs")
+		.append("clipPath")
+		.attr("id", clipId)
+		.append("rect")
+		.attr("id", clipRectId)
+		.attr("x", mapMargin.left)
+		.attr("y", mapMargin.top)
+		.attr("width", plotWidth-mapMargin.right)
+		.attr("height", plotHeight-mapMargin.bottom)
+		.attr("fill", "none");
+
+	svg.append("use")
+		.attr("xlink:href", `#${clipRectId}`)
+		.attr("y", 0)
+		.attr("x", 0);
+
+	const mapURL = (x, y, z) => `https://api.mapbox.com/styles/v1/${styleID}/tiles/${z}/${x}/${y}@2x?access_token=${accessToken}`
+
+	svg.append("g")
+		.attr("pointer-events", "none")
+		.selectAll("image")
+		.data(tiles, d => d).join("image")
+			.attr("xlink:href", d => mapURL(...d3.tileWrap(d)))
+			.attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
+			.attr("y", ([, y]) => (y + tiles.translate[1]) * tiles.scale)
+			.attr("width", tiles.scale)
+			.attr("height", tiles.scale)
+			.attr("clip-path", `url(#${clipId})`);
 
 	const C = rawdata.capacity[0].length;
 
@@ -277,28 +308,6 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.0);
 	}
-
-	let primaryRegions = svg.append("g")
-		.selectAll("path")
-		.data(primaryGeometries.features)
-		.join("path")
-		.attr("class", "borders-main")
-		.attr("fill", d => {
-			if (colorRegions) {
-				const j = rawdata.config.node_names.indexOf(d.properties.name);
-				if (j >= 0) {
-					if (dynamic) {
-						return colorscale(data[j][0]);
-					} else {
-						return colorscale(data[j]);
-					}
-				}
-			}
-			return "lightgray";
-		})
-		.attr("stroke", "white")
-		.attr("stroke-width", 0.75)
-		.attr("d", p);
 
 	let pts = svg.selectAll("points")
 		.data(rawdata.config.node_names)
@@ -325,16 +334,6 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			const _p = p.pointRadius(r);
 			return _p({type: "Point", coordinates: [l.long, l.lat]});
 		});
-
-	if (secondaryGeometries != null) {
-		svg.append("path")
-			.datum(secondaryGeometries)
-			.attr("fill", "none")
-			.attr("stroke", "darkgray")
-			.attr("stroke-width", 1.0)
-			.attr("stroke-linejoin", "round")
-			.attr("d", p);
-	}
 
 	let defs = svg.append("defs");
 	let linearGradient = defs.append("linearGradient")

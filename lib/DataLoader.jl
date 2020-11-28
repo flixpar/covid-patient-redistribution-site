@@ -58,7 +58,8 @@ function load_jhhs(
 	adj = (data.dist_matrix .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
 
-	extent = (extent_type = :states, extent_regions = ["Maryland"])
+	# extent = (extent_type = :states, extent_regions = ["Maryland"])
+	extent = (extent_type = :points, extent_regions = [])
 
 	return (
 		initial = initial,
