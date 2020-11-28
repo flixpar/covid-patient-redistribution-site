@@ -6,7 +6,7 @@ const mapPadding    = ({top: -200, right: -250, bottom: -200, left: -400});
 const mapMargin     = ({top: 25, right: 10, bottom: 10, left: 10});
 
 const pointSizeMult = 0.75;
-const ticknessMult = 0.5;
+const thicknessMult = 0.5;
 
 const mapPlotFont = "CMU Serif";
 
@@ -155,11 +155,12 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 0.9 * mapWidth;
+	const plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
 
-	let g1 = svg.append("g");
-	let g2 = svg.append("g").attr("transform", `translate(${plotWidth},0)`);
+	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
+	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, rawdata, data1, links, colorscale, geometries, plotWidth, mapHeight, make_dynamic, plot_title);
+	g1 = makeMap(g1, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, plot_title);
 	g2 = makeColorbar(g2, colorscale, "Required Surge Capacity (Bed-Days)");
 
 	return svg.node();
@@ -430,7 +431,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 				.attr("d", d => p(d))
 				.style("fill", "none")
 				.style("stroke", linkColor)
-				.style("stroke-width", d => linkWidthScale(d.weight) * ticknessMult)
+				.style("stroke-width", d => linkWidthScale(d.weight) * thicknessMult)
 				.attr("stroke-linecap", "butt")
 				.attr("marker-end", "url(#arrow)");
 		}
