@@ -62,8 +62,8 @@ function makeJHHSDashboard(response) {
 		.domain(d3.extent(response.config.dates, d => new Date(Date.parse(d))))
 		.range([plotMargin.left, plotSize.width - plotMargin.right]);
 	const yScale = d3.scaleLinear()
-			.domain([0, maxY]).nice()
-			.range([plotSize.height - plotMargin.bottom, plotMargin.top]);
+		.domain([0, maxY]).nice()
+		.range([plotSize.height - plotMargin.bottom, plotMargin.top]);
 
 	const data = computeDashboardData(response);
 
@@ -127,9 +127,9 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 		.text(response.config.node_names[locIdx]);
 
 	const line = d3.line()
-	.defined(d => !isNaN(d.value))
-	.x(d => xScale(d.date))
-	.y(d => yScale(d.value));
+		.defined(d => !isNaN(d.value))
+		.x(d => xScale(d.date))
+		.y(d => yScale(d.value));
 
 	const C = response.capacity[0].length;
 	for (let c = 0; c < C; c++) {
@@ -145,6 +145,7 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 
 	const locName = response.config.node_names[locIdx];
 	const locColor = (locName in dashboardLineColors) ? dashboardLineColors[locName] : dashboardLineColors["default"];
+
 	svg.append("path")
 		.datum(data["active"][locIdx])
 		.attr("fill", "none")
@@ -152,6 +153,16 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 		.attr("stroke-width", dashboardLineWidth)
 		.attr("stroke-linejoin", "round")
 		.attr("stroke-linecap", "round")
+		.attr("d", line);
+
+	svg.append("path")
+		.datum(data["active_null"][locIdx])
+		.attr("fill", "none")
+		.attr("stroke", locColor)
+		.attr("stroke-width", lineWidth/1.5)
+		.attr("stroke-linejoin", "round")
+		.attr("stroke-linecap", "round")
+		.attr("opacity", 0.25)
 		.attr("d", line);
 
 	return svg;
