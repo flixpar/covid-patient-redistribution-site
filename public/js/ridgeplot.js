@@ -145,9 +145,12 @@ function buildRidgePlot(data, resource) {
 		.attr("stroke", "black")
 		.attr("d", d => line(d.values));
 
+	const randomID = Math.random().toString(36).substring(7);
+	const gradId = "linear-gradient" + "-" + randomID;
+
 	const defs = svg.append("defs");
 	let linearGradient = defs.append("linearGradient")
-		.attr("id", "linear-gradient")
+		.attr("id", gradId)
 		.attr("x1", 0)
 		.attr("x2", 0)
 		.attr("y1", 0)
@@ -162,7 +165,7 @@ function buildRidgePlot(data, resource) {
 			.attr("y", (height/2) - (colorscale_height/2))
 			.attr("width", 20)
 			.attr("height", colorscale_height)
-			.style("fill", "url(#linear-gradient)");
+			.style("fill", `url(#${gradId})`);
 
 	return svg.node();
 }

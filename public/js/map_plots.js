@@ -335,19 +335,6 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			return _p({type: "Point", coordinates: [l.long, l.lat]});
 		});
 
-	let defs = svg.append("defs");
-	let linearGradient = defs.append("linearGradient")
-		.attr("id", "linear-gradient")
-		.attr("x1", 0)
-		.attr("x2", 0)
-		.attr("y1", 1)
-		.attr("y2", 0);
-	linearGradient.selectAll("stop")
-		.data(colorscale.ticks())
-		.join("stop")
-		.attr("offset", d => d / colorscale.maxValue)
-		.attr("stop-color", d => colorscale(d));
-
 	if (title != null) {
 		svg.append("text")
 			.attr("x", plotWidth/2)
