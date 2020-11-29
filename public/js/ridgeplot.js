@@ -156,7 +156,7 @@ function buildRidgePlot(data, resource) {
 		.attr("y1", 0)
 		.attr("y2", 1);
 	linearGradient.selectAll("stop")
-		.data(color.ticks().reverse())
+		.data(color.ticks(100).reverse())
 		.join("stop")
 			.attr("offset", d => d)
 			.attr("stop-color", d => color(d));

@@ -642,7 +642,7 @@ function getOverflowColorscale(data) {
 		}
 	}
 
-	const tickSize = maxValue / 100;
+	const tickSize = maxValue / 200;
 	overflowColorscale.ticks = function() {
 		return d3.range(0.0, maxValue+tickSize, tickSize)
 	}
