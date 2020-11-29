@@ -34,7 +34,7 @@ function createJHHSDashboard(response, add_description=true) {
 	const fig = makeJHHSDashboard(response);
 	section.appendChild(fig);
 
-	const capacityNames = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"];
+	const capacityNames = response.config.capacity_names;
 	const capacityColorscaleElem = makeHorizontalColorScale(capacityNames, dashboardCapacityColors);
 	capacityColorscaleElem.style.marginTop = "20px";
 	section.appendChild(capacityColorscaleElem);
@@ -72,10 +72,15 @@ function makeJHHSDashboard(response) {
 	g1 = makeYAxis(g1, xScale, yScale, marginSize, plotMargin);
 
 	const ind = d3.range(N).sort((i,j) => (response.config.node_names[i] <= response.config.node_names[j]) ? -1 : 1);
+	let tooltips = [];
 	for (let i = 0; i < N; i++) {
 		const j = ind[i];
 		let g = svg.append("g").attr("transform", `translate(${dashboardMargin.left + (i*plotSize.width)}, ${dashboardMargin.top})`);
-		g = plotActive(g, xScale, yScale, data, response, j, plotSize, plotMargin);
+		g,tooltips[i] = plotActive(g, xScale, yScale, data, response, j, plotSize, plotMargin);
+	}
+	for (let i = 0; i < N; i++) {
+		let g = svg.append("g").attr("transform", `translate(${dashboardMargin.left + (i*plotSize.width)}, ${dashboardMargin.top})`);
+		g.append(() => tooltips[i].node);
 	}
 
 	return svg.node();
@@ -165,7 +170,44 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 		.attr("opacity", 0.25)
 		.attr("d", line);
 
-	return svg;
+	const tooltip = new DashboardTooltip(xScale,yScale);
+
+	const locIdxAlt = response.config.node_names.slice(0).sort().indexOf(response.config.node_names[locIdx]);
+	const xOffset = dashboardMargin.left + (locIdxAlt * plotSize.width);
+	const yOffset = dashboardMargin.top;
+
+	svg.append("rect")
+		.attr("x", plotMargin.left)
+		.attr("y", plotMargin.top)
+		.attr("width", plotSize.width - plotMargin.left - plotMargin.right)
+		.attr("height", plotSize.height - plotMargin.top - plotMargin.bottom)
+		.attr("fill", "none")
+		.attr("id", `box-${locIdx}`)
+		.attr("pointer-events", "visible");
+
+	const lines = [
+		data["active"][locIdx],
+		data["active_null"][locIdx],
+	];
+	for (let c = 0; c < C; c++) {
+		lines.push(data["capacity"][locIdx][c]);
+	}
+
+	let parentSVG = svg.node().parentElement;
+	svg.selectAll(`#box-${locIdx}`).on("mousemove", event => {
+		const svgWidth = parentSVG.clientWidth;
+		const scaleFactor = dashboardSize.width / svgWidth;
+		const pointerX = ((event.offsetX * scaleFactor) - xOffset);
+		const pointerY = ((event.offsetY * scaleFactor) - yOffset);
+		if (pointerX < 0 || pointerX > plotSize.width || pointerY < 0 || pointerY > plotSize.height) {
+			return;
+		}
+		const d = dashboardBisect(lines, xScale.invert(pointerX), yScale.invert(pointerY));
+		tooltip.show(d);
+	});
+	svg.select(`#box-${locIdx}`).on("mouseleave", () => tooltip.hide());
+
+	return svg, tooltip;
 }
 
 function makeYAxis(svg, xScale, yScale, plotSize, plotMargin) {
@@ -220,21 +262,27 @@ function computeDashboardData(response) {
 		}
 
 		for (let t = 0; t < T; t++) {
-		const d = new Date(Date.parse(response.config.dates[t]));
-		active_data[i][t] = {
-			"date": d,
-			"value": response.active[i][t],
-		};
-		active_null_data[i][t] = {
-			"date": d,
-			"value": response.active_null[i][t],
-		};
-		for (let c = 0; c < C; c++) {
-			capacity_data[i][c][t] = {
-			"date": d,
-			"value": response.capacity[i][c],
+			const d = new Date(Date.parse(response.config.dates[t]));
+			active_data[i][t] = {
+				"date": d,
+				"value": response.active[i][t],
+				"data_type": "With Transfers",
+				"node_name": response.config.node_names[i],
 			};
-		}
+			active_null_data[i][t] = {
+				"date": d,
+				"value": response.active_null[i][t],
+				"data_type": "Without Transfers",
+				"node_name": response.config.node_names[i],
+			};
+			for (let c = 0; c < C; c++) {
+				capacity_data[i][c][t] = {
+					"date": d,
+					"value": response.capacity[i][c],
+					"data_type": response.config.capacity_names[c],
+					"node_name": response.config.node_names[i],
+				};
+			}
 		}
 	}
 	const data = {
@@ -245,3 +293,78 @@ function computeDashboardData(response) {
 
 	return data;
 }
+
+class DashboardTooltip {
+	constructor(x,y) {
+		this.x = x;
+		this.y = y;
+
+		let tmpSVG = d3.create("svg");
+		let tmpNode = tmpSVG.append("g")
+			.attr("pointer-events", "none")
+			.attr("display", "none")
+			.attr("font-family", dashboardAxisFont)
+			.attr("font-size", dashboardAxisFontSize)
+			.attr("text-anchor", "middle");
+
+		tmpNode.append("rect")
+			.attr("x", -50)
+			.attr("y", -65)
+			.attr("width", 100)
+			.attr("height", 45)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.5);
+		tmpNode.append("rect")
+			.attr("transform", "translate(0, -30) rotate(45)")
+			.attr("width", 12)
+			.attr("height", 12)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.0);
+		tmpNode.append("rect")
+			.attr("x", -50)
+			.attr("y", -65)
+			.attr("width", 100)
+			.attr("height", 45)
+			.attr("fill", "white");
+
+		this.hospNameElem = tmpNode.append("text").attr("y", "-55").node();
+		this.tfrElem      = tmpNode.append("text").attr("y", "-45").node();
+		this.dateElem     = tmpNode.append("text").attr("y", "-35").node();
+		this.yvalElem     = tmpNode.append("text").attr("y", "-25").node();
+
+		tmpNode.append("circle")
+			.attr("stroke", "black")
+			.attr("fill", "none")
+			.attr("r", 2);
+
+		this.node = tmpNode.node();
+	}
+
+	show(d) {
+		this.node.removeAttribute("display");
+		this.node.setAttribute("transform", `translate(${this.x(d.date)},${this.y(d.value)})`);
+		this.hospNameElem.textContent = d.node_name;
+		this.tfrElem.textContent = d.data_type;
+		this.dateElem.textContent = d3.timeFormat("%Y-%m-%d")(d.date);
+		const yval_prefix = (d.data_type.indexOf("Capacity") > 0) ? "Beds: " : "Patients: ";
+		this.yvalElem.textContent = yval_prefix + d.value.toFixed(0);
+	}
+
+	hide() {
+		this.node.setAttribute("display", "none");
+	}
+}
+
+const dashboardBisectDate = d3.bisector(d => d.date).center;
+
+function dashboardBisect(lines, date, yval) {
+	const line1 = lines[0];
+	const i = dashboardBisectDate(line1, date, 1);
+	const d = line1[i].date;
+	const v = lines.map(l => l.findIndex(x => x.date == d));
+	const j = d3.minIndex(v.map((x,k) => Math.abs(lines[k][x].value - yval)));
+	return lines[j][v[j]];
+}
+

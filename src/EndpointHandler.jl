@@ -100,6 +100,7 @@ function handle_patients_request(
 		:node_names => data.node_names,
 		:node_names_abbrev => data.node_names_abbrev,
 		:node_locations    => data.node_locations,
+		:capacity_names => data.capacity_names,
 		:node_type => "hospital",
 		:region    => "jhhs",
 		:extent    => data.extent,

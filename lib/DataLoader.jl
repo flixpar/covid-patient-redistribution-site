@@ -54,6 +54,7 @@ function load_jhhs(
 
 	beds = casesdata.beds
 	capacity = casesdata.capacity
+	capacity_names = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"]
 
 	adj = (data.dist_matrix .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
@@ -72,6 +73,7 @@ function load_jhhs(
 		node_names = hospitals,
 		node_names_abbrev = hospitals_abbrev,
 		extent = extent,
+		capacity_names = capacity_names,
 	)
 end
 
