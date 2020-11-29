@@ -40,6 +40,7 @@ th {
 .info-icon {
 	height: 1em;
 	margin-left: 3px;
+	vertical-align: text-bottom;
 }
 
 #metrics-table {
