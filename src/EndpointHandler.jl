@@ -19,7 +19,9 @@ function handle_patients_request(
 		scenario::Symbol,
 		patient_type::Symbol,
 		objective::Symbol,
+		surge_preferences_dict::Dict{String,Any},
 		capacity_util::Float64,
+		uncertainty_level::Symbol,
 		los_param::String,
 
 		start_date::Date,
@@ -31,7 +33,6 @@ function handle_patients_request(
 	@assert patient_type in [:ward, :icu, :all]
 
 	data = load_jhhs(scenario, patient_type, start_date, end_date)
-
 	default_capacity_level = 4
 
 	if los_param == "default_dist"
@@ -41,6 +42,8 @@ function handle_patients_request(
 	else
 		error("Invalid los distribution selection: $(los_param)")
 	end
+
+	surge_preferences = [parse(Float64, surge_preferences_dict[lowercase(k)]) for k in data.node_names]
 
 	if objective == :minoverflow
 		model = patient_redistribution(

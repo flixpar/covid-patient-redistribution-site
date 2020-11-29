@@ -542,10 +542,18 @@ function sendUpdateQuery() {
 	if (!validateForm()) {
 		return;
 	}
+	const surgepreferences = {
+		bmc: document.getElementById("form-surgepreferences-bmc").value,
+		hcgh: document.getElementById("form-surgepreferences-hcgh").value,
+		jhh: document.getElementById("form-surgepreferences-jhh").value,
+		sh: document.getElementById("form-surgepreferences-sh").value,
+		smh: document.getElementById("form-surgepreferences-smh").value,
+	};
 	const data = {
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
+		surgepreferences: surgepreferences,
 		utilization: $("#form-utilization")[0].value,
 		uncertaintylevel: $("#form-uncertainty")[0].value,
 		los: $("#form-los")[0].value,

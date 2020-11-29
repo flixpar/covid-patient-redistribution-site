@@ -34,7 +34,9 @@ route("/api/patients", method=POST) do
 	scenario = str_to_symbol(input["scenario"])
 	patient_type = str_to_symbol(input["patient_type"])
 	objective = str_to_symbol(input["objective"])
+	surge_preferences = input["surgepreferences"]
 	capacity_util = parse(Float64, input["utilization"])
+	uncertainty_level = str_to_symbol(input["uncertaintylevel"])
 	los = input["los"]
 
 	start_date = Date(input["start_date"])
@@ -42,7 +44,8 @@ route("/api/patients", method=POST) do
 
 	handle_patients_request(
 		scenario, patient_type,
-		objective, capacity_util, los,
+		objective, surge_preferences,
+		capacity_util, uncertainty_level, los,
 		start_date, end_date,
 	)
 end
