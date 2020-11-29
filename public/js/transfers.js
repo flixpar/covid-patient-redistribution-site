@@ -144,19 +144,22 @@ function makeTransfersBreakdownSubplot(svg, response, locIdx, plotSize) {
 	});
 
 	const series = d3.range(N).map(j => {
-		return data.map(d => {
+		return data.map((d,t) => {
 			return {
 				date: d.date,
-				key: j,
 				color: tfrBarColors[response.config.node_names[j]],
 				0: (j == 0) ? 0 : d.values[j-1],
 				1: d.values[j],
+				value: response.sent[locIdx][j][t],
+				fromIdx: locIdx,
+				toIdx: j,
 			}
 		});
 	});
 
-	// const binWidth = 5;
-	const binWidth = 1.0 * (x(dates[1]) - x(dates[0]));
+	const binWidth = 1.02 * (x(dates[1]) - x(dates[0]));
+
+	const tooltip = new TransfersTooltip(svg, x, y, binWidth, response.config.node_names);
 
 	svg.append("g")
 		.selectAll("g")
@@ -169,7 +172,11 @@ function makeTransfersBreakdownSubplot(svg, response, locIdx, plotSize) {
 				.attr("y", d => y(d[1]))
 				.attr("height", d => y(d[0]) - y(d[1]))
 				.attr("width", binWidth)
-				.attr("fill", d => d.color);
+				.attr("fill", d => d.color)
+			.on("mouseover", (e,d) => tooltip.show(d, e))
+			.on("mouseout", _ => tooltip.hide());
+
+	svg.append(() => tooltip.node);
 
 	return svg;
 }
@@ -197,4 +204,75 @@ function makeTransfersBreakdownXAxis(svg, response, plotSize) {
 		.call(xAxis);
 
 	return svg;
+}
+
+class TransfersTooltip {
+	constructor(svg,x,y,binWidth,node_names) {
+		this.x = x;
+		this.y = y;
+		this.binWidth = binWidth;
+		this.node_names = node_names;
+		this.svg = svg;
+		this.highlight = null;
+
+		let tmpSVG = d3.create("svg");
+		let tmpNode = tmpSVG.append("g")
+			.attr("pointer-events", "none")
+			.attr("display", "none")
+			.attr("font-family", "monospace")
+			.attr("font-size", "8px")
+			.attr("text-anchor", "middle");
+
+		tmpNode.append("rect")
+			.attr("x", -50)
+			.attr("y", -50)
+			.attr("width", 100)
+			.attr("height", 40)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.5);
+		tmpNode.append("rect")
+			.attr("transform", "translate(0, -25) rotate(45)")
+			.attr("width", 15)
+			.attr("height", 15)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.0);
+		tmpNode.append("rect")
+			.attr("x", -50)
+			.attr("y", -50)
+			.attr("width", 100)
+			.attr("height", 40)
+			.attr("fill", "white");
+
+		this._locs = tmpNode.append("text").attr("y", "-37").node();
+		this._date = tmpNode.append("text").attr("y", "-27").node();
+		this._yval = tmpNode.append("text").attr("y", "-17").node();
+
+		this.node = tmpNode.node();
+	}
+
+	show(d,e) {
+		this.node.removeAttribute("display");
+		this.node.setAttribute("transform", `translate(${this.x(d.date)+(this.binWidth/2)},${this.y(d[1])})`);
+
+		this._locs.textContent = this.node_names[d.fromIdx] + " → " + this.node_names[d.toIdx];
+		this._date.textContent = d3.timeFormat("%Y-%m-%d")(d.date);
+		this._yval.textContent = "Transfers: " + d.value.toFixed(0);
+
+		this.highlight = this.svg
+			.append("rect")
+			.attr("x", this.x(d.date))
+			.attr("y", this.y(d[1]))
+			.attr("height", this.y(d[0]) - this.y(d[1]))
+			.attr("width", this.binWidth)
+			.attr("fill", "none")
+			.attr("stroke", "white")
+			.attr("stroke-width", "1px");
+	}
+
+	hide() {
+		this.highlight.remove();
+		this.node.setAttribute("display", "none");
+	}
 }
