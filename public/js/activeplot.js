@@ -310,15 +310,28 @@ class Tooltip {
 
 		tmpNode.append("rect")
 			.attr("x", -60)
-			.attr("y", -60)
+			.attr("y", -70)
 			.attr("width", 120)
 			.attr("height", 50)
 			.attr("fill", "white")
-			.attr("rx", "3")
-			.attr("stroke", "gray");
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.5);
+		tmpNode.append("rect")
+			.attr("transform", "translate(0, -35) rotate(45)")
+			.attr("width", 18)
+			.attr("height", 18)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.5);
+		tmpNode.append("rect")
+			.attr("x", -60)
+			.attr("y", -70)
+			.attr("width", 120)
+			.attr("height", 50)
+			.attr("fill", "white");
 
-		this._date = tmpNode.append("text").attr("y", "-40").node();
-		this._yval = tmpNode.append("text").attr("y", "-15").node();
+		this._date = tmpNode.append("text").attr("y", "-50").node();
+		this._yval = tmpNode.append("text").attr("y", "-25").node();
 
 		tmpNode.append("circle")
 			.attr("stroke", "black")
@@ -326,7 +339,6 @@ class Tooltip {
 			.attr("r", 6);
 
 		this.node = tmpNode.node();
-
 	}
 
 	show(d) {
