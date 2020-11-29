@@ -15,7 +15,7 @@ function results_all(
 		locations::Array{String,1},
 		start_date::Date,
 		los;
-		use_rounding::Bool=true,
+		use_rounding::Bool=false,
 )
 	N, _, T = size(sent)
 
@@ -23,8 +23,8 @@ function results_all(
 		beds = round.(Int, beds, RoundUp)
 	end
 
-	summary = results_summary(sent, beds, initial_patients, discharged_patients, admitted_patients, locations, start_date, los)
-	complete = results_complete(sent, beds, initial_patients, discharged_patients, admitted_patients, locations, start_date, los)
+	summary = results_summary(sent, beds, initial_patients, discharged_patients, admitted_patients, locations, start_date, los, use_rounding=use_rounding)
+	complete = results_complete(sent, beds, initial_patients, discharged_patients, admitted_patients, locations, start_date, los, use_rounding=use_rounding)
 
 	sent_matrix_table = results_sentmatrix_table(sent, locations)
 	sent_matrix_vis = results_sentmatrix_vis(sent, initial_patients, admitted_patients, locations)
@@ -32,7 +32,7 @@ function results_all(
 
 	sent_to = Dict(locations[i] => locations[row] for (i,row) in enumerate(eachrow(sum(sent, dims=3)[:,:,1] .> 0)))
 
-	active, active_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los)
+	active, active_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los, use_rounding=use_rounding)
 
 	overflow = [max(0, active[i,t] - beds[i]) for i in 1:N, t in 1:T]
 	load = [active[i,t] / beds[i] for i in 1:N, t in 1:T]
@@ -65,10 +65,11 @@ function results_summary(
 		locations::Array{String,1},
 		start_date::Date,
 		los,
+		;use_rounding=false,
 )
 	N, _, T = size(sent)
 
-	active, active_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los)
+	active, active_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los, use_rounding=use_rounding)
 
 	overflow = [sum(max(0, active[i,t] - beds[i]) for t in 1:T) for i in 1:N]
 	load = [sum(active[i,t] / beds[i] for t in 1:T)/T for i in 1:N]
@@ -98,10 +99,11 @@ function results_complete(
 		locations::Array{String,1},
 		start_date::Date,
 		los,
+		;use_rounding=false,
 )
 	N, _, T = size(sent)
 
-	active_patients, active_patients_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los)
+	active_patients, active_patients_null = results_active_patients(sent, initial_patients, discharged_patients, admitted_patients, los, use_rounding=use_rounding)
 
 	overflow = [max(0, active_patients[i,t] - beds[i]) for i in 1:N, t in 1:T]
 	load = [(active_patients[i,t] / beds[i]) for i in 1:N, t in 1:T]
@@ -163,7 +165,7 @@ function results_active_patients(
 		discharged_patients::Array{<:Real,2},
 		admitted_patients::Array{<:Real,2},
 		los;
-		use_rounding::Bool=true,
+		use_rounding::Bool=false,
 )
 	N, _, T = size(sent)
 

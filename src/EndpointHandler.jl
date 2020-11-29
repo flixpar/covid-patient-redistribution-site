@@ -90,6 +90,7 @@ function handle_patients_request(
 		data.node_names,
 		start_date,
 		los_dist,
+		use_rounding=false,
 	)
 
 	config = Dict(
