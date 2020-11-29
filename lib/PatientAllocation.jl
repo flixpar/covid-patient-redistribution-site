@@ -19,10 +19,11 @@ function patient_redistribution(
 		adj_matrix::BitArray{2}, los::Union{<:Distribution,Array{<:Real,1},Int};
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
-		capacity_weights::Array{<:Real,1}=Int[],
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
+		objective_weights::Array{<:Real}=Int[],
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
@@ -48,10 +49,20 @@ function patient_redistribution(
 	if isempty(capacity_weights)
 		capacity_weights = ones(Int, C)
 	end
-
 	if isempty(node_weights)
 		node_weights = ones(Int, N)
 	end
+	if isempty(objective_weights)
+		objective_weights = ones(Float64, N, C)
+	end
+
+	if ndims(objective_weights) == 1
+		objective_weights = repeat(objective_weights, (1,C))
+	end
+	@assert size(objective_weights) == (N,C)
+
+	objective_weights = objective_weights .* node_weights
+	objective_weights = objective_weights .* capacity_weights'
 
 	L = discretize_los(los, T)
 
@@ -87,7 +98,7 @@ function patient_redistribution(
 	active_null = compute_active_null(initial_patients, discharged_patients, admitted_patients, L)
 
 	# objective function
-	objective = @expression(model, dot(capacity_weights, sum(sum(overflow, dims=2) .* node_weights, dims=1)))
+	objective = @expression(model, sum(sum(overflow, dims=2) .* objective_weights))
 
 	######################
 	## Hard Constraints ##

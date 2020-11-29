@@ -45,6 +45,10 @@ function handle_patients_request(
 
 	surge_preferences = [parse(Float64, surge_preferences_dict[lowercase(k)]) for k in data.node_names]
 
+	N, C = size(data.capacity)
+	objective_weights = ones(Float64, N, C)
+	objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
+
 	if objective == :minoverflow
 		model = patient_redistribution(
 			data.capacity,
@@ -54,8 +58,9 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
-			smoothness_penalty=0.01,
+			smoothness_penalty=0.001,
 			capacity_cushion=(1.0-capacity_util),
+			objective_weights=objective_weights,
 			verbose=false
 		)
 	elseif objective == :loadbalance
@@ -67,7 +72,7 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
-			smoothness_penalty=0.01,
+			smoothness_penalty=0.001,
 			capacity_cushion=(1.0-capacity_util),
 			verbose=false
 		)
