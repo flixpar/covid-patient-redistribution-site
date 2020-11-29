@@ -192,7 +192,7 @@ function results_active_patients(
 				- sum(sent[i,:,t₁])
 				+ sum(sent[:,i,t₁])
 			) for t₁ in 1:t)
-			+ sum(sent[i,:,t])
+			# + sum(sent[i,:,t])
 		) for i in 1:N, t in 1:T
 	]
 	active_null = [(

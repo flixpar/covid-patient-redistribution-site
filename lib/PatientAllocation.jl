@@ -93,7 +93,7 @@ function patient_redistribution(
 			- sum(sent[i,:,t₁])
 			+ sum(sent[:,i,t₁])
 		) for t₁ in 1:t)
-		+ sum(sent[i,:,t])
+		# + sum(sent[i,:,t])
 	)
 	active_null = compute_active_null(initial_patients, discharged_patients, admitted_patients, L)
 
