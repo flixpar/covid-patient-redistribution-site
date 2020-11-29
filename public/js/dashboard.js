@@ -88,7 +88,7 @@ function plotActive(svg, xScale, yScale, data, response, locIdx, plotSize, plotM
 		.style("font-family", dashboardAxisFont)
 		.style("font-size", dashboardAxisFontSize)
 		.call(d3.axisBottom(xScale)
-					.ticks(d3.timeMonth.every(1))
+					.ticks(d3.timeWeek.every(3))
 					.tickSizeOuter(4)
 					.tickFormat(d3.timeFormat("%m/%d"))
 				 )

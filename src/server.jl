@@ -11,7 +11,7 @@ using EndpointHandler
 
 
 route("/") do
-	serve_static_file("html/home.html")
+	serve_static_file("html/patients.html")
 end
 
 route("/patients") do
