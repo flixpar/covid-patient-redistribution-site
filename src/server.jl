@@ -1,5 +1,6 @@
 using Genie
 using Genie.Router
+using Genie.Requests
 
 using Dates
 
@@ -28,14 +29,16 @@ end
 route("/api/patients", method=POST) do
 	str_to_symbol(s) = Symbol(replace(lowercase(s), " " => "_"))
 
-	scenario = str_to_symbol(@params(:scenario))
-	patient_type = str_to_symbol(@params(:patient_type))
-	objective = str_to_symbol(@params(:objective))
-	capacity_util = parse(Float64, @params(:utilization))
-	los = @params(:los)
+	input = jsonpayload()
 
-	start_date = Date(@params(:start_date))
-	end_date   = Date(@params(:end_date))
+	scenario = str_to_symbol(input["scenario"])
+	patient_type = str_to_symbol(input["patient_type"])
+	objective = str_to_symbol(input["objective"])
+	capacity_util = parse(Float64, input["utilization"])
+	los = input["los"]
+
+	start_date = Date(input["start_date"])
+	end_date   = Date(input["end_date"])
 
 	handle_patients_request(
 		scenario, patient_type,

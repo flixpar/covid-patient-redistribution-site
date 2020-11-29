@@ -542,21 +542,23 @@ function sendUpdateQuery() {
 	if (!validateForm()) {
 		return;
 	}
+	const data = {
+		scenario: $("#form-scenario")[0].value,
+		patient_type: $("#form-patient-type")[0].value,
+		objective: $("#form-objective")[0].value,
+		utilization: $("#form-utilization")[0].value,
+		uncertaintylevel: $("#form-uncertainty")[0].value,
+		los: $("#form-los")[0].value,
+		start_date: $("#form-start-date")[0].value,
+		end_date: $("#form-end-date")[0].value,
+	}
 	console.log("Querying server...");
 	$.ajax({
 		url: "/api/patients",
 		type: "post",
-		data: {
-			scenario: $("#form-scenario")[0].value,
-			patient_type: $("#form-patient-type")[0].value,
-			objective: $("#form-objective")[0].value,
-			surgepreferences: $("#form-surgepreferences")[0].value,
-			utilization: $("#form-utilization")[0].value,
-			uncertaintylevel: $("#form-uncertainty")[0].value,
-			los: $("#form-los")[0].value,
-			start_date: $("#form-start-date")[0].value,
-			end_date: $("#form-end-date")[0].value,
-		},
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		data: JSON.stringify(data),
 		success: handleResponse,
 		beforeSend: showProgressbar,
 		error: ajaxErrorHandler,
