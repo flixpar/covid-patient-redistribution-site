@@ -118,6 +118,7 @@ function handle_patients_request(
 		:capacity => permutedims(data.capacity, (2,1)),
 		:active => permutedims(results.active_patients, (2,1)),
 		:active_null => permutedims(results.active_patients_nosent, (2,1)),
+		:admitted => permutedims(data.admitted, (2,1)),
 		:total_patients => sum(data.initial) + sum(data.admitted),
 		:config => config,
 	)

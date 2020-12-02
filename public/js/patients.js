@@ -50,6 +50,7 @@ function handleResponse(response, status, xhr) {
 	createJHHSDashboard(response);
 	createTransfersBreakdownPlot(response);
 
+	createAdmittedPlot(response);
 	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
@@ -70,6 +71,7 @@ function makeSections() {
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
 		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
 		{title: "Surge Metrics",                          identifier: "results-surgemetrics",showDefault: true},
+		{title: "Admissions",                             identifier: "results-admitted",    showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},

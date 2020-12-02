@@ -26,6 +26,8 @@ const dashboardDescription = ``;
 
 const transfersDescription = ``;
 
+const admittedDescription = ``;
+
 const metricsDescription = `
 <div class="content" style="margin-bottom: 1em;">
 There are two primary metrics by which we evaluate the potential results of making patient transfers.
