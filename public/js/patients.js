@@ -43,6 +43,7 @@ function handleResponse(response, status, xhr) {
 	}
 
 	createStatsSummary(response);
+	createSurgeCapacityMetrics(response);
 
 	createMap(response, "overflow_dynamic");
 
@@ -68,6 +69,7 @@ function makeSections() {
 	const sectionInfo = [
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
 		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
+		{title: "Surge Metrics",                          identifier: "results-surgemetrics",showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
@@ -442,6 +444,57 @@ function downloadTableAsCSV(table, fn) {
 	document.body.appendChild(downloadAnchorNode);
 	downloadAnchorNode.click();
 	downloadAnchorNode.remove();
+}
+
+function createSurgeCapacityMetrics(rawdata) {
+	const N = rawdata.config.node_names.length;
+	const T = rawdata.config.dates.length;
+	const nDecimals = 0;
+
+	const maxoverflow_byloc_sent = d3.range(N).map(i => d3.max(rawdata.active[i].map(x => Math.max(0, x - rawdata.beds[i]))));
+	const maxoverflow_byloc_nosent = d3.range(N).map(i => d3.max(rawdata.active_null[i].map(x => Math.max(0, x - rawdata.beds[i]))));
+
+	let table = document.createElement("table");
+	table.id = "surgemetrics-table";
+	table.className = "table";
+	table.style.marginLeft = "auto";
+	table.style.marginRight = "auto";
+
+	let titleRow = document.createElement("tr");
+	let titleRowElem = document.createElement("td");
+	titleRowElem.innerText = "Required Surge Capacity (Beds)";
+	titleRowElem.colSpan = N+1;
+	titleRowElem.className = "text-centered";
+	titleRow.appendChild(titleRowElem);
+	table.appendChild(titleRow);
+
+	let keyRow = document.createElement("tr");
+	let valueRow = document.createElement("tr");
+	table.appendChild(keyRow);
+	table.appendChild(valueRow);
+
+	function addMetric(mName, mValue) {
+		let keyElem = document.createElement("td");
+		let valueElem = document.createElement("td");
+
+		keyElem.innerText = mName;
+		if (mValue != null && typeof mValue == "number") {
+			valueElem.innerText = mValue.toFixed(nDecimals);
+		} else {
+			valueElem.innerText = mValue;
+		}
+
+		keyRow.appendChild(keyElem);
+		valueRow.appendChild(valueElem);
+	}
+
+	for (let i = 0; i < N; i++) {
+		addMetric(rawdata.config.node_names[i], maxoverflow_byloc_sent[i]);
+	}
+	addMetric("Total", d3.sum(maxoverflow_byloc_sent));
+
+	const section = getSection("results-surgemetrics");
+	section.appendChild(table);
 }
 
 function createStatsSummary(rawdata, add_description=true) {
