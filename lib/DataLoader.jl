@@ -52,7 +52,8 @@ function load_jhhs(
 		end
 	end
 
-	beds = casesdata.beds
+	default_capacity_level = 4
+	beds = casesdata.capacity[:,default_capacity_level]
 	capacity = casesdata.capacity
 	capacity_names = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"]
 
