@@ -79,11 +79,11 @@ end
 
 function los_dist_default(bedtype::Symbol)
 	if bedtype == :icu
-		return Gamma(0.9875, 12.8990)
+		return Gamma(1.77595, 5.9512)
 	elseif bedtype == :ward
-		return Gamma(1.825, 3.772)
+		return Gamma(2.601, 3.8046)
 	else
-		return Gamma(1.723, 4.154)
+		return Gamma(2.244, 4.4988)
 	end
 end
 
