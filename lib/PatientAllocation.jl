@@ -20,7 +20,8 @@ function patient_redistribution(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		active_smoothness_penalty::Real=0, admitted_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
@@ -138,6 +139,7 @@ function patient_redistribution(
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
 	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
+	add_admitted_smoothness_penalty!(model, sent, objective, admitted_smoothness_penalty, admitted_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 	add_loadbalancing_penalty!(model, sent, objective, balancing_penalty, balancing_thresh, active_patients, capacity)
 	add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
@@ -161,7 +163,8 @@ function patient_loadbalance(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		active_smoothness_penalty::Real=0, admitted_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 
@@ -261,6 +264,7 @@ function patient_loadbalance(
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
 	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
+	add_admitted_smoothness_penalty!(model, sent, objective, admitted_smoothness_penalty, admitted_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 
 	###############
@@ -285,7 +289,8 @@ function patient_hybridmodel(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		active_smoothness_penalty::Real=0, admitted_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
@@ -413,6 +418,7 @@ function patient_hybridmodel(
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
 	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
+	add_admitted_smoothness_penalty!(model, sent, objective, admitted_smoothness_penalty, admitted_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 	add_loadbalancing_penalty!(model, sent, objective, balancing_penalty, balancing_thresh, active_patients, capacity)
 	add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
@@ -586,6 +592,22 @@ function add_active_smoothness_penalty!(model, sent, objective, smoothness_penal
 		@constraint(model, [i=1:N,t=1:T-1], -(active_patients[i,t] - active_patients[i,t+1]) <= active_smoothness_dummy[i,t])
 
 		add_to_expression!(objective, smoothness_penalty * sum(active_smoothness_dummy))
+	end
+	return
+end
+
+# penalize non-smoothness in admitted patients if enabled
+function add_admitted_smoothness_penalty!(model, sent, objective, smoothness_penalty, admitted_patients)
+	if smoothness_penalty > 0
+		N, _, T = size(sent)
+
+		@expression(model, total_admitted[i=1:N,t=1:T], admitted_patients[i,t] - sum(sent[i,:,t]) + sum(sent[:,i,t]))
+
+		@variable(model, admitted_smoothness_dummy[i=1:N,t=1:T-1] >= 0)
+		@constraint(model, [i=1:N,t=1:T-1],  (total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy[i,t])
+		@constraint(model, [i=1:N,t=1:T-1], -(total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy[i,t])
+
+		add_to_expression!(objective, smoothness_penalty * sum(admitted_smoothness_dummy))
 	end
 	return
 end
