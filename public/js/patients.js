@@ -496,7 +496,18 @@ function createSurgeCapacityMetrics(rawdata) {
 		const capLevelName = rawdata.config.capacity_names[capLevel];
 		addColumn([nodeName, maxOverflowValue, capLevelName]);
 	}
-	addColumn(["Total", d3.sum(max_overflows), ""]);
+
+	const maxCapLevelName = rawdata.config.capacity_names[d3.max(max_capacitylevels)];
+	addColumn(["Total", d3.sum(max_overflows), maxCapLevelName]);
+
+	const totalActive = d3.range(T).map(t => d3.sum(rawdata.active, a => a[t]));
+	const maxActive = d3.max(totalActive);
+	const totalCapacity = d3.range(C).map(c => d3.sum(rawdata.capacity, x => x[c]));
+	const idealOverflow = Math.max(0, maxActive - totalCapacity[C-1]);
+	const idealCapLevel = totalCapacity.findIndex(c => c > maxActive);
+	const idealCapLevelIdx = (idealCapLevel == -1) ? C-1 : idealCapLevel-1;
+	const idealCapLevelName = rawdata.config.capacity_names[idealCapLevelIdx];
+	addColumn(["Ideal", idealOverflow, idealCapLevelName]);
 
 	for (row of rows) {
 		tableBody.appendChild(row);
