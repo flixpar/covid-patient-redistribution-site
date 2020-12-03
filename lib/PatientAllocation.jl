@@ -31,6 +31,7 @@ function patient_redistribution(
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
 		severity_weighting::Bool=false, setup_cost::Real=0,
 
+		timelimit::Int=30,
 		verbose::Bool=false,
 	)
 
@@ -78,6 +79,10 @@ function patient_redistribution(
 
 	model = Model(Gurobi.Optimizer)
 	if !verbose set_silent(model) end
+
+	if constrain_integer
+		set_optimizer_attribute(model, "TimeLimit", timelimit)
+	end
 
 	###############
 	## Variables ##
@@ -161,6 +166,7 @@ function patient_loadbalance(
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		setup_cost::Real=0,
 
+		timelimit::Int=30,
 		verbose::Bool=false,
 	)
 
@@ -192,6 +198,10 @@ function patient_loadbalance(
 
 	model = Model(Gurobi.Optimizer)
 	if !verbose set_silent(model) end
+
+	if constrain_integer
+		set_optimizer_attribute(model, "TimeLimit", timelimit)
+	end
 
 	###############
 	## Variables ##
