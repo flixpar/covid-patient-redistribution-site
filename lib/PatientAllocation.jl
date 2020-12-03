@@ -20,7 +20,7 @@ function patient_redistribution(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
@@ -137,6 +137,7 @@ function patient_redistribution(
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
+	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 	add_loadbalancing_penalty!(model, sent, objective, balancing_penalty, balancing_thresh, active_patients, capacity)
 	add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
@@ -160,7 +161,7 @@ function patient_loadbalance(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 
@@ -259,6 +260,7 @@ function patient_loadbalance(
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
+	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 
 	###############
@@ -283,7 +285,7 @@ function patient_hybridmodel(
 
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
-		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		sent_penalty::Real=0, smoothness_penalty::Real=0, active_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
@@ -410,6 +412,7 @@ function patient_hybridmodel(
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
+	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
 	add_setup_cost!(model, sent, objective, setup_cost)
 	add_loadbalancing_penalty!(model, sent, objective, balancing_penalty, balancing_thresh, active_patients, capacity)
 	add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
@@ -569,6 +572,20 @@ function add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
 
 		add_to_expression!(objective, smoothness_penalty * sum(smoothness_dummy))
 		add_to_expression!(objective, smoothness_penalty * sum(sent[:,:,1]))
+	end
+	return
+end
+
+# penalize non-smoothness in active patients if enabled
+function add_active_smoothness_penalty!(model, sent, objective, smoothness_penalty, active_patients)
+	if smoothness_penalty > 0
+		N, _, T = size(sent)
+
+		@variable(model, active_smoothness_dummy[i=1:N,t=1:T-1] >= 0)
+		@constraint(model, [i=1:N,t=1:T-1],  (active_patients[i,t] - active_patients[i,t+1]) <= active_smoothness_dummy[i,t])
+		@constraint(model, [i=1:N,t=1:T-1], -(active_patients[i,t] - active_patients[i,t+1]) <= active_smoothness_dummy[i,t])
+
+		add_to_expression!(objective, smoothness_penalty * sum(active_smoothness_dummy))
 	end
 	return
 end
