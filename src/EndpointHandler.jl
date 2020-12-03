@@ -49,10 +49,11 @@ function handle_patients_request(
 	surge_preferences = [parse(Float64, surge_preferences_dict[lowercase(k)]) for k in data.node_names]
 
 	N, C = size(data.capacity)
-	objective_weights = ones(Float64, N, C)
-	objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
 
 	if objective == :minoverflow
+		objective_weights = ones(Float64, N, C)
+		objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
+
 		model = patient_redistribution(
 			data.capacity,
 			data.initial,
@@ -66,7 +67,7 @@ function handle_patients_request(
 			objective_weights=objective_weights,
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
-			verbose=false
+			verbose=false,
 		)
 	elseif objective == :loadbalance
 		model = patient_loadbalance(
@@ -80,7 +81,7 @@ function handle_patients_request(
 			smoothness_penalty=0.001,
 			capacity_cushion=(1.0-capacity_util),
 			constrain_integer=constrain_integer,
-			verbose=false
+			verbose=false,
 		)
 	else
 		error("Invalid objective: $(objective)")

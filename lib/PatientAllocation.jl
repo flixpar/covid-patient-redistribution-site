@@ -158,10 +158,11 @@ function patient_loadbalance(
 		admitted_patients::Array{<:Real,2},
 		adj_matrix::BitArray{2}, los::Union{<:Distribution,Array{<:Real,1},Int};
 
-		capacity_cushion::Real=-1, capacity_weights::Array{<:Real,1}=Int[],
+		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
+		capacity_weights::Array{<:Real,1}=Int[],
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		setup_cost::Real=0,
@@ -182,9 +183,7 @@ function patient_loadbalance(
 	C = size(capacity, 2)
 	check_sizes(initial_patients, discharged_patients, admitted_patients, capacity)
 
-	if 0 < capacity_cushion < 1
-		capacity = capacity .* (1.0 - capacity_cushion)
-	end
+	capacity = capacity .* (1.0 .- capacity_cushion)
 
 	if isempty(capacity_weights)
 		capacity_weights = ones(Int, C)
@@ -201,6 +200,7 @@ function patient_loadbalance(
 
 	if constrain_integer
 		set_optimizer_attribute(model, "TimeLimit", timelimit)
+		set_optimizer_attribute(model, "MIPGap", 0.05)
 	end
 
 	###############
