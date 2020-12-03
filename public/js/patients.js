@@ -70,13 +70,12 @@ function makeSections() {
 	const sectionInfo = [
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
 		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
-		{title: "Surge Metrics",                          identifier: "results-surgemetrics",showDefault: true},
+		{title: "Metrics",                                identifier: "results-metrics",     showDefault: true},
 		{title: "Admissions",                             identifier: "results-admitted",    showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
 		{title: "Number of Active COVID Patients",        identifier: "results-active",      showDefault: false},
-		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
 		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
 	]
 
@@ -531,7 +530,7 @@ function createSurgeCapacityMetrics(rawdata) {
 		}
 	}
 
-	const section = getSection("results-surgemetrics");
+	const section = getSection("results-metrics");
 	section.appendChild(table);
 }
 
@@ -562,6 +561,13 @@ function createStatsSummary(rawdata, add_description=true) {
 		table.appendChild(row);
 	}
 
+	function addMetricSeparator() {
+		let lastRow = table.childNodes[table.childElementCount-1];
+		for (elem of lastRow.childNodes) {
+			elem.style.borderBottom = "1px solid lightgray";
+		}
+	}
+
 	const overflow_byloc = d3.range(N).map(i => rawdata.active[i].map(x => Math.max(0, x - rawdata.beds[i])));
 	const overflow_nosent_byloc = d3.range(N).map(i => rawdata.active_null[i].map(x => Math.max(0, x - rawdata.beds[i])));
 
@@ -578,8 +584,10 @@ function createStatsSummary(rawdata, add_description=true) {
 	addMetric("Required Surge Capacity (Without Transfers)", overflow_nosent);
 	addMetric("Required Surge Capacity (With Transfers)", overflow_sent);
 	addMetric("Reduction in Required Surge Capacity", (overflow_reduction * 100).toFixed(2) + "%");
+	addMetricSeparator();
 	addMetric("Max Required Surge Capacity (Without Transfers)", maxoverflow_nosent);
 	addMetric("Max Required Surge Capacity (With Transfers)", maxoverflow_sent);
+	addMetricSeparator();
 	addMetric("Transferred Patients", sent_total);
 	addMetric("Perecent of Patients Transferred", (sent_pct * 100).toFixed(2) + "%");
 
@@ -592,6 +600,9 @@ function createStatsSummary(rawdata, add_description=true) {
 	}
 
 	section.appendChild(table);
+
+	let hr = document.createElement("hr");
+	section.appendChild(hr);
 }
 
 function showProgressbar() {

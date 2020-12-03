@@ -28,20 +28,8 @@ const transfersDescription = ``;
 
 const admittedDescription = ``;
 
-const metricsDescription = `
-<div class="content" style="margin-bottom: 1em;">
-There are two primary metrics by which we evaluate the potential results of making patient transfers.
-<ol>
-<li><i>Surge Capacity Requirements:</i> The capacity is saved when patients are optimally transferred from over-loaded locations to within-capacity locations. Reducing the amount of required surge capacity is critical since it is often costly and challenging for hospitals to add capacity, and the increased load can lead to worse outcomes for both COVID and non-COVID patients. The surge capacity requirements also provide insight into any need for adding future capacity both on the system- and hospital-level.</li>
-<li><i>Total Number of Transfers:</i> Transfers can be difficult and complicated for both hospitals and patients, so our models aim to keep the number of transfers at a minimum while reducing the required surge capacity as much as possible.</li>
-</ol>
-</div>
-`;
+const metricsDescription = ``;
 
-function njCaseDescription(start_date, end_date) {
-	return `The case study you selected was a selection of nine hospitals in New Jersey from ${start_date} to ${end_date}. Northeastern New Jersey was in the epicenter of the first wave of the COVID pandemic in the US, and as a result many New Jersey hospitals experienced an extreme surge of COVID patients. These hospitals took action to increase their original patient capacity to accommodate the additional patients: according to a report from the New Jersey Hospital Association, hospitals added at least 2,800 ICU beds. However, the New Jersey hospital system as a whole did not go over capacity, so the hospitals that were hit hardest may have been better served by transferring patients to hospitals in areas with fewer COVID cases. You can see the impact optimal patient transfers could have made in the results below.`;
-}
-
-function neCaseDescription(start_date, end_date) {
-	return `The case study you selected was the northeast region of the United States from ${start_date} to ${end_date}. Some of these states, particularly New York and New Jersey, were hit very hard by the first wave of the COVID pandemic in the US during March and April 2020. There were massive efforts to increase hospital capacity so that the healthcare systems of these states would not be completely overwhelmed. However, not all states in the northeast went over capacity, or even approached the capacity of their hospitals, so they could have benefitted significantly from optimal patient transfers. You can see the impact optimal patient transfers could have made in the results below.`;
+function jhhsCaseDescription(start_date, end_date) {
+	return `Johns Hopkins Health System from ${start_date} to ${end_date}.`;
 }
