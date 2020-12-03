@@ -31,9 +31,6 @@ function createAdmittedPlot(response, add_description=true) {
 
 	const fig = makeAdmittedPlot(response);
 	section.appendChild(fig);
-
-	let hr = document.createElement("hr");
-	section.appendChild(hr);
 }
 
 function makeAdmittedPlot(response) {
