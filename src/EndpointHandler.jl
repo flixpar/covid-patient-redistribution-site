@@ -64,7 +64,7 @@ function handle_patients_request(
 			sent_penalty=0.01,
 			smoothness_penalty=0.001,
 			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.1,
+			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
 			objective_weights=objective_weights,
 			transfer_budget=transfer_budget,
@@ -82,7 +82,7 @@ function handle_patients_request(
 			sent_penalty=0.01,
 			smoothness_penalty=0.001,
 			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.1,
+			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
 			constrain_integer=constrain_integer,
 			verbose=false,
@@ -93,7 +93,7 @@ function handle_patients_request(
 		capacity_weights = ones(Int, C)
 		capacity_weights[end] = 4
 		overflowmin_weight = 1.0
-		loadbalance_weight = 0.25
+		loadbalance_weight = 50.0
 
 		model = patient_hybridmodel(
 			data.capacity,
@@ -107,7 +107,7 @@ function handle_patients_request(
 			sent_penalty=0.01,
 			smoothness_penalty=0.001,
 			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.1,
+			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
 			objective_weights=objective_weights,
 			capacity_weights=capacity_weights,
