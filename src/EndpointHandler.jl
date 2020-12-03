@@ -19,6 +19,7 @@ function handle_patients_request(
 		scenario::Symbol,
 		patient_type::Symbol,
 		objective::Symbol,
+		constrain_integer::Bool,
 		transfer_budget_dict::Dict{String,Any},
 		surge_preferences_dict::Dict{String,Any},
 		capacity_util::Float64,
@@ -64,6 +65,7 @@ function handle_patients_request(
 			capacity_cushion=(1.0-capacity_util),
 			objective_weights=objective_weights,
 			transfer_budget=transfer_budget,
+			constrain_integer=constrain_integer,
 			verbose=false
 		)
 	elseif objective == :loadbalance
@@ -77,6 +79,7 @@ function handle_patients_request(
 			sent_penalty=0.01,
 			smoothness_penalty=0.001,
 			capacity_cushion=(1.0-capacity_util),
+			constrain_integer=constrain_integer,
 			verbose=false
 		)
 	else

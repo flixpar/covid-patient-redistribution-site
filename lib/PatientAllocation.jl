@@ -21,6 +21,7 @@ function patient_redistribution(
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
 		objective_weights::Array{<:Real}=Int[],
@@ -82,7 +83,7 @@ function patient_redistribution(
 	## Variables ##
 	###############
 
-	@variable(model, sent[1:N,1:N,1:T] >= 0)
+	@variable(model, sent[1:N,1:N,1:T] >= 0, integer=constrain_integer)
 	@variable(model, overflow[1:N,1:T,1:C] >= 0)
 
 	#################
@@ -155,6 +156,7 @@ function patient_loadbalance(
 		capacity_cushion::Real=-1, capacity_weights::Array{<:Real,1}=Int[],
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		constrain_integer::Bool=false,
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		setup_cost::Real=0,
@@ -195,7 +197,7 @@ function patient_loadbalance(
 	## Variables ##
 	###############
 
-	@variable(model, sent[1:N,1:N,1:T] >= 0)
+	@variable(model, sent[1:N,1:N,1:T] >= 0, integer=constrain_integer)
 	@variable(model, load_objective[1:N,1:T,1:C] >= 0)
 
 	#################

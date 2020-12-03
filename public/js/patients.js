@@ -656,6 +656,7 @@ function sendUpdateQuery() {
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
+		integer: $("#form-integer")[0].value,
 		transferbudget: transferBudget,
 		surgepreferences: surgepreferences,
 		utilization: $("#form-utilization")[0].value,
@@ -702,6 +703,7 @@ const tooltip_content = {
 	"form-surgepreferences": "Preference for where to create additional capacity if it is necessary.",
 	"form-utilization": "Percentage of the total capacity that can be used in practice.",
 	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",
+	"form-integer": "Use the mixed-integer programming formulation or not.",
 };
 $("#form label").each((i, el) => {
 	const k = el.getAttribute("for");

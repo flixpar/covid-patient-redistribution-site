@@ -172,6 +172,16 @@
 				</div>
 
 				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-integer">Ensure Integral Transfers</label>
+					<div class="select is-fullwidth">
+						<select id="form-integer">
+							<option value="true" selected>True</option>
+							<option value="false">False</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-start-date">Start Date</label>
 					<input type="date" id="form-start-date" value="2020-11-20" class="input date column is-two-thirds">
 				</div>
@@ -184,8 +194,6 @@
 				<div class="field is-horizontal">
 					<button type="button" id="form-submit" class="button is-info column is-6 is-offset-3">Update</button>
 				</div>
-
-				<input type="hidden" id="form-integer" value="false">
 			</form>
 		</div>
 

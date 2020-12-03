@@ -18,6 +18,10 @@ route("/patients") do
 	serve_static_file("html/patients.html")
 end
 
+route("/patients_int") do
+	serve_static_file("html/patients_int.html")
+end
+
 route("/method") do
 	serve_static_file("html/method.html")
 end
@@ -39,13 +43,14 @@ route("/api/patients", method=POST) do
 	capacity_util = parse(Float64, input["utilization"])
 	uncertainty_level = str_to_symbol(input["uncertaintylevel"])
 	los = input["los"]
+	constrain_integer = (input["integer"] == "true")
 
 	start_date = Date(input["start_date"])
 	end_date   = Date(input["end_date"])
 
 	handle_patients_request(
 		scenario, patient_type,
-		objective,
+		objective, constrain_integer,
 		transfer_budget, surge_preferences,
 		capacity_util, uncertainty_level, los,
 		start_date, end_date,
