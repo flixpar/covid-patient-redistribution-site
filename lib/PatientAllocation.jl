@@ -8,7 +8,7 @@ using LinearAlgebra
 using MathOptInterface
 using Statistics
 
-export patient_redistribution, patient_loadbalance
+export patient_redistribution, patient_loadbalance, patient_hybridmodel
 
 
 function patient_redistribution(
