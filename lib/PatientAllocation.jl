@@ -603,11 +603,15 @@ function add_admitted_smoothness_penalty!(model, sent, objective, smoothness_pen
 
 		@expression(model, total_admitted[i=1:N,t=1:T], admitted_patients[i,t] - sum(sent[i,:,t]) + sum(sent[:,i,t]))
 
-		@variable(model, admitted_smoothness_dummy[i=1:N,t=1:T-1] >= 0)
-		@constraint(model, [i=1:N,t=1:T-1],  (total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy[i,t])
-		@constraint(model, [i=1:N,t=1:T-1], -(total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy[i,t])
+		@variable(model, admitted_smoothness_dummy_l1[i=1:N,t=1:T-1] >= 0)
+		@constraint(model, [i=1:N,t=1:T-1],  (total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy_l1[i,t])
+		@constraint(model, [i=1:N,t=1:T-1], -(total_admitted[i,t] - total_admitted[i,t+1]) <= admitted_smoothness_dummy_l1[i,t])
 
-		add_to_expression!(objective, smoothness_penalty * sum(admitted_smoothness_dummy))
+		@variable(model, admitted_smoothness_dummy_l∞[i=1:N] >= 0)
+		@constraint(model, [i=1:N,t=1:T-1], admitted_smoothness_dummy_l1[i,t] <= admitted_smoothness_dummy_l∞[i])
+
+		add_to_expression!(objective, smoothness_penalty * sum(admitted_smoothness_dummy_l1))
+		add_to_expression!(objective, smoothness_penalty * T * sum(admitted_smoothness_dummy_l∞))
 	end
 	return
 end
