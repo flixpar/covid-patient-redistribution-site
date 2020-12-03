@@ -453,9 +453,11 @@ function createSurgeCapacityMetrics(rawdata) {
 	const C = rawdata.capacity[0].length;
 	const nDecimals = 0;
 
-	const max_active = d3.range(N).map(i => d3.max(rawdata.active[i]));
-	const max_overflows = max_active.map((a,i) => Math.max(0, a - rawdata.capacity[i][C-1]));
-	const max_capacitylevels = max_active.map((m,i) => rawdata.capacity[i].findIndex(c => c > m)).map(x => (x == -1) ? C-1 : x-1);
+	const max_active_wtfr = d3.range(N).map(i => d3.max(rawdata.active[i]));
+	const max_active_notfr = d3.range(N).map(i => d3.max(rawdata.active_null[i]));
+	const max_overflows_wtfr = max_active_wtfr.map((a,i) => Math.max(0, a - rawdata.capacity[i][C-1]));
+	const max_overflows_notfr = max_active_notfr.map((a,i) => Math.max(0, a - rawdata.capacity[i][C-1]));
+	const max_capacitylevels_wtfr = max_active_wtfr.map((m,i) => rawdata.capacity[i].findIndex(c => c > m)).map(x => (x == -1) ? C-1 : x-1);
 
 	let table = document.createElement("table");
 	table.id = "surgemetrics-table";
@@ -487,17 +489,18 @@ function createSurgeCapacityMetrics(rawdata) {
 		}
 	}
 
-	addColumn(["Hospital", "Required Surge Capacity (Beds)", "Maximum Required Capacity Level"]);
+	addColumn(["Hospital", "Required Surge Capacity With Transfers (Beds)", "Required Surge Capacity Without Transfers (Beds)", "Maximum Required Capacity Level"]);
 	for (let i = 0; i < N; i++) {
 		const nodeName = rawdata.config.node_names[i];
-		const maxOverflowValue = max_overflows[i];
-		const capLevel = max_capacitylevels[i];
+		const maxOverflowValueWithTfr = max_overflows_wtfr[i];
+		const maxOverflowValueWithoutTfr = max_overflows_notfr[i];
+		const capLevel = max_capacitylevels_wtfr[i];
 		const capLevelName = rawdata.config.capacity_names[capLevel];
-		addColumn([nodeName, maxOverflowValue, capLevelName]);
+		addColumn([nodeName, maxOverflowValueWithTfr, maxOverflowValueWithoutTfr, capLevelName]);
 	}
 
-	const maxCapLevelName = rawdata.config.capacity_names[d3.max(max_capacitylevels)];
-	addColumn(["Total", d3.sum(max_overflows), maxCapLevelName]);
+	const maxCapLevelName = rawdata.config.capacity_names[d3.max(max_capacitylevels_wtfr)];
+	addColumn(["Total", d3.sum(max_overflows_wtfr), d3.sum(max_overflows_notfr), maxCapLevelName]);
 
 	const totalActive = d3.range(T).map(t => d3.sum(rawdata.active, a => a[t]));
 	const maxActive = d3.max(totalActive);
@@ -506,7 +509,7 @@ function createSurgeCapacityMetrics(rawdata) {
 	const idealCapLevel = totalCapacity.findIndex(c => c > maxActive);
 	const idealCapLevelIdx = (idealCapLevel == -1) ? C-1 : idealCapLevel-1;
 	const idealCapLevelName = rawdata.config.capacity_names[idealCapLevelIdx];
-	addColumn(["Ideal", idealOverflow, idealCapLevelName]);
+	addColumn(["Ideal", idealOverflow, "–", idealCapLevelName]);
 
 	for (row of rows) {
 		tableBody.appendChild(row);
