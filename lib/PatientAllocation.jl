@@ -361,7 +361,7 @@ function patient_hybridmodel(
 
 	@variable(model, sent[1:N,1:N,1:T] >= 0, integer=constrain_integer)
 	@variable(model, load_objective[1:N,1:T,1:C] >= 0)
-	@variable(model, overflow[1:N,1:T,1:C] >= 0)
+	@variable(model, overflow[1:N,1:T] >= 0)
 
 	#################
 	## Expressions ##
@@ -386,7 +386,7 @@ function patient_hybridmodel(
 	# objective function
 	objective = @expression(model, 
 		(loadbalance_weight * dot(capacity_weights, sum(load_objective, dims=(1,2))))
-		+ (overflowmin_weight * sum(sum(overflow, dims=2) .* objective_weights))
+		+ (overflowmin_weight * sum(sum(overflow, dims=2) .* node_weights))
 	)
 
 	######################
@@ -402,7 +402,7 @@ function patient_hybridmodel(
 	# objective constraints
 	@constraint(model, [i=1:N,t=1:T,c=1:C],  (load[i,t,c] - mean(load[:,t,c])) <= load_objective[i,t,c])
 	@constraint(model, [i=1:N,t=1:T,c=1:C], -(load[i,t,c] - mean(load[:,t,c])) <= load_objective[i,t,c])
-	@constraint(model, [i=1:N,t=1:T,c=1:C], overflow[i,t,c] >= active_patients[i,t] - capacity[i,c])
+	@constraint(model, [i=1:N,t=1:T], overflow[i,t] >= active_patients[i,t] - capacity[i,end])
 
 	################################
 	## Optional Constraints/Costs ##

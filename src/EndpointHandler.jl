@@ -88,12 +88,11 @@ function handle_patients_request(
 			verbose=false,
 		)
 	elseif objective == :hybrid
-		objective_weights = ones(Float64, N, C)
-		objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
+		node_weights = 1.0 .- (0.003 * surge_preferences)
 		capacity_weights = ones(Int, C)
 		capacity_weights[end] = 4
-		overflowmin_weight = 1.0
-		loadbalance_weight = 50.0
+		overflowmin_weight = 0.5
+		loadbalance_weight = 2.0
 
 		model = patient_hybridmodel(
 			data.capacity,
@@ -104,12 +103,12 @@ function handle_patients_request(
 			los_dist,
 			overflowmin_weight=overflowmin_weight,
 			loadbalance_weight=loadbalance_weight,
-			sent_penalty=0.01,
-			smoothness_penalty=0.001,
+			sent_penalty=5.0,
+			smoothness_penalty=0,
 			active_smoothness_penalty=0.01,
 			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
-			objective_weights=objective_weights,
+			node_weights=node_weights,
 			capacity_weights=capacity_weights,
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
