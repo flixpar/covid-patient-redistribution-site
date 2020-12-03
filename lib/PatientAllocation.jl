@@ -271,6 +271,159 @@ function patient_loadbalance(
 	return model
 end
 
+function patient_hybridmodel(
+		capacity::Array{<:Real},
+		initial_patients::Array{<:Real,1},
+		discharged_patients::Array{<:Real,2},
+		admitted_patients::Array{<:Real,2},
+		adj_matrix::BitArray{2}, los::Union{<:Distribution,Array{<:Real,1},Int};
+
+		overflowmin_weight::Real=1.0,
+		loadbalance_weight::Real=0.25,
+
+		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
+		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
+		sent_penalty::Real=0, smoothness_penalty::Real=0,
+		constrain_integer::Bool=false,
+		capacity_weights::Array{<:Real,1}=Int[],
+		node_weights::Array{<:Real,1}=Int[],
+		objective_weights::Array{<:Real}=Int[],
+		transfer_budget::Array{<:Real,1}=Int[],
+
+		sendreceive_gap::Int=0, min_send_amt::Real=0,
+		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
+		severity_weighting::Bool=false, setup_cost::Real=0,
+
+		timelimit::Int=30,
+		verbose::Bool=false,
+	)
+
+	###############
+	#### Setup ####
+	###############
+
+	if ndims(capacity) == 1
+		capacity = reshape(capacity, (:,1))
+	end
+
+	N, T = size(admitted_patients)
+	C = size(capacity, 2)
+	check_sizes(initial_patients, discharged_patients, admitted_patients, capacity)
+
+	capacity = capacity .* (1.0 .- capacity_cushion)
+
+	if isempty(capacity_weights)
+		capacity_weights = ones(Int, C)
+	end
+	if isempty(node_weights)
+		node_weights = ones(Int, N)
+	end
+	if isempty(objective_weights)
+		objective_weights = ones(Float64, N, C)
+	end
+
+	if ndims(objective_weights) == 1
+		objective_weights = repeat(objective_weights, (1,C))
+	end
+	@assert size(objective_weights) == (N,C)
+
+	objective_weights = objective_weights .* node_weights
+	objective_weights = objective_weights .* capacity_weights'
+
+	if isempty(transfer_budget)
+		transfer_budget = fill(Inf, N)
+	end
+
+	L = discretize_los(los, T)
+
+	###############
+	#### Model ####
+	###############
+
+	model = Model(Gurobi.Optimizer)
+	if !verbose set_silent(model) end
+
+	if constrain_integer
+		set_optimizer_attribute(model, "TimeLimit", timelimit)
+		set_optimizer_attribute(model, "MIPGap", 0.05)
+	end
+
+	###############
+	## Variables ##
+	###############
+
+	@variable(model, sent[1:N,1:N,1:T] >= 0, integer=constrain_integer)
+	@variable(model, load_objective[1:N,1:T,1:C] >= 0)
+	@variable(model, overflow[1:N,1:T,1:C] >= 0)
+
+	#################
+	## Expressions ##
+	#################
+
+	# expressions for the number of active patients
+	@expression(model, active_patients[i=1:N,t=1:T],
+		initial_patients[i]
+		- sum(discharged_patients[i,1:t])
+		+ sum(L[t-t₁+1] * (
+			admitted_patients[i,t₁]
+			- sum(sent[i,:,t₁])
+			+ sum(sent[:,i,t₁])
+		) for t₁ in 1:t)
+		+ sum(sent[i,:,t])
+	)
+	active_null = compute_active_null(initial_patients, discharged_patients, admitted_patients, L)
+
+	# expression for the patient load
+	@expression(model, load[i=1:N,t=1:T,c=1:C], active_patients[i,t] / capacity[i,c])
+
+	# objective function
+	objective = @expression(model, 
+		(loadbalance_weight * dot(capacity_weights, sum(load_objective, dims=(1,2))))
+		+ (overflowmin_weight * sum(sum(overflow, dims=2) .* objective_weights))
+	)
+
+	######################
+	## Hard Constraints ##
+	######################
+
+	# ensure the number of active patients is non-negative
+	@constraint(model, [i=1:N,t=1:T], active_patients[i,t] >= 0)
+
+	# only send new patients
+	@constraint(model, [t=1:T], sum(sent[:,:,t], dims=2) .<= admitted_patients[:,t])
+
+	# objective constraints
+	@constraint(model, [i=1:N,t=1:T,c=1:C],  (load[i,t,c] - mean(load[:,t,c])) <= load_objective[i,t,c])
+	@constraint(model, [i=1:N,t=1:T,c=1:C], -(load[i,t,c] - mean(load[:,t,c])) <= load_objective[i,t,c])
+	@constraint(model, [i=1:N,t=1:T,c=1:C], overflow[i,t,c] >= active_patients[i,t] - capacity[i,c])
+
+	################################
+	## Optional Constraints/Costs ##
+	################################
+
+	enforce_adj!(model, sent, adj_matrix)
+	enforce_no_artificial_overflow!(model, no_artificial_overflow, active_patients, active_null, capacity)
+	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
+	enforce_minsendamt!(model, sent, min_send_amt)
+	enforce_sendreceivegap!(model, sent, sendreceive_gap)
+	enforce_transferbudget!(model, sent, transfer_budget)
+
+	add_sent_penalty!(model, sent, objective, sent_penalty)
+	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
+	add_setup_cost!(model, sent, objective, setup_cost)
+	add_loadbalancing_penalty!(model, sent, objective, balancing_penalty, balancing_thresh, active_patients, capacity)
+	add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
+
+	###############
+	#### Solve ####
+	###############
+
+	@objective(model, Min, objective)
+	optimize!(model)
+
+	return model
+end
+
 ##############################################
 ############# Helper Functions ###############
 ##############################################

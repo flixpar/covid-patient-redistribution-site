@@ -83,6 +83,32 @@ function handle_patients_request(
 			constrain_integer=constrain_integer,
 			verbose=false,
 		)
+	elseif objective == :hybrid
+			objective_weights = ones(Float64, N, C)
+			objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
+			capacity_weights = ones(Int, C)
+			capacity_weights[end] = 4
+			overflowmin_weight = 1.0
+			loadbalance_weight = 0.25
+
+			model = patient_hybridmodel(
+				data.capacity,
+				data.initial,
+				data.discharged,
+				data.admitted,
+				data.adj,
+				los_dist,
+				overflowmin_weight=overflowmin_weight,
+				loadbalance_weight=loadbalance_weight,
+				sent_penalty=0.01,
+				smoothness_penalty=0.001,
+				capacity_cushion=(1.0-capacity_util),
+				objective_weights=objective_weights,
+				capacity_weights=capacity_weights,
+				transfer_budget=transfer_budget,
+				constrain_integer=constrain_integer,
+				verbose=false,
+			)
 	else
 		error("Invalid objective: $(objective)")
 	end
