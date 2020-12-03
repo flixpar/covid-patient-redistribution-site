@@ -19,6 +19,7 @@ function handle_patients_request(
 		scenario::Symbol,
 		patient_type::Symbol,
 		objective::Symbol,
+		transfer_budget_dict::Dict{String,Any},
 		surge_preferences_dict::Dict{String,Any},
 		capacity_util::Float64,
 		uncertainty_level::Symbol,
@@ -43,6 +44,7 @@ function handle_patients_request(
 		error("Invalid los distribution selection: $(los_param)")
 	end
 
+	transfer_budget = [parse(Int, transfer_budget_dict[lowercase(k)]) for k in data.node_names]
 	surge_preferences = [parse(Float64, surge_preferences_dict[lowercase(k)]) for k in data.node_names]
 
 	N, C = size(data.capacity)
@@ -61,6 +63,7 @@ function handle_patients_request(
 			smoothness_penalty=0.001,
 			capacity_cushion=(1.0-capacity_util),
 			objective_weights=objective_weights,
+			transfer_budget=transfer_budget,
 			verbose=false
 		)
 	elseif objective == :loadbalance

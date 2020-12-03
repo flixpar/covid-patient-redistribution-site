@@ -24,6 +24,7 @@ function patient_redistribution(
 		capacity_weights::Array{<:Real,1}=Int[],
 		node_weights::Array{<:Real,1}=Int[],
 		objective_weights::Array{<:Real}=Int[],
+		transfer_budget::Array{<:Real,1}=Int[],
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
@@ -63,6 +64,10 @@ function patient_redistribution(
 
 	objective_weights = objective_weights .* node_weights
 	objective_weights = objective_weights .* capacity_weights'
+
+	if isempty(transfer_budget)
+		transfer_budget = fill(Inf, N)
+	end
 
 	L = discretize_los(los, T)
 
@@ -122,6 +127,7 @@ function patient_redistribution(
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
 	enforce_minsendamt!(model, sent, min_send_amt)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
+	enforce_transferbudget!(model, sent, transfer_budget)
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
@@ -363,6 +369,16 @@ function enforce_sendreceivegap!(model, sent, sendreceive_gap)
 		)
 	end
 	return
+end
+
+# enforce an upper limit on the number of transfers per hospital-day
+function enforce_transferbudget!(model, sent, transfer_budget)
+	N, _, T = size(sent)
+	for i in 1:N
+		if !isinf(transfer_budget[i])
+			@constraint(model, [t=1:T], sum(sent[i,:,t]) <= transfer_budget[i])
+		end
+	end
 end
 
 ##############################################

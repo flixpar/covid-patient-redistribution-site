@@ -645,10 +645,18 @@ function sendUpdateQuery() {
 		sh: document.getElementById("form-surgepreferences-sh").value,
 		smh: document.getElementById("form-surgepreferences-smh").value,
 	};
+	const transferBudget = {
+		bmc: document.getElementById("form-transferbudget-bmc").value,
+		hcgh: document.getElementById("form-transferbudget-hcgh").value,
+		jhh: document.getElementById("form-transferbudget-jhh").value,
+		sh: document.getElementById("form-transferbudget-sh").value,
+		smh: document.getElementById("form-transferbudget-smh").value,
+	}
 	const data = {
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
+		transferbudget: transferBudget,
 		surgepreferences: surgepreferences,
 		utilization: $("#form-utilization")[0].value,
 		uncertaintylevel: $("#form-uncertainty")[0].value,
@@ -690,6 +698,7 @@ const tooltip_content = {
 	"form-scenario": "Forecast scenario to use.",
 	"form-objective": "Primary objective for the optimization model.",
 	"form-weights": "Preferences for where to transfer patients to if the system runs out of capacity.",
+	"form-transferbudget": "Maximum number of patients that can be transferred from the given hospital in a day.",
 	"form-surgepreferences": "Preference for where to create additional capacity if it is necessary.",
 	"form-utilization": "Percentage of the total capacity that can be used in practice.",
 	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",
