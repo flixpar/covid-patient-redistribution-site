@@ -1,4 +1,6 @@
-# Johns Hopkins Health System COVID-19 Patient Redistribution Site
-Felix Parker
+# Maryland COVID-19 Patient Redistribution Site
 
-Main repo [here](https://github.com/flixpar/covid-resource-allocation).
+Run the server locally with:
+```
+julia src/server.jl
+```
