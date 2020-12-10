@@ -29,7 +29,3 @@ const transfersDescription = ``;
 const admittedDescription = ``;
 
 const metricsDescription = ``;
-
-function jhhsCaseDescription(start_date, end_date) {
-	return `Johns Hopkins Health System from ${start_date} to ${end_date}.`;
-}

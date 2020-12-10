@@ -26,31 +26,14 @@ function handleResponse(response, status, xhr) {
 
 	makeSections();
 
-	if (response.config.region == "new_jersey") {
-		const d = njCaseDescription(response.config.start_date, response.config.end_date);
-		let description = document.createElement("p");
-		description.innerHTML = d;
-		getSection("casestudy-info").appendChild(description);
-	} else if (response.config.region == "northeast") {
-		const d = neCaseDescription(response.config.start_date, response.config.end_date);
-		let description = document.createElement("p");
-		description.innerHTML = d;
-		getSection("casestudy-info").appendChild(description);
-	} else {
-		let section = getSection("casestudy-info");
-		let sectionContainer = section.parentElement;
-		sectionContainer.remove();
-	}
+	let section = getSection("casestudy-info");
+	let sectionContainer = section.parentElement;
+	sectionContainer.remove();
 
 	createStatsSummary(response);
-	createSurgeCapacityMetrics(response);
 
 	createMap(response, "overflow_dynamic");
 
-	createJHHSDashboard(response);
-	createTransfersBreakdownPlot(response);
-
-	createAdmittedPlot(response);
 	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
@@ -69,13 +52,11 @@ function handleResponse(response, status, xhr) {
 function makeSections() {
 	const sectionInfo = [
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
-		{title: "Main Results",                           identifier: "results-dashboard",   showDefault: true},
 		{title: "Metrics",                                identifier: "results-metrics",     showDefault: true},
-		{title: "Admissions",                             identifier: "results-admitted",    showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
+		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
-		{title: "Number of Active COVID Patients",        identifier: "results-active",      showDefault: false},
 		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
 	]
 
