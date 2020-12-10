@@ -477,7 +477,7 @@ function createCapacityOption(plotName, rawdata) {
 		let opt = document.createElement("option");
 		opt.text = capacityNames[c];
 		opt.value = c;
-		if (c == 3) {
+		if (c == 0) {
 			opt.selected = true;
 		}
 		capacitySelect.appendChild(opt);
