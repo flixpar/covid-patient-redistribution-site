@@ -38,7 +38,7 @@
 	<section class="section">
 
 		<div class="container">
-			<h1 class="title">JHHS Optimal COVID-19 Patient Redistribution</h1>
+			<h1 class="title">Maryland Optimal COVID-19 Patient Redistribution</h1>
 		</div>
 
 		<div class="container">
@@ -53,9 +53,9 @@
 					<label class="label column is-one-third" for="form-scenario">Scenario</label>
 					<div class="select is-fullwidth">
 						<select id="form-scenario">
-							<option>Moderate</option>
-							<option selected>Pessimistic</option>
-							<option>Catastrophic</option>
+							<option>Optimistic</option>
+							<option selected>Moderate</option>
+							<option>Pessimistic</option>
 						</select>
 					</div>
 				</div>
@@ -66,7 +66,7 @@
 						<select id="form-patient-type">
 							<option value="all">All</option>
 							<option value="icu" selected>ICU</option>
-							<option value="ward">Acute</option>
+							<option value="acute">Acute</option>
 						</select>
 					</div>
 				</div>
@@ -84,54 +84,7 @@
 
 				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-transferbudget">Transfer Budget</label>
-					<div id="form-transferbudget" class="form-weights-container">
-						<div class="input-range-container">
-							<label for="form-transferbudget-bmc">BMC</label>
-							<input id="form-transferbudget-bmc" class="input" type="number" min="0" value="10" step="1">
-						</div>
-						<div class="input-range-container">
-							<label for="form-transferbudget-hcgh">HCGH</label>
-							<input id="form-transferbudget-hcgh" class="input" type="number" min="0" value="10" step="1">
-						</div>
-						<div class="input-range-container">
-							<label for="form-transferbudget-jhh">JHH</label>
-							<input id="form-transferbudget-jhh" class="input" type="number" min="0" value="10" step="1">
-						</div>
-						<div class="input-range-container">
-							<label for="form-transferbudget-sh">SH</label>
-							<input id="form-transferbudget-sh" class="input" type="number" min="0" value="10" step="1">
-						</div>
-						<div class="input-range-container">
-							<label for="form-transferbudget-smh">SMH</label>
-							<input id="form-transferbudget-smh" class="input" type="number" min="0" value="10" step="1">
-						</div>
-					</div>
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-surgepreferences">Surge Capacity Preferences</label>
-					<div class="form-weights-container">
-						<div class="input-range-container">
-							<label for="form-surgepreferences-bmc">BMC</label>
-							<input id="form-surgepreferences-bmc" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
-						</div>
-						<div class="input-range-container">
-							<label for="form-surgepreferences-hcgh">HCGH</label>
-							<input id="form-surgepreferences-hcgh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
-						</div>
-						<div class="input-range-container">
-							<label for="form-surgepreferences-jhh">JHH</label>
-							<input id="form-surgepreferences-jhh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
-						</div>
-						<div class="input-range-container">
-							<label for="form-surgepreferences-sh">SH</label>
-							<input id="form-surgepreferences-sh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
-						</div>
-						<div class="input-range-container">
-							<label for="form-surgepreferences-smh">SMH</label>
-							<input id="form-surgepreferences-smh" type="range" min="-1" max="1" value="0" step="0.25" orient="vertical">
-						</div>
-					</div>
+					<input id="form-transferbudget" class="input" type="number" min="0" value="10" step="1">
 				</div>
 
 				<div class="field is-horizontal">
@@ -149,17 +102,7 @@
 					</div>
 				</div>
 
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-uncertainty">Forecast Uncertainty (Currently Inactive)</label>
-					<div class="select is-fullwidth">
-						<select id="form-uncertainty">
-							<option>High</option>
-							<option selected>Default</option>
-							<option>Low</option>
-							<option>None</option>
-						</select>
-					</div>
-				</div>
+				<input type="hidden" id="form-uncertainty" value="Default">
 
 				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-los">Length of Stay</label>

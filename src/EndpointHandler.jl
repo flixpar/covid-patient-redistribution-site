@@ -20,8 +20,7 @@ function handle_patients_request(
 		patient_type::Symbol,
 		objective::Symbol,
 		constrain_integer::Bool,
-		transfer_budget_dict::Dict{String,Any},
-		surge_preferences_dict::Dict{String,Any},
+		transfer_budget::Float64,
 		capacity_util::Float64,
 		uncertainty_level::Symbol,
 		los_param::String,
@@ -45,15 +44,11 @@ function handle_patients_request(
 		error("Invalid los distribution selection: $(los_param)")
 	end
 
-	transfer_budget = [parse(Int, transfer_budget_dict[lowercase(k)]) for k in data.node_names]
-	surge_preferences = [parse(Float64, surge_preferences_dict[lowercase(k)]) for k in data.node_names]
-
 	N, C = size(data.capacity)
 
-	if objective == :minoverflow
-		objective_weights = ones(Float64, N, C)
-		objective_weights[:,end] = 1.0 .- (0.003 * surge_preferences)
+	transfer_budget = fill(transfer_budget, N)
 
+	if objective == :minoverflow
 		model = patient_redistribution(
 			data.capacity,
 			data.initial,
@@ -66,7 +61,6 @@ function handle_patients_request(
 			active_smoothness_penalty=0.01,
 			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
-			objective_weights=objective_weights,
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
 			verbose=false,
@@ -88,7 +82,6 @@ function handle_patients_request(
 			verbose=false,
 		)
 	elseif objective == :hybrid
-		node_weights = 1.0 .- (0.003 * surge_preferences)
 		capacity_weights = ones(Int, C)
 		capacity_weights[end] = 4
 		overflowmin_weight = 0.5
@@ -108,7 +101,6 @@ function handle_patients_request(
 			active_smoothness_penalty=0.01,
 			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
-			node_weights=node_weights,
 			capacity_weights=capacity_weights,
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
