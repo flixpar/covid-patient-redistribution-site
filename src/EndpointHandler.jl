@@ -31,10 +31,10 @@ function handle_patients_request(
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario), Patient type: $(patient_type)"
 
-	@assert patient_type in [:ward, :icu, :all]
+	@assert patient_type in [:acute, :icu, :all]
 
-	data = load_jhhs(scenario, patient_type, start_date, end_date)
-	default_capacity_level = 4
+	data = load_maryland(scenario, patient_type, start_date, end_date)
+	default_capacity_level = 1
 
 	if los_param == "default_dist"
 		los_dist = los_dist_default(patient_type)
@@ -132,7 +132,7 @@ function handle_patients_request(
 		:node_locations    => data.node_locations,
 		:capacity_names => data.capacity_names,
 		:node_type => "hospital",
-		:region    => "jhhs",
+		:region    => "maryland",
 		:extent    => data.extent,
 		:capacity_util => capacity_util,
 		:default_capacity_level => default_capacity_level,

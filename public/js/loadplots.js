@@ -14,7 +14,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 		section.appendChild(description);
 	}
 
-	const overallData = extractOverallLoadData(rawdata, 3);
+	const overallData = extractOverallLoadData(rawdata, 0);
 	const overallLoadPlot = makeOverallLoadPlot(overallData);
 	overallLoadPlot.id = "overallloadplot";
 
@@ -41,7 +41,7 @@ function createLoadPlots(rawdata, add_description=true) {
 	createCapacityOption("loadplots", rawdata);
 }
 
-function makeLoadPlots(rawdata, capacityLevel=3) {
+function makeLoadPlots(rawdata, capacityLevel=0) {
 	const loadData = extractLoadData(rawdata, capacityLevel);
 
 	const betweenMargin = 50;
