@@ -8,41 +8,43 @@ using Distributions
 using Dates
 using LinearAlgebra
 
-export load_jhhs
+export load_maryland
 export los_dist_default
 
 basepath = joinpath(dirname(@__FILE__), "../")
 
 
-function load_jhhs(
+function load_maryland(
 		scenario::Symbol,
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
 	)
 	@assert(start_date < end_date)
-	@assert(patient_type in [:icu, :ward, :all])
+	@assert(patient_type in [:icu, :acute, :all])
 
-	data = deserialize("data/data_jhhs.jlser")
+	data = deserialize("data/data_maryland.jlser")
+
+	hospital_ind = collect(1:10)
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
-	N = length(data.location_names)
+	N = length(hospital_ind)
 	T = (end_date - start_date).value + 1
 
-	hospitals = data.location_names
-	hospitals_abbrev = data.location_names_short
+	hospitals = data.location_names[hospital_ind]
+	hospitals_abbrev = data.location_names_short[hospital_ind]
 
 	bedtype = (patient_type == :all) ? :allbeds : patient_type
 	casesdata = data.casesdata[scenario,bedtype]
 
 	start_date_idx = (start_date - data.start_date).value + 1
 	end_date_idx   = (end_date   - data.start_date).value + 1
-	admitted = casesdata.admitted[:,start_date_idx:end_date_idx]
+	admitted = casesdata.admitted[hospital_ind,start_date_idx:end_date_idx]
 
 	day0 = max(data.start_date, start_date - Day(1))
 	day0_idx = (day0 - data.start_date).value + 1
-	initial = casesdata.active[:, day0_idx]
+	initial = casesdata.active[hospital_ind, day0_idx]
 
 	discharged = Array{Float64,2}(undef, N, T)
 	for i in 1:N
@@ -52,12 +54,12 @@ function load_jhhs(
 		end
 	end
 
-	default_capacity_level = 4
-	beds = casesdata.capacity[:,default_capacity_level]
-	capacity = casesdata.capacity
-	capacity_names = ["Baseline Capacity", "Ramp-Up Capacity", "Surge Capacity", "Max Capacity"]
+	default_capacity_level = 1
+	beds = casesdata.capacity[hospital_ind,default_capacity_level]
+	capacity = casesdata.capacity[hospital_ind,:]
+	capacity_names = ["Baseline Capacity"]
 
-	adj = (data.dist_matrix .<= 1)
+	adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
 
 	# extent = (extent_type = :states, extent_regions = ["Maryland"])
@@ -81,7 +83,7 @@ end
 function los_dist_default(bedtype::Symbol)
 	if bedtype == :icu
 		return Gamma(1.77595, 5.9512)
-	elseif bedtype == :ward
+	elseif bedtype == :acute
 		return Gamma(2.601, 3.8046)
 	else
 		return Gamma(2.244, 4.4988)
