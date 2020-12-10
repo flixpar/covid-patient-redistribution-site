@@ -1,0 +1,210 @@
+{
+    "University of Maryland Medical Center": {
+        "lat": 39.2880132,
+        "lng": -76.6248449
+    },
+    "Washington Adventist ACS": {
+        "lat": 39.0505206,
+        "lng": -76.9567856
+    },
+    "Johns Hopkins Hospital": {
+        "lat": 39.2967385,
+        "lng": -76.59273619999999
+    },
+    "Holy Cross Hospital": {
+        "lat": 39.0147079,
+        "lng": -77.0347487
+    },
+    "Midtown (UM)": {
+        "lat": 39.2880132,
+        "lng": -76.6248449
+    },
+    "Maryland Corrections Hagerstown ACS": {
+        "lat": 39.564794,
+        "lng": -77.715604
+    },
+    "Fort Washington ACS": {
+        "lat": 38.7285124,
+        "lng": -76.9925925
+    },
+    "Doctors Community Hospital": {
+        "lat": 38.9822557,
+        "lng": -76.8650243
+    },
+    "Union Memorial Hospital (MedStar)": {
+        "lat": 39.3293571,
+        "lng": -76.6147421
+    },
+    "Baltimore Convention Center Field Hospital": {
+        "lat": 39.2967385,
+        "lng": -76.59273619999999
+    },
+    "Peninsula Regional Medical Center": {
+        "lat": 38.362468,
+        "lng": -75.598013
+    },
+    "Southern Maryland Hospital (MedStar)": {
+        "lat": 38.7482446,
+        "lng": -76.87605839999999
+    },
+    "White Oak Medical Center": {
+        "lat": 39.0505206,
+        "lng": -76.9567856
+    },
+    "Garrett Memorial Hospital (WVU)": {
+        "lat": 39.4133516,
+        "lng": -79.4008822
+    },
+    "Sinai Hospital of Baltimore": {
+        "lat": 39.3519304,
+        "lng": -76.6616308
+    },
+    "Harford Memorial Hospital (UMUCH)": {
+        "lat": 39.5429695,
+        "lng": -76.09085739999999
+    },
+    "Charles Regional (UM)": {
+        "lat": 38.5290318,
+        "lng": -76.9722452
+    },
+    "Bowie Medical Center": {
+        "lat": 38.9494063,
+        "lng": -76.7459566
+    },
+    "Prince George's ACS": {
+        "lat": 38.9306528,
+        "lng": -76.92091119999999
+    },
+    "Grace Medical Center": {
+        "lat": 39.2888057,
+        "lng": -76.6494863
+    },
+    "Frederick Memorial Hospital": {
+        "lat": 39.4232087,
+        "lng": -77.41396300000001
+    },
+    "Northwest Hospital": {
+        "lat": 39.3587545,
+        "lng": -76.78107949999999
+    },
+    "Shady Grove Adventist Hospital": {
+        "lat": 39.09804219999999,
+        "lng": -77.1982981
+    },
+    "Baltimore Washington Medical Center": {
+        "lat": 39.13768719999999,
+        "lng": -76.6228375
+    },
+    "Holy Cross Germantown": {
+        "lat": 39.1816721,
+        "lng": -77.242491
+    },
+    "Franklin Square (MedStar)": {
+        "lat": 39.3510975,
+        "lng": -76.4778621
+    },
+    "Suburban Hospital": {
+        "lat": 38.9970612,
+        "lng": -77.1103272
+    },
+    "Johns Hopkins Bayview Medical Center": {
+        "lat": 39.2901622,
+        "lng": -76.5471072
+    },
+    "Laurel Regional Medical Center": {
+        "lat": 39.08694759999999,
+        "lng": -76.8814318
+    },
+    "Carroll Hospital Center": {
+        "lat": 39.557625,
+        "lng": -76.99026049999999
+    },
+    "Good Samaritan Hospital (MedStar)": {
+        "lat": 39.3580471,
+        "lng": -76.5866301
+    },
+    "Montgomery Medical Center (MedStar)": {
+        "lat": 39.153756,
+        "lng": -77.0547649
+    },
+    "Western Maryland Medical Center (UPMC)": {
+        "lat": 39.6483691,
+        "lng": -78.7328124
+    },
+    "Union Hospital of Cecil County": {
+        "lat": 39.6082002,
+        "lng": -75.83319039999999
+    },
+    "Atlantic General Hospital": {
+        "lat": 38.3396404,
+        "lng": -75.2115477
+    },
+    "Jessup Corrections ACS": {
+        "lat": 39.1416755,
+        "lng": -76.77036129999999
+    },
+    "St. Mary's Hospital": {
+        "lat": 38.3020444,
+        "lng": -76.6382783
+    },
+    "St. Joseph's (UM)": {
+        "lat": 39.3873256,
+        "lng": -76.6111596
+    },
+    "Calvert Memorial Hospital": {
+        "lat": 38.5593911,
+        "lng": -76.5963089
+    },
+    "Howard County General Hospital (JHM)": {
+        "lat": 39.2133029,
+        "lng": -76.8836377
+    },
+    "Anne Arundel Medical Center": {
+        "lat": 38.9901197,
+        "lng": -76.5356436
+    },
+    "Prince George's Hospital Center": {
+        "lat": 38.9306528,
+        "lng": -76.92091119999999
+    },
+    "Fort Washington Hospital": {
+        "lat": 38.7285124,
+        "lng": -76.9925925
+    },
+    "Upper Chesapeake Medical Center (UMUCH)": {
+        "lat": 39.5192942,
+        "lng": -76.3460006
+    },
+    "Meritus Medical Center": {
+        "lat": 39.62300219999999,
+        "lng": -77.6845915
+    },
+    "Greater Baltimore Medical Center": {
+        "lat": 39.3918476,
+        "lng": -76.62418869999999
+    },
+    "Mercy Medical Center": {
+        "lat": 39.2930847,
+        "lng": -76.612734
+    },
+    "Dorchester (UMSRH)": {
+        "lat": 38.5713852,
+        "lng": -76.0673788
+    },
+    "Chestertown (UMSRH)": {
+        "lat": 39.2172126,
+        "lng": -76.0647888
+    },
+    "Harbor Hospital (MedStar)": {
+        "lat": 39.2517834,
+        "lng": -76.614662
+    },
+    "Easton (UMSRH)": {
+        "lat": 38.7693889,
+        "lng": -76.076719
+    },
+    "St. Agnes Hospital": {
+        "lat": 39.2716394,
+        "lng": -76.6735887
+    }
+}
