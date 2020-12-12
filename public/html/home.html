@@ -38,7 +38,7 @@
 	<section class="section">
 
 		<div class="container">
-			<h1 class="title">COVID-19 Resource and Demand Redistribution for Hospital Systems</h1>
+			<h1 class="title">COVID-19 Patient Redistribution for Maryland Hospitals</h1>
 			<p>
 				<b>Introduction.</b> The arrival of the COVID-19 pandemic has put a significant strain on healthcare capacity around the globe. To mitigate the pressure, healthcare facilities responded by both reducing demand through canceling elective procedures and also increasing capacity by creating new COVID-19-suitable beds and calling additional personnel. While these measures have proven effective, delays in elective care may result in adverse effects for patients. Additionally, increasing COVID-19 capacity is costly, slow, and may not be feasible for all healthcare centers. At the same time, healthcare centers have made efforts to optimize the use of complementary resources, including extending the use of Personal Protective Equipment (PPE). A compounding organizational drawback to conventional healthcare center responses is that often they are organized at individual healthcare centers-level rather than at a system-level. We aim to take a step toward a more coherent response from the system of healthcare entities in times of chronic demand surge.
 				<br><br>
@@ -48,39 +48,8 @@
 				<br><br>
 				<b>Our Approach.</b> We consider a system of hospitals, their patient-load, their current and surge capacity (including the available staff and PPE), operational and transfer constraints, and a forecast of patient arrival for each hospital. We use mixed-integer optimization models to find the best load-balance with the minimum total patient transfers. Our models return a time series (for each day in the time window) of the optimal number of patient transfers between the hospitals. The transfers are recommended to happen upon the arrival of the patients to the system, typically the Emergency Department.
 				<br><br>
-				<b>Additional Information.</b> Our <a href="/html/presentation.html">talk</a> at the INFORMS 2020 Annual Meeting explains our approach. Our <a href="https://arxiv.org/abs/2011.03528">paper</a> details the technical aspects of our methodology. Our <a href="https://github.com/flixpar/covid-resource-allocation">GitHub repository</a> implements our models and case studies.
+				<b>Additional Information.</b> Our <a href="https://covid-hospital-operations.com/html/presentation.html">talk</a> at the INFORMS 2020 Annual Meeting explains our approach. Our <a href="https://arxiv.org/abs/2011.03528">paper</a> details the technical aspects of our methodology. Our <a href="https://github.com/flixpar/covid-resource-allocation">GitHub repository</a> implements our models and case studies.
 				<br><br>
-				<b>Case Study Reports.</b> We provide the results for a set of case studies in the US as listed below. All the data used in these case studies are publicly available. Please see our full report <a href="https://arxiv.org/abs/2011.03528">here</a>.
-				<div class="content" style="margin-bottom: 0;">
-					<ul>
-						<li>State Level
-							<ul>
-								<li>Northeast region</li>
-								<li>South region</li>
-							</ul>
-						</li>
-						<li>County Level
-							<ul>
-								<li>New Jersey</li>
-								<li>New York</li>
-								<li>Florida</li>
-							</ul>
-						</li>
-						<li>Trauma Service Area Level
-							<ul>
-								<li>Texas</li>
-							</ul>
-						</li>
-						<li>Hospital Level
-							<ul>
-								<li>New Jersey</li>
-								<li>New York</li>
-								<li>Florida</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-				<br>
 				<b>Try it out.</b> We provide an interactive tool where you can change the parameters of our models for our case studies and explore the range of possible results for yourself. To explore more, visit our <a href="/patients">Interactive Tool page</a>.
 				<br><br>
 				<b>Inquiries.</b> Please contact us at &lt;kghobad1 at jhu.edu&gt; for more information or to inquire about applying our model to your hospital system.
