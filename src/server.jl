@@ -11,15 +11,15 @@ using EndpointHandler
 
 
 route("/") do
-	serve_static_file("html/patients.html")
+	serve_static_file("html/home.html")
 end
 
-route("/patients") do
-	serve_static_file("html/patients.html")
+route("/patients-static") do
+	serve_static_file("html/patients-static.html")
 end
 
-route("/method") do
-	serve_static_file("html/method.html")
+route("/patients-interactive") do
+	serve_static_file("html/patients-interactive.html")
 end
 
 route("/about") do

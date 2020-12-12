@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>COVID-19 Patient Redistribution</title>
+
+	<link rel="stylesheet" href="/css/nav.css">
+	<link rel="stylesheet" href="/css/patients.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css">
+
+	<script async defer data-domain="maryland.covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="/js/menu.js"></script>
+</head>
+
+<body>
+
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbar-menu" class="navbar-menu">
+			<div id="navbar-main" class="navbar-start">
+				<a href="/home" class="navbar-item">Home</a>
+				<a href="/patients-static" class="navbar-item">Patient Redistribution</a>
+				<a href="/patients-interactive" class="navbar-item">Interactive</a>
+				<a href="/about" class="navbar-item">About Us</a>
+			</div>
+		</div>
+	</nav>
+
+	<section class="section">
+
+		<div class="container">
+			<h1 class="title">Maryland Optimal COVID-19 Patient Redistribution</h1>
+		</div>
+
+		<form id="form" autocomplete="off">
+			<input type="hidden" id="form-scenario" value="moderate">
+			<input type="hidden" id="form-patient-type" value="icu">
+			<input type="hidden" id="form-objective" value="minoverflow">
+			<input type="hidden" id="form-transferbudget" value="15">
+			<input type="hidden" id="form-utilization" value="1.0">
+			<input type="hidden" id="form-uncertainty" value="Default">
+			<input type="hidden" id="form-los" value="default_dist">
+			<input type="hidden" id="form-start-date" value="2020-12-01">
+			<input type="hidden" id="form-end-date" value="2021-01-31">
+			<input type="hidden" id="form-integer" value="false">
+		</form>
+
+		<div class="container" id="results-container">
+			<div id="progressbar-area" class="column is-10 is-offset-1">
+				<div class="notification">
+					Updating...
+					<br>
+					Note: This site solves the optimization model in real time on our server, so you may have to wait briefly while it returns an answer.
+				</div>
+				<progress class="progress is-small is-info" max="100"></progress>
+			</div>
+			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
+				<div class="notification is-danger">Error</div>
+			</div>
+			<div id="result-area" class="column is-12"></div>
+		</div>
+
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
+	<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+	<script src="https://unpkg.com/d3@6"></script>
+	<script src="https://unpkg.com/d3-sankey@0.12"></script>
+	<script src="https://unpkg.com/d3-tile@1"></script>
+	<script src="https://unpkg.com/d3-geo@1.12.1/dist/d3-geo.min.js"></script>
+	<script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+
+	<script src="/js/figure_text.js"></script>
+	<script src="/js/loadplots.js"></script>
+	<script src="/js/map_plots.js"></script>
+	<script src="/js/activeplot.js"></script>
+	<script src="/js/parallelplot.js"></script>
+	<script src="/js/ridgeplot.js"></script>
+
+	<script src="/js/patients.js"></script>
+
+</body>
+
+</html>
