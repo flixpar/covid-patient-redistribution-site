@@ -51,11 +51,11 @@ function handleResponse(response, status, xhr) {
 function makeSections() {
 	const sectionInfo = [
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
-		{title: "Metrics",                                identifier: "results-metrics",     showDefault: true},
+		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
-		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
+		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
 		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
 	]
 
