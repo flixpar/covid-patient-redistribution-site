@@ -37,8 +37,8 @@ function handleResponse(response, status, xhr) {
 	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
-	createParallelPlot(response, "patients");
 	createRidgePlot(net_sent, config.node_names, "patients");
+	createTransfersSankey(response);
 
 	setupTable(summary_data, is_wide=true, table_id="summary-table", title="Summary Statistics");
 	setupTable(full_results, is_wide=true, table_id="full-table",    title="Full Results");

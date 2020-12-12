@@ -1,4 +1,4 @@
-const parallelplotDescription = `
+const transfersSankeyDescription = `
 This figure shows the relative numbers of patients transferred between locations over the selected time window. Ribbons connect locations that are sending patients (on the left) with locations that are receiving patients (on the right), where the relative widths represent the number of patients sent.
 `;
 
