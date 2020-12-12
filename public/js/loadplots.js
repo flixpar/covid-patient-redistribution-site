@@ -19,7 +19,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	overallLoadPlot.id = "overallloadplot";
 
 	section.appendChild(overallLoadPlot);
-	createCapacityOption("overallloadplot", rawdata);
+	// createCapacityOption("overallloadplot", rawdata);
 
 	const hr = document.createElement("hr");
 	section.appendChild(hr);
@@ -38,7 +38,7 @@ function createLoadPlots(rawdata, add_description=true) {
 	loadPlots.id = "loadplots";
 
 	section.appendChild(loadPlots);
-	createCapacityOption("loadplots", rawdata);
+	// createCapacityOption("loadplots", rawdata);
 }
 
 function makeLoadPlots(rawdata, capacityLevel=0) {
