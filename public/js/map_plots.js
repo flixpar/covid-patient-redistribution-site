@@ -129,8 +129,8 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 	let g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 2*plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)");
-	g2 = makeMap(g2, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)");
+	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)");
+	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)");
 	g3 = makeColorbar(g3, colorscale, colorbar_label);
 
 	if (debugMap) {
@@ -164,7 +164,7 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
 	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, plot_title);
+	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, plot_title);
 	g2 = makeColorbar(g2, colorscale, "Required Surge Capacity (Bed-Days)");
 
 	return svg.node();
@@ -222,7 +222,7 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 ///////// Plot Maps ////////
 ////////////////////////////
 
-function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, dynamic=true, title=null) {
+function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, dynamic=true, title=null) {
 
 	if (dynamic) {
 		while (mapPlotIntervals.length != 0) {
@@ -235,6 +235,8 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 
 	const dates = rawdata.config.dates.map(d => new Date(Date.parse(d)))
 	const T = dates.length;
+
+	const tooltip = new MapTooltip(svg, globalSVG, rawdata);
 
 	const selected_extent = getExtent(rawdata.config, geometries);
 	let map_projection = d3.geoMercator().fitExtent(
@@ -312,7 +314,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 	let pts = svg.selectAll("points")
 		.data(rawdata.config.node_names)
 		.enter().append("path")
-		.style("fill", d => {
+		.attr("fill", d => {
 			if (!colorRegions) {
 				const j = rawdata.config.node_names.indexOf(d);
 				if (j >= 0) {
@@ -325,15 +327,17 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			}
 			return "lightgray";
 		})
-		.style("stroke", "white")
-		.style("stroke-width", "0.5px")
+		.attr("stroke", "white")
+		.attr("stroke-width", "0.5px")
 		.style("transform-box", "fill-box")
 		.attr("d", (d,i) => {
 			const l = rawdata.config.node_locations[d];
 			const r = nodeSizeScale(i) * pointSizeMult;
 			const _p = p.pointRadius(r);
 			return _p({type: "Point", coordinates: [l.long, l.lat]});
-		});
+		})
+		.on("mouseover", (e,d) => tooltip.show(e,d))
+		.on("mouseout",  (e,d) => tooltip.hide(e,d));
 
 	if (title != null) {
 		svg.append("text")
@@ -393,7 +397,7 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 		}
 
 		if (!colorRegions) {
-			pts.style("fill", (d,i) => colorscale(data[i][t]));
+			pts.attr("fill", (d,i) => colorscale(data[i][t]));
 		}
 
 		svg.selectAll("#date-label").remove();
@@ -447,8 +451,123 @@ function makeMap(svg, rawdata, data, links, colorscale, geometries, plotWidth, p
 			});
 	}
 
+	tooltip.build();
+
 	return svg.node();
 }
+
+////////////////////////////
+///////// Tooltip //////////
+////////////////////////////
+
+class MapTooltip {
+	constructor(svg, globalSVG, response) {
+		this.svg = globalSVG;
+		this.response = response;
+		this.highlight = null;
+
+		console.log(svg.node().getAttribute("transform"));
+
+		let tmpSVG = d3.create("svg");
+		let tooltipContainer = tmpSVG.append("g")
+			.attr("transform", svg.node().getAttribute("transform"));
+
+		let tooltipNode = tooltipContainer.append("g")
+			// .attr("transform", svg.node().getAttribute("transform"))
+			.attr("pointer-events", "none")
+			.attr("display", "none")
+			.attr("font-family", "monospace")
+			.attr("font-size", 12)
+			.attr("text-anchor", "middle");
+
+		this.bubble = tooltipNode.append("rect")
+			.attr("x", -60)
+			.attr("y", 8)
+			.attr("width", 120)
+			.attr("height", 24)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.5);
+		this.topTab = tooltipNode.append("rect")
+			.attr("transform", "translate(0, 2) rotate(45)")
+			.attr("width", 12)
+			.attr("height", 12)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.0);
+		this.bottomTab = tooltipNode.append("rect")
+			.attr("transform", "translate(0, 35) rotate(45)")
+			.attr("width", 12)
+			.attr("height", 12)
+			.attr("fill", "white")
+			.attr("stroke", "gray")
+			.attr("stroke-width", 1.0);
+		this.bubbleBackground = tooltipNode.append("rect")
+			.attr("x", -60)
+			.attr("y", 8)
+			.attr("width", 120)
+			.attr("height", 24)
+			.attr("fill", "white");
+
+		this.tooltipNode = tooltipNode;
+
+		this.textLine1 = tooltipNode.append("text").attr("y", "24").node();
+
+		this.node = tooltipNode.node();
+		this.tooltipContainer = tooltipContainer.node();
+	}
+
+	show(e,d) {
+		this.node.removeAttribute("display");
+
+		this.textLine1.textContent = d;
+
+		this.highlight = e.srcElement.cloneNode();
+		this.highlight.setAttribute("fill", "none");
+		this.highlight.setAttribute("stroke", "white");
+		this.highlight.setAttribute("stroke-width", "2px");
+		e.srcElement.parentElement.insertBefore(this.highlight, e.srcElement.nextSibling);
+
+		const bbox = e.srcElement.getBBox();
+
+		const xCenter = bbox.x + (bbox.width / 2);
+		const yCenter = bbox.y + (bbox.height / 2);
+		const yOffset = bbox.height / 2;
+
+		const positionBottom = (yCenter+yOffset+40 <= mapHeight);
+
+		if (positionBottom) {
+			this.node.setAttribute("transform", `translate(${xCenter},${yCenter+yOffset})`);
+			this.topTab.node().removeAttribute("display");
+			this.bottomTab.node().setAttribute("display", "none");
+		} else {
+			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-45-10})`);
+			this.topTab.node().setAttribute("display", "none");
+			this.bottomTab.node().removeAttribute("display");
+		}
+
+		const labelWidth = d.length * 12 * 0.6 + 20;
+		if (labelWidth > 120) {
+			this.bubble.attr("width", labelWidth);
+			this.bubble.attr("x", -labelWidth/2);
+			this.bubbleBackground.attr("width", labelWidth);
+			this.bubbleBackground.attr("x", -labelWidth/2);
+		}
+	}
+
+	hide(e,d) {
+		if (this.highlight != null) {
+			this.highlight.remove();
+			this.highlight = null;
+		}
+		this.node.setAttribute("display", "none");
+	}
+
+	build() {
+		this.svg.append(() => this.tooltipContainer);
+	}
+}
+
 
 ////////////////////////////
 /////// Extract Data ///////
