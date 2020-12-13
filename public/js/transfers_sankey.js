@@ -25,10 +25,10 @@ function makeTransfersSankey(graph) {
 
 	const {nodes, links} = toSankey(graph);
 	const nLocs = nodes.length;
-	
+
 	// Tooltip //
 	let tooltip = new TransfersSankeyTooltip(svg, graph);
-	
+
 	// Title + Axis Labels //
 
 	svg.append("text")
@@ -56,14 +56,14 @@ function makeTransfersSankey(graph) {
 		.style("font-size", "18px")
 		.attr("transform", `rotate(-90,${transfersSankeyMargins.right/2},${transfersSankeySize.height/2})`)
 		.text("Patients Sent");
-	
+
 	// color scale
 	const colorScale = d3.scaleOrdinal()
 		.domain(d3.range(nLocs))
 		.range(d3.range(nLocs).map(x => d3.interpolatePlasma(x/nLocs)))
 
 	// Nodes //
-	
+
 	// nodes
 	svg.append("g")
 		.selectAll("rect")
@@ -76,7 +76,7 @@ function makeTransfersSankey(graph) {
 		.attr("fill", d => colorScale(d.index))
 		.append("title")
 		.text(d => `${d.name.substring(0,d.name.length-4)}\n${d3.format(",.0f")(d.value)}`);
-	
+
 	// node titles
 	svg.append("g")
 		.attr("font-family", "sans-serif")
@@ -91,7 +91,7 @@ function makeTransfersSankey(graph) {
 		.text(d => d.name.substring(0,d.name.length-4));
 
 	// Links //
-	
+
 	// links
 	const link = svg.append("g")
 		.attr("fill", "none")
@@ -120,7 +120,7 @@ function makeTransfersSankey(graph) {
 		.attr("stroke", d => `url(#${d.uid})`)
 		.attr("stroke-width", d => Math.max(1, d.width))
 		.on("mouseover", (e,d) => tooltip.show(e,d))
-	
+
 	// Enable Tooltip //
 	svg.append(() => tooltip.node);
 
@@ -218,7 +218,7 @@ class TransfersSankeyTooltip {
 			.attr("width", 120)
 			.attr("height", 35)
 			.attr("fill", "white");
-		
+
 		this.tooltipNode = tooltipNode;
 
 		this.textLine1 = tooltipNode.append("text").attr("y", "24").node();
@@ -227,25 +227,25 @@ class TransfersSankeyTooltip {
 		this.node = tooltipNode.node();
 	}
 
-	show(e,d,locIdx) {
+	show(e,d) {
 		this.node.removeAttribute("display");
-		
+
 		this.textLine1.textContent = `${d.source.name.substring(0,d.source.name.length-4)} → ${d.target.name.substring(0,d.target.name.length-4)}`;
 		this.textLine2.textContent = "Transfers: " + d3.format(",.0f")(d.value);
-		
+
 		this.highlight = e.srcElement.cloneNode();
 		this.highlight.setAttribute("stroke", "white");
 		e.srcElement.parentElement.appendChild(this.highlight);
 		this.highlight.addEventListener("mouseout", (e) => this.hide());
-		
+
 		const bbox = e.srcElement.getBBox();
-		
+
 		const xCenter = bbox.x + (bbox.width / 2);
 		const yCenter = bbox.y + (bbox.height / 2);
 		const yOffset = Math.max(1, d.width) / 2;
 
 		const positionBottom = (yCenter+yOffset+40 <= transfersSankeySize.height);
-		
+
 		if (positionBottom) {
 			this.node.setAttribute("transform", `translate(${xCenter},${yCenter+yOffset})`);
 			this.topTab.node().removeAttribute("display");
