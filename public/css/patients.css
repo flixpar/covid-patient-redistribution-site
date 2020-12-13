@@ -115,3 +115,28 @@ input[type="range"] {
 .text-centered {
 	text-align: center !important;
 }
+
+.hospital-select-container {
+	display: flex;
+	flex-flow: wrap;
+	justify-content: space-evenly;
+}
+
+.hospital-select-item {
+	/* border: 1px solid lightgray; */
+	border: 1px solid white;
+	border-radius: 4px;
+
+	margin: 2px;
+	padding: 1px 5px 1px 5px;
+
+	white-space: nowrap;
+}
+
+.hospital-select-item input {
+	margin-right: 5px;
+}
+
+.hospital-select-item-selected {
+	border: 1px solid blue;
+}

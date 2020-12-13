@@ -10,6 +10,7 @@ using LinearAlgebra
 
 export load_maryland
 export los_dist_default
+export maryland_hospitals_list
 
 basepath = joinpath(dirname(@__FILE__), "../")
 
@@ -88,6 +89,35 @@ function los_dist_default(bedtype::Symbol)
 	else
 		return Gamma(2.244, 4.4988)
 	end
+end
+
+function maryland_hospitals_list()
+	data = deserialize("data/data_maryland.jlser")
+	hospitals = data.location_names
+
+	casesdata = data.casesdata[:moderate,:allbeds]
+
+	day0 = today()
+	day0_idx = (day0 - data.start_date).value + 1
+	initial = casesdata.active[:,day0_idx]
+
+	default_capacity_level = 1
+	beds = casesdata.capacity[:,default_capacity_level]
+
+	load = initial ./ beds
+
+	default_hospitals_ind = sortperm(beds, rev=true)[1:8]
+	default_hospitals = sort(hospitals[default_hospitals_ind])
+
+	hospitals_meta = [
+		Dict(
+			"name" => hospitals[i],
+			"current_load" => load[i],
+			"default" => i in default_hospitals_ind,
+		)
+		for i in 1:length(hospitals)
+	]
+	return hospitals_meta
 end
 
 end

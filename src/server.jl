@@ -52,6 +52,10 @@ route("/api/patients", method=POST) do
 	)
 end
 
+route("/api/hospital-list", method=GET) do
+	get_hospital_list()
+end
+
 
 haskey(ENV, "GENIE_ENV") || (ENV["GENIE_ENV"] = "dev")
 if !haskey(ENV, "HOST")

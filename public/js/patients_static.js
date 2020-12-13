@@ -17,10 +17,7 @@ function handleResponse(response, status, xhr) {
 	const config       = response.config;
 
 	makeSections();
-
-	let section = getSection("casestudy-info");
-	let sectionContainer = section.parentElement;
-	sectionContainer.remove();
+	createHospitalsSelect();
 
 	createStatsSummary(response);
 
@@ -54,6 +51,57 @@ function makeSections() {
 	for (s of sectionInfo) {
 		makeSection(s)
 	}
+}
+
+function createHospitalsSelect() {
+	let section = getSection("casestudy-info");
+
+	let selectAreaTitle = document.createElement("h5");
+	selectAreaTitle.className = "title is-5";
+	selectAreaTitle.style.textAlign = "center";
+	selectAreaTitle.style.marginBottom = "10px";
+	selectAreaTitle.textContent = "Hospital Selection";
+	section.appendChild(selectAreaTitle);
+
+	let selectArea = document.createElement("div");
+	selectArea.className = "hospital-select-container";
+	section.appendChild(selectArea);
+
+	$.get("/api/hospital-list", data => {
+		for (h of data) {
+			let s = document.createElement("span");
+			s.className = "hospital-select-item";
+
+			let checkbox = document.createElement("input");
+			checkbox.type = "checkbox";
+			checkbox.id = `hospitalselect-${h.name}`;
+			s.appendChild(checkbox);
+
+			if (h.default) {
+				checkbox.checked = true;
+				s.classList.add("hospital-select-item-selected");
+			}
+
+			checkbox.addEventListener("change", e => {
+				s.classList.toggle("hospital-select-item-selected");
+			});
+
+			let label = document.createElement("label");
+			label.textContent = h.name;
+			label.htmlFor = `hospitalselect-${h.name}`;
+			s.appendChild(label);
+
+			if (h.current_load < 0.9) {
+				s.style.backgroundColor = "#6cc777";
+			} else if (h.current_load < 1.05) {
+				s.style.backgroundColor = "#ffeb3b87";
+			} else {
+				s.style.backgroundColor = "red";
+			}
+
+			selectArea.appendChild(s);
+		}
+	});
 }
 
 function sendUpdateQuery() {

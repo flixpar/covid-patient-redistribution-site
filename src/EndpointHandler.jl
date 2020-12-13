@@ -13,6 +13,7 @@ using PatientAllocation
 import PatientAllocationResults
 
 export handle_patients_request
+export get_hospital_list
 
 
 function handle_patients_request(
@@ -153,6 +154,11 @@ function handle_patients_request(
 		:config => config,
 	)
 	return json(outcomes)
+end
+
+function get_hospital_list()
+	hospitals = maryland_hospitals_list()
+	return json(hospitals)
 end
 
 end;
