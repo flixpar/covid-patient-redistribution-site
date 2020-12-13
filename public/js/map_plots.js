@@ -6,7 +6,7 @@ const mapPadding    = ({top: 20, right: 20, bottom: 20, left: 20});
 const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 10});
 
 const styleID = "flixpar/cki265uhk0zjr19tlq0es9v0l";
-const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kxeWh3cXMwYjY1MnJsbGk5cjlpaHl4In0.my1R6Ozh-LMXfo3jlqzOqA";
+const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
 const pointSizeMult = 0.75;
 const thicknessMult = 0.5;
