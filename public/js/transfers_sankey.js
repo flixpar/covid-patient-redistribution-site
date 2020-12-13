@@ -190,7 +190,7 @@ class TransfersSankeyTooltip {
 			.attr("font-size", 12)
 			.attr("text-anchor", "middle");
 
-		tooltipNode.append("rect")
+		this.bubble = tooltipNode.append("rect")
 			.attr("x", -60)
 			.attr("y", 10)
 			.attr("width", 120)
@@ -212,7 +212,7 @@ class TransfersSankeyTooltip {
 			.attr("fill", "white")
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.0);
-		tooltipNode.append("rect")
+		this.bubbleBackground = tooltipNode.append("rect")
 			.attr("x", -60)
 			.attr("y", 10)
 			.attr("width", 120)
@@ -230,7 +230,8 @@ class TransfersSankeyTooltip {
 	show(e,d) {
 		this.node.removeAttribute("display");
 
-		this.textLine1.textContent = `${d.source.name.substring(0,d.source.name.length-4)} → ${d.target.name.substring(0,d.target.name.length-4)}`;
+		const transferText = `${d.source.name.substring(0,d.source.name.length-4)} → ${d.target.name.substring(0,d.target.name.length-4)}`;
+		this.textLine1.textContent = transferText;
 		this.textLine2.textContent = "Transfers: " + d3.format(",.0f")(d.value);
 
 		this.highlight = e.srcElement.cloneNode();
@@ -254,6 +255,14 @@ class TransfersSankeyTooltip {
 			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-45-10})`);
 			this.topTab.node().setAttribute("display", "none");
 			this.bottomTab.node().removeAttribute("display");
+		}
+
+		const transferTextWidth = transferText.length * 12 * 0.6 + 20;
+		if (transferTextWidth > 120) {
+			this.bubble.attr("width", transferTextWidth);
+			this.bubble.attr("x", -transferTextWidth/2);
+			this.bubbleBackground.attr("width", transferTextWidth);
+			this.bubbleBackground.attr("x", -transferTextWidth/2);
 		}
 	}
 
