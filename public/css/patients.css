@@ -118,12 +118,15 @@ input[type="range"] {
 
 .hospital-select-container {
 	display: flex;
-	flex-flow: wrap;
-	justify-content: space-evenly;
+	flex-direction: column;
+
+	max-width: 500px;
+	max-height: 200px;
+	overflow-y: scroll;
+	margin: auto;
 }
 
 .hospital-select-item {
-	/* border: 1px solid lightgray; */
 	border: 1px solid white;
 	border-radius: 4px;
 

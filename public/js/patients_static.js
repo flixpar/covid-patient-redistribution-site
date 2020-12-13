@@ -69,8 +69,9 @@ function createHospitalsSelect() {
 
 	$.get("/api/hospital-list", data => {
 		for (h of data) {
-			let s = document.createElement("span");
+			let s = document.createElement("label");
 			s.className = "hospital-select-item";
+			s.htmlFor = `hospitalselect-${h.name}`;
 
 			let checkbox = document.createElement("input");
 			checkbox.type = "checkbox";
@@ -86,9 +87,8 @@ function createHospitalsSelect() {
 				s.classList.toggle("hospital-select-item-selected");
 			});
 
-			let label = document.createElement("label");
+			let label = document.createElement("span");
 			label.textContent = h.name;
-			label.htmlFor = `hospitalselect-${h.name}`;
 			s.appendChild(label);
 
 			if (h.current_load < 0.9) {
