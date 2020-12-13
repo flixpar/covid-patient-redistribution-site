@@ -20,13 +20,19 @@ function load_maryland(
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
+		;debug::Bool=false,
 	)
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
 
 	data = deserialize("data/data_maryland.jlser")
 
-	hospital_ind = collect(1:10)
+	beds_ = data.casesdata[:moderate,:allbeds].capacity[:,1]
+	hospital_ind = sortperm(beds_, rev=true)[1:8]
+
+	if debug
+		hospital_ind = hospital_ind[1:3]
+	end
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
