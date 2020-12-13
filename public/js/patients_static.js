@@ -18,6 +18,7 @@ function handleResponse(response, status, xhr) {
 
 	makeSections();
 	createHospitalsSelect();
+	listParameters(response);
 
 	createStatsSummary(response);
 
@@ -102,6 +103,80 @@ function createHospitalsSelect() {
 			selectArea.appendChild(s);
 		}
 	});
+
+	section.appendChild(document.createElement("hr"));
+}
+
+function listParameters(response) {
+	const nDecimals = 5;
+
+	let table = document.createElement("table");
+	table.id = "parameters-table";
+	table.className = "table is-hoverable";
+	table.style.marginLeft = "auto";
+	table.style.marginRight = "auto";
+
+	let tableHead = document.createElement("thead");
+	table.appendChild(tableHead);
+	let tableHeader = document.createElement("tr");
+	tableHead.appendChild(tableHeader);
+	let keyHeader = document.createElement("th");
+	let valueHeader = document.createElement("th");
+	keyHeader.textContent = "Parameter";
+	valueHeader.textContent = "Parameter Value";
+	tableHeader.appendChild(keyHeader);
+	tableHeader.appendChild(valueHeader);
+
+	let tableBody = document.createElement("tbody");
+	table.appendChild(tableBody);
+
+	function addRow(k, v) {
+		let row = document.createElement("tr");
+		let col1 = document.createElement("td");
+		let col2 = document.createElement("td");
+
+		col1.className = "parameters-name-elem has-text-left";
+		col2.className = "parameters-value-elem";
+
+		col1.innerText = k;
+		if (v != null && typeof v == "number") {
+			col2.innerText = v.toFixed(nDecimals);
+		} else {
+			col2.innerText = v;
+		}
+
+		row.appendChild(col1);
+		row.appendChild(col2);
+		tableBody.appendChild(row);
+	}
+	function addSeparator() {
+		let lastRow = tableBody.childNodes[tableBody.childElementCount-1];
+		for (elem of lastRow.childNodes) {
+			elem.style.borderBottom = "1px solid lightgray";
+		}
+	}
+
+	const data = {
+		scenario: $("#form-scenario")[0].value,
+		patient_type: $("#form-patient-type")[0].value,
+		objective: $("#form-objective")[0].value,
+		integer: $("#form-integer")[0].value,
+		transferbudget: $("#form-transferbudget")[0].value,
+		utilization: $("#form-utilization")[0].value,
+		uncertaintylevel: $("#form-uncertainty")[0].value,
+		los: $("#form-los")[0].value,
+		start_date: $("#form-start-date")[0].value,
+		end_date: $("#form-end-date")[0].value,
+	}
+
+	const patient_type = (data.patient_type == "icu") ? "ICU" : toTitlecase(data.patient_type);
+
+	addRow("Patient Type", patient_type);
+	addRow("Start Date", data.start_date);
+	addRow("End Date", data.end_date);
+
+	let section = getSection("casestudy-info");
+	section.appendChild(table);
 }
 
 function sendUpdateQuery() {
