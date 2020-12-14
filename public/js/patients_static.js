@@ -53,55 +53,60 @@ function makeSections() {
 	}
 }
 
-function createHospitalsSelect() {
+function createHospitalsSelect(data) {
 	let section = getSection("casestudy-info");
 
-	let selectAreaTitle = document.createElement("h5");
-	selectAreaTitle.className = "title is-5";
-	selectAreaTitle.style.textAlign = "center";
-	selectAreaTitle.style.marginBottom = "10px";
-	selectAreaTitle.textContent = "Hospital Selection";
-	section.appendChild(selectAreaTitle);
+	let selectAreaContainer = document.createElement("div");
+	selectAreaContainer.className = "select-area-container";
+	section.appendChild(selectAreaContainer);
+
+	let selectAreaHeader = document.createElement("div");
+	selectAreaHeader.className = "hospital-select-header";
+	selectAreaHeader.textContent = "Select Hospitals";
+	selectAreaContainer.appendChild(selectAreaHeader);
 
 	let selectArea = document.createElement("div");
 	selectArea.className = "hospital-select-container";
-	section.appendChild(selectArea);
+	selectAreaContainer.appendChild(selectArea);
 
-	$.get("/api/hospital-list", data => {
-		for (h of data) {
-			let s = document.createElement("label");
-			s.className = "hospital-select-item";
-			s.htmlFor = `hospitalselect-${h.name}`;
+	for (h of data) {
+		let s = document.createElement("label");
+		s.className = "hospital-select-item";
+		s.htmlFor = `hospitalselect-${h.name}`;
 
-			let checkbox = document.createElement("input");
-			checkbox.type = "checkbox";
-			checkbox.id = `hospitalselect-${h.name}`;
-			s.appendChild(checkbox);
+		let checkbox = document.createElement("input");
+		checkbox.type = "checkbox";
+		checkbox.id = `hospitalselect-${h.name}`;
+		s.appendChild(checkbox);
 
-			if (h.default) {
-				checkbox.checked = true;
-				s.classList.add("hospital-select-item-selected");
-			}
-
-			checkbox.addEventListener("change", e => {
-				s.classList.toggle("hospital-select-item-selected");
-			});
-
-			let label = document.createElement("span");
-			label.textContent = h.name;
-			s.appendChild(label);
-
-			if (h.current_load < 0.9) {
-				s.style.backgroundColor = "#6cc777";
-			} else if (h.current_load < 1.05) {
-				s.style.backgroundColor = "#ffeb3b87";
-			} else {
-				s.style.backgroundColor = "red";
-			}
-
-			selectArea.appendChild(s);
+		if (h.default) {
+			checkbox.checked = true;
+			s.classList.add("hospital-select-item-selected");
 		}
-	});
+
+		checkbox.addEventListener("change", e => {
+			s.classList.toggle("hospital-select-item-selected");
+		});
+
+		let label = document.createElement("span");
+		label.textContent = h.name;
+		s.appendChild(label);
+
+		let loadLabel = document.createElement("span");
+		loadLabel.style.float = "right";
+		loadLabel.textContent = `(Load = ${h.current_load.toFixed(1)})`;
+		s.appendChild(loadLabel);
+
+		if (h.current_load < 0.9) {
+			s.style.backgroundColor = "#6cc777";
+		} else if (h.current_load < 1.05) {
+			s.style.backgroundColor = "#ffeb3b87";
+		} else {
+			s.style.backgroundColor = "red";
+		}
+
+		selectArea.appendChild(s);
+	}
 
 	section.appendChild(document.createElement("hr"));
 }
