@@ -124,6 +124,8 @@ function handle_patients_request(
 		use_rounding=false,
 	)
 
+	nodes_meta = maryland_hospitals_list()
+
 	config = Dict(
 		:start_date => start_date,
 		:end_date   => end_date,
@@ -131,6 +133,7 @@ function handle_patients_request(
 		:node_names => data.node_names,
 		:node_names_abbrev => data.node_names_abbrev,
 		:node_locations    => data.node_locations,
+		:nodes_meta => nodes_meta,
 		:capacity_names => data.capacity_names,
 		:node_type => "hospital",
 		:region    => "maryland",

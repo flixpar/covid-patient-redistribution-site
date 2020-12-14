@@ -1,23 +1,22 @@
 function handleResponse(response, status, xhr) {
-	console.log("Updating...");
-	hideProgressbar();
-	container.innerHTML = "";
-
 	recentResponse = response;
+	hideProgressbar();
+	generateContent(response);
+}
+
+function generateContent(response) {
+	console.log("Updating...");
+	container.innerHTML = "";
 
 	const summary_data = response.summary;
 	const full_results = response.full_results;
-	const sent_matrix  = response.sent_matrix;
-	const net_sent     = response.net_sent;
-	const sent         = response.sent;
-	const beds         = response.beds;
 	const capacity     = response.capacity;
 	const active_patients = response.active;
 	const active_patients_nosent = response.active_null;
 	const config       = response.config;
 
 	makeSections();
-	createHospitalsSelect();
+	createHospitalsSelect(response.config.nodes_meta);
 	listParameters(response);
 
 	createStatsSummary(response);
