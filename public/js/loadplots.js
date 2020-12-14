@@ -3,6 +3,7 @@ const loadPlotsHeight = 400;
 const loadPlotsMargin = ({top: 35, right: 30, bottom: 30, left: 50})
 const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
+const loadPlotsShowPoints = true;
 
 
 function createOverallLoadPlot(rawdata, add_description=true) {
@@ -145,25 +146,6 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("fill", "red")
 		.attr("opacity", 0.2);
 
-	for (let i = 0; i < N; i++) {
-
-		svg.append("path")
-			.datum(load[i])
-			.attr("fill", "none")
-			.attr("stroke", colorscale(i))
-			.attr("stroke-width", 2)
-			.attr("d", line);
-
-		svg.selectAll(".point")
-			.data(load[i])
-			.enter().append("svg:circle")
-			.attr("fill", colorscale(i))
-			.attr("cx", d => x(d.date))
-			.attr("cy", d => yScale(d.value))
-			.attr("r", 3);
-
-	}
-
 	svg.append("line")
 		.attr("x1", 0)
 		.attr("x2", loadPlotsWidth)
@@ -171,6 +153,27 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("y2", yScale(1.0))
 		.attr("stroke-width", 6)
 		.attr("stroke", "red");
+
+	for (let i = 0; i < N; i++) {
+
+		svg.append("path")
+			.datum(load[i])
+			.attr("fill", "none")
+			.attr("stroke", colorscale(i))
+			.attr("stroke-width", 4)
+			.attr("d", line);
+
+		if (loadPlotsShowPoints) {
+			svg.selectAll("points")
+				.data(load[i])
+				.enter().append("circle")
+				.attr("fill", colorscale(i))
+				.attr("cx", d => x(d.date))
+				.attr("cy", d => yScale(d.value))
+				.attr("r", 5);
+		}
+
+	}
 
 	svg.append("rect")
 		.attr("x", 0)
@@ -279,6 +282,14 @@ function makeOverallLoadPlot(overall_load) {
 		.attr("fill", "red")
 		.attr("opacity", 0.2);
 
+	svg.append("line")
+		.attr("x1", loadPlotsMargin.left)
+		.attr("x2", loadPlotsWidth-loadPlotsMargin.right)
+		.attr("y1", y(1.0))
+		.attr("y2", y(1.0))
+		.attr("stroke-width", 5)
+		.attr("stroke", "red");
+
 	svg.append("path")
 		.datum(overall_load)
 		.attr("fill", "none")
@@ -288,23 +299,17 @@ function makeOverallLoadPlot(overall_load) {
 		.attr("stroke-linecap", "round")
 		.attr("d", line);
 
-	svg.selectAll(".point")
-		.data(overall_load)
-		.enter().append("svg:circle")
-		.attr("fill", "darkblue")
-		.attr("stroke", "white")
-		.attr("stroke-width", 1)
-		.attr("cx", d => x(d.date))
-		.attr("cy", d => y(d.value))
-		.attr("r", 6);
-
-	svg.append("line")
-		.attr("x1", loadPlotsMargin.left)
-		.attr("x2", loadPlotsWidth-loadPlotsMargin.right)
-		.attr("y1", y(1.0))
-		.attr("y2", y(1.0))
-		.attr("stroke-width", 5)
-		.attr("stroke", "red");
+	if (loadPlotsShowPoints) {
+		svg.selectAll("points")
+			.data(overall_load)
+			.enter().append("circle")
+			.attr("fill", "darkblue")
+			.attr("stroke", "white")
+			.attr("stroke-width", 0.5)
+			.attr("cx", d => x(d.date))
+			.attr("cy", d => y(d.value))
+			.attr("r", 4);
+	}
 
 	return svg.node();
 }
