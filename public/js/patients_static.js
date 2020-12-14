@@ -57,7 +57,7 @@ function createHospitalsSelect(data) {
 	let section = getSection("casestudy-info");
 
 	let selectAreaContainer = document.createElement("div");
-	selectAreaContainer.className = "select-area-container";
+	selectAreaContainer.className = "hospital-select-container";
 	section.appendChild(selectAreaContainer);
 
 	let selectAreaHeader = document.createElement("div");
@@ -66,7 +66,7 @@ function createHospitalsSelect(data) {
 	selectAreaContainer.appendChild(selectAreaHeader);
 
 	let selectArea = document.createElement("div");
-	selectArea.className = "hospital-select-container";
+	selectArea.className = "hospital-select-area";
 	selectAreaContainer.appendChild(selectArea);
 
 	for (h of data) {

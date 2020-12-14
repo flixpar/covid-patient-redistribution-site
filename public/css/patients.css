@@ -116,30 +116,43 @@ input[type="range"] {
 	text-align: center !important;
 }
 
-.hospital-select-header {
-	width: 100%;
-	max-width: 500px;
-	margin: auto;
-}
-
 .hospital-select-container {
 	display: flex;
 	flex-direction: column;
 
 	max-width: 500px;
-	max-height: 200px;
-	overflow-y: scroll;
+	max-height: 300px;
 	margin: auto;
+
+	border: 1px solid lightgray;
+	border-radius: 4px;
+
+	padding: 5px;
+
+	box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
+}
+
+.hospital-select-header {
+	font-weight: bold;
+}
+
+.hospital-select-area {
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
 }
 
 .hospital-select-item {
 	border: 1px solid white;
 	border-radius: 4px;
 
-	margin: 2px;
 	padding: 1px 5px 1px 5px;
 
 	white-space: nowrap;
+}
+
+.hospital-select-item:hover {
+	opacity: 0.8;
 }
 
 .hospital-select-item input {
