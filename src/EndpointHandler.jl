@@ -28,6 +28,8 @@ function handle_patients_request(
 
 		start_date::Date,
 		end_date::Date,
+
+		;verbose::Bool=false,
 	)
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario), Patient type: $(patient_type)"
@@ -64,7 +66,7 @@ function handle_patients_request(
 			capacity_cushion=(1.0-capacity_util),
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
-			verbose=false,
+			verbose=verbose,
 		)
 	elseif objective == :loadbalance
 		model = patient_loadbalance(
@@ -80,7 +82,7 @@ function handle_patients_request(
 			admitted_smoothness_penalty=0.25,
 			capacity_cushion=(1.0-capacity_util),
 			constrain_integer=constrain_integer,
-			verbose=false,
+			verbose=verbose,
 		)
 	elseif objective == :hybrid
 		capacity_weights = ones(Int, C)
@@ -105,7 +107,7 @@ function handle_patients_request(
 			capacity_weights=capacity_weights,
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
-			verbose=false,
+			verbose=verbose,
 		)
 	else
 		error("Invalid objective: $(objective)")
