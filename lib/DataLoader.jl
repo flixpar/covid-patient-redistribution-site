@@ -14,13 +14,15 @@ export maryland_hospitals_list
 
 basepath = joinpath(dirname(@__FILE__), "../")
 
+DEBUG = false
+NDEDBUG = 8
+
 
 function load_maryland(
 		scenario::Symbol,
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
-		;debug::Bool=false,
 	)
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
@@ -28,10 +30,10 @@ function load_maryland(
 	data = deserialize("data/data_maryland.jlser")
 
 	beds_ = data.casesdata[:moderate,:allbeds].capacity[:,1]
-	hospital_ind = sortperm(beds_, rev=true)[1:8]
+	hospital_ind = sortperm(beds_, rev=true)
 
-	if debug
-		hospital_ind = hospital_ind[1:3]
+	if DEBUG
+		hospital_ind = hospital_ind[1:NDEDBUG]
 	end
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
@@ -112,7 +114,13 @@ function maryland_hospitals_list()
 
 	load = initial ./ beds
 
-	default_hospitals_ind = sortperm(beds, rev=true)[1:8]
+	default_hospitals_ind = sortperm(beds, rev=true)
+	default_hospitals_ind = default_hospitals_ind[1:10]
+
+	if DEBUG && NDEDBUG < 10
+		default_hospitals_ind = default_hospitals_ind[1:NDEDBUG]
+	end
+
 	default_hospitals = sort(hospitals[default_hospitals_ind])
 
 	hospitals_meta = [

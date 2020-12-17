@@ -69,14 +69,25 @@ function createHospitalsSelect(data) {
 	selectArea.className = "hospital-select-area";
 	selectAreaContainer.appendChild(selectArea);
 
-	for (h of data) {
+	let selectUpdateButton = document.createElement("button");
+	selectUpdateButton.textContent = "Update";
+	selectUpdateButton.type = "button";
+	selectUpdateButton.className = "button is-info";
+	selectAreaContainer.appendChild(selectUpdateButton);
+
+	selectUpdateButton.addEventListener("click", () => {
+		const newResponse = filterResponse(recentResponse);
+		generateContent(newResponse);
+	});
+
+	data.forEach((h,i) => {
 		let s = document.createElement("label");
 		s.className = "hospital-select-item";
 		s.htmlFor = `hospitalselect-${h.name}`;
 
 		let checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
-		checkbox.id = `hospitalselect-${h.name}`;
+		checkbox.id = `hospitalselect-${i}`;
 		s.appendChild(checkbox);
 
 		if (h.default) {
@@ -106,7 +117,7 @@ function createHospitalsSelect(data) {
 		}
 
 		selectArea.appendChild(s);
-	}
+	});
 
 	section.appendChild(document.createElement("hr"));
 }
@@ -181,6 +192,32 @@ function listParameters(response) {
 
 	let section = getSection("casestudy-info");
 	section.appendChild(table);
+}
+
+function filterResponse(response_) {
+	let response = JSON.parse(JSON.stringify(response_));
+
+	const selectedHospitalNames = response.config.nodes_meta.map((h,i) => {
+		const c = document.getElementById(`hospitalselect-${i}`).checked;
+		return c ? h.name : null;
+	}).filter(x => x != null);
+	const selectedInd = selectedHospitalNames.map(h => response.config.node_names.indexOf(h)).sort();
+
+	console.log(selectedHospitalNames);
+	console.log(selectedInd);
+
+	response.config.node_names = selectedInd.map(i => response.config.node_names[i]);
+	response.config.node_names_abbrev = selectedInd.map(i => response.config.node_names_abbrev[i]);
+
+	response.beds = selectedInd.map(i => response.beds[i]);
+	response.capacity = selectedInd.map(i => response.capacity[i]);
+	response.active = selectedInd.map(i => response.active[i]);
+	response.active_null = selectedInd.map(i => response.active_null[i]);
+	response.admitted = selectedInd.map(i => response.admitted[i]);
+
+	response.sent = selectedInd.map(i => selectedInd.map(j => response.sent[i][j]));
+
+	return response;
 }
 
 function sendUpdateQuery() {
