@@ -100,7 +100,7 @@ function los_dist_default(bedtype::Symbol)
 end
 
 function maryland_hospitals_list()
-	data = deserialize("data/data_maryland.jlser")
+	data = deserialize(joinpath(projectbasepath, "data/data_maryland.jlser"))
 	hospitals = data.location_names
 
 	casesdata = data.casesdata[:moderate,:allbeds]
