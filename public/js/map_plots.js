@@ -466,8 +466,6 @@ class MapTooltip {
 		this.response = response;
 		this.highlight = null;
 
-		console.log(svg.node().getAttribute("transform"));
-
 		let tmpSVG = d3.create("svg");
 		let tooltipContainer = tmpSVG.append("g")
 			.attr("transform", svg.node().getAttribute("transform"));
