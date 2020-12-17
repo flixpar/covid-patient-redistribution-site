@@ -12,7 +12,7 @@ export load_maryland
 export los_dist_default
 export maryland_hospitals_list
 
-basepath = joinpath(dirname(@__FILE__), "../")
+projectbasepath = joinpath(@__DIR__, "../")
 
 DEBUG = false
 NDEDBUG = 8
@@ -27,7 +27,7 @@ function load_maryland(
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
 
-	data = deserialize("data/data_maryland.jlser")
+	data = deserialize(joinpath(projectbasepath, "data/data_maryland.jlser"))
 
 	beds_ = data.casesdata[:moderate,:allbeds].capacity[:,1]
 	hospital_ind = sortperm(beds_, rev=true)

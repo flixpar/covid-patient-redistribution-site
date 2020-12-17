@@ -1,4 +1,7 @@
 using Dates
+
+push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
+push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
 include("../src/EndpointHandler.jl")
 
 params_date_range = today():Day(1):(today()+Day(2))
@@ -15,7 +18,7 @@ default_params = (
 	constrain_integer = false,
 	transfer_budget = Inf,
 	capacity_util = 1.0,
-	uncertainty_level = "default",
+	uncertainty_level = :default,
 	los_param = "default_dist",
 	period_length = Month(2),
 )
