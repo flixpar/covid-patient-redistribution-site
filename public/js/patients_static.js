@@ -191,6 +191,7 @@ function listParameters(response) {
 
 	const patient_type = (data.patient_type == "icu") ? "ICU" : toTitlecase(data.patient_type);
 
+	addRow("Scenario", data.scenario);
 	addRow("Patient Type", patient_type);
 	addRow("Start Date", data.start_date);
 	addRow("End Date", data.end_date);
