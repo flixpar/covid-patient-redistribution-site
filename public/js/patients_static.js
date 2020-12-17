@@ -237,12 +237,13 @@ function sendUpdateQuery() {
 		end_date: $("#form-end-date")[0].value,
 	}
 	console.log("Querying server...");
+	const start_date_str = data.start_date.replaceAll("-", "");
+	const fn = `${start_date_str}_${data.scenario}_${data.patient_type}.json`;
+	console.log(`Fetching: ${fn}`)
 	$.ajax({
-		url: "/api/patients",
-		type: "post",
+		url: `/results-static/${fn}`,
+		type: "get",
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		data: JSON.stringify(data),
 		success: handleResponse,
 		beforeSend: showProgressbar,
 		error: ajaxErrorHandler,
