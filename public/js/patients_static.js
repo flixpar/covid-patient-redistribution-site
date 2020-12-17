@@ -1,7 +1,9 @@
 function handleResponse(response, status, xhr) {
 	recentResponse = response;
+	createHospitalsSelect(response.config.nodes_meta);
+	const newResponse = filterResponse(response);
 	hideProgressbar();
-	generateContent(response);
+	generateContent(newResponse);
 }
 
 function generateContent(response) {
@@ -16,7 +18,6 @@ function generateContent(response) {
 	const config       = response.config;
 
 	makeSections();
-	createHospitalsSelect(response.config.nodes_meta);
 	listParameters(response);
 
 	createStatsSummary(response);
@@ -39,7 +40,6 @@ function generateContent(response) {
 
 function makeSections() {
 	const sectionInfo = [
-		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
 		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
@@ -54,10 +54,15 @@ function makeSections() {
 }
 
 function createHospitalsSelect(data) {
-	let section = getSection("casestudy-info");
+	if (document.getElementById("hospital-select-container") != null) {
+		return;
+	}
+
+	let section = document.getElementById("info-container");
 
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
+	selectAreaContainer.id = "hospital-select-container";
 	section.appendChild(selectAreaContainer);
 
 	let selectAreaHeader = document.createElement("div");
@@ -83,7 +88,7 @@ function createHospitalsSelect(data) {
 	data.forEach((h,i) => {
 		let s = document.createElement("label");
 		s.className = "hospital-select-item";
-		s.htmlFor = `hospitalselect-${h.name}`;
+		s.htmlFor = `hospitalselect-${i}`;
 
 		let checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
@@ -190,8 +195,12 @@ function listParameters(response) {
 	addRow("Start Date", data.start_date);
 	addRow("End Date", data.end_date);
 
-	let section = getSection("casestudy-info");
-	section.appendChild(table);
+	if (document.getElementById("parameters-table") != null) {
+		document.getElementById("parameters-table").replaceWith(table);
+	} else {
+		let section = document.getElementById("info-container");
+		section.appendChild(table);
+	}
 }
 
 function filterResponse(response_) {
