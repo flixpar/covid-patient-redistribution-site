@@ -1,24 +1,21 @@
-build/*
-cache/*
-config/secrets.jl
-docs/build
+# logs
 log/*
 logs/*
-session/*
-!*.gitkeep
 
+# temp files
 *.log
 *.swo
 *.swp
+*.tmp
 *.vi
+*.lp
 *~
-
 .DS_Store
 .vscode
+cache/*
 
+# jupyter notebook cache
 .ipynb_checkpoints/
 
-target/
+# manual backups
 backup/
-
-*.lp
