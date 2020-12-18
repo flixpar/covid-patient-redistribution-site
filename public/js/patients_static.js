@@ -292,24 +292,11 @@ function filterResponse(response_) {
 }
 
 function sendUpdateQuery() {
-	if (!validateForm()) {
-		return;
-	}
-	const data = {
-		scenario: $("#form-scenario")[0].value,
-		patient_type: $("#form-patient-type")[0].value,
-		objective: $("#form-objective")[0].value,
-		integer: $("#form-integer")[0].value,
-		transferbudget: $("#form-transferbudget")[0].value,
-		utilization: $("#form-utilization")[0].value,
-		uncertaintylevel: $("#form-uncertainty")[0].value,
-		los: $("#form-los")[0].value,
-		start_date: $("#form-start-date")[0].value,
-		end_date: $("#form-end-date")[0].value,
-	}
 	console.log("Querying server...");
-	const start_date_str = data.start_date.replaceAll("-", "");
-	const fn = `${start_date_str}_${data.scenario}_${data.patient_type}.json`;
+	const start_date_str = document.getElementById("form-start-date").value.replaceAll("-", "");
+	const scenario = document.getElementById("form-scenario").value.toLowerCase();
+	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
+	const fn = `${start_date_str}_${scenario}_${patient_type}.json`;
 	console.log(`Fetching: ${fn}`)
 	$.ajax({
 		url: `/results-static/${fn}`,
