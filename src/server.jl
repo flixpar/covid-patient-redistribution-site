@@ -14,6 +14,10 @@ route("/") do
 	serve_static_file("html/home.html")
 end
 
+route("/home") do
+	serve_static_file("html/home.html")
+end
+
 route("/patients-static") do
 	serve_static_file("html/patients-static.html")
 end

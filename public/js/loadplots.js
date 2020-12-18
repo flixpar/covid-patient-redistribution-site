@@ -7,7 +7,7 @@ const loadPlotsShowPoints = true;
 
 
 function createOverallLoadPlot(rawdata, add_description=true) {
-	const section = document.getElementById("section-results-load");
+	const section = document.getElementById("section-results-totalload");
 
 	if (add_description) {
 		let description = document.createElement("p");
@@ -21,9 +21,6 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 
 	section.appendChild(overallLoadPlot);
 	// createCapacityOption("overallloadplot", rawdata);
-
-	const hr = document.createElement("hr");
-	section.appendChild(hr);
 }
 
 function createLoadPlots(rawdata, add_description=true) {

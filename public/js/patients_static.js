@@ -8,7 +8,7 @@ function handleResponse(response, status, xhr) {
 
 function generateContent(response) {
 	console.log("Updating...");
-	container.innerHTML = "";
+	clearContent();
 
 	const summary_data = response.summary;
 	const full_results = response.full_results;
@@ -17,7 +17,6 @@ function generateContent(response) {
 	const active_patients_nosent = response.active_null;
 	const config       = response.config;
 
-	makeSections();
 	listParameters(response);
 
 	createStatsSummary(response);
@@ -38,18 +37,31 @@ function generateContent(response) {
 	console.log("Done.");
 }
 
-function makeSections() {
-	const sectionInfo = [
-		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
-		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
-		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
-		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
-		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
-		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
-	]
+const sectionInfo = [
+	{title: "Parameters",                      identifier: "parameters",          reset:false, showDefault: true},
+	{title: "Healthcare System Load",          identifier: "results-totalload",   reset:true,  showDefault: true},
+	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true},
+	{title: "Hospital Loads",                  identifier: "results-load",        reset:true,  showDefault: true},
+	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true},
+	{title: "Active COVID Patients",           identifier: "results-active",      reset:true,  showDefault: false},
+	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
+	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
+];
 
+function makeSections() {
 	for (s of sectionInfo) {
-		makeSection(s)
+		makeSection(s);
+		let e = getSection(s.identifier);
+	}
+}
+makeSections();
+
+function clearContent() {
+	for (s of sectionInfo) {
+		if (s.reset) {
+			let section = getSection(s.identifier);
+			section.innerHTML = "";
+		}
 	}
 }
 
@@ -58,7 +70,7 @@ function createHospitalsSelect(data) {
 		return;
 	}
 
-	let section = document.getElementById("info-container");
+	let section = getSection("parameters");
 
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
@@ -199,7 +211,7 @@ function listParameters(response) {
 	if (document.getElementById("parameters-table") != null) {
 		document.getElementById("parameters-table").replaceWith(table);
 	} else {
-		let section = document.getElementById("info-container");
+		let section = getSection("parameters");
 		section.appendChild(table);
 	}
 }

@@ -64,7 +64,6 @@ function getSection(sectionID) {
 
 function showProgressbar() {
 	$("#progressbar-area").show();
-	container.innerHTML = "";
 }
 
 function hideProgressbar() {
