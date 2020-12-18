@@ -54,6 +54,10 @@ function precompute_result(params)
 	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type).json")
 	write(fn, result)
 
+	run(`mv $(fn) $(fn*".tmp")`)
+	run(pipeline(`tail -n1 $(fn*".tmp")`, stdout=fn))
+	run(`rm $(fn*".tmp")`)
+
 	if VERBOSE
 		println("Done. Saved to: $(fn)")
 		println("==================================")
