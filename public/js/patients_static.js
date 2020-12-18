@@ -17,8 +17,6 @@ function generateContent(response) {
 	const active_patients_nosent = response.active_null;
 	const config       = response.config;
 
-	listParameters(response);
-
 	createStatsSummary(response);
 
 	createMap(response, "overflow_dynamic");
@@ -70,12 +68,12 @@ function createHospitalsSelect(data) {
 		return;
 	}
 
-	let section = getSection("parameters");
-
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
 	selectAreaContainer.id = "hospital-select-container";
-	section.appendChild(selectAreaContainer);
+
+	let section = document.getElementById("static-params-form");
+	section.insertBefore(selectAreaContainer, document.getElementById("params-form-submit"));
 
 	let selectAreaHeader = document.createElement("div");
 	selectAreaHeader.className = "hospital-select-header";
@@ -85,17 +83,6 @@ function createHospitalsSelect(data) {
 	let selectArea = document.createElement("div");
 	selectArea.className = "hospital-select-area";
 	selectAreaContainer.appendChild(selectArea);
-
-	let selectUpdateButton = document.createElement("button");
-	selectUpdateButton.textContent = "Update";
-	selectUpdateButton.type = "button";
-	selectUpdateButton.className = "button is-info";
-	selectAreaContainer.appendChild(selectUpdateButton);
-
-	selectUpdateButton.addEventListener("click", () => {
-		const newResponse = filterResponse(recentResponse);
-		generateContent(newResponse);
-	});
 
 	data.forEach((h,i) => {
 		let s = document.createElement("label");
@@ -135,9 +122,71 @@ function createHospitalsSelect(data) {
 
 		selectArea.appendChild(s);
 	});
-
-	section.appendChild(document.createElement("hr"));
 }
+
+function createParametersForm() {
+	let section = getSection("parameters");
+
+	let formContainer = document.createElement("div");
+	formContainer.id = "static-params-form";
+	section.appendChild(formContainer);
+
+	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Scenario", "form-scenario");
+	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "Patient Type", "form-patient-type");
+
+	formContainer.appendChild(scenarioSelect);
+	formContainer.appendChild(patienttypeSelect);
+
+	let selectUpdateButton = document.createElement("button");
+	selectUpdateButton.textContent = "Update";
+	selectUpdateButton.type = "button";
+	selectUpdateButton.className = "button is-info is-fullwidth";
+	selectUpdateButton.id = "params-form-submit";
+	formContainer.appendChild(selectUpdateButton);
+
+	selectUpdateButton.addEventListener("click", () => {
+		const newResponse = filterResponse(recentResponse);
+		generateContent(newResponse);
+	});
+}
+
+function createSelect(optionNames, defaultIdx, labelText, selectId) {
+	let selectContainer = document.createElement("div");
+	selectContainer.className = "field";
+	selectContainer.style.marginBottom = "0.75rem";
+
+	let selectLabel = document.createElement("label");
+	selectLabel.className = "label";
+	selectLabel.htmlFor = selectId;
+	selectLabel.textContent = labelText;
+	selectLabel.style.marginBottom = "0.2rem";
+	selectContainer.appendChild(selectLabel);
+
+	let selectControl = document.createElement("div");
+	selectControl.className = "control";
+	selectContainer.appendChild(selectControl);
+
+	let selectWrapper = document.createElement("div");
+	selectWrapper.className = "select is-fullwidth";
+	selectControl.appendChild(selectWrapper);
+
+	let select = document.createElement("select");
+	select.id = selectId;
+
+	let options = optionNames.map(txt => {
+		let s = document.createElement("option");
+		s.text = txt;
+		select.appendChild(s);
+		return s;
+	});
+	options[defaultIdx].selected = true;
+
+	selectWrapper.appendChild(select);
+
+	return selectContainer;
+}
+
+createParametersForm();
 
 function listParameters(response) {
 	const nDecimals = 5;
