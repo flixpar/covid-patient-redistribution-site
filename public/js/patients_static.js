@@ -274,11 +274,14 @@ function filterResponse(response_) {
 	}).filter(x => x != null);
 	const selectedInd = selectedHospitalNames.map(h => response.config.node_names.indexOf(h)).sort();
 
-	console.log(selectedHospitalNames);
-	console.log(selectedInd);
-
 	response.config.node_names = selectedInd.map(i => response.config.node_names[i]);
 	response.config.node_names_abbrev = selectedInd.map(i => response.config.node_names_abbrev[i]);
+
+	let node_locations = {};
+	selectedHospitalNames.forEach(h => {
+		node_locations[h] = response.config.node_locations[h];
+	});
+	response.config.node_locations = node_locations;
 
 	response.beds = selectedInd.map(i => response.beds[i]);
 	response.capacity = selectedInd.map(i => response.capacity[i]);
