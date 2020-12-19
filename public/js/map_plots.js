@@ -5,6 +5,8 @@ const mapPlotMargin = ({top: 25, right:  0, bottom:  0, left:  0});
 const mapPadding    = ({top: 20, right: 20, bottom: 20, left: 20});
 const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 10});
 
+const stackHorizontal = true;
+
 const styleID = "flixpar/cki265uhk0zjr19tlq0es9v0l";
 const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
@@ -122,15 +124,31 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, geometries, plot_title, colorbar_label) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
-	const plotWidth = 0.45 * mapWidth;
-	const plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
+	let plotWidth, plotHeight;
+	let g1, g2, g3;
+	let labelPosition;
+	if (stackHorizontal) {
+		plotWidth = 0.45 * mapWidth;
+		plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
 
-	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
-	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
-	let g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 2*plotWidth}, ${mapPlotMargin.top})`);
+		g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
+		g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
+		g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 2*plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)");
-	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)");
+		labelPosition = "top";
+	} else {
+		plotWidth = 0.9 * mapWidth;
+		plotHeight = 0.5 * (mapHeight - mapPlotMargin.top - mapPlotMargin.bottom);
+
+		g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10}, ${mapPlotMargin.top - 15})`);
+		g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10}, ${mapPlotMargin.top - 15 + plotHeight})`);
+		g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10 + plotWidth}, ${mapPlotMargin.top})`);
+
+		labelPosition = "left";
+	}
+
+	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)", labelPosition);
+	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)", labelPosition);
 	g3 = makeColorbar(g3, colorscale, colorbar_label);
 
 	if (debugMap) {
@@ -222,7 +240,7 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 ///////// Plot Maps ////////
 ////////////////////////////
 
-function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, dynamic=true, title=null) {
+function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, dynamic=true, title=null, titlePosition="top") {
 
 	if (dynamic) {
 		while (mapPlotIntervals.length != 0) {
@@ -340,13 +358,22 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		.on("mouseout",  (e,d) => tooltip.hide(e,d));
 
 	if (title != null) {
-		svg.append("text")
-			.attr("x", plotWidth/2)
-			.attr("y", 20)
-			.attr("text-anchor", "middle")
-			.style("font-family", mapPlotFont)
-			.style("font-size", "18px")
-			.text(title);
+		if (titlePosition == "top") {
+			svg.append("text")
+				.attr("x", plotWidth/2)
+				.attr("y", 20)
+				.attr("text-anchor", "middle")
+				.style("font-family", mapPlotFont)
+				.style("font-size", "16px")
+				.text(title);
+		} else if (titlePosition == "left") {
+			svg.append("text")
+				.attr("transform", `translate(4,${plotHeight/2}) rotate(-90)`)
+				.attr("text-anchor", "middle")
+				.style("font-family", mapPlotFont)
+				.style("font-size", "16px")
+				.text(title);
+		}
 	}
 
 	// setup arrow
