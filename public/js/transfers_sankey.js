@@ -224,6 +224,8 @@ class TransfersSankeyTooltip {
 		this.textLine1 = tooltipNode.append("text").attr("y", "24").node();
 		this.textLine2 = tooltipNode.append("text").attr("y", "38").node();
 
+		this.svg.on("mousemove", e => this.move(e));
+
 		this.node = tooltipNode.node();
 	}
 
@@ -232,30 +234,12 @@ class TransfersSankeyTooltip {
 
 		const transferText = `${d.source.name.substring(0,d.source.name.length-4)} → ${d.target.name.substring(0,d.target.name.length-4)}`;
 		this.textLine1.textContent = transferText;
-		this.textLine2.textContent = "Transfers: " + d3.format(",.0f")(d.value);
+		this.textLine2.textContent = "Transfers: " + d.value.toFixed(0);
 
 		this.highlight = e.srcElement.cloneNode();
 		this.highlight.setAttribute("stroke", "white");
 		e.srcElement.parentElement.appendChild(this.highlight);
-		this.highlight.addEventListener("mouseout", (e) => this.hide());
-
-		const bbox = e.srcElement.getBBox();
-
-		const xCenter = bbox.x + (bbox.width / 2);
-		const yCenter = bbox.y + (bbox.height / 2);
-		const yOffset = Math.max(1, d.width) / 2;
-
-		const positionBottom = (yCenter+yOffset+40 <= transfersSankeySize.height);
-
-		if (positionBottom) {
-			this.node.setAttribute("transform", `translate(${xCenter},${yCenter+yOffset})`);
-			this.topTab.node().removeAttribute("display");
-			this.bottomTab.node().setAttribute("display", "none");
-		} else {
-			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-45-10})`);
-			this.topTab.node().setAttribute("display", "none");
-			this.bottomTab.node().removeAttribute("display");
-		}
+		this.highlight.addEventListener("mouseout", () => this.hide());
 
 		const transferTextWidth = transferText.length * 12 * 0.6 + 20;
 		if (transferTextWidth > 120) {
@@ -263,6 +247,23 @@ class TransfersSankeyTooltip {
 			this.bubble.attr("x", -transferTextWidth/2);
 			this.bubbleBackground.attr("width", transferTextWidth);
 			this.bubbleBackground.attr("x", -transferTextWidth/2);
+		}
+	}
+
+	move(e) {
+		const scaleFactor = transfersSankeySize.width / this.svg.node().clientWidth;
+		const x = scaleFactor * e.layerX;
+		const y = scaleFactor * e.layerY;
+
+		const positionBottom = (y-45-10 <= 0);
+		if (positionBottom) {
+			this.node.setAttribute("transform", `translate(${x},${y})`);
+			this.topTab.node().removeAttribute("display");
+			this.bottomTab.node().setAttribute("display", "none");
+		} else {
+			this.node.setAttribute("transform", `translate(${x},${y-45-10})`);
+			this.topTab.node().setAttribute("display", "none");
+			this.bottomTab.node().removeAttribute("display");
 		}
 	}
 
