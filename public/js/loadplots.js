@@ -1,9 +1,9 @@
-const loadPlotsWidth = 800;
-const loadPlotsHeight = 400;
+const loadPlotsWidth = 1000;
+const loadPlotsHeight = 500;
 const loadPlotsMargin = ({top: 35, right: 30, bottom: 30, left: 50})
 const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
-const loadPlotsShowPoints = true;
+const loadPlotsShowPoints = false;
 
 
 function createOverallLoadPlot(rawdata, add_description=true) {
@@ -18,9 +18,10 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	const overallData = extractOverallLoadData(rawdata, 0);
 	const overallLoadPlot = makeOverallLoadPlot(overallData);
 	overallLoadPlot.id = "overallloadplot";
+	overallLoadPlot.style.width = "75%";
+	overallLoadPlot.style.marginLeft = "12.5%";
 
 	section.appendChild(overallLoadPlot);
-	// createCapacityOption("overallloadplot", rawdata);
 }
 
 function createLoadPlots(rawdata, add_description=true) {
@@ -36,7 +37,6 @@ function createLoadPlots(rawdata, add_description=true) {
 	loadPlots.id = "loadplots";
 
 	section.appendChild(loadPlots);
-	// createCapacityOption("loadplots", rawdata);
 }
 
 function makeLoadPlots(rawdata, capacityLevel=0) {
@@ -157,7 +157,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 			.datum(load[i])
 			.attr("fill", "none")
 			.attr("stroke", colorscale(i))
-			.attr("stroke-width", 4)
+			.attr("stroke-width", 2)
 			.attr("d", line);
 
 		if (loadPlotsShowPoints) {
@@ -197,10 +197,10 @@ function makeOverallLoadPlot(overall_load) {
 
 	svg.append("text")
 		.attr("x", loadPlotsWidth/2)
-		.attr("y", 20)
+		.attr("y", 25)
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "22px")
+		.style("font-size", "20px")
 		.text("Overall System Load");
 
 	const maxLoadVal = d3.max(overall_load, y => y.value)
@@ -214,7 +214,7 @@ function makeOverallLoadPlot(overall_load) {
 	const yAxis = svg => svg
 		.attr("transform", `translate(${loadPlotsMargin.left},0)`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "18px")
+		.style("font-size", "12px")
 		.call(d3.axisRight(y)
 			.ticks(5)
 			.tickSize(loadPlotsWidth - loadPlotsMargin.left - loadPlotsMargin.right)
@@ -238,7 +238,7 @@ function makeOverallLoadPlot(overall_load) {
 	const xAxis = g => g
 		.attr("transform", `translate(0,${loadPlotsHeight - loadPlotsMargin.bottom})`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "16px")
+		.style("font-size", "12px")
 		.call(d3.axisBottom(x)
 			.ticks(d3.timeWeek.every(1))
 			.tickSize(-(loadPlotsHeight - loadPlotsMargin.top - loadPlotsMargin.bottom))
@@ -291,7 +291,7 @@ function makeOverallLoadPlot(overall_load) {
 		.datum(overall_load)
 		.attr("fill", "none")
 		.attr("stroke", "darkblue")
-		.attr("stroke-width", 4)
+		.attr("stroke-width", 2)
 		.attr("stroke-linejoin", "round")
 		.attr("stroke-linecap", "round")
 		.attr("d", line);
