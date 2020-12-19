@@ -114,6 +114,7 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 			fig = makeSingleChoropleth(dynamic, rawdata, data2, links, colorscale, geometry, plotTitle, colorbarLabel);
 		}
 		figContainer.appendChild(fig);
+		generateFigureDownloadButtons(fig, "hospitals-map");
 	});
 }
 

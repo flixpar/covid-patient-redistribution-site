@@ -22,6 +22,8 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	overallLoadPlot.style.marginLeft = "12.5%";
 
 	section.appendChild(overallLoadPlot);
+
+	generateFigureDownloadButtons(overallLoadPlot, "load-overall");
 }
 
 function createLoadPlots(rawdata, add_description=true) {
@@ -37,6 +39,8 @@ function createLoadPlots(rawdata, add_description=true) {
 	loadPlots.id = "loadplots";
 
 	section.appendChild(loadPlots);
+
+	generateFigureDownloadButtons(loadPlots, "load-hospitals");
 }
 
 function makeLoadPlots(rawdata, capacityLevel=0) {

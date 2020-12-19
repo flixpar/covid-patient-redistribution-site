@@ -15,8 +15,7 @@ function createTransfersSankey(response, add_description=true) {
 
 	section.appendChild(fig);
 
-	let hr = document.createElement("hr");
-	section.appendChild(hr);
+	generateFigureDownloadButtons(fig, "transfer-flows");
 }
 
 function makeTransfersSankey(graph) {

@@ -101,6 +101,42 @@ function validateForm() {
 	return dates_valid;
 }
 
+function generateFigureDownloadButtons(figureNode, figureName) {
+	let buttonsContainer = document.createElement("div");
+	buttonsContainer.style.width = "100%";
+	buttonsContainer.style.textAlign = "center";
+	figureNode.parentElement.appendChild(buttonsContainer);
+
+	let svgButton = document.createElement("button");
+	svgButton.textContent = "Download SVG";
+	svgButton.type = "button";
+	svgButton.className = "button is-light is-small";
+	svgButton.addEventListener("click", () => downloadFigureAsSVG(figureNode, figureName+".svg"))
+	buttonsContainer.appendChild(svgButton);
+}
+
+function downloadFigureAsSVG(svg, fn) {
+	let serializer = new XMLSerializer();
+	let source = serializer.serializeToString(svg);
+
+	if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+		source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+	}
+	if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+		source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+	}
+	source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+	const dataStr = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+	let downloadAnchorNode = document.createElement("a");
+	downloadAnchorNode.setAttribute("href", dataStr);
+	downloadAnchorNode.setAttribute("download", fn);
+	document.body.appendChild(downloadAnchorNode);
+	downloadAnchorNode.click();
+	downloadAnchorNode.remove();
+}
+
 function createInfo(parentElement, content) {
 	let el = document.createElement("img");
 	el.src = "img/info.svg";
