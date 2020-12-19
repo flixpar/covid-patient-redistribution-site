@@ -347,6 +347,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		})
 		.attr("stroke", "white")
 		.attr("stroke-width", "0.5px")
+		.attr("opacity", 0.95)
 		.style("transform-box", "fill-box")
 		.attr("d", (d,i) => {
 			const l = rawdata.config.node_locations[d];
@@ -376,10 +377,22 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		}
 	}
 
+	// date background
+	svg.append("rect")
+		.attr("id", "date-background")
+		.attr("x", (plotWidth/2) - 70)
+		.attr("y", 24)
+		.attr("width", 140)
+		.attr("height", 20)
+		.attr("rx", 5).attr("ry", 5)
+		.attr("fill", "white")
+		.attr("opacity", 0.65)
+		.attr("stroke", "none");
+
 	// setup arrow
-	const markerBoxWidth = 4
-	const markerBoxHeight = 4
-	const refX = markerBoxWidth + 0.1
+	const markerBoxWidth = 2
+	const markerBoxHeight = 2.8
+	const refX = markerBoxWidth + 0.2
 	const refY = markerBoxHeight / 2
 	const arrowPoints = [[0, 0], [0, markerBoxHeight], [markerBoxWidth, markerBoxHeight/2]];
 	svg
@@ -394,7 +407,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		.attr("orient", "auto-start-reverse")
 		.append("path")
 		.attr("d", d3.line()(arrowPoints))
-		.attr("fill", "black");
+		.attr("fill", "#525252");
 
 	const linkColor = colorRegions ? "lightgray" : "gray";
 
@@ -448,6 +461,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 				.attr("d", d => p(d))
 				.style("fill", "none")
 				.style("stroke", linkColor)
+				.attr("opacity", 0.65)
 				.style("stroke-width", d => linkWidthScale(d.weight) * thicknessMult)
 				.attr("stroke-linecap", "butt")
 				.attr("marker-end", "url(#arrow)");
