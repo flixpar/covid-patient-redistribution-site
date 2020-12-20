@@ -1,4 +1,4 @@
-const mapHeight = 650;
+const mapHeight = 500;
 const mapWidth  = 1000;
 
 const mapPlotMargin = ({top: 25, right:  0, bottom:  0, left:  0});
@@ -7,7 +7,7 @@ const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 10});
 
 const stackHorizontal = true;
 
-const styleID = "flixpar/cki265uhk0zjr19tlq0es9v0l";
+const styleID = "flixpar/ckix2q40h5dur19p54z64ts67";
 const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
 const pointSizeMult = 0.75;
