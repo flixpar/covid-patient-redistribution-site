@@ -87,3 +87,24 @@ function sendUpdateQuery() {
 }
 $("#form-submit").click(sendUpdateQuery);
 sendUpdateQuery();
+
+const tooltip_content = {
+	"form-start-date": "Date to start the patient allocation model.",
+	"form-end-date"  : "Date to end the patient allocation model.",
+	"form-los"       : "Expected number of days that a patient will have to stay in the hospital.",
+	"form-patient-type": "Restrict focus to patients requiring a certain level of care.",
+	"form-scenario": "Forecast scenario to use.",
+	"form-objective": "Primary objective for the optimization model.",
+	"form-weights": "Preferences for where to transfer patients to if the system runs out of capacity.",
+	"form-transferbudget": "Maximum number of patients that can be transferred from a hospital in a day.",
+	"form-surgepreferences": "Preference for where to create additional capacity if it is necessary.",
+	"form-utilization": "Percentage of the total capacity that can be used in practice.",
+	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",
+	"form-integer": "Use the mixed-integer programming formulation or not.",
+};
+$("label").each((i, el) => {
+	const k = el.getAttribute("for");
+	if (k in tooltip_content) {
+		createInfo(el, tooltip_content[k]);
+	}
+});

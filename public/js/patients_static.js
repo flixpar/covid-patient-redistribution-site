@@ -77,9 +77,11 @@ function createHospitalsSelect(data) {
 	let selectAreaHeader = document.createElement("label");
 	selectAreaHeader.className = "label";
 	selectAreaHeader.style.marginBottom = "0.2rem";
-	selectAreaHeader.textContent = "Select Hospitals";
+	selectAreaHeader.textContent = "Hospitals";
 	selectAreaHeader.htmlFor = "hospitalselect";
 	selectAreaField.appendChild(selectAreaHeader);
+
+	createInfo(selectAreaHeader, tooltip_content["hospitalselect"]);
 
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
@@ -226,7 +228,7 @@ function createParametersForm() {
 	formContainer.id = "static-params-form";
 	section.appendChild(formContainer);
 
-	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Scenario", "form-scenario");
+	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "Patient Type", "form-patient-type");
 
 	formContainer.appendChild(scenarioSelect);
@@ -405,3 +407,15 @@ function sendUpdateQuery() {
 	});
 }
 sendUpdateQuery();
+
+const tooltip_content = {
+	"form-patient-type": "Restrict the focus to patients requiring a certain level of care, and the capacity available for those patients.",
+	"form-scenario": "Each forecast scenario is a set of assumptions about the severity of the COVID outbreak which can be used to forecast hospitalizations.",
+	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
+};
+$("label").each((i, el) => {
+	const k = el.getAttribute("for");
+	if (k in tooltip_content) {
+		createInfo(el, tooltip_content[k]);
+	}
+});
