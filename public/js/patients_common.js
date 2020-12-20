@@ -103,8 +103,10 @@ function validateForm() {
 
 function generateFigureDownloadButtons(figureNode, figureName) {
 	let buttonsContainer = document.createElement("div");
+	buttonsContainer.className = "buttons";
 	buttonsContainer.style.width = "100%";
 	buttonsContainer.style.textAlign = "center";
+	buttonsContainer.style.display = "block";
 	figureNode.parentElement.appendChild(buttonsContainer);
 
 	let svgButton = document.createElement("button");
@@ -113,6 +115,13 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	svgButton.className = "button is-light is-small";
 	svgButton.addEventListener("click", () => downloadFigureAsSVG(figureNode, figureName+".svg"))
 	buttonsContainer.appendChild(svgButton);
+
+	let pngButton = document.createElement("button");
+	pngButton.textContent = "Download PNG";
+	pngButton.type = "button";
+	pngButton.className = "button is-light is-small";
+	pngButton.addEventListener("click", () => downloadFigureAsPNG(figureNode, figureName+".png"))
+	buttonsContainer.appendChild(pngButton);
 }
 
 async function getSVGData(svg) {
@@ -177,6 +186,37 @@ async function downloadFigureAsSVG(svg, fn) {
 	document.body.appendChild(downloadAnchorNode);
 	downloadAnchorNode.click();
 	downloadAnchorNode.remove();
+}
+
+async function downloadFigureAsPNG(svg, fn) {
+	const scaleFactor = 3.0;
+	const width = svg.clientWidth;
+	const height = svg.clientHeight;
+	const canvas = new OffscreenCanvas(width*scaleFactor, height*scaleFactor);
+
+	let ctx = canvas.getContext("2d");
+
+	ctx.fillStyle = "white";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	const dataStr = await getSVGData(svg);
+
+	let img = new Image();
+	img.src = dataStr;
+	img.onload = function() {
+		ctx.drawImage(img, 0, 0);
+
+		canvas.convertToBlob().then(blob => {
+			const pngUrl = URL.createObjectURL(blob);
+
+			let downloadAnchorNode = document.createElement("a");
+			downloadAnchorNode.setAttribute("href", pngUrl);
+			downloadAnchorNode.setAttribute("download", fn);
+			document.body.appendChild(downloadAnchorNode);
+			downloadAnchorNode.click();
+			downloadAnchorNode.remove();
+		});
+	}
 }
 
 function createInfo(parentElement, content) {
