@@ -122,6 +122,13 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	pngButton.className = "button is-light is-small";
 	pngButton.addEventListener("click", () => downloadFigureAsPNG(figureNode, figureName+".png"))
 	buttonsContainer.appendChild(pngButton);
+
+	let pdfButton = document.createElement("button");
+	pdfButton.textContent = "Download PDF";
+	pdfButton.type = "button";
+	pdfButton.className = "button is-light is-small";
+	pdfButton.addEventListener("click", () => downloadFigureAsPDF(figureNode, figureName+".pdf"))
+	buttonsContainer.appendChild(pdfButton);
 }
 
 async function getSVGData(svg) {
@@ -217,6 +224,45 @@ async function downloadFigureAsPNG(svg, fn) {
 			downloadAnchorNode.remove();
 		});
 	}
+}
+
+async function downloadFigureAsPDF(figureNode, fn) {
+	let svg = figureNode.cloneNode(true);
+
+	let imgCvt = {};
+	for (imgNode of svg.querySelectorAll("image")) {
+		const u = imgNode.href.baseVal;
+		if (imgCvt[u] == null) {
+			imgCvt[u] = await encodeImage(u);
+		}
+		imgNode.href.baseVal = imgCvt[u];
+		imgNode.href.animVal = imgCvt[u];
+	}
+
+	let doc = new PDFDocument({size: [figureNode.clientWidth, figureNode.clientHeight]});
+	SVGtoPDF(doc, svg, 0, 0, {});
+	doc.end();
+
+	const chunks = [];
+	const stream = doc.pipe({
+		write: (chunk) => chunks.push(chunk),
+		end: () => {
+			const pdfBlob = new Blob(chunks, {
+				type: 'application/octet-stream'
+			});
+			const blobUrl = URL.createObjectURL(pdfBlob);
+
+			let downloadAnchorNode = document.createElement("a");
+			downloadAnchorNode.setAttribute("href", blobUrl);
+			downloadAnchorNode.setAttribute("download", fn);
+			document.body.appendChild(downloadAnchorNode);
+			downloadAnchorNode.click();
+			downloadAnchorNode.remove();
+		},
+		on: (event, action) => {},
+		once: (...args) => {},
+		emit: (...args) => {},
+	});
 }
 
 function createInfo(parentElement, content) {
