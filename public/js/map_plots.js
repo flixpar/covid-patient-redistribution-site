@@ -10,6 +10,7 @@ const stackHorizontal = true;
 const styleID = "flixpar/ckix2q40h5dur19p54z64ts67";
 const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
+const pointSizeUniform = true;
 const pointSizeMult = 0.75;
 const thicknessMult = 0.5;
 
@@ -864,8 +865,8 @@ function getNodeSizeScale(beds, colorRegions) {
 	ys = ys.map(y => Math.max(Math.min(y, 40), 2));
 
 	function sizeScale(i) {
-		if (colorRegions) {
-			return 4;
+		if (colorRegions || pointSizeUniform) {
+			return 6;
 		} else {
 			return ys[i];
 		}
