@@ -72,7 +72,7 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 		data2 = data.overflow;
 		colorscale = getOverflowColorscale(data.overflow_null);
 		plotTitle = "Required Surge Capacity";
-		colorbarLabel = "Required Surge Capacity (Bed-Days)";
+		colorbarLabel = "Required Surge Beds";
 		description = overflowmapDescription;
 	} else if (metric == "overflow" || metric == "overflow_static") {
 		dynamic = false;
