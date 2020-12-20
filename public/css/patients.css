@@ -121,7 +121,6 @@ input[type="range"] {
 	flex-direction: column;
 
 	width: 100%;
-	max-height: 300px;
 	margin: auto;
 
 	border: 1px solid lightgray;
@@ -140,6 +139,7 @@ input[type="range"] {
 .hospital-select-area {
 	display: flex;
 	flex-direction: column;
+	max-height: 300px;
 	overflow-y: scroll;
 }
 
@@ -162,6 +162,18 @@ input[type="range"] {
 
 .hospital-select-item-selected {
 	border: 1px solid blue;
+}
+
+.hospital-select-list {
+	max-height: 150px;
+	overflow-y: scroll;
+
+	border-bottom: 1px solid lightgray;
+	margin-bottom: 4px !important;
+}
+
+.hospitalselect-tag {
+	margin-bottom: 0.25rem !important;
 }
 
 #static-params-form {

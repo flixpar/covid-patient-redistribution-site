@@ -68,17 +68,106 @@ function createHospitalsSelect(data) {
 		return;
 	}
 
+	let selectAreaField = document.createElement("div");
+	selectAreaField.className = "field";
+
+	let section = document.getElementById("static-params-form");
+	section.insertBefore(selectAreaField, document.getElementById("params-form-submit"));
+
+	let selectAreaHeader = document.createElement("label");
+	selectAreaHeader.className = "label";
+	selectAreaHeader.style.marginBottom = "0.2rem";
+	selectAreaHeader.textContent = "Select Hospitals";
+	selectAreaHeader.htmlFor = "hospitalselect";
+	selectAreaField.appendChild(selectAreaHeader);
+
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
 	selectAreaContainer.id = "hospital-select-container";
+	selectAreaField.appendChild(selectAreaContainer);
 
-	let section = document.getElementById("static-params-form");
-	section.insertBefore(selectAreaContainer, document.getElementById("params-form-submit"));
+	let selectAreaList = document.createElement("div");
+	selectAreaList.className = "hospital-select-list field is-grouped is-grouped-multiline";
+	selectAreaContainer.appendChild(selectAreaList);
 
-	let selectAreaHeader = document.createElement("div");
-	selectAreaHeader.className = "hospital-select-header";
-	selectAreaHeader.textContent = "Select Hospitals";
-	selectAreaContainer.appendChild(selectAreaHeader);
+	function generateTag(h,i) {
+		let tagContainer = document.createElement("div");
+		let tag = document.createElement("div");
+		let tagText = document.createElement("span");
+		let tagDelete = document.createElement("a");
+
+		tagContainer.id = `hospitalselect-tag-${i}`;
+
+		tagContainer.className = "hospitalselect-tag control";
+		tag.className = "tags has-addons";
+		tagText.className = "tag";
+		tagDelete.className = "tag is-delete is-danger is-light";
+
+		tagText.innerText = h.name;
+		tagDelete.addEventListener("click", e => {
+			document.getElementById(`hospitalselect-${i}`).checked = false;
+			document.getElementById(`hospitalselect-label-${i}`).classList.remove("hospital-select-item-selected");
+			tagContainer.remove();
+		});
+
+		tag.appendChild(tagDelete);
+		tag.appendChild(tagText);
+		tagContainer.appendChild(tag);
+		selectAreaList.appendChild(tagContainer);
+	}
+
+	data.forEach((h,i) => {
+		if (h.default) {
+			generateTag(h,i);
+		}
+	});
+
+	let selectAreaSearchContainer = document.createElement("div");
+	selectAreaSearchContainer.className = "control has-icons-left";
+	selectAreaSearchContainer.style.marginBottom = "5px";
+	selectAreaContainer.appendChild(selectAreaSearchContainer);
+
+	let selectAreaSearchInput = document.createElement("input");
+	selectAreaSearchInput.type = "text";
+	selectAreaSearchInput.className = "input";
+	selectAreaSearchInput.placeholder = "Search";
+	selectAreaSearchContainer.appendChild(selectAreaSearchInput);
+
+	let selectAreaSearchIconContainer = document.createElement("span");
+	selectAreaSearchIconContainer.className = "icon is-left";
+	let selectAreaSearchIcon = document.createElement("ion-icon");
+	selectAreaSearchIcon.name = "search-outline";
+	selectAreaSearchIcon.setAttribute("aria-hidden", "true");
+	selectAreaSearchContainer.appendChild(selectAreaSearchIconContainer);
+	selectAreaSearchIconContainer.appendChild(selectAreaSearchIcon);
+
+	selectAreaSearchInput.addEventListener("keyup", e => {
+		const searchText = selectAreaSearchInput.value.toLowerCase();
+
+		let nshow = 0;
+		for (let i = 0; i < data.length; i++) {
+			const h = data[i];
+			if (h.name.toLowerCase().indexOf(searchText) >= 0) {
+				document.getElementById(`hospitalselect-label-${i}`).style.display = "block";
+				nshow += 1;
+			} else {
+				document.getElementById(`hospitalselect-label-${i}`).style.display = "none";
+			}
+		}
+
+		if (nshow == 0) {
+			if (document.getElementById("hospitalselect-empty-text") == null) {
+				let p = document.createElement("p");
+				p.id = "hospitalselect-empty-text";
+				p.textContent = "No Results";
+				selectAreaContainer.appendChild(p);
+			}
+		} else {
+			if (document.getElementById("hospitalselect-empty-text") != null) {
+				document.getElementById("hospitalselect-empty-text").remove();
+			}
+		}
+	});
 
 	let selectArea = document.createElement("div");
 	selectArea.className = "hospital-select-area";
@@ -88,6 +177,7 @@ function createHospitalsSelect(data) {
 		let s = document.createElement("label");
 		s.className = "hospital-select-item";
 		s.htmlFor = `hospitalselect-${i}`;
+		s.id = `hospitalselect-label-${i}`;
 
 		let checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
@@ -101,6 +191,11 @@ function createHospitalsSelect(data) {
 
 		checkbox.addEventListener("change", e => {
 			s.classList.toggle("hospital-select-item-selected");
+			if (e.target.checked) {
+				generateTag(h,i);
+			} else {
+				document.getElementById(`hospitalselect-tag-${i}`).remove();
+			}
 		});
 
 		let label = document.createElement("span");
@@ -153,7 +248,6 @@ function createParametersForm() {
 function createSelect(optionNames, defaultIdx, labelText, selectId) {
 	let selectContainer = document.createElement("div");
 	selectContainer.className = "field";
-	selectContainer.style.marginBottom = "0.75rem";
 
 	let selectLabel = document.createElement("label");
 	selectLabel.className = "label";
