@@ -115,9 +115,22 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	buttonsContainer.appendChild(svgButton);
 }
 
-function downloadFigureAsSVG(svg, fn) {
+async function getSVGData(svg) {
+	let imgCvt = {};
+	for (imgNode of svg.querySelectorAll("image")) {
+		const u = imgNode.href.baseVal;
+		if (imgCvt[u] == null) {
+			imgCvt[u] = await encodeImage(u);
+		}
+	}
+
 	let serializer = new XMLSerializer();
 	let source = serializer.serializeToString(svg);
+
+	for (k in imgCvt) {
+		const v = imgCvt[k];
+		source = source.replaceAll(k, v);
+	}
 
 	if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
 		source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
@@ -128,6 +141,35 @@ function downloadFigureAsSVG(svg, fn) {
 	source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
 	const dataStr = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+	return dataStr;
+}
+
+function encodeImage(imgURL) {
+	let canvas = document.createElement("canvas");
+	canvas.style.display = "none";
+	canvas.width = 1024;
+	canvas.height = 1024;
+	document.getElementById("results-container").appendChild(canvas);
+
+	let ctx = canvas.getContext("2d");
+
+	let img = new Image();
+	img.setAttribute('crossOrigin', 'anonymous');
+	img.src = imgURL;
+
+	let p = new Promise((resolve, reject) => {
+		img.onload = function() {
+			ctx.drawImage(img, 0, 0);
+			const dataURL = canvas.toDataURL("image/png");
+			canvas.remove();
+			resolve(dataURL);
+		}
+	});
+	return p;
+}
+
+async function downloadFigureAsSVG(svg, fn) {
+	const dataStr = await getSVGData(svg);
 
 	let downloadAnchorNode = document.createElement("a");
 	downloadAnchorNode.setAttribute("href", dataStr);
