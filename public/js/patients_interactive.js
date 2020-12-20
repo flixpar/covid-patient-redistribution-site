@@ -57,6 +57,7 @@ function makeSections() {
 }
 
 function sendUpdateQuery() {
+	return;
 	if (!validateForm()) {
 		return;
 	}
