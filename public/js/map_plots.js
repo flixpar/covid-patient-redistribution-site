@@ -793,13 +793,13 @@ function pointsToGeoJSON(locations) {
 
 function getOverflowColorscale(data) {
 	const maxValue = d3.max(data.flat());
-	const overflow_thresh = 5;
+	const overflow_thresh = 2;
 
 	function overflowColorscale(x) {
 		if (x >= 0 && x <= overflow_thresh) {
 			return "green";
 		} else if (x > overflow_thresh) {
-			return d3.scaleSequential(d3.interpolateReds).domain([overflow_thresh, maxValue])(x);
+			return d3.scaleSequential(d3.interpolateReds).domain([overflow_thresh-(maxValue/2), maxValue])(x);
 		} else {
 			return null;
 		}
