@@ -36,6 +36,7 @@ function makeTransfersSankey(graph) {
 		.attr("text-anchor", "middle")
 		.style("font-family", "Helvetica")
 		.style("font-size", "18px")
+		.attr("fill", "black")
 		.text("Patient Transfers");
 
 	svg.append("text")
@@ -44,6 +45,7 @@ function makeTransfersSankey(graph) {
 		.attr("text-anchor", "middle")
 		.style("font-family", "Helvetica")
 		.style("font-size", "18px")
+		.attr("fill", "black")
 		.attr("transform", `rotate(-90,${transfersSankeySize.width-transfersSankeyMargins.right+25},${transfersSankeySize.height/2})`)
 		.text("Patients Received");
 
@@ -53,6 +55,7 @@ function makeTransfersSankey(graph) {
 		.attr("text-anchor", "middle")
 		.style("font-family", "Helvetica")
 		.style("font-size", "18px")
+		.attr("fill", "black")
 		.attr("transform", `rotate(-90,${transfersSankeyMargins.right/2},${transfersSankeySize.height/2})`)
 		.text("Patients Sent");
 
@@ -80,6 +83,7 @@ function makeTransfersSankey(graph) {
 	svg.append("g")
 		.attr("font-family", "sans-serif")
 		.attr("font-size", 11)
+		.attr("fill", "black")
 		.selectAll("text")
 		.data(nodes)
 		.join("text")

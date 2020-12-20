@@ -222,7 +222,9 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 		.style("font-family", mapPlotFont)
 		.style("font-size", "11px")
 		.call(d3.axisRight(colorbarScale).ticks(5))
-		.call(g => g.select(".domain").remove());
+		.call(g => g.select(".domain").remove())
+		.call(g => g.selectAll(".tick line").attr("stroke", "#4a4a4a"))
+		.call(g => g.selectAll(".tick text").attr("fill", "#4a4a4a"));
 	svg.append("g").call(colorAxis);
 
 	if (colorbarLabel != null) {

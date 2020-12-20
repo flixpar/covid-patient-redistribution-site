@@ -15,13 +15,15 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 		section.appendChild(description);
 	}
 
+	let overallLoadPlotContainer = document.createElement("div");
+	overallLoadPlotContainer.style.width = "75%";
+	overallLoadPlotContainer.style.marginLeft = "12.5%";
+	section.appendChild(overallLoadPlotContainer);
+
 	const overallData = extractOverallLoadData(rawdata, 0);
 	const overallLoadPlot = makeOverallLoadPlot(overallData);
 	overallLoadPlot.id = "overallloadplot";
-	overallLoadPlot.style.width = "75%";
-	overallLoadPlot.style.marginLeft = "12.5%";
-
-	section.appendChild(overallLoadPlot);
+	overallLoadPlotContainer.appendChild(overallLoadPlot);
 
 	generateFigureDownloadButtons(overallLoadPlot, "load-overall");
 }
@@ -90,11 +92,13 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-opacity", 0.5)
-			.attr("stroke-dasharray", "4,4"))
+			.attr("stroke-dasharray", "4,4")
+			.attr("stroke", "#4a4a4a"))
 		.call(g => g.selectAll(".tick text")
 			.attr("x", "-10px")
 			.attr("dy", "4px")
 			.attr("text-anchor", "end")
+			.attr("fill", "#4a4a4a")
 		);
 
 	const dates = load[0].map(d => d.date);
@@ -116,8 +120,9 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-opacity", 0.5)
-			.attr("stroke-dasharray", "4,4"))
-		.call(g => g.selectAll(".tick text").attr("dy", "20px"));
+			.attr("stroke-dasharray", "4,4")
+			.attr("stroke", "#4a4a4a"))
+		.call(g => g.selectAll(".tick text").attr("dy", "20px").attr("fill", "#4a4a4a"));
 
 	const colorscale = d3.scaleSequential(d3.interpolateRainbow).domain([0,N]);
 
@@ -191,6 +196,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
 		.style("font-size", "22px")
+		.attr("fill", "black")
 		.text(title);
 
 	return svg;
@@ -226,11 +232,13 @@ function makeOverallLoadPlot(overall_load) {
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-opacity", 0.5)
-			.attr("stroke-dasharray", "4,4"))
+			.attr("stroke-dasharray", "4,4")
+			.attr("stroke", "#4a4a4a"))
 		.call(g => g.selectAll(".tick text")
 			.attr("x", "-10px")
 			.attr("dy", "4px")
 			.attr("text-anchor", "end")
+			.attr("fill", "#4a4a4a")
 		);
 
 	const dates = overall_load.map(d => d.date);
@@ -251,8 +259,9 @@ function makeOverallLoadPlot(overall_load) {
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-opacity", 0.5)
-			.attr("stroke-dasharray", "4,4"))
-		.call(g => g.selectAll(".tick text").attr("dy", "20px"));
+			.attr("stroke-dasharray", "4,4")
+			.attr("stroke", "#4a4a4a"))
+		.call(g => g.selectAll(".tick text").attr("dy", "20px").attr("fill", "#4a4a4a"));
 
 	const line = d3.line()
 		.defined(d => !isNaN(d.value))
@@ -357,6 +366,7 @@ function makeLoadPlotsLegend(svg, location_names, totalWidth) {
 				.attr("text-anchor", "start")
 				.style("font-family", loadPlotsLegendFont)
 				.style("font-size", "20px")
+				.attr("fill", "black")
 				.text(location_names[k]);
 
 			if (debug) {
