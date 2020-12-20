@@ -9,6 +9,7 @@ function createTransfersSankey(response, add_description=true) {
 	const section = document.getElementById("section-results-transfers");
 	if (add_description) {
 		let description = document.createElement("p");
+		description.className = "caption";
 		description.innerHTML = transfersSankeyDescription;
 		section.appendChild(description);
 	}

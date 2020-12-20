@@ -11,6 +11,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 
 	if (add_description) {
 		let description = document.createElement("p");
+		description.className = "caption";
 		description.innerHTML = overallloadplotDescription;
 		section.appendChild(description);
 	}
@@ -33,6 +34,7 @@ function createLoadPlots(rawdata, add_description=true) {
 
 	if (add_description) {
 		let description = document.createElement("p");
+		description.className = "caption";
 		description.innerHTML = loadplotsDescription;
 		section.appendChild(description);
 	}

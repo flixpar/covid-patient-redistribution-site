@@ -43,6 +43,11 @@ th {
 	vertical-align: text-bottom;
 }
 
+.caption {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 #metrics-table {
 	margin-left: auto;
 	margin-right: auto;

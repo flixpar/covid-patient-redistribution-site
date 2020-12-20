@@ -101,6 +101,7 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 
 	if (add_description && description != null) {
 		let descriptionElem = document.createElement("p");
+		descriptionElem.className = "caption";
 		descriptionElem.innerHTML = description;
 		section.appendChild(descriptionElem);
 	}

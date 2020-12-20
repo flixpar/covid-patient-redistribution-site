@@ -217,6 +217,7 @@ function createActivePlot(active, active_null, capacity, config, add_description
 
 	if (add_description) {
 		let description = document.createElement("p");
+		description.className = "caption";
 		description.innerHTML = activeplotDescription;
 		section.appendChild(description);
 	}
