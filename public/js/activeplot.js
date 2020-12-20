@@ -222,19 +222,10 @@ function createActivePlot(active, active_null, capacity, config, add_description
 		section.appendChild(description);
 	}
 
-	const activeLabels = ["Active Patients", "Active Patients (Without Transfers)"];
-	const activeColors = [active_color, active_null_color];
-	const patientsColorscaleElem = makeHorizontalColorScale(activeLabels, activeColors);
-	section.appendChild(patientsColorscaleElem);
-
-	const capacityNames = [
-		"Baseline Capacity",
-		"Ramp-Up Capacity",
-		"Surge Capacity",
-		"Max Capacity",
-	];
-	const capacityColorscaleElem = makeHorizontalColorScale(capacityNames, capacityColors);
-	section.appendChild(capacityColorscaleElem);
+	const labels = ["Active Patients (Without Transfers)", "Active Patients (With Transfers)", "Baseline Capacity"];
+	const colors = [active_null_color, active_color, capacityColors[0]];
+	const legend = makeHorizontalColorScale(labels, colors);
+	section.appendChild(legend);
 
 	section.appendChild(table);
 }
@@ -242,7 +233,7 @@ function createActivePlot(active, active_null, capacity, config, add_description
 function makeHorizontalColorScale(labels, colors) {
 	const C = labels.length;
 
-	const totalWidth = 0.5 * document.getElementById("results-container").offsetWidth;
+	const totalWidth = document.getElementById("results-container").clientWidth;
 
 	const maxLabelLength = d3.max(labels, x => x.length);
 	const colWidth = (maxLabelLength * 4.5) + 14 + 20;
@@ -278,7 +269,6 @@ function makeHorizontalColorScale(labels, colors) {
 	let colorscale = svg.node();
 
 	let colorscaleElem = document.createElement("div");
-	colorscaleElem.className = "column is-6 is-offset-3";
 	colorscaleElem.style.padding = "0";
 	colorscaleElem.appendChild(colorscale);
 
