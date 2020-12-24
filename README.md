@@ -1,4 +1,4 @@
-# Maryland COVID-19 Patient Redistribution Site
+# COVID COVID-19 Patient Redistribution Site
 
 Run the server locally with:
 ```
