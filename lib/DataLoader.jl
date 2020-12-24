@@ -8,9 +8,9 @@ using Distributions
 using Dates
 using LinearAlgebra
 
-export load_maryland
+export load_hhs
 export los_dist_default
-export maryland_hospitals_list
+export hospitals_list
 
 projectbasepath = joinpath(@__DIR__, "../")
 
@@ -18,7 +18,7 @@ DEBUG = false
 NDEDBUG = 8
 
 
-function load_maryland(
+function load_hhs(
 		scenario::Symbol,
 		patient_type::Symbol,
 		start_date::Date,
@@ -27,7 +27,7 @@ function load_maryland(
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
 
-	data = deserialize(joinpath(projectbasepath, "data/data_maryland.jlser"))
+	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
 	beds_ = data.casesdata[:moderate,:allbeds].capacity[:,1]
 	hospital_ind = sortperm(beds_, rev=true)
@@ -71,7 +71,6 @@ function load_maryland(
 	adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
 
-	# extent = (extent_type = :states, extent_regions = ["Maryland"])
 	extent = (extent_type = :points, extent_regions = [])
 
 	return (
@@ -99,8 +98,8 @@ function los_dist_default(bedtype::Symbol)
 	end
 end
 
-function maryland_hospitals_list()
-	data = deserialize(joinpath(projectbasepath, "data/data_maryland.jlser"))
+function hospitals_list()
+	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 	hospitals = data.location_names
 
 	casesdata = data.casesdata[:moderate,:allbeds]

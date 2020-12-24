@@ -36,7 +36,7 @@ function handle_patients_request(
 
 	@assert patient_type in [:acute, :icu, :all]
 
-	data = load_maryland(scenario, patient_type, start_date, end_date)
+	data = load_hhs(scenario, patient_type, start_date, end_date)
 	default_capacity_level = 1
 
 	if los_param == "default_dist"
@@ -126,7 +126,7 @@ function handle_patients_request(
 		use_rounding=false,
 	)
 
-	nodes_meta = maryland_hospitals_list()
+	nodes_meta = hospitals_list()
 
 	config = Dict(
 		:start_date => start_date,
@@ -138,7 +138,7 @@ function handle_patients_request(
 		:nodes_meta => nodes_meta,
 		:capacity_names => data.capacity_names,
 		:node_type => "hospital",
-		:region    => "maryland",
+		:region    => "us",
 		:extent    => data.extent,
 		:capacity_util => capacity_util,
 		:default_capacity_level => default_capacity_level,
@@ -162,7 +162,7 @@ function handle_patients_request(
 end
 
 function get_hospital_list()
-	hospitals = maryland_hospitals_list()
+	hospitals = hospitals_list()
 	return json(hospitals)
 end
 
