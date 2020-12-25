@@ -1,4 +1,5 @@
 using Dates
+using JSON
 
 push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
 push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
@@ -52,11 +53,7 @@ function precompute_result(params)
 
 	d = replace(string(params.start_date), "-" => "")
 	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type).json")
-	write(fn, result)
-
-	run(`mv $(fn) $(fn*".tmp")`)
-	run(pipeline(`tail -n1 $(fn*".tmp")`, stdout=fn))
-	run(`rm $(fn*".tmp")`)
+	write(fn, JSON.json(result))
 
 	if VERBOSE
 		println("Done. Saved to: $(fn)")
