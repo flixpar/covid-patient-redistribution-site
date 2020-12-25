@@ -5,14 +5,19 @@ push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
 push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
 include("../src/EndpointHandler.jl")
 
+
+REGIONS = [
+	(region_name = "MD", region_type = "state"),
+	(region_name = "CT", region_type = "state"),
+	(region_name = "MA", region_type = "state"),
+	(region_name = "ME", region_type = "state"),
+	(region_name = "VA", region_type = "state"),
+]
+
 params_date_range = today():Day(1):(today()+Day(2))
 params_list = [
-	(scenario=:moderate,    patient_type=:icu),
-	(scenario=:pessimistic, patient_type=:icu),
-	(scenario=:optimistic,  patient_type=:icu),
-	(scenario=:moderate,    patient_type=:acute),
-	(scenario=:pessimistic, patient_type=:acute),
-	(scenario=:optimistic,  patient_type=:acute),
+	(scenario=:moderate, patient_type=:icu),
+	(scenario=:moderate, patient_type=:acute),
 ]
 default_params = (
 	objective = :minoverflow,
@@ -22,6 +27,7 @@ default_params = (
 	uncertainty_level = :default,
 	los_param = "default_dist",
 	period_length = Month(2),
+	smoothness = false,
 )
 results_path = "../public/results-static/"
 VERBOSE = true
@@ -34,7 +40,11 @@ function precompute_result(params)
 		println("start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
 	end
 
+	hospitals_meta = get_hospital_list(region=params.region)
+	hospitals = [h["name"] for h in hospitals_meta]
+
 	result = EndpointHandler.handle_patients_request(
+		hospitals,
 		params.scenario,
 		params.patient_type,
 
@@ -49,6 +59,7 @@ function precompute_result(params)
 		params.start_date + default_params.period_length,
 
 		verbose=VERBOSE,
+		smoothness=default_params.smoothness,
 	)
 
 	d = replace(string(params.start_date), "-" => "")
@@ -68,8 +79,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
 		mkpath(results_path)
 	end
 	println("Precomputing results!")
-	for start_date in params_date_range, params_ in params_list
-		params = merge(params_, (start_date=start_date,))
+	for start_date in params_date_range, params_ in params_list, region in REGIONS
+		params = merge(params_, (;start_date, region))
 		precompute_result(params)
 	end
 end
