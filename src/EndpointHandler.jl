@@ -29,6 +29,7 @@ function handle_patients_request(
 		end_date::Date,
 
 		;verbose::Bool=false,
+		smoothness::Bool=true,
 	)
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario), Patient type: $(patient_type)"
@@ -50,6 +51,8 @@ function handle_patients_request(
 
 	transfer_budget = fill(transfer_budget, N)
 
+	s = smoothness ? 1 : 0
+
 	if objective == :minoverflow
 		model = patient_redistribution(
 			data.capacity,
@@ -59,9 +62,9 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
-			smoothness_penalty=0.001,
-			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.25,
+			smoothness_penalty=0.001*s,
+			active_smoothness_penalty=0.01*s,
+			admitted_smoothness_penalty=0.25*s,
 			capacity_cushion=(1.0-capacity_util),
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
@@ -76,9 +79,9 @@ function handle_patients_request(
 			data.adj,
 			los_dist,
 			sent_penalty=0.01,
-			smoothness_penalty=0.001,
-			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.25,
+			smoothness_penalty=0.001*s,
+			active_smoothness_penalty=0.01*s,
+			admitted_smoothness_penalty=0.25*s,
 			capacity_cushion=(1.0-capacity_util),
 			constrain_integer=constrain_integer,
 			verbose=verbose,
@@ -100,8 +103,8 @@ function handle_patients_request(
 			loadbalance_weight=loadbalance_weight,
 			sent_penalty=5.0,
 			smoothness_penalty=0,
-			active_smoothness_penalty=0.01,
-			admitted_smoothness_penalty=0.25,
+			active_smoothness_penalty=0.01*s,
+			admitted_smoothness_penalty=0.25*s,
 			capacity_cushion=(1.0-capacity_util),
 			capacity_weights=capacity_weights,
 			transfer_budget=transfer_budget,
