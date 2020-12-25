@@ -1,7 +1,6 @@
 module EndpointHandler
 
 using Genie
-using Genie.Renderer.Json
 
 using Dates
 using JuMP
@@ -158,12 +157,12 @@ function handle_patients_request(
 		:total_patients => sum(data.initial) + sum(data.admitted),
 		:config => config,
 	)
-	return json(outcomes)
+	return outcomes
 end
 
 function get_hospital_list()
 	hospitals = hospitals_list()
-	return json(hospitals)
+	return hospitals
 end
 
 end;

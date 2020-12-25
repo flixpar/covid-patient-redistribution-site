@@ -1,6 +1,7 @@
 using Genie
 using Genie.Router
 using Genie.Requests
+using Genie.Renderer.Json
 
 using Dates
 
@@ -47,17 +48,19 @@ route("/api/patients", method=POST) do
 	start_date = Date(input["start_date"])
 	end_date   = Date(input["end_date"])
 
-	handle_patients_request(
+	response = handle_patients_request(
 		scenario, patient_type,
 		objective, constrain_integer,
 		transfer_budget,
 		capacity_util, uncertainty_level, los,
 		start_date, end_date,
 	)
+	return json(response)
 end
 
 route("/api/hospital-list", method=GET) do
-	get_hospital_list()
+	response = get_hospital_list()
+	return json(response)
 end
 
 
