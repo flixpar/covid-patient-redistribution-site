@@ -63,9 +63,11 @@ function load_hhs(
 		end
 	end
 
+	covid_capacity_proportion = 0.4
+
 	default_capacity_level = 1
-	beds = casesdata.capacity[hospital_ind,default_capacity_level]
-	capacity = casesdata.capacity[hospital_ind,:]
+	beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_proportion
+	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
 
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
