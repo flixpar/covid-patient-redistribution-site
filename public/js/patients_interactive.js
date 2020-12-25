@@ -43,7 +43,8 @@ function handleResponse(response, status, xhr) {
 function makeSections() {
 	const sectionInfo = [
 		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
-		{title: "Healthcare System Load",                 identifier: "results-load",        showDefault: true},
+		{title: "Healthcare System Load",                 identifier: "results-totalload",   showDefault: true},
+		{title: "Hospital Loads",                         identifier: "results-load",        showDefault: true},
 		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
 		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
 		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
@@ -57,7 +58,6 @@ function makeSections() {
 }
 
 function sendUpdateQuery() {
-	return;
 	if (!validateForm()) {
 		return;
 	}
