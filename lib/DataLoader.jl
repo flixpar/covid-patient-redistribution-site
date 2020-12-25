@@ -68,8 +68,10 @@ function load_hhs(
 	capacity = casesdata.capacity[hospital_ind,:]
 	capacity_names = ["Baseline Capacity"]
 
-	adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
 	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
+
+	# adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
+	adj = adj = BitArray(ones(N,N) - diagm(ones(N)))
 
 	extent = (extent_type = :points, extent_regions = [])
 
