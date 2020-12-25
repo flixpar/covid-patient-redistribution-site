@@ -26,7 +26,7 @@ default_params = (
 	capacity_util = 1.0,
 	uncertainty_level = :default,
 	los_param = "default_dist",
-	period_length = Month(2),
+	end_date = Date(2021, 01, 09),
 	smoothness = false,
 )
 results_path = "../public/results-static/"
@@ -40,7 +40,7 @@ function precompute_result(params)
 		println("start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
 	end
 
-	hospitals_meta = get_hospital_list(region=params.region)
+	hospitals_meta = EndpointHandler.get_hospital_list(region=params.region)
 	hospitals = [h["name"] for h in hospitals_meta]
 
 	result = EndpointHandler.handle_patients_request(
@@ -56,7 +56,7 @@ function precompute_result(params)
 		default_params.los_param,
 
 		params.start_date,
-		params.start_date + default_params.period_length,
+		default_params.end_date,
 
 		verbose=VERBOSE,
 		smoothness=default_params.smoothness,
