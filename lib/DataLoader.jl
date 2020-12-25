@@ -14,8 +14,10 @@ export hospitals_list
 
 projectbasepath = joinpath(@__DIR__, "../")
 
+NDEFAULT = 10
+
 DEBUG = false
-NDEDBUG = 8
+NDEDBUG = 6
 
 
 function load_hhs(
@@ -102,29 +104,42 @@ function los_dist_default(bedtype::Symbol)
 	end
 end
 
-function hospitals_list()
+function hospitals_list(;region=nothing, names=nothing)
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
-	hospitals = data.location_names
+
+	if !isnothing(names)
+		hospitals_ind = [h.index for h in data.location_meta if h.name in names]
+	elseif !isnothing(region)
+		if region.region_type == "state"
+			hospitals_info = filter(h -> h.state == region.region_name, data.location_meta)
+		else
+			hospitals_info = data.location_meta
+		end
+		hospitals_ind = [h.index for h in hospitals_info]
+	else
+		hospitals_ind = 1:length(data.location_names)
+	end
+	sort!(hospitals_ind)
+
+	hospitals = data.location_names[hospitals_ind]
 
 	casesdata = data.casesdata[:moderate,:allbeds]
 
 	day0 = today()
 	day0_idx = (day0 - data.start_date).value + 1
-	initial = casesdata.active[:,day0_idx]
+	initial = casesdata.active[hospitals_ind, day0_idx]
 
 	default_capacity_level = 1
-	beds = casesdata.capacity[:,default_capacity_level]
+	beds = casesdata.capacity[hospitals_ind, default_capacity_level]
 
 	load = initial ./ beds
 
 	default_hospitals_ind = sortperm(beds, rev=true)
-	default_hospitals_ind = default_hospitals_ind[1:10]
+	default_hospitals_ind = default_hospitals_ind[1:NDEFAULT]
 
-	if DEBUG && NDEDBUG < 10
+	if DEBUG && NDEDBUG < NDEFAULT
 		default_hospitals_ind = default_hospitals_ind[1:NDEDBUG]
 	end
-
-	default_hospitals = sort(hospitals[default_hospitals_ind])
 
 	hospitals_meta = [
 		Dict(
