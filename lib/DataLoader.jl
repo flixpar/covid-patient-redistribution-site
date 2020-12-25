@@ -21,6 +21,7 @@ NDEDBUG = 6
 
 
 function load_hhs(
+		hospital_list::Array{String,1},
 		scenario::Symbol,
 		patient_type::Symbol,
 		start_date::Date,
@@ -31,14 +32,17 @@ function load_hhs(
 
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
-	beds_ = data.casesdata[:moderate,:allbeds].capacity[:,1]
-	hospital_ind = sortperm(beds_, rev=true)
+	@assert data.start_date <= start_date < end_date <= data.end_date
+
+	hospital_ind = [findfirst(==(h), data.location_names) for h in hospital_list]
+	hospital_ind = sort(hospital_ind)
 
 	if DEBUG
+		beds_ = data.casesdata[:moderate,:allbeds].capacity[hospital_ind,1]
+		hospital_ind = hospital_ind[sortperm(beds_, rev=true)]
 		hospital_ind = hospital_ind[1:NDEDBUG]
+		hospital_ind = sort(hospital_ind)
 	end
-
-	@assert data.start_date <= start_date < end_date <= data.end_date
 
 	N = length(hospital_ind)
 	T = (end_date - start_date).value + 1

@@ -48,7 +48,11 @@ route("/api/patients", method=POST) do
 	start_date = Date(input["start_date"])
 	end_date   = Date(input["end_date"])
 
+	default_locations = get_hospital_list()
+	default_locations = [h["name"] for h in default_locations if h["default"]]
+
 	response = handle_patients_request(
+		default_locations,
 		scenario, patient_type,
 		objective, constrain_integer,
 		transfer_budget,
