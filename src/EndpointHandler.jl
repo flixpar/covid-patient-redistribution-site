@@ -163,8 +163,8 @@ function handle_patients_request(
 	return outcomes
 end
 
-function get_hospital_list()
-	hospitals = hospitals_list()
+function get_hospital_list(;region=nothing, names=nothing)
+	hospitals = hospitals_list(region=region, names=names)
 	return hospitals
 end
 
