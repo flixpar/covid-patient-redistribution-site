@@ -70,6 +70,9 @@ function sendUpdateQuery() {
 		return;
 	}
 	const data = {
+		alloclevel: $("#form-level")[0].value,
+		region: $("#form-region")[0].value,
+		hospitals: null,
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
