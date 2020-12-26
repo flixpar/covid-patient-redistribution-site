@@ -57,6 +57,14 @@ function makeSections() {
 	}
 }
 
+function getHospitals() {
+	const region = $("#form-region")[0].value;
+	$.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d, false));
+}
+getHospitals();
+
+document.getElementById("form-region").addEventListener("change", () => getHospitals());
+
 function sendUpdateQuery() {
 	if (!validateForm()) {
 		return;
