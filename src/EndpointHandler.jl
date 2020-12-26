@@ -13,6 +13,7 @@ import PatientAllocationResults
 
 export handle_patients_request
 export get_hospital_list
+export get_regions_list
 
 
 function handle_patients_request(
@@ -167,6 +168,11 @@ end
 function get_hospital_list(;region=nothing, names=nothing)
 	hospitals = hospitals_list(region=region, names=names)
 	return hospitals
+end
+
+function get_regions_list()
+	regions = regions_list()
+	return regions
 end
 
 end;
