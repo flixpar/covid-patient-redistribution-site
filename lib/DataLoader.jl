@@ -121,8 +121,9 @@ function hospitals_list(;region=nothing, names=nothing)
 		end
 		hospitals_ind = [h.index for h in hospitals_info]
 	else
-		hospitals_ind = 1:length(data.location_names)
+		hospitals_ind = collect(1:length(data.location_names))
 	end
+	filter!(x -> !isnothing(x), hospitals_ind)
 	sort!(hospitals_ind)
 
 	hospitals = data.location_names[hospitals_ind]
@@ -137,6 +138,7 @@ function hospitals_list(;region=nothing, names=nothing)
 	beds = casesdata.capacity[hospitals_ind, default_capacity_level]
 
 	load = initial ./ beds
+	load[beds .== 0] .= 1.0
 
 	default_hospitals_ind = sortperm(beds, rev=true)
 	default_hospitals_ind = default_hospitals_ind[1:NDEFAULT]
