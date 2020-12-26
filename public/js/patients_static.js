@@ -89,8 +89,10 @@ function createParametersForm() {
 	formContainer.appendChild(selectUpdateButton);
 
 	selectUpdateButton.addEventListener("click", () => {
-		const newResponse = filterResponse(recentResponse);
-		generateContent(newResponse);
+		sendUpdateQuery();
+		// handleResponse(recentResponse);
+		// const newResponse = filterResponse(recentResponse);
+		// generateContent(newResponse);
 	});
 }
 
