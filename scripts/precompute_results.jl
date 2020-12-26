@@ -57,7 +57,7 @@ function precompute_result(params)
 	)
 
 	d = replace(string(params.start_date), "-" => "")
-	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type).json")
+	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_name).json")
 	write(fn, JSON.json(result))
 
 	if VERBOSE
