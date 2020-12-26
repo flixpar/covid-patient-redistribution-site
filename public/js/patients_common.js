@@ -273,6 +273,22 @@ function createInfo(parentElement, content) {
 	tippy(el, {delay: [null, 250]});
 }
 
+function getRegions() {
+	const default_region = "MD";
+	$.get("/api/regions-list", regions => {
+		let region_select = document.getElementById("form-region");
+		region_select.innerHTML = "";
+		for (region of regions) {
+			let opt = document.createElement("option");
+			opt.text = region.region_name;
+			if (region.region_name == default_region) {
+				opt.selected = true;
+			}
+			region_select.appendChild(opt);
+		}
+	});
+}
+
 function createHospitalsSelect(data, staticPage=true) {
 	// if (document.getElementById("hospital-select-container") != null) {
 		// return;

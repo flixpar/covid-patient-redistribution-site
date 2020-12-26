@@ -1,19 +1,13 @@
 using Dates
 using JSON
+using Serialization
 
 push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
 push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
 include("../src/EndpointHandler.jl")
 
 
-REGIONS = [
-	(region_name = "MD", region_type = "state"),
-	(region_name = "CT", region_type = "state"),
-	(region_name = "MA", region_type = "state"),
-	(region_name = "ME", region_type = "state"),
-	(region_name = "VA", region_type = "state"),
-]
-
+REGIONS = deserialize("../data/regions_hhs.jlser")
 params_date_range = today():Day(1):(today()+Day(2))
 params_list = [
 	(scenario=:moderate, patient_type=:icu),

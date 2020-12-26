@@ -11,6 +11,7 @@ using LinearAlgebra
 export load_hhs
 export los_dist_default
 export hospitals_list
+export regions_list
 
 projectbasepath = joinpath(@__DIR__, "../")
 
@@ -156,6 +157,11 @@ function hospitals_list(;region=nothing, names=nothing)
 		for i in 1:length(hospitals)
 	]
 	return hospitals_meta
+end
+
+function regions_list()
+	data = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	return data
 end
 
 end

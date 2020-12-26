@@ -75,11 +75,18 @@ function createParametersForm() {
 	formContainer.id = "static-params-form";
 	section.appendChild(formContainer);
 
+	let regionSelect = createSelect(["MD"], 0, "Region", "form-region");
 	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "Patient Type", "form-patient-type");
 
+	formContainer.appendChild(regionSelect);
 	formContainer.appendChild(scenarioSelect);
 	formContainer.appendChild(patienttypeSelect);
+
+	getRegions();
+	getHospitals();
+
+	regionSelect.addEventListener("change", () => getHospitals());
 
 	let selectUpdateButton = document.createElement("button");
 	selectUpdateButton.textContent = "Update";
@@ -124,7 +131,10 @@ function createSelect(optionNames, defaultIdx, labelText, selectId) {
 		select.appendChild(s);
 		return s;
 	});
-	options[defaultIdx].selected = true;
+
+	if (defaultIdx != null) {
+		options[defaultIdx].selected = true;
+	}
 
 	selectWrapper.appendChild(select);
 
@@ -241,10 +251,11 @@ function filterResponse(response_) {
 
 function sendUpdateQuery() {
 	console.log("Querying server...");
+	const region = document.getElementById("form-region").value;
 	const start_date_str = document.getElementById("form-start-date").value.replaceAll("-", "");
 	const scenario = document.getElementById("form-scenario").value.toLowerCase();
 	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
-	const fn = `${start_date_str}_${scenario}_${patient_type}.json`;
+	const fn = `${start_date_str}_${scenario}_${patient_type}_state_${region}.json`;
 	console.log(`Fetching: ${fn}`)
 	$.ajax({
 		url: `/results-static/${fn}`,

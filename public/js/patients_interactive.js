@@ -61,6 +61,8 @@ function getHospitals() {
 	const region = $("#form-region")[0].value;
 	$.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d, false));
 }
+
+getRegions();
 getHospitals();
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
