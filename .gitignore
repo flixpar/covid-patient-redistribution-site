@@ -19,3 +19,7 @@ cache/*
 
 # manual backups
 backup/
+
+# static results
+public/results-static/
+
