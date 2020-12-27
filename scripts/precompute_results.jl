@@ -31,7 +31,7 @@ function precompute_result(params)
 	if VERBOSE
 		println("==================================")
 		println("Precomputing results for:")
-		println("start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
+		println("region: $(params.region), start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
 	end
 
 	hospitals_meta = EndpointHandler.get_hospital_list(region=params.region)
