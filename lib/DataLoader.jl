@@ -22,6 +22,7 @@ NDEDBUG = 6
 
 
 function load_hhs(
+		region::NamedTuple,
 		hospital_list::Array{String,1},
 		scenario::Symbol,
 		patient_type::Symbol,
