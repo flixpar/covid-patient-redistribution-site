@@ -17,6 +17,7 @@ export get_regions_list
 
 
 function handle_patients_request(
+		region::NamedTuple,
 		location_names::Array{String,1},
 		scenario::Symbol,
 		patient_type::Symbol,
@@ -38,7 +39,7 @@ function handle_patients_request(
 
 	@assert patient_type in [:acute, :icu, :all]
 
-	data = load_hhs(location_names, scenario, patient_type, start_date, end_date)
+	data = load_hhs(region, location_names, scenario, patient_type, start_date, end_date)
 	default_capacity_level = 1
 
 	if los_param == "default_dist"
@@ -130,7 +131,7 @@ function handle_patients_request(
 		use_rounding=false,
 	)
 
-	nodes_meta = hospitals_list(names=data.node_names)
+	nodes_meta = hospitals_list(region=region, names=data.node_names)
 
 	config = Dict(
 		:start_date => start_date,

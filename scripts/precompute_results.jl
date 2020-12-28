@@ -38,6 +38,7 @@ function precompute_result(params)
 	hospitals = [h["name"] for h in hospitals_meta]
 
 	result = EndpointHandler.handle_patients_request(
+		params.region,
 		hospitals,
 		params.scenario,
 		params.patient_type,

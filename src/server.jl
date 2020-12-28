@@ -55,6 +55,7 @@ route("/api/patients", method=POST) do
 
 	response = handle_patients_request(
 		default_locations,
+		region, hospitals_list,
 		scenario, patient_type,
 		objective, constrain_integer,
 		transfer_budget,
