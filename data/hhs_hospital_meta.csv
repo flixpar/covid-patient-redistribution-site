@@ -972,8 +972,8 @@ Community Hospital Of The Monterey Peninsula,050145,CA,Monterey,93940,6053,,
 Community Hospital South,150128,IN,Indianapolis,46227,18097,HSI00000248,Community Health Network
 "Community Hospital, Llc",370203,OK,Oklahoma City,73159,40109,,
 "Community Hospital, Onaga And St Marys Campus",171354,KS,Onaga,66521,20149,,
-Community Hospitals And Wellness Centers,361327,OH,Montpelier,43543,39171,,
 Community Hospitals And Wellness Centers,360121,OH,Bryan,43506,39171,,
+Community Hospitals And Wellness Centers,361327,OH,Montpelier,43543,39171,,
 Community Howard Regional Health Inc,150007,IN,Kokomo,46902,18067,HSI00000248,Community Health Network
 Community Medical Center,270023,MT,Missoula,59804,30063,HSI00000254,Community Medical Center
 Community Medical Center,310041,NJ,Toms River,8755,34029,HSI00000863,RWJBarnabas Health
@@ -1240,8 +1240,8 @@ El Camino Hospital,050308,CA,Mountain View,94040,6085,HSI00000336,El Camino Hosp
 El Campo Memorial Hospital,450694,TX,El Campo,77437,48481,,
 El Centro Regional Medical Center,050045,CA,El Centro,92243,6025,,
 El Paso Children'S Hospital,453313,TX,El Paso,79905,48141,,
-El Paso Ltac Hospital,452193,TX,,79902,,,
 El Paso Ltac Hospital,452122,TX,,79905,,,
+El Paso Ltac Hospital,452193,TX,,79902,,,
 Eleanor Slater Hospital,412001,RI,Cranston,2921,44007,,
 Electra Memorial Hospital,451343,TX,Electra,76360,48485,,
 Elite Medical Center,f70d7abf93c78280583ac18e896e6737cca8212b017513ffdcf3f4de52d49be4,NV,Las Vegas,89109,,,
@@ -1271,6 +1271,7 @@ Emory Long Term Acute Care,112006,GA,Decatur,30030,13089,HSI00000342,Emory Healt
 Emory University Hospital,110010,GA,Atlanta,30322,13089,HSI00000342,Emory Healthcare
 Emory University Hospital Midtown,110078,GA,Atlanta,30308,13121,HSI00000342,Emory Healthcare
 Encino Hospital Medical Center,050158,CA,Encino,91436,6037,HSI00000845,Prime Healthcare Services
+Encompass Health Rehabilitation Center,452122,TX,,79606,,,
 Endless Mountains Health Systems,391306,PA,Montrose,18801,42115,,
 Englewood Community Hospital,100267,FL,Englewood,34223,12115,HSI00000492,HCA Healthcare
 Englewood Hospital And Medical Center,310045,NJ,Englewood,7631,34003,,
@@ -1462,8 +1463,8 @@ Geneva General Hospital,330058,NY,Geneva,14456,36069,HSI00000362,Finger Lakes He
 Genoa Community Hospital,281312,NE,Genoa,68640,31125,,
 George C Grape Community Hospital,161324,IA,Hamburg,51640,19071,,
 George E Weems Memorial Hospital,101305,FL,Apalachicola,32320,12037,HSI00001060,Tallahassee Memorial Healthcare
-George L Mee Memorial Hospital,051336,CA,King City,93930,6053,,
 George L Mee Memorial Hospital,050189,CA,King City,93930,6053,,
+George L Mee Memorial Hospital,051336,CA,King City,93930,6053,,
 George Regional Health System,250036,MS,Lucedale,39452,28039,,
 George Washington Univ Hospital,090001,DC,Washington,20037,11001,HSI00001148,Universal Health Services
 Georgetown Community Hospital,180101,KY,Georgetown,40324,21209,HSI00000584,Lifepoint Health
@@ -1490,8 +1491,8 @@ Golden Plains Community Hospital,451369,TX,Borger,79007,48233,,
 Golden Valley Memorial Hospital,260175,MO,Clinton,64735,29083,,
 Goleta Valley Cottage Hospital,050357,CA,Santa Barbara,93111,6083,HSI00000283,Cottage Health System
 Good Samaritan Hospital,050257,CA,Bakersfield,93308,6029,,
-Good Samaritan Hospital,050471,CA,Los Angeles,90017,6037,HSI00000404,Good Samaritan Hospital
 Good Samaritan Hospital,050380,CA,San Jose,95124,6085,HSI00000492,HCA Healthcare
+Good Samaritan Hospital,050471,CA,Los Angeles,90017,6037,HSI00000404,Good Samaritan Hospital
 Good Samaritan Hospital,150042,IN,Vincennes,47591,18083,HSI00000405,Good Samaritan Hospital
 Good Samaritan Hospital,360134,OH,Cincinnati,45220,39061,HSI00000183,Catholic Health Initiatives
 Good Samaritan Hospital,390066,PA,Lebanon,17042,42075,HSI00001243,Wellspan Health
@@ -2073,8 +2074,8 @@ Kern Medical Center,050315,CA,Bakersfield,93306,6029,,
 Kern Valley Healthcare District,051314,CA,Lake Isabella,93240,6029,,
 Kershawhealth,420048,SC,Camden,29020,45055,HSI00000584,Lifepoint Health
 Ketchikan Medical Center,021311,AK,Ketchikan,99901,2130,HSI00000814,Peacehealth
-Kettering Medical Center,360368,OH,Troy,45373,39109,,
 Kettering Medical Center,360079,OH,Kettering,45429,39113,HSI00000546,Kettering Health Network
+Kettering Medical Center,360368,OH,Troy,45373,39109,,
 Kimball Health Services,281305,NE,Kimball,69145,31105,,
 Kimble Hospital,451306,TX,Junction,76849,48267,,
 Kindred Hospital,452039,TX,Houston,77065,48201,,
@@ -2557,18 +2558,18 @@ Memorial Hermann Northeast Hospital,450684,TX,Humble,77338,48201,HSI00000654,Mem
 Memorial Hermann Sugar Land Hospital,450848,TX,Sugar Land,77479,48157,HSI00000654,Memorial Hermann Healthcare System
 Memorial Hermann Surgical Hospital Kingwood,670005,TX,Kingwood,77339,48201,,
 Memorial Hermann Texas Medical Center,450068,TX,Houston,77030,48201,HSI00000654,Memorial Hermann Healthcare System
+Memorial Hospital,140185,IL,Belleville,62226,17163,HSI00000070,BJC Healthcare
 Memorial Hospital,141305,IL,Carthage,62321,17067,HSI00001146,Unitypoint Health
 Memorial Hospital,141338,IL,Chester,62233,17157,HSI00000070,BJC Healthcare
-Memorial Hospital,140185,IL,Belleville,62226,17163,HSI00000070,BJC Healthcare
 Memorial Hospital,150072,IN,Logansport,46947,18017,,
 Memorial Hospital,171381,KS,Abilene,67410,20041,,
 Memorial Hospital,281320,NE,Aurora,68818,31081,,
 Memorial Hospital,281339,NE,Seward,68434,31159,,
-Memorial Hospital,360156,OH,Fremont,43420,39143,HSI00000848,ProMedica Health System
 Memorial Hospital,360092,OH,Marysville,43040,39159,,
+Memorial Hospital,360156,OH,Fremont,43420,39143,HSI00000848,ProMedica Health System
 Memorial Hospital,370178,OK,Stilwell,74960,40001,,
-Memorial Hospital,451358,TX,Seminole,79360,48165,,
 Memorial Hospital,450235,TX,Gonzales,78629,48177,,
+Memorial Hospital,451358,TX,Seminole,79360,48165,,
 Memorial Hospital,451386,TX,Dumas,79029,48341,,
 Memorial Hospital And Health Care Center,150115,IN,Jasper,47546,18037,HSI00000589,Little Company of Mary Hospital and Health Care Centers
 Memorial Hospital And Manor,110132,GA,Bainbridge,39819,13087,HSI00001330,Memorial Hospital and Manor
