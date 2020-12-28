@@ -1,6 +1,5 @@
 function handleResponse(response, status, xhr) {
 	recentResponse = response;
-	createHospitalsSelect(response.config.nodes_meta);
 	const newResponse = filterResponse(response);
 	hideProgressbar();
 	generateContent(newResponse);
@@ -224,7 +223,8 @@ function filterResponse(response_) {
 	let response = JSON.parse(JSON.stringify(response_));
 
 	const selectedHospitalNames = response.config.nodes_meta.map((h,i) => {
-		const c = document.getElementById(`hospitalselect-${i}`).checked;
+		const j = response.config.node_names.indexOf(h.name);
+		const c = document.getElementById(`hospitalselect-${j}`).checked;
 		return c ? h.name : null;
 	}).filter(x => x != null);
 	const selectedInd = selectedHospitalNames.map(h => response.config.node_names.indexOf(h)).sort();

@@ -290,9 +290,6 @@ function getRegions() {
 }
 
 function createHospitalsSelect(data, staticPage=true) {
-	// if (document.getElementById("hospital-select-container") != null) {
-		// return;
-	// }
 	if (document.getElementById("hospital-select-container") != null) {
 		if (staticPage) {
 			document.getElementById("hospital-select-field").remove();
