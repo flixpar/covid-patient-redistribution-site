@@ -229,6 +229,12 @@ function filterResponse(response_) {
 	}).filter(x => x != null);
 	const selectedInd = selectedHospitalNames.map(h => response.config.node_names.indexOf(h)).sort();
 
+	const N = response_.config.node_names.length;
+	const T = response_.admitted[0].length;
+	const C = response_.capacity[0].length;
+
+	const unselectedInd = d3.range(N).filter(i => selectedInd.indexOf(i) < 0);
+
 	response.config.node_names = selectedInd.map(i => response.config.node_names[i]);
 	response.config.node_names_abbrev = selectedInd.map(i => response.config.node_names_abbrev[i]);
 
@@ -245,6 +251,29 @@ function filterResponse(response_) {
 	response.admitted = selectedInd.map(i => response.admitted[i]);
 
 	response.sent = selectedInd.map(i => selectedInd.map(j => response.sent[i][j]));
+
+	const n = response.config.node_names.length;
+
+	response.config.node_names.push("Other");
+	response.config.node_names_abbrev.push("Other");
+	response.beds.push(d3.sum(unselectedInd, i => response_.beds[i]));
+	response.capacity.push(d3.range(C).map(c => d3.sum(unselectedInd, i => response_.capacity[i][c])));
+	response.active.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active[i][t])));
+	response.active_null.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active_null[i][t])));
+	response.admitted.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.admitted[i][t])));
+	response.config.node_locations["Other"] = {
+		lat: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].lat),
+		long: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].long),
+	};
+
+	response.sent.push([]);
+	for (let i = 0; i < n; i++) {
+		response.sent[i].push(d3.range(T).map(t => d3.sum(unselectedInd, j => response_.sent[i][j][t])));
+	}
+	for (let i = 0; i < n; i++) {
+		response.sent[n][i] = d3.range(T).map(t => d3.sum(unselectedInd, j => response_.sent[j][i][t]));
+	}
+	response.sent[n][n] = d3.range(T).map(t => d3.sum(unselectedInd, i => d3.sum(unselectedInd, j => response_.sent[i][j][t])));
 
 	return response;
 }
