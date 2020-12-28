@@ -20,7 +20,7 @@ default_params = (
 	capacity_util = 1.0,
 	uncertainty_level = :default,
 	los_param = "default_dist",
-	end_date = Date(2021, 01, 09),
+	end_date = Date(2021, 01, 16),
 	smoothness = false,
 )
 results_path = "../public/results-static/"
