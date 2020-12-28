@@ -59,11 +59,15 @@ function makeSections() {
 
 function getHospitals() {
 	const region = $("#form-region")[0].value;
-	$.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d, false));
+	let request = $.get("/api/hospital-list", {region: region}, d => {
+		hospitals_meta_list = d;
+		createHospitalsSelect(d, false);
+	});
+	return request;
 }
 
 getRegions();
-getHospitals();
+let getHospitalsRequest = getHospitals();
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
 
@@ -98,8 +102,11 @@ function sendUpdateQuery() {
 		error: ajaxErrorHandler,
 	});
 }
-$("#form-submit").click(sendUpdateQuery);
-sendUpdateQuery();
+
+getHospitalsRequest.done(() => {
+	$("#form-submit").click(sendUpdateQuery);
+	sendUpdateQuery();
+});
 
 const tooltip_content = {
 	"form-start-date": "Date to start the patient allocation model.",
