@@ -1,3 +1,5 @@
+let hospitals_meta_list = null;
+
 function handleResponse(response, status, xhr) {
 	console.log("Updating...");
 	hideProgressbar();
@@ -75,10 +77,16 @@ function sendUpdateQuery() {
 	if (!validateForm()) {
 		return;
 	}
+
+	const selectedHospitalNames = hospitals_meta_list.map((h,i) => {
+		const c = document.getElementById(`hospitalselect-${i}`).checked;
+		return c ? h.name : null;
+	}).filter(x => x != null);
+
 	const data = {
 		alloclevel: $("#form-level")[0].value,
 		region: $("#form-region")[0].value,
-		hospitals: null,
+		hospitals: selectedHospitalNames,
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,

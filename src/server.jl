@@ -50,11 +50,15 @@ route("/api/patients", method=POST) do
 	end_date   = Date(input["end_date"])
 
 	region = (region_type = "state", region_name = region_name)
-	default_locations = get_hospital_list(region=region)
-	default_locations = [h["name"] for h in default_locations if h["default"]]
+
+	if isnothing(input["hospitals"])
+		default_locations = get_hospital_list(region=region)
+		hospitals_list = [h["name"] for h in default_locations if h["default"]]
+	else
+		hospitals_list = string.(input["hospitals"])
+	end
 
 	response = handle_patients_request(
-		default_locations,
 		region, hospitals_list,
 		scenario, patient_type,
 		objective, constrain_integer,
