@@ -64,7 +64,8 @@ function clearContent() {
 
 function getHospitals() {
 	const region = $("#form-region")[0].value;
-	$.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d));
+	let request = $.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d));
+	return request;
 }
 
 function createParametersForm() {
@@ -83,7 +84,7 @@ function createParametersForm() {
 	formContainer.appendChild(patienttypeSelect);
 
 	getRegions();
-	getHospitals();
+	let getHospitalsRequest = getHospitals();
 
 	regionSelect.addEventListener("change", () => getHospitals());
 
@@ -94,11 +95,9 @@ function createParametersForm() {
 	selectUpdateButton.id = "params-form-submit";
 	formContainer.appendChild(selectUpdateButton);
 
-	selectUpdateButton.addEventListener("click", () => {
+	getHospitalsRequest.done(() => {
 		sendUpdateQuery();
-		// handleResponse(recentResponse);
-		// const newResponse = filterResponse(recentResponse);
-		// generateContent(newResponse);
+		selectUpdateButton.addEventListener("click", () => sendUpdateQuery());
 	});
 }
 
@@ -295,7 +294,6 @@ function sendUpdateQuery() {
 		error: ajaxErrorHandler,
 	});
 }
-sendUpdateQuery();
 
 const tooltip_content = {
 	"form-patient-type": "Restrict the focus to patients requiring a certain level of care, and the capacity available for those patients.",
