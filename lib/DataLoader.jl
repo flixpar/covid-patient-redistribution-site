@@ -146,10 +146,10 @@ function hospitals_list(;region=nothing, names=nothing)
 	load[beds .== 0] .= 1.0
 
 	default_hospitals_ind = sortperm(beds, rev=true)
-	default_hospitals_ind = default_hospitals_ind[1:NDEFAULT]
+	default_hospitals_ind = default_hospitals_ind[1:min(NDEFAULT, length(default_hospitals_ind))]
 
 	if DEBUG && NDEDBUG < NDEFAULT
-		default_hospitals_ind = default_hospitals_ind[1:NDEDBUG]
+		default_hospitals_ind = default_hospitals_ind[1:min(NDEDBUG, length(default_hospitals_ind))]
 	end
 
 	hospitals_meta = [
