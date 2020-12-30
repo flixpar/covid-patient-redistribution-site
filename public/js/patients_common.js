@@ -275,7 +275,8 @@ function createInfo(parentElement, content) {
 
 function getRegions() {
 	const default_region = "MD";
-	$.get("/api/regions-list", {region_type: "state"}, regions => {
+	const regiontype = document.getElementById("form-regiontype").value;
+	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
 		region_select.innerHTML = "";
 		for (region of regions) {
@@ -287,6 +288,7 @@ function getRegions() {
 			region_select.appendChild(opt);
 		}
 	});
+	return request;
 }
 
 function createHospitalsSelect(data, staticPage=true) {
