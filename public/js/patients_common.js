@@ -275,7 +275,7 @@ function createInfo(parentElement, content) {
 
 function getRegions() {
 	const default_region = "MD";
-	$.get("/api/regions-list", regions => {
+	$.get("/api/regions-list", {region_type: "state"}, regions => {
 		let region_select = document.getElementById("form-region");
 		region_select.innerHTML = "";
 		for (region of regions) {
