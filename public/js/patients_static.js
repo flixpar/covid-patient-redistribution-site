@@ -277,10 +277,11 @@ function filterResponse(response_) {
 	return response;
 }
 
-function sendUpdateQuery() {
+function sendUpdateQuery(latest=false) {
 	console.log("Querying server...");
+	let start_date_str = document.getElementById("form-start-date").value.replaceAll("-", "");
+	start_date_str = latest ? "latest" : start_date_str;
 	const region = document.getElementById("form-region").value;
-	const start_date_str = document.getElementById("form-start-date").value.replaceAll("-", "");
 	const scenario = document.getElementById("form-scenario").value.toLowerCase();
 	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
 	const fn = `${start_date_str}_${scenario}_${patient_type}_state_${region}.json`;
@@ -291,7 +292,13 @@ function sendUpdateQuery() {
 		contentType: "application/json; charset=utf-8",
 		success: handleResponse,
 		beforeSend: showProgressbar,
-		error: ajaxErrorHandler,
+		error: e => {
+			if (!latest) {
+				sendUpdateQuery(true);
+			} else {
+				ajaxErrorHandler(e);
+			}
+		},
 	});
 }
 
