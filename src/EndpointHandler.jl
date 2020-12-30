@@ -171,8 +171,8 @@ function get_hospital_list(;region=nothing, names=nothing)
 	return hospitals
 end
 
-function get_regions_list()
-	regions = regions_list()
+function get_regions_list(region_type::Symbol=:any)
+	regions = regions_list(region_type)
 	return regions
 end
 

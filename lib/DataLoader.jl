@@ -163,8 +163,11 @@ function hospitals_list(;region=nothing, names=nothing)
 	return hospitals_meta
 end
 
-function regions_list()
+function regions_list(region_type::Symbol=:all)
 	data = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	if region_type != :all
+		filter!(r -> r.region_type == region_type, data)
+	end
 	return data
 end
 

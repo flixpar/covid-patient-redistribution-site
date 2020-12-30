@@ -80,7 +80,12 @@ route("/api/hospital-list", method=GET) do
 end
 
 route("/api/regions-list", method=GET) do
-	response = get_regions_list()
+	if haskey(@params, :region_type)
+		region_type = Symbol(@params(:region_type))
+	else
+		region_type = :any
+	end
+	response = get_regions_list(region_type)
 	return json(response)
 end
 
