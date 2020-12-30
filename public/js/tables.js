@@ -31,7 +31,7 @@ function setupTable(table_data, is_wide=false, table_id=null, title=null, replac
 			if (typeof val == "string") {
 				el.innerHTML = val;
 			} else if (val == null) {
-				console.log(i, colName, "NULL!!");
+				// console.log(i, colName, "NULL!!");
 				el.innerHTML = "NaN";
 			} else {
 				el.innerHTML = val.toFixed(3);
