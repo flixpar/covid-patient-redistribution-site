@@ -63,8 +63,11 @@ function clearContent() {
 }
 
 function getHospitals() {
-	const region = $("#form-region")[0].value;
-	let request = $.get("/api/hospital-list", {region: region}, d => createHospitalsSelect(d));
+	const data = {
+		region_type: $("#form-regiontype")[0].value,
+		region: $("#form-region")[0].value,
+	};
+	let request = $.get("/api/hospital-list", data, d => createHospitalsSelect(d));
 	return request;
 }
 
@@ -83,8 +86,8 @@ function createParametersForm() {
 	formContainer.appendChild(scenarioSelect);
 	formContainer.appendChild(patienttypeSelect);
 
-	getRegions();
-	let getHospitalsRequest = getHospitals();
+	let genRegionsRequest = getRegions();
+	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());
 
 	regionSelect.addEventListener("change", () => getHospitals());
 
