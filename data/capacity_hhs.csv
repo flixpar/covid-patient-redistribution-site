@@ -14,7 +14,7 @@ Acadia General Hospital,190044,8,49,57
 Acadia St Landry,191319,0,15,15
 Acadian Medical Center,190318,4,29,33
 Acmh Hospital,390163,7,135,146
-Acuity Specialty Hospital Of Morgantown,510092,11,15,26
+Acuity Specialty Hospital Of Morgantown,512004,10,14,24
 Acuity Specialty Hospital Of New Jersey,312023,0,30,30
 Acuity Specialty Hospital Of Southern New Jersey,312022,0,66,66
 Acuity Specialty Hospital Ohio Valley,512005,9,10,19
@@ -58,7 +58,7 @@ Adventhealth Waterman,100057,39,311,350
 Adventhealth Wauchula,101300,0,25,25
 Adventhealth Wesley Chapel,100319,7,130,137
 Adventhealth Zephyrhills,100046,15,168,182
-Adventist Bolingbrook Hospital,140304,17,99,114
+Adventist Bolingbrook Hospital,140304,18,98,114
 Adventist Glenoaks,140292,16,70,82
 Adventist Health And Rideout,050133,30,195,225
 Adventist Health Bakersfield,050455,45,208,253
@@ -80,7 +80,7 @@ Adventist Health Ukiah Valley,050301,8,71,79
 Adventist Healthcare Fort Washington Medical Ctr,210060,16,21,37
 Adventist Healthcare Shady Grove Medical Center,210057,26,407,433
 Adventist Healthcare White Oak Medical Center,210016,28,219,247
-Adventist Hinsdale Hospital,140122,27,165,212
+Adventist Hinsdale Hospital,140122,26,169,212
 Adventist La Grange Memorial Hospital,140065,17,154,177
 Advocate Christ Hospital & Medical Center,140208,286,555,841
 Advocate Condell Medical Center,140202,55,275,330
@@ -244,7 +244,7 @@ Ascension Via Christi Hospital Pittsburg Inc,170006,12,60,72
 Ashe Memorial Hospital,341325,1,40,43
 Asheville Specialty Hospital,342017,0,34,34
 Ashland Health Center,171304,0,17,17
-Ashley County Medical Center,041323,13,-9,5
+Ashley County Medical Center,041323,13,-9,4
 Ashley Medical Center,351322,0,8,8
 Ashley Regional Medical Center,460030,8,15,23
 Ashtabula County Medical Center,360125,9,75,84
@@ -347,6 +347,7 @@ Banner Goldfield Medical Center,030134,0,16,17
 Banner Heart Hospital,030105,25,75,99
 Banner Ironwood Medical Center,030130,6,48,53
 Banner Lassen Medical Center,051320,0,27,27
+Banner Ocotillo Medical Center,030147,0,0,0
 Banner Payson Medical Center,031318,4,19,20
 Banner Thunderbird Medical Center,030089,68,432,500
 Banner-University Medical Center South Campus,030111,19,96,114
@@ -1212,6 +1213,7 @@ El Centro Regional Medical Center,050045,17,97,114
 El Paso Children'S Hospital,453313,20,-14,6
 El Paso Ltac Hospital,452122,0,42,42
 El Paso Ltac Hospital,452193,0,30,30
+Eleanor Slater Hospital,412001,0,0,0
 Electra Memorial Hospital,451343,0,24,24
 Elite Medical Center,f70d7abf93c78280583ac18e896e6737cca8212b017513ffdcf3f4de52d49be4,0,34,34
 Elizabethtown Community Hospital,331302,0,25,25
@@ -1806,7 +1808,7 @@ Howard Young Medical Ctr,520091,10,32,42
 Hshs Good Shepherd Hospital Inc,140019,0,30,30
 Hshs Holy Family Hospital,140137,0,38,38
 Hshs St Clare Memorial Hospital,521310,0,20,20
-Hshs St Elizabeth'S Hospital,140187,20,184,204
+Hshs St Elizabeth'S Hospital,140187,20,183,203
 Hudson Hospital & Clinic,521335,0,31,31
 Hudson Regional Hospital,310118,6,49,55
 Hudson Valley Hospital Center,330267,17,88,105
@@ -1911,6 +1913,7 @@ Jay Hospital,100048,0,35,35
 Jeff Davis Hospital,111333,4,21,25
 Jefferson Community Health & Life,281319,0,19,19
 Jefferson County Health Center,161364,0,0,25
+Jefferson County Hospital,250060,0,0,0
 Jefferson County Hospital,371311,0,10,10
 Jefferson Davis Community Hospital Cah,251326,0,19,19
 Jefferson Health-Northeast,390115,67,383,450
@@ -1986,7 +1989,7 @@ Kaiser Foundation Hospital - Vacaville,050767,11,90,101
 Kaiser Foundation Hospital - Walnut Creek,050072,32,140,173
 Kaiser Foundation Hospital - West La,050561,43,216,259
 Kaiser Foundation Hospital - Westside,380103,13,78,90
-Kaiser Foundation Hospital - Woodland Hills,050677,33,233,266
+Kaiser Foundation Hospital - Woodland Hills,050677,33,234,267
 Kaiser Foundation Hospital - Zion,050515,96,511,607
 Kaiser Foundation Hospital And Rehab Center,050073,14,152,166
 Kaiser Foundation Hospital Fontana,050140,124,472,596
@@ -2079,7 +2082,7 @@ King'S Daughters' Health,150069,6,48,54
 King'S Daughters' Medical Center,180009,36,262,298
 Kingman Community Hospital,171378,0,9,9
 Kingman Regional Medical Center,030055,14,122,136
-Kings County Hospital Center,330202,50,639,690
+Kings County Hospital Center,330202,50,639,689
 Kings Daughters Medical Center Ohio,360361,0,0,10
 Kingsbrook Jewish Medical Center,330201,10,191,201
 Kiowa County Memorial Hospital,171332,0,8,8
@@ -2501,13 +2504,13 @@ Memorial Community Hospital Mch & Health System,281359,0,12,12
 Memorial Health University Medical Center,110036,138,396,534
 Memorial Healthcare,230121,7,74,81
 "Memorial Healthcare System, Inc",440091,72,358,430
-Memorial Hermann Hospital System,450184,169,1251,1420
+Memorial Hermann Hospital System,450184,169,1187,1356
 Memorial Hermann Katy Hospital,450847,20,173,193
 Memorial Hermann Memorial City Medical Center,450610,79,305,384
 Memorial Hermann Northeast Hospital,450684,15,217,232
 Memorial Hermann Sugar Land Hospital,450848,14,135,149
 Memorial Hermann Surgical Hospital Kingwood,670005,0,11,11
-Memorial Hermann Texas Medical Center,450068,253,839,1093
+Memorial Hermann Texas Medical Center,450068,253,903,1157
 Memorial Hospital,140185,24,189,213
 Memorial Hospital,141305,0,17,17
 Memorial Hospital,141338,0,0,23
@@ -2684,7 +2687,7 @@ Methodist Richardson Medical Center,450537,30,201,232
 Methodist Southlake Hospital,670132,4,56,57
 Metro Health Hospital,230236,17,183,200
 Metro Nashville General Hospital,440111,23,41,64
-Metrohealth System,360059,153,450,604
+Metrohealth System,360059,154,450,604
 Metropolitan Hospital,400106,5,97,102
 Metropolitan Hospital Center,330199,19,273,291
 Metrowest Medical Center,220175,38,178,216
@@ -3417,7 +3420,7 @@ Putnam General Hospital,111313,0,22,22
 Putnam Hospital Center,330273,10,104,114
 Quail Creek Surgical Hospital,450875,0,23,23
 Queen Of The Valley Medical Center,050009,20,136,156
-Queens Hospital Center,330231,29,409,437
+Queens Hospital Center,330231,29,410,439
 Quincy Valley Hospital,501320,0,4,4
 Rady Children'S Hospital - San Diego,053303,192,-192,0
 Rainbow Babies And Childrens Hospital,363302,24,-24,0
@@ -3806,6 +3809,7 @@ Sgmc Lanier Campus,111326,0,6,6
 Shamrock General Hospital,451340,1,35,36
 Shannon West Texas Memorial Hospital,450571,38,365,403
 Share Medical Center,371341,0,21,21
+Sharkey Issaquena Community Hospital,251338,0,21,21
 Sharon Hospital,070004,9,51,60
 Sharon Regional Health System,390211,15,141,160
 Sharp Chula Vista Medical Center,050222,37,223,260
@@ -4359,6 +4363,7 @@ Thomas Jefferson University Hospital,390174,155,689,848
 Thomas Memorial Hospital,510029,26,165,191
 Thomasville Regional Medical Center,010174,0,33,33
 Thorek Memorial Hospital,140115,10,146,156
+Three Crosses Regional Hospital Llc,320091,0,0,0
 Three Rivers Health,230015,0,0,44
 Three Rivers Hospital,441303,0,20,20
 Three Rivers Hospital,501324,0,10,10
@@ -4543,7 +4548,7 @@ University Of Virginia Medical Center,490009,178,378,556
 University Of Washington Medical Ctr,500008,124,482,606
 University Of Wi  Hospitals & Clinics Authority,520098,113,397,510
 University Pediatric Hospital,403301,52,-52,0
-Unm Hospital,320001,130,244,374
+Unm Hospital,320001,127,240,368
 Unm Sandoval Regional Medical Center,320089,11,48,59
 Uofl Health - Jewish Hospital,180040,41,244,285
 Uofl Health - Shelbyville Hospital,180016,0,72,72
@@ -4755,7 +4760,7 @@ Westchester Medical Center,330234,207,407,602
 Westerly Hospital,410013,9,107,116
 Western Arizona Regional Medical Center,030101,20,44,64
 Western Missouri Medical Center,260097,8,42,50
-Western Regional Medical Center,030138,0,0,9
+Western Regional Medical Center,030138,0,0,10
 Western Wisconsin Health,521347,0,16,16
 "Westfield Memorial Hospital, Inc",330166,1,7,8
 Westfields Hospital And Clinic,521345,0,41,41
