@@ -60,8 +60,11 @@ function makeSections() {
 }
 
 function getHospitals() {
-	const region = $("#form-region")[0].value;
-	let request = $.get("/api/hospital-list", {region: region}, d => {
+	const data = {
+		region_type: $("#form-regiontype")[0].value,
+		region: $("#form-region")[0].value,
+	};
+	let request = $.get("/api/hospital-list", data, d => {
 		hospitals_meta_list = d;
 		createHospitalsSelect(d, false);
 	});
@@ -72,6 +75,10 @@ getRegions();
 let getHospitalsRequest = getHospitals();
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
+document.getElementById("form-regiontype").addEventListener("change", () => {
+	let req = getRegions();
+	req.done(() => getHospitals());
+});
 
 function sendUpdateQuery() {
 	if (!validateForm()) {
@@ -86,6 +93,7 @@ function sendUpdateQuery() {
 	const data = {
 		alloclevel: $("#form-level")[0].value,
 		region: $("#form-region")[0].value,
+		regiontype: $("#form-regiontype")[0].value,
 		hospitals: selectedHospitalNames,
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,

@@ -113,21 +113,22 @@ end
 function hospitals_list(;region=nothing, names=nothing)
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
-	if !isnothing(names) && !isnothing(region) && region.region_type == "state"
-		hospitals_info = filter(h -> (h.state == region.region_name) && (h.name in names), data.location_meta)
-		unique!(h -> h.name, hospitals_info)
-		hospitals_ind = [h.index for h in hospitals_info]
-	elseif !isnothing(names)
-		hospitals_ind = [h.index for h in data.location_meta if h.name in names]
-	elseif !isnothing(region) && region.region_type == "state"
+	if !isnothing(region) && region.region_type == :state
 		hospitals_info = filter(h -> h.state == region.region_name, data.location_meta)
-		unique!(h -> h.name, hospitals_info)
-		hospitals_ind = [h.index for h in hospitals_info]
+	elseif !isnothing(region) && region.region_type == :hospital_system
+		hospitals_info = filter(h -> !ismissing(h.system_name) && (h.system_name == region.region_name), data.location_meta)
 	elseif !isnothing(region)
 		error("Unsupported region type")
 	else
-		hospitals_ind = collect(1:length(data.location_names))
+		hospitals_info = data.location_meta
 	end
+
+	if !isnothing(names)
+		hospitals_info = filter(h -> h.name in names, hospitals_info)
+	end
+
+	unique!(h -> h.name, hospitals_info)
+	hospitals_ind = [h.index for h in hospitals_info]
 	filter!(x -> !isnothing(x), hospitals_ind)
 	sort!(hospitals_ind)
 

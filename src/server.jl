@@ -36,6 +36,7 @@ route("/api/patients", method=POST) do
 
 	input = jsonpayload()
 
+	region_type = str_to_symbol(input["regiontype"])
 	region_name = input["region"]
 	scenario = str_to_symbol(input["scenario"])
 	patient_type = str_to_symbol(input["patient_type"])
@@ -49,7 +50,7 @@ route("/api/patients", method=POST) do
 	start_date = Date(input["start_date"])
 	end_date   = Date(input["end_date"])
 
-	region = (region_type = "state", region_name = region_name)
+	region = (region_type = region_type, region_name = region_name)
 
 	if isnothing(input["hospitals"])
 		default_locations = get_hospital_list(region=region)
@@ -70,8 +71,8 @@ route("/api/patients", method=POST) do
 end
 
 route("/api/hospital-list", method=GET) do
-	if haskey(@params, :region)
-		region = (region_type = "state", region_name = @params(:region))
+	if haskey(@params, :region_type) && haskey(@params, :region)
+		region = (region_type = Symbol(@params(:region_type)), region_name = @params(:region))
 	else
 		region = nothing
 	end
