@@ -71,8 +71,8 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 		data1 = data.overflow_null;
 		data2 = data.overflow;
 		colorscale = getOverflowColorscale(data.overflow_null);
-		plotTitle = "Required Surge Capacity";
-		colorbarLabel = "Required Surge Beds";
+		plotTitle = "Required Additional COVID Beds";
+		colorbarLabel = "Number of Additional Beds";
 		description = overflowmapDescription;
 	} else if (metric == "overflow" || metric == "overflow_static") {
 		dynamic = false;
