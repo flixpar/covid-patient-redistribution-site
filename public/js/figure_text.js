@@ -1,5 +1,5 @@
 const transfersSankeyDescription = `
-This figure shows the total number of COVID patients transferred between hospitals over the time period considered. Ribbons connect locations that are sending patients (on the left) with locations that are receiving patients (on the right), where the relative widths represent the number of patients sent.
+The ribbons show the volume of patients that should be moved between hospitals. “Other Hospitals” refers to the rest of the hospitals in the selected state that were not chosen by the user to be displayed.
 `;
 
 const ridgeplotDescription = `
@@ -11,15 +11,27 @@ The following figures illustrate the number of hospitalized COVID patients (per 
 `;
 
 const overallloadplotDescription = `
-This figure shows the overall load of the system relative to its capacity for COVID patients. When the COVID load (blue) is in the green region, the system is under capacity and can accomadate all COVID patients without needing additional capacity. When the blue line is in the red region, the system is over capacity and must create additional capacity for COVID patients. Note that since transfers only move patients around within the system, they can only help individual hospitals and not the system as a whole, so this line is constant regardless of how many transfers are made. Optimal transfers can be most impactful when the load (blue) is near the capacity line (red) because this indicates that some hospitals will be over capacity and need to transfer patients out and some hospitals will be under capacity and able to accept transfers.
+The occupancy forecast of the entire state for the time duration of choice.
+<br>
+<b>How to read this figure:</b> When the occupancy (blue curve) is in the green region, the occupancy level (ICU or Acute COVID-19 beds, depending on what was selected above) is within the capacity of the state. If it enters the red region, there will be a bed shortage.
+<br>
+<b>Insights:</b> If the blue curve enters the red region, the state needs to increase bed capacity to be able to meet the predicted demand. The date and the minimum required additional beds depend on when the blue curve starts to enter the red zone and by how far it surpasses the current capacity (the red line).
 `;
 
 const loadplotsDescription = `
-This figure displays the load on each individual hospital, which is the number of COVID patients divided by the number of beds available to COVID patients. A load greater than 1 (over the red line) means that the hospital will run out of beds for COVID patients, and will need to transfer patients or add more beds, while a load less than 1 (under the red line) means that the hospital has extra capacity for COVID patients. On the left is the forecasted load, which is what the forecast model predicts will happen if no transfers are made. On the right is the projected load at each hospital assuming optimal transfers are made. If optimal transfers are made, hospitals will only go over capacity if there is no space left for their patients anywhere in the system or if there are sufficiently good operational reasons to keep the additional patients where they are.
+The occupancy forecast for each hospital (as selected above) for the time duration of choice. Left figure displays the occupancy when patients are not transferred, and the right figure displays occupancy when optimal patient transfers is utilized.
+<br>
+<b>How to read this figure:</b> When the occupancy of a hospital (the thinner curves) enter the green region, the occupancy level of that hospital (ICU, Acute, or total COVID-19 beds) is within the capacity of the hospital.
+<br>
+<b>Insights for individual hospitals:</b> If a hospital enters the red region, there will be a bed shortage at that hospital. The shortage can be mitigated by either adding more COVID-19 beds (left figure) or optimally transferring patients to other hospitals that have extra capacity (right figure).
 `;
 
 const overflowmapDescription = `
-These maps show how much surge capacity will have to be created at each hospital. Each point represents a hospital, and each hospital is colored depending on how many additional beds it needs to care for all of its COVID patients. Green indicates that a hospital is under capacity, and does not need any additional beds, while darker shades of red indicate that a hospital needs more beds. The figure on the left assumes no transfers are made, and the figure on the right assumes that optimal patient transfers are made. The arrows represent transfers, where the width of the arrow corresponds to the number of patients sent.
+A map of the daily predicted required additional COVID-19 beds for each selected hospital with and without optimal transfers (right and left maps, respectively).
+<br>
+<b>How to read this figure:</b> The green dot indicates that the hospital will operate within capacity on the displayed date. A red dot, conversely, means that the hospital requires additional beds. The darker the red, the more beds are needed. These bed shortages can be mitigated by utilizing the available capacity in near-by hospitals by transferring patients (the figure on the right). The arrows (and their thickness) show where (and how many) patients should be moved to minimize the bed shortage. “Other Hospitals” refers to the rest of the hospitals that were not chosen by the user to be visualized.
+<br>
+<b>Insights:</b> The hospitals that become red in the right figure will need additional COVID-19 beds added.
 `;
 
 const dashboardDescription = ``;
