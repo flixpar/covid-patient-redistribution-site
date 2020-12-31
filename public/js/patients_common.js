@@ -448,7 +448,7 @@ function createHospitalsSelect(data, staticPage=true) {
 
 		let loadLabel = document.createElement("span");
 		loadLabel.style.float = "right";
-		loadLabel.textContent = `(Load = ${h.current_load.toFixed(1)})`;
+		loadLabel.textContent = `(Occupancy = ${(h.current_load*100).toFixed(0)}%)`;
 		s.appendChild(loadLabel);
 
 		if (h.current_load < 0.9) {
