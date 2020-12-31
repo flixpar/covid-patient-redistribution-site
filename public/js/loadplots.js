@@ -9,13 +9,6 @@ const loadPlotsShowPoints = false;
 function createOverallLoadPlot(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-totalload");
 
-	if (add_description) {
-		let description = document.createElement("p");
-		description.className = "caption";
-		description.innerHTML = overallloadplotDescription;
-		section.appendChild(description);
-	}
-
 	let overallLoadPlotContainer = document.createElement("div");
 	overallLoadPlotContainer.style.width = "75%";
 	overallLoadPlotContainer.style.marginLeft = "12.5%";
@@ -27,10 +20,23 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	overallLoadPlotContainer.appendChild(overallLoadPlot);
 
 	generateFigureDownloadButtons(overallLoadPlot, "load-overall");
+
+	if (add_description) {
+		let description = document.createElement("p");
+		description.className = "caption";
+		description.innerHTML = overallloadplotDescription;
+		section.appendChild(description);
+	}
 }
 
 function createLoadPlots(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-load");
+
+	const loadPlots = makeLoadPlots(rawdata);
+	loadPlots.id = "loadplots";
+	section.appendChild(loadPlots);
+
+	generateFigureDownloadButtons(loadPlots, "load-hospitals");
 
 	if (add_description) {
 		let description = document.createElement("p");
@@ -38,13 +44,6 @@ function createLoadPlots(rawdata, add_description=true) {
 		description.innerHTML = loadplotsDescription;
 		section.appendChild(description);
 	}
-
-	const loadPlots = makeLoadPlots(rawdata);
-	loadPlots.id = "loadplots";
-
-	section.appendChild(loadPlots);
-
-	generateFigureDownloadButtons(loadPlots, "load-hospitals");
 }
 
 function makeLoadPlots(rawdata, capacityLevel=0) {

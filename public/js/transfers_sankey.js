@@ -7,16 +7,16 @@ function createTransfersSankey(response, add_description=true) {
 	const fig = makeTransfersSankey(graph);
 
 	const section = document.getElementById("section-results-transfers");
+	section.appendChild(fig);
+
+	generateFigureDownloadButtons(fig, "transfer-flows");
+
 	if (add_description) {
 		let description = document.createElement("p");
 		description.className = "caption";
 		description.innerHTML = transfersSankeyDescription;
 		section.appendChild(description);
 	}
-
-	section.appendChild(fig);
-
-	generateFigureDownloadButtons(fig, "transfer-flows");
 }
 
 function makeTransfersSankey(graph) {
