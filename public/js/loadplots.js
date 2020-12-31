@@ -1,6 +1,6 @@
 const loadPlotsWidth = 1000;
 const loadPlotsHeight = 500;
-const loadPlotsMargin = ({top: 35, right: 30, bottom: 30, left: 50})
+const loadPlotsMargin = ({top: 35, right: 30, bottom: 30, left: 60})
 const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
 const loadPlotsShowPoints = false;
@@ -50,19 +50,20 @@ function createLoadPlots(rawdata, add_description=true) {
 function makeLoadPlots(rawdata, capacityLevel=0) {
 	const loadData = extractLoadData(rawdata, capacityLevel);
 
-	const betweenMargin = 50;
+	const betweenMargin = 100;
 	const labelsWidth = 45;
+	const titleHeight = 40;
 
 	const totalWidth = 2*loadPlotsWidth + loadPlotsMargin.left + loadPlotsMargin.right + betweenMargin + labelsWidth;
-	const totalHeight = loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom;
+	const totalHeight = loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom + titleHeight;
 	let legendHeight;
 
 	let svg = d3.create("svg").attr("viewBox", [0, 0, totalWidth, totalHeight]);
 
-	let g1 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left}, ${loadPlotsMargin.top})`);
-	let g2 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + loadPlotsWidth}, ${loadPlotsMargin.top})`);
-	let g3 = svg.append("g").attr("transform", `translate(0, ${loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom})`);
-	let g4 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + 2*loadPlotsWidth}, ${loadPlotsMargin.top})`);
+	let g1 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left}, ${loadPlotsMargin.top + titleHeight})`);
+	let g2 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + loadPlotsWidth}, ${loadPlotsMargin.top + titleHeight})`);
+	let g3 = svg.append("g").attr("transform", `translate(0, ${loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom + titleHeight})`);
+	let g4 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + 2*loadPlotsWidth}, ${loadPlotsMargin.top + titleHeight})`);
 
 	const maxLoadVal = d3.max(loadData.load_null, x => d3.max(x, y => y.value))
 	const maxY = Math.min(5.0, Math.max(2.0, Math.ceil(maxLoadVal)));
@@ -71,10 +72,18 @@ function makeLoadPlots(rawdata, capacityLevel=0) {
 		.domain([0, maxY]).nice()
 		.range([loadPlotsHeight, 0]);
 
-	g1 = makeLoadPlot(g1, loadData.load_null, yScale, maxY, "COVID Patient Load by Location (Without Transfers)");
-	g2 = makeLoadPlot(g2, loadData.load, yScale, maxY, "COVID Patient Load by Location (With Transfers)");
+	g1 = makeLoadPlot(g1, loadData.load_null, yScale, maxY, "Without Optimal Transfers");
+	g2 = makeLoadPlot(g2, loadData.load, yScale, maxY, "With Optimal Transfers");
 	g3, legendHeight = makeLoadPlotsLegend(g3, rawdata.config.node_names, totalWidth);
 	g4 = makeLoadLabels(g4, yScale, maxY);
+
+	svg.append("text")
+		.attr("x", totalWidth / 2)
+		.attr("y", 28)
+		.attr("text-anchor", "middle")
+		.style("font-family", loadPlotsFont)
+		.style("font-size", "30px")
+		.text("COVID Occupancy by Hospital");
 
 	svg.attr("viewBox", [0, 0, totalWidth, totalHeight+legendHeight]);
 
@@ -86,7 +95,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 	const yAxis = svg => svg
 		.attr("transform", `translate(0,0)`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "18px")
+		.style("font-size", "20px")
 		.call(d3.axisRight(yScale)
 			.ticks(5)
 			.tickSize(loadPlotsWidth)
@@ -101,9 +110,11 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 			.attr("dy", "4px")
 			.attr("text-anchor", "end")
 			.attr("fill", "#4a4a4a")
+			.text(t => (t*100) + "%")
 		);
 
 	const dates = load[0].map(d => d.date);
+	const xInterval = getDateIntervals(dates);
 	const N = load.length;
 
 	const x = d3.scaleUtc()
@@ -113,11 +124,11 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 	const xAxis = g => g
 		.attr("transform", `translate(0,${loadPlotsHeight})`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "16px")
+		.style("font-size", "20px")
 		.call(d3.axisBottom(x)
-			.ticks(d3.utcWeek.every(1))
+			.ticks(xInterval)
 			.tickSize(-loadPlotsHeight)
-			.tickFormat(d3.timeFormat("%m/%d"))
+			.tickFormat(d3.timeFormat("%m/%d/%y"))
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
@@ -197,7 +208,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("y", -10)
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "22px")
+		.style("font-size", "26px")
 		.attr("fill", "black")
 		.text(title);
 
@@ -205,15 +216,16 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 }
 
 function makeOverallLoadPlot(overall_load) {
-	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth, loadPlotsHeight]);
+	const labelsWidth = 45;
+	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth+labelsWidth, loadPlotsHeight]);
 
 	svg.append("text")
 		.attr("x", loadPlotsWidth/2)
 		.attr("y", 25)
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "20px")
-		.text("Overall System Load");
+		.style("font-size", "22px")
+		.text("Total COVID Occupancy");
 
 	const maxLoadVal = d3.max(overall_load, y => y.value)
 	const maxY = Math.min(5.0, Math.max(2.0, Math.ceil(maxLoadVal)));
@@ -226,7 +238,7 @@ function makeOverallLoadPlot(overall_load) {
 	const yAxis = svg => svg
 		.attr("transform", `translate(${loadPlotsMargin.left},0)`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "12px")
+		.style("font-size", "15px")
 		.call(d3.axisRight(y)
 			.ticks(5)
 			.tickSize(loadPlotsWidth - loadPlotsMargin.left - loadPlotsMargin.right)
@@ -241,9 +253,11 @@ function makeOverallLoadPlot(overall_load) {
 			.attr("dy", "4px")
 			.attr("text-anchor", "end")
 			.attr("fill", "#4a4a4a")
+			.text(t => (t*100) + "%")
 		);
 
 	const dates = overall_load.map(d => d.date);
+	const xInterval = getDateIntervals(dates);
 
 	const x = d3.scaleUtc()
 		.domain(d3.extent(dates))
@@ -252,11 +266,11 @@ function makeOverallLoadPlot(overall_load) {
 	const xAxis = g => g
 		.attr("transform", `translate(0,${loadPlotsHeight - loadPlotsMargin.bottom})`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "12px")
+		.style("font-size", "15px")
 		.call(d3.axisBottom(x)
-			.ticks(d3.timeWeek.every(1))
+			.ticks(xInterval)
 			.tickSize(-(loadPlotsHeight - loadPlotsMargin.top - loadPlotsMargin.bottom))
-			.tickFormat(d3.timeFormat("%m/%d"))
+			.tickFormat(d3.timeFormat("%m/%d/%y"))
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
@@ -322,6 +336,9 @@ function makeOverallLoadPlot(overall_load) {
 			.attr("cy", d => y(d.value))
 			.attr("r", 4);
 	}
+
+	let sideLabelsArea = svg.append("g").attr("transform", `translate(${loadPlotsWidth-25}, 0)`);
+	sideLabelsArea = makeLoadLabels(sideLabelsArea, y, maxY);
 
 	return svg.node();
 }
@@ -422,7 +439,7 @@ function makeLoadLabels(svg, yScale, maxY) {
 		.attr("transform", `translate(40,${q1}) rotate(90)`)
 		.style("fill", "green")
 		.style("font-family", loadPlotsFont)
-		.text("Under Capacity");
+		.text("Within Capacity");
 
 	const q2 = yScale((1 + maxY)/2) - 50;
 	svg.append("text")
@@ -484,6 +501,29 @@ function extractOverallLoadData(rawdata, capacityLevel=3) {
 	}
 
 	return overall_load;
+}
+
+function getDateIntervals(dates) {
+	const T = (dates[dates.length-1] - dates[0]) / 86400000;
+	let xInterval = d3.utcWeek.every(1);
+	if (T < 5) {
+		xInterval = d3.utcDay.every(1);
+	} else if (T < 7) {
+		xInterval = d3.utcDay.every(2);
+	} else if (T < 14) {
+		xInterval = d3.utcDay.every(3);
+	} else if (T < 21) {
+		xInterval = d3.utcDay.every(5);
+	} else if (T < 31) {
+		xInterval = d3.utcWeek.every(1);
+	} else if (T < 60) {
+		xInterval = d3.utcWeek.every(2);
+	} else if (T < 120) {
+		xInterval = d3.utcWeek.every(3);
+	} else {
+		xInterval = d3.utcMonth.every(1);
+	}
+	return xInterval;
 }
 
 function createCapacityOption(plotName, rawdata) {
