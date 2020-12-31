@@ -38,7 +38,7 @@ function makeTransfersSankey(graph) {
 		.style("font-family", "Helvetica")
 		.style("font-size", "18px")
 		.attr("fill", "black")
-		.text("Patient Transfers");
+		.text("Optimal Patient Transfers");
 
 	svg.append("text")
 		.attr("x", transfersSankeySize.width-transfersSankeyMargins.right+25)
