@@ -471,5 +471,11 @@ function createHospitalsSelect(data, staticPage=true) {
 
 		selectArea.appendChild(s);
 	});
+
+	if (staticPage) {
+		selectArea.classList.add("static-page");
+		selectAreaList.classList.add("static-page");
+
+	}
 }
 
