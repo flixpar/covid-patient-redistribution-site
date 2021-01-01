@@ -78,13 +78,18 @@ function createParametersForm() {
 	formContainer.id = "static-params-form";
 	section.appendChild(formContainer);
 
+	let selectArea = document.createElement("div");
+	selectArea.id = "static-params-form-select-area";
+
 	let regionSelect = createSelect(["MD"], 0, "Region", "form-region");
 	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "Patient Type", "form-patient-type");
 
-	formContainer.appendChild(regionSelect);
-	formContainer.appendChild(scenarioSelect);
-	formContainer.appendChild(patienttypeSelect);
+	selectArea.appendChild(regionSelect);
+	selectArea.appendChild(scenarioSelect);
+	selectArea.appendChild(patienttypeSelect);
+
+	formContainer.appendChild(selectArea);
 
 	let genRegionsRequest = getRegions();
 	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());
