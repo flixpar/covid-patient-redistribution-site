@@ -7,19 +7,29 @@ let recentResponse = null;
 function makeSection(sectionInfo) {
 	let sectionContainer = document.createElement("div");
 	let sectionHeader = document.createElement("div");
-	let sectionHeaderText = document.createElement("h3");
+	let sectionHeaderTitleArea = document.createElement("span");
+	let sectionHeaderTitle = document.createElement("h3");
+	let sectionHeaderSubtitle = document.createElement("h5");
 	let sectionContent = document.createElement("div");
 
 	sectionContainer.className = "results-section";
 	sectionContent.className = "results-section-content is-collapsible";
 	sectionHeader.className = "results-section-header";
-	sectionHeaderText.className = "title is-3 results-section-header-text";
+	sectionHeaderTitle.className = "title is-3 results-section-header-title";
+	sectionHeaderSubtitle.className = "title is-5 results-section-header-subtitle";
 
 	const sectionID = "section-" + sectionInfo.identifier;
 	sectionContent.id = sectionID;
 
-	sectionHeaderText.innerText = sectionInfo.title;
-	sectionHeader.appendChild(sectionHeaderText);
+	sectionHeaderTitle.innerText = sectionInfo.title;
+	sectionHeaderTitleArea.appendChild(sectionHeaderTitle);
+
+	if (sectionInfo.subtitle != null) {
+		sectionHeaderSubtitle.innerText = sectionInfo.subtitle;
+		sectionHeaderTitleArea.appendChild(sectionHeaderSubtitle);
+	}
+
+	sectionHeader.appendChild(sectionHeaderTitleArea);
 
 	let toggleButton = document.createElement("a");
 	toggleButton.className = "section-toggle-button";

@@ -36,10 +36,10 @@ function generateContent(response) {
 
 const sectionInfo = [
 	{title: "Parameters",                      identifier: "parameters",          reset:false, showDefault: true},
-	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true},
-	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true},
-	{title: "Healthcare System Load",          identifier: "results-totalload",   reset:true,  showDefault: true},
-	{title: "Hospital Loads",                  identifier: "results-load",        reset:true,  showDefault: true},
+	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true, subtitle: "Where are additional COVID beds required?"},
+	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
+	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
+	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: true},
 	{title: "Active COVID Patients",           identifier: "results-active",      reset:true,  showDefault: false},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
 	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
