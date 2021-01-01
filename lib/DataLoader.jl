@@ -36,8 +36,7 @@ function load_hhs(
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
-	hospital_ind = [findfirst(==(h), data.location_names) for h in hospital_list]
-	hospital_ind = sort(hospital_ind)
+	hospital_ind = filter_hospitals(data, region=region, names=hospital_list)
 
 	if DEBUG
 		beds_ = data.casesdata[:moderate,:allbeds].capacity[hospital_ind,1]
@@ -49,8 +48,9 @@ function load_hhs(
 	N = length(hospital_ind)
 	T = (end_date - start_date).value + 1
 
-	hospitals = data.location_names[hospital_ind]
-	hospitals_abbrev = data.location_names_short[hospital_ind]
+	hospitals = data.location_ids[hospital_ind]
+	hospital_names = data.location_names[hospital_ind]
+	hospital_abbrevs = data.location_names_short[hospital_ind]
 
 	bedtype = (patient_type == :all) ? :allbeds : patient_type
 	casesdata = data.casesdata[scenario,bedtype]
@@ -78,7 +78,7 @@ function load_hhs(
 	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
 
-	node_locations = Dict(h => data.locations_latlong[h] for h in hospitals)
+	node_locations = Dict(h[1] => data.locations_latlong[h] for h in hospitals)
 
 	# adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
 	adj = adj = BitArray(ones(N,N) - diagm(ones(N)))
@@ -93,8 +93,9 @@ function load_hhs(
 		capacity = capacity,
 		adj = adj,
 		node_locations = node_locations,
-		node_names = hospitals,
-		node_names_abbrev = hospitals_abbrev,
+		node_names = hospital_names,
+		node_names_abbrev = hospital_abbrevs,
+		node_ids = hospitals,
 		extent = extent,
 		capacity_names = capacity_names,
 	)
@@ -110,9 +111,7 @@ function los_dist_default(bedtype::Symbol)
 	end
 end
 
-function hospitals_list(;region=nothing, names=nothing)
-	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
-
+function filter_hospitals(data; region=nothing, names=nothing)
 	if !isnothing(region) && region.region_type == :state
 		hospitals_info = filter(h -> h.state == region.region_name, data.location_meta)
 	elseif !isnothing(region) && region.region_type == :hospital_system
@@ -132,6 +131,13 @@ function hospitals_list(;region=nothing, names=nothing)
 	filter!(x -> !isnothing(x), hospitals_ind)
 	sort!(hospitals_ind)
 
+	return hospitals_ind
+end
+
+function hospitals_list(;region=nothing, names=nothing)
+	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
+
+	hospitals_ind = filter_hospitals(data, region=region, names=names)
 	hospitals = data.location_names[hospitals_ind]
 
 	casesdata = data.casesdata[:moderate,:allbeds]
