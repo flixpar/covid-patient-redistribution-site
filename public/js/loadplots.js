@@ -84,7 +84,11 @@ function makeLoadPlots(rawdata, capacityLevel=0) {
 		.style("font-size", "30px")
 		.text("COVID Occupancy by Hospital");
 
-	svg.attr("viewBox", [0, 0, totalWidth, totalHeight+legendHeight]);
+	makeYLabel(svg, "Occupancy");
+
+	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+	viewBox[3] += legendHeight;
+	svg.attr("viewBox", viewBox);
 
 	return svg.node();
 }
@@ -339,7 +343,24 @@ function makeOverallLoadPlot(overall_load) {
 	let sideLabelsArea = svg.append("g").attr("transform", `translate(${loadPlotsWidth-25}, 0)`);
 	sideLabelsArea = makeLoadLabels(sideLabelsArea, y, maxY);
 
+	makeYLabel(svg, "Occupancy");
+
 	return svg.node();
+}
+
+function makeYLabel(svg, text) {
+	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+	const svgHeight = viewBox[3];
+	svg.append("text")
+		.attr("text-anchor", "middle")
+		.attr("transform", `translate(${viewBox[0]-16},${svgHeight/2}) rotate(-90)`)
+		.style("font-family", loadPlotsFont)
+		.style("font-size", "18px")
+		.text(text);
+	viewBox[0] = viewBox[0] - 36;
+	viewBox[2] = viewBox[2] + 36;
+	svg.attr("viewBox", viewBox);
+	return svg;
 }
 
 function makeLoadPlotsLegend(svg, location_names, totalWidth) {
