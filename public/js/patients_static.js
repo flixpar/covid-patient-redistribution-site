@@ -261,14 +261,16 @@ function filterResponse(response_) {
 
 	const n = response.config.node_names.length;
 
-	response.config.node_names.push("Other");
-	response.config.node_names_abbrev.push("Other");
+	const otherHospitalsName = "Other Hospitals";
+
+	response.config.node_names.push(otherHospitalsName);
+	response.config.node_names_abbrev.push(otherHospitalsName);
 	response.beds.push(d3.sum(unselectedInd, i => response_.beds[i]));
 	response.capacity.push(d3.range(C).map(c => d3.sum(unselectedInd, i => response_.capacity[i][c])));
 	response.active.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active[i][t])));
 	response.active_null.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active_null[i][t])));
 	response.admitted.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.admitted[i][t])));
-	response.config.node_locations["Other"] = {
+	response.config.node_locations[otherHospitalsName] = {
 		lat: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].lat),
 		long: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].long),
 	};
