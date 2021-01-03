@@ -122,7 +122,7 @@ function filter_hospitals(data; region=nothing, names=nothing)
 		hospitals_info = data.location_meta
 	end
 
-	if !isnothing(names)
+	if !isnothing(names) && !isempty(names)
 		hospitals_info = filter(h -> h.name in names, hospitals_info)
 	end
 
@@ -134,13 +134,13 @@ function filter_hospitals(data; region=nothing, names=nothing)
 	return hospitals_ind
 end
 
-function hospitals_list(;region=nothing, names=nothing)
+function hospitals_list(;region=nothing, names=nothing, bedtype=:icu, scenario=:moderate)
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
 	hospitals_ind = filter_hospitals(data, region=region, names=names)
 	hospitals = data.location_names[hospitals_ind]
 
-	casesdata = data.casesdata[:moderate,:allbeds]
+	casesdata = data.casesdata[scenario, bedtype]
 
 	day0 = today()
 	day0_idx = (day0 - data.start_date).value + 1
