@@ -1,6 +1,7 @@
 .navbar {
 	border-bottom: 1px solid lightgray;
 	margin-bottom: 10px;
+	background-color: #f9f9f9 !important;
 }
 
 #navbar-brand-img {
@@ -9,9 +10,19 @@
 	margin-right: 5px;
 }
 
-@media screen and (min-width: 1024px) {
-	#navbar-main {
-		justify-content: center;
-		width: 100%;
-	}
+.navbar-brand > a {
+	font-weight: bold;
+}
+
+#navbar-menu {
+	text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#navbar-title > a {
+	color: #4a4a4a;
+	font-weight: bold;
 }
