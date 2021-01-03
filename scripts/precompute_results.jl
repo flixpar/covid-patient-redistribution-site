@@ -34,12 +34,9 @@ function precompute_result(params)
 		println("region: $(params.region), start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
 	end
 
-	hospitals_meta = EndpointHandler.get_hospital_list(region=params.region)
-	hospitals = [h["name"] for h in hospitals_meta]
-
 	result = EndpointHandler.handle_patients_request(
 		params.region,
-		hospitals,
+		String[],
 		params.scenario,
 		params.patient_type,
 
