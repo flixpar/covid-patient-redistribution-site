@@ -24,6 +24,7 @@ function generateContent(response) {
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
+	createSurgeTimeline(response);
 
 	setupTable(summary_data, is_wide=true, table_id="summary-table", title="Summary Statistics");
 	setupTable(full_results, is_wide=true, table_id="full-table",    title="Full Results");
@@ -38,6 +39,7 @@ const sectionInfo = [
 	{title: "Parameters",                      identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true, subtitle: "Where are additional COVID beds required?"},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
+	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
 	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: true},
 	{title: "Active COVID Patients",           identifier: "results-active",      reset:true,  showDefault: false},
