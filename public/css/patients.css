@@ -21,9 +21,9 @@
 	line-height: 1em !important;
 }
 
-/* .field:not(:last-child) {
+.field:not(:last-child) {
 	margin-bottom: 0px !important;
-} */
+}
 
 #form-submit {
 	line-height: 1em;
@@ -203,6 +203,7 @@ input[type="range"] {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	margin-bottom: 10px;
 }
 
 #static-params-form-select-area > .field {
