@@ -135,12 +135,12 @@ function createStatsSummary(rawdata, add_description=true) {
 	const sent_total = d3.sum(rawdata.sent, x => d3.sum(x, z => d3.sum(z)));
 	const sent_pct = sent_total / rawdata.total_patients;
 
-	addMetric("Required Surge Capacity (Without Transfers)", overflow_nosent);
-	addMetric("Required Surge Capacity (With Transfers)", overflow_sent);
+	addMetric("Required Surge Capacity (Without Optimal Transfers)", overflow_nosent);
+	addMetric("Required Surge Capacity (With Optimal Transfers)", overflow_sent);
 	addMetric("Reduction in Required Surge Capacity", (overflow_reduction * 100).toFixed(2) + "%");
 	addMetricSeparator();
-	addMetric("Max Required Surge Capacity (Without Transfers)", maxoverflow_nosent);
-	addMetric("Max Required Surge Capacity (With Transfers)", maxoverflow_sent);
+	addMetric("Max Required Surge Capacity (Without Optimal Transfers)", maxoverflow_nosent);
+	addMetric("Max Required Surge Capacity (With Optimal Transfers)", maxoverflow_sent);
 	addMetricSeparator();
 	addMetric("Transferred Patients", sent_total);
 	addMetric("Perecent of Patients Transferred", (sent_pct * 100).toFixed(2) + "%");

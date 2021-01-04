@@ -150,8 +150,8 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 		labelPosition = "left";
 	}
 
-	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Transfers)", labelPosition);
-	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Transfers)", labelPosition);
+	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Optimal Transfers)", labelPosition);
+	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Optimal Transfers)", labelPosition);
 	g3 = makeColorbar(g3, colorscale, colorbar_label);
 
 	if (debugMap) {
