@@ -1,5 +1,5 @@
 let recentResponse = null;
-const ipstackAPIKey = "5b8931a3a0e596a8a1bf3a1a2a531cfe";
+const apiKey = "d8c1e45132c880c51bd4310f76b12ad9cf21d04c5ae1f1a2ccbb8c4c";
 
 
 function handleResponse(response, status, xhr) {
@@ -23,7 +23,7 @@ function hideProgressbar() {
 }
 
 function getData() {
-	$.get(`http://api.ipstack.com/check?access_key=${ipstackAPIKey}`, d => {
+	$.get(`https://api.ipdata.co/?api-key=${apiKey}`, d => {
 		const loc = {lat: d.latitude, long: d.longitude};
 		$.get("/api/hospital-selection", loc, handleResponse);
 	});
