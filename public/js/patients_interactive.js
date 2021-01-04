@@ -39,6 +39,8 @@ function handleResponse(response, status, xhr) {
 
 	setupDownloads(response);
 
+	enableHowtoButtons();
+
 	console.log("Done.");
 }
 

@@ -217,3 +217,24 @@ input[type="range"] {
 		padding-right: 0 !important;
 	}
 }
+
+.description-howto-label {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.description-howto-text {
+}
+
+.hidden {
+	display: none;
+}
+
+.icon-expand-text {
+	vertical-align: text-bottom;
+	margin-left: 0.1em;
+}
+
+table.is-hoverable-custom > tr:hover {
+	background-color: #fafafa;
+}

@@ -32,6 +32,8 @@ function generateContent(response) {
 
 	setupDownloads(response);
 
+	enableHowtoButtons();
+
 	console.log("Done.");
 }
 
