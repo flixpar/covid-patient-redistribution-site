@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>COVID-19 Patient Redistribution</title>
+
+	<link rel="stylesheet" href="/css/nav.css">
+	<link rel="stylesheet" href="/css/patients.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css">
+
+	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="/js/menu.js"></script>
+</head>
+
+<body>
+
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a href="/patients-static" class="navbar-item">COVID-19 Capacity Management</a>
+			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbar-menu" class="navbar-menu">
+			<div id="navbar-main" class="navbar-start">
+				<a href="/patients-static" class="navbar-item">Overview</a>
+				<a href="/patients-interactive" class="navbar-item">Details</a>
+				<a href="/about" class="navbar-item">About</a>
+			</div>
+		</div>
+	</nav>
+
+	<section class="section">
+
+		<div class="container">
+			<h1 class="title">Hospital Selection</h1>
+		</div>
+
+		<div class="container" id="results-container">
+			<div id="progressbar-area" class="column is-10 is-offset-1">
+				<div class="notification">
+					Updating...
+					<br>
+					Note: This site solves the optimization model in real time on our server, so you may have to wait briefly while it returns an answer.
+				</div>
+				<progress class="progress is-small is-info" max="100"></progress>
+			</div>
+			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
+				<div class="notification is-danger">Error</div>
+			</div>
+			<div id="result-area" class="column is-12"></div>
+		</div>
+
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
+	<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+	<script src="https://unpkg.com/d3@6"></script>
+
+	<script src="https://unpkg.com/mapbox-gl@2.0.1/dist/mapbox-gl.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/mapbox-gl@2.0.1/dist/mapbox-gl.css">
+
+	<style>
+		.map-wrapper {
+			position: relative;
+			width: 100%;
+			height: 500px;
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		.marker {
+			border: none;
+			cursor: pointer;
+			height: 24px;
+			width: 18px;
+		}
+	</style>
+
+	<script src="/js/locations_map.js"></script>
+	<script src="/js/hospital_selection.js"></script>
+
+</body>
+
+</html>

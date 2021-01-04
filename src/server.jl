@@ -27,6 +27,10 @@ route("/patients-interactive") do
 	serve_static_file("html/patients-interactive.html")
 end
 
+route("/hospital-selection") do
+	serve_static_file("html/hospital-selection.html")
+end
+
 route("/about") do
 	serve_static_file("html/about.html")
 end
@@ -87,6 +91,20 @@ route("/api/regions-list", method=GET) do
 		region_type = :any
 	end
 	response = get_regions_list(region_type)
+	return json(response)
+end
+
+route("/api/hospital-selection") do
+	if haskey(@params, :lat) && haskey(@params, :long)
+		loc = (lat = parse(Float64, @params(:lat)), long = parse(Float64, @params(:long)))
+	elseif haskey(@params, :zipcode)
+		@warn "Query by zipcode not yet implemented"
+		loc = (lat = 39.2961773, long = -76.5939447) # JHH (temporary)
+	else
+		@error "No location to use for hospital selection"
+		return
+	end
+	response = handle_hospital_selection(loc)
 	return json(response)
 end
 

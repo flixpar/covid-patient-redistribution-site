@@ -9,11 +9,13 @@ using LinearAlgebra
 
 using DataLoader
 using PatientAllocation
+using HospitalSelection
 import PatientAllocationResults
 
 export handle_patients_request
 export get_hospital_list
 export get_regions_list
+export handle_hospital_selection
 
 
 function handle_patients_request(
@@ -174,6 +176,11 @@ end
 function get_regions_list(region_type::Symbol=:any)
 	regions = regions_list(region_type)
 	return regions
+end
+
+function handle_hospital_selection(loc)
+	scores = score_hospitals(loc)
+	return scores
 end
 
 end;
