@@ -20,7 +20,6 @@ function generateContent(response) {
 
 	createMap(response, "overflow_dynamic");
 
-	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
@@ -44,7 +43,6 @@ const sectionInfo = [
 	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
 	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: true},
-	{title: "Active COVID Patients",           identifier: "results-active",      reset:true,  showDefault: false},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
 	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
 ];
