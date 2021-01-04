@@ -27,6 +27,7 @@ function handleResponse(response, status, xhr) {
 	createStatsSummary(response);
 
 	createMap(response, "overflow_dynamic");
+	createMap(response, "load", "transfers", false);
 
 	createActivePlot(active_patients, active_patients_nosent, capacity, config);
 	createOverallLoadPlot(response);
