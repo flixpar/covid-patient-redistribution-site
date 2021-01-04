@@ -95,6 +95,7 @@ function createStatsSummary(rawdata, add_description=true) {
 
 	let table = document.createElement("table");
 	table.id = "metrics-table";
+	table.className = "is-hoverable-custom";
 	function addMetric(m_name, m_value) {
 		let row = document.createElement("tr");
 		let col1 = document.createElement("td");
