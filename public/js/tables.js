@@ -160,7 +160,7 @@ function updateFilterBy() {
 		let options = recentResponse.config.node_names;
 		createOptions(options, filterValueSelect);
 	} else if (filterby === "date") {
-		let allDates = recentResponse.full_results.columns[1];
+		let allDates = recentResponse.full_results.date;
 		let uniqueDates = allDates.filter(function(item, pos){
 			return allDates.indexOf(item) == pos; 
 		});
@@ -199,17 +199,9 @@ function filterFullTable() {
 	};
 
 	let tableData = JSON.parse(JSON.stringify(recentResponse.full_results));
-	let colIdx = -1;
-	if (filterby === "location") {
-		colIdx = tableData.colindex.lookup.location - 1;
-	} else {
-		colIdx = tableData.colindex.lookup.day - 1;
-	}
 
 	const filterValue = document.getElementById("filter-value-select").value;
-
-	let values = tableData.columns[colIdx];
-	console.log(values);
+	let values = tableData[filterby];
 	let filterInd = [];
 	for (let i = 0; i < values.length; i++) {
 		if (values[i] == filterValue) {
@@ -217,8 +209,8 @@ function filterFullTable() {
 		}
 	}
 
-	for (const i in tableData.columns) {
-		tableData.columns[i] = tableData.columns[i].filter((_,j) => filterInd.indexOf(j) >= 0);
+	for (const col of Object.keys(tableData)) {
+		tableData[col] = tableData[col].filter((_,j) => filterInd.indexOf(j) >= 0);
 	}
 
 	setupTable(tableData, is_wide=true, table_id="full-table", title="Full Results", replace=true);
