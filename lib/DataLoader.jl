@@ -78,10 +78,9 @@ function load_hhs(
 	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
 
-	node_locations = Dict(h[1] => data.locations_latlong[h] for h in hospitals)
+	node_locations = Dict(h[1] => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for h in hospitals)
 
-	# adj = (data.dist_matrix[hospital_ind,hospital_ind] .<= 1)
-	adj = adj = BitArray(ones(N,N) - diagm(ones(N)))
+	adj = fully_connected(N)
 
 	extent = (extent_type = :points, extent_regions = [])
 
@@ -176,6 +175,12 @@ function regions_list(region_type::Symbol=:all)
 		filter!(r -> r.region_type == region_type, data)
 	end
 	return data
+end
+
+function fully_connected(n::Int; self_edges::Bool=false)
+	if (self_edges) return BitArray(ones(Bool, n, n)) end
+	adj = BitArray(ones(Bool, n, n) - diagm(ones(Bool, n)))
+	return adj
 end
 
 end
