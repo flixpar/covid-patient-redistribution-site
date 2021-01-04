@@ -1,6 +1,7 @@
 using Genie
 using Genie.Router
 using Genie.Requests
+using Genie.Renderer
 using Genie.Renderer.Json
 
 using Dates
@@ -12,7 +13,7 @@ using EndpointHandler
 
 
 route("/") do
-	serve_static_file("html/home.html")
+	redirect("/patients-static")
 end
 
 route("/home") do
