@@ -39,8 +39,8 @@ function createMap(rawdata, metric, transfers="both", add_description=true) {
 		data1 = data.load_null;
 		data2 = data.load;
 		colorscale = getLoadColorscale(data.load_null);
-		plotTitle = "COVID Patient Load";
-		colorbarLabel = "Normalized Load";
+		plotTitle = "COVID Patient Occupancy";
+		colorbarLabel = "Normalized Occupancy";
 	} else if (metric == "max_load") {
 		dynamic = false;
 		const data = extractDataStatic(rawdata);
@@ -176,7 +176,7 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	return svg.node();
 }
 
-function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, plot_title) {
+function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, plot_title, colorbarLabel) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 0.9 * mapWidth;
@@ -186,7 +186,7 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 
 	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, plot_title);
-	g2 = makeColorbar(g2, colorscale, "Required Surge Capacity (Bed-Days)");
+	g2 = makeColorbar(g2, colorscale, colorbarLabel);
 
 	return svg.node();
 }
