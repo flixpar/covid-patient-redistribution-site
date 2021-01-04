@@ -3,7 +3,8 @@ toTitlecase = s => s.split(' ').map(w => w[0].toUpperCase() + w.substr(1)).join(
 function setupTable(table_data, is_wide=false, table_id=null, title=null, replace=false) {
 
 	const cols = Object.keys(table_data);
-	const colNames = cols.map(c => toTitlecase(c.replace(/_/g, " ")));
+	let colNames = cols.map(c => toTitlecase(c.replace(/_/g, " ")));
+	colNames = colNames.map(c => (columnConvert[c] == null) ? c : columnConvert[c]);
 
 	let table = document.createElement("table");
 	table.id = table_id;
@@ -297,16 +298,20 @@ function downloadTableAsCSV(table, fn) {
 }
 
 const column_descriptions = {
-	"Total Sent": "Total number of patients that should be sent to another state according to our model.",
-	"Total Received": "Total number of patients that would be received from another state under our model.",
-	"Overflow": "Number of patient-days where a patient does not have a hospital bed available to them.",
-	"Capacity": "Number of hospital beds in the state.",
-	"New Patients": "Forecasted number of people who need to be admitted to the hospital on a given day in a given state.",
-	"Sent": "Number of patients that should be sent to another state on a given day according to our model.",
-	"Received": "Number of patients that would be received from another state on a given day under our model.",
-	"Active Patients": "Expected number of patients in a given state on a given day after re-distribution.",
-	"Average Load" : "Percentage of beds dedicated to COVID patients that are filled, on average.",
-	"Load" : "Percentage of beds dedicated to COVID patients that are filled.",
+	"Total Sent": "Total number of patients that should be sent to another hospital according to our model.",
+	"Total Received": "Total number of patients that would be received from another hospital under our model.",
+	"Overflow (Optimal Transfers)": "Number of patient-days where a patient does not have a hospital bed available to them, assuming optimal patient transfers.",
+	"Overflow (Without Optimal Transfers)": "Number of patient-days where a patient does not have a hospital bed available to them, according to the data/forecast.",
+	"Capacity": "Number of COVID-dedicated beds in the hospital.",
+	"New Patients": "Forecasted number of people who need to be admitted to the hospital on a given day.",
+	"Optimal Transfers (Sent)": "Number of patients that should be sent to another hospital on a given day according to our model.",
+	"Optimal Transfers (Received)": "Number of patients that would be received from another hospital on a given day under our model.",
+	"Active Patients (Optimal Transfers)": "Expected number of patients in a given hospital on a given day, assuming optimal transfers.",
+	"Active Patients (Without Optimal Transfers)": "Expected number of patients in a given hospital on a given day, according to the data/forecasts.",
+	"Occupancy (Optimal Transfers)" : "Percentage of beds dedicated to COVID patients that are filled, assuming optimal transfers.",
+	"Occupancy (Without Optimal Transfers)" : "Percentage of beds dedicated to COVID patients that are filled, according to the data/forecasts.",
+	"Average Occupancy (Optimal Transfers)" : "Percentage of beds dedicated to COVID patients that are filled, on average, assuming optimal transfers.",
+	"Average Occupancy (Without Optimal Transfers)" : "Percentage of beds dedicated to COVID patients that are filled, on average, according to the data/forecasts.",
 	"Date": "Date in YYYY-MM-DD format.",
 };
 function addColumnTooltips(tableId) {
@@ -317,3 +322,16 @@ function addColumnTooltips(tableId) {
 		}
 	});
 }
+
+const columnConvert = {
+	"Active Patients": "Active Patients (Optimal Transfers)",
+	"Overflow": "Overflow (Optimal Transfers)",
+	"Load": "Occupancy (Optimal Transfers)",
+	"Overall Load": "Average Occupancy (Optimal Transfers)",
+	"Active Patients Nosent": "Active Patients (Without Optimal Transfers)",
+	"Overflow Nosent": "Overflow (Without Optimal Transfers)",
+	"Load Nosent": "Occupancy (Without Optimal Transfers)",
+	"Overall Load Nosent": "Average Occupancy (Without Optimal Transfers)",
+	"Sent": "Optimal Transfers (Sent)",
+	"Received": "Optimal Transfers (Received)",
+};
