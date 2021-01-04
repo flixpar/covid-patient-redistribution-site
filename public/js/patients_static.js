@@ -289,10 +289,10 @@ function filterResponse(response_) {
 	return response;
 }
 
-function sendUpdateQuery(latest=false) {
+function sendUpdateQuery(latest=true) {
 	console.log("Querying server...");
-	let start_date_str = document.getElementById("form-start-date").value.replaceAll("-", "");
-	start_date_str = latest ? "latest" : start_date_str;
+	const start_date = document.getElementById("form-start-date").value;
+	const start_date_str = latest ? "latest" : start_date.replaceAll("-", "");
 	const region = document.getElementById("form-region").value;
 	const scenario = document.getElementById("form-scenario").value.toLowerCase();
 	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
@@ -304,13 +304,7 @@ function sendUpdateQuery(latest=false) {
 		contentType: "application/json; charset=utf-8",
 		success: handleResponse,
 		beforeSend: showProgressbar,
-		error: e => {
-			if (!latest) {
-				sendUpdateQuery(true);
-			} else {
-				ajaxErrorHandler(e);
-			}
-		},
+		error: ajaxErrorHandler,
 	});
 }
 
