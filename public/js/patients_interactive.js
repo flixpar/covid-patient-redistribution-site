@@ -47,14 +47,14 @@ function handleResponse(response, status, xhr) {
 
 function makeSections() {
 	const sectionInfo = [
-		{title: "Info",                                   identifier: "casestudy-info",      showDefault: true},
-		{title: "Healthcare System Load",                 identifier: "results-totalload",   showDefault: true},
-		{title: "Hospital Loads",                         identifier: "results-load",        showDefault: true},
-		{title: "Required Surge Capacity Map",            identifier: "results-overflowmap", showDefault: true},
-		{title: "Active COVID Patients",                  identifier: "results-active",      showDefault: true},
-		{title: "Patient Transfer Flows",                 identifier: "results-transfers",   showDefault: true},
-		{title: "Metrics",                                identifier: "results-metrics",     showDefault: false},
-		{title: "Raw Results",                            identifier: "results-raw",         showDefault: false},
+		{title: "Info",                         identifier: "casestudy-info",      showDefault: true},
+		{title: "System Map",                   identifier: "results-overflowmap", showDefault: true, subtitle: "Where are additional COVID beds required?"},
+		{title: "Patient Transfer Flows",       identifier: "results-transfers",   showDefault: true, subtitle: "Where should patients be transfered?"},
+		{title: "Total COVID Occupancy",        identifier: "results-totalload",   showDefault: true},
+		{title: "Hospital COIVD Occupancy",     identifier: "results-load",        showDefault: true},
+		{title: "Active COVID Patients",        identifier: "results-active",      showDefault: true},
+		{title: "Metrics",                      identifier: "results-metrics",     showDefault: false},
+		{title: "Raw Results",                  identifier: "results-raw",         showDefault: false},
 	]
 
 	for (s of sectionInfo) {
