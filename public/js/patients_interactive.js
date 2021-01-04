@@ -33,6 +33,7 @@ function handleResponse(response, status, xhr) {
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
+	createSurgeTimeline(response);
 
 	setupTable(summary_data, is_wide=true, table_id="summary-table", title="Summary Statistics");
 	setupTable(full_results, is_wide=true, table_id="full-table",    title="Full Results");
@@ -50,6 +51,7 @@ function makeSections() {
 		{title: "Info",                         identifier: "casestudy-info",      showDefault: true},
 		{title: "System Map",                   identifier: "results-overflowmap", showDefault: true, subtitle: "Where are additional COVID beds required?"},
 		{title: "Patient Transfer Flows",       identifier: "results-transfers",   showDefault: true, subtitle: "Where should patients be transfered?"},
+		{title: "Surge Timeline",               identifier: "results-surgetimeline", showDefault: true, subtitle: "When is additional capacity needed?"},
 		{title: "Total COVID Occupancy",        identifier: "results-totalload",   showDefault: true},
 		{title: "Hospital COIVD Occupancy",     identifier: "results-load",        showDefault: true},
 		{title: "Active COVID Patients",        identifier: "results-active",      showDefault: true},
