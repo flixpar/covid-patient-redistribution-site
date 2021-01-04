@@ -177,6 +177,35 @@ function regions_list(region_type::Symbol=:all)
 	return data
 end
 
+function haversine_distance(loc1, loc2)
+	R = 6371e3
+
+	φ1 = loc1.lat * π/180
+	φ2 = loc2.lat * π/180
+	Δφ = (loc2.lat-loc1.lat) * π/180
+	Δλ = (loc2.long-loc1.long) * π/180
+
+	a = (sin(Δφ/2) * sin(Δφ/2)) + (cos(φ1) * cos(φ2) * sin(Δλ/2) * sin(Δλ/2))
+	c = 2 * atan(sqrt(a), sqrt(1-a))
+
+	dist = R * c / 1000
+
+	return dist
+end
+
+function haversine_distance_matrix(locations)
+	N = length(locations)
+	distancematrix = zeros(Float32, N, N)
+	for i in 1:N
+		for j in i+1:N
+			dist = haversine_distance(locations[i], locations[j])
+			distancematrix[i,j] = dist
+			distancematrix[j,i] = dist
+		end
+	end
+	return distancematrix
+end
+
 function fully_connected(n::Int; self_edges::Bool=false)
 	if (self_edges) return BitArray(ones(Bool, n, n)) end
 	adj = BitArray(ones(Bool, n, n) - diagm(ones(Bool, n)))
