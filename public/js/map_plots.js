@@ -772,6 +772,9 @@ function pointsToGeoJSON(locations) {
 	geojson.features = [];
 	for (const loc_name in locations) {
 		const loc = locations[loc_name];
+		if (loc.lat == 0 && loc.long == 0) {
+			continue;
+		}
 		geojson.features.push({
 			"type": "Feature",
 			"properties": {},
