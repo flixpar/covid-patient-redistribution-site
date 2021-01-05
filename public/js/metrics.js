@@ -1,3 +1,9 @@
+import {getSection} from "./patients_common.js";
+import {metricsDescription} from "./figure_text.js";
+
+export {createSurgeCapacityMetrics, createStatsSummary};
+
+
 function createSurgeCapacityMetrics(rawdata) {
 	const N = rawdata.config.node_names.length;
 	const T = rawdata.config.dates.length;
@@ -118,7 +124,7 @@ function createStatsSummary(rawdata, add_description=true) {
 
 	function addMetricSeparator() {
 		let lastRow = table.childNodes[table.childElementCount-1];
-		for (elem of lastRow.childNodes) {
+		for (const elem of lastRow.childNodes) {
 			elem.style.borderBottom = "1px solid lightgray";
 		}
 	}
