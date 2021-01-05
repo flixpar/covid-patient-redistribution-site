@@ -59,7 +59,7 @@ async function addMarkers(map, response) {
 
 		const popupContent = `
 			<h3>${pt.properties.name}</h3>
-			<p>Score: ${pt.properties.score.toFixed(2)}</p>
+			<p>Score: ${(pt.properties.score*100).toFixed(0)}/100</p>
 		`;
 		const popup = new mapboxgl.Popup({offset: 15}).setHTML(popupContent);
 
@@ -96,6 +96,8 @@ function computeData(response) {
 				name: response.hospitals[i][0],
 				id: response.hospitals[i][1],
 				score: response.scores[i],
+				distance: response.distances[i],
+				occupancy: response.load[i],
 			},
 		};
 		geojson.features.push(pt);
@@ -107,6 +109,6 @@ function computeData(response) {
 function getScoreColorscale(response) {
 	const minScore = d3.min(response.scores);
 	const maxScore = d3.max(response.scores);
-	const colorscale = d3.scaleSequential(d3.interpolateRdYlGn).domain([maxScore, minScore]);
+	const colorscale = d3.scaleSequential(d3.interpolateRdYlGn).domain([minScore, maxScore]);
 	return colorscale;
 }
