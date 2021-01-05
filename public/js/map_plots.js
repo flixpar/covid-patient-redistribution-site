@@ -16,7 +16,7 @@ const thicknessMult = 0.5;
 
 const mapPlotFont = "sans-serif";
 
-const mapAnimationTime = 30000;
+const mapAnimationFrameTime = 1000;
 const mapAnimationDelayTime = 2000;
 
 const debugMap = false;
@@ -112,11 +112,13 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 	loadGeometry().then(geometry => {
 		let fig;
 		if (transfers == "both") {
-			fig = makeGroupedChoropleth(dynamic, rawdata, data1, data2, links, colorscale, geometry, plotTitle, colorbarLabel);
+			fig = makeGroupedChoropleth(dynamic, rawdata, data1, data2, links, colorscale, geometry, metric, plotTitle, colorbarLabel);
 		} else if (transfers == "no_transfers") {
-			fig = makeSingleChoropleth(dynamic, rawdata, data1, links, colorscale, geometry, plotTitle, colorbarLabel);
+			plotTitle += " (Without Optimal Transfers)";
+			fig = makeSingleChoropleth(dynamic, rawdata, data1, links, colorscale, geometry, metric+"_notransfers", plotTitle, colorbarLabel);
 		} else if (transfers == "transfers") {
-			fig = makeSingleChoropleth(dynamic, rawdata, data2, links, colorscale, geometry, plotTitle, colorbarLabel);
+			plotTitle += " (With Optimal Transfers)";
+			fig = makeSingleChoropleth(dynamic, rawdata, data2, links, colorscale, geometry, metric+"_transfers", plotTitle, colorbarLabel);
 		}
 		figContainer.appendChild(fig);
 		generateFigureDownloadButtons(fig, "hospitals-map");
@@ -127,7 +129,7 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 ////// Plot Components /////
 ////////////////////////////
 
-function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, geometries, plot_title, colorbar_label) {
+function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, geometries, metric_name, plot_title, colorbar_label) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	let plotWidth, plotHeight;
@@ -153,8 +155,8 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 		labelPosition = "left";
 	}
 
-	g1 = makeMap(g1, svg, rawdata, data1,   null, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(Without Optimal Transfers)", labelPosition);
-	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, "(With Optimal Transfers)", labelPosition);
+	g1 = makeMap(g1, svg, rawdata, data1, null, colorscale, geometries, plotWidth, plotHeight, metric_name+"_notransfers", make_dynamic, "(Without Optimal Transfers)", labelPosition);
+	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, metric_name+"_transfers", make_dynamic, "(With Optimal Transfers)", labelPosition);
 	g3 = makeColorbar(g3, colorscale, colorbar_label);
 
 	if (debugMap) {
@@ -179,7 +181,7 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	return svg.node();
 }
 
-function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, plot_title, colorbarLabel) {
+function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, metric_name, plot_title, colorbarLabel) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 0.9 * mapWidth;
@@ -188,7 +190,7 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
 	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
 
-	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, make_dynamic, plot_title);
+	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, metric_name, make_dynamic, plot_title);
 	g2 = makeColorbar(g2, colorscale, colorbarLabel);
 
 	return svg.node();
@@ -248,7 +250,7 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 ///////// Plot Maps ////////
 ////////////////////////////
 
-function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, dynamic=true, title=null, titlePosition="top") {
+function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, metric_name, dynamic=true, title=null, titlePosition="top") {
 
 	if (dynamic) {
 		while (mapPlotIntervals.length != 0) {
@@ -262,7 +264,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 	const dates = rawdata.config.dates.map(d => new Date(Date.parse(d)))
 	const T = dates.length;
 
-	const tooltip = new MapTooltip(svg, globalSVG, rawdata);
+	const tooltip = new MapTooltip(svg, globalSVG, rawdata, metric_name);
 
 	const selected_extent = getExtent(rawdata.config, geometries);
 	let map_projection = d3.geoMercator().fitExtent(
@@ -434,6 +436,8 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 	}
 
 	function animate(t) {
+		tooltip.update(t);
+
 		if (colorRegions) {
 			primaryRegions.style("fill", d => {
 				const j = rawdata.config.node_names.indexOf(d.properties.name);
@@ -477,6 +481,8 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 	}
 
 	if (dynamic) {
+		const mapAnimationTime = mapAnimationFrameTime * T;
+
 		const delay = d3.scaleTime()
 			.domain([dates[0], dates[T-1]])
 			.range([0, mapAnimationTime]);
@@ -510,10 +516,13 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 ////////////////////////////
 
 class MapTooltip {
-	constructor(svg, globalSVG, response) {
+	constructor(svg, globalSVG, response, metric_name) {
 		this.svg = globalSVG;
 		this.response = response;
+		this.metric_name = metric_name;
 		this.highlight = null;
+		this.current_t = 0;
+		this.current_loc = 0;
 
 		let tmpSVG = d3.create("svg");
 		let tooltipContainer = tmpSVG.append("g")
@@ -531,7 +540,7 @@ class MapTooltip {
 			.attr("x", -60)
 			.attr("y", 8)
 			.attr("width", 120)
-			.attr("height", 24)
+			.attr("height", 56)
 			.attr("fill", "white")
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.5);
@@ -553,12 +562,14 @@ class MapTooltip {
 			.attr("x", -60)
 			.attr("y", 8)
 			.attr("width", 120)
-			.attr("height", 24)
+			.attr("height", 56)
 			.attr("fill", "white");
 
 		this.tooltipNode = tooltipNode;
 
-		this.textLine1 = tooltipNode.append("text").attr("y", "24").node();
+		this.textLine1 = tooltipNode.append("text").attr("y", 24).node();
+		this.textLine2 = tooltipNode.append("text").attr("y", 40).node();
+		this.textLine3 = tooltipNode.append("text").attr("y", 56).node();
 
 		this.node = tooltipNode.node();
 		this.tooltipContainer = tooltipContainer.node();
@@ -567,7 +578,11 @@ class MapTooltip {
 	show(e,d) {
 		this.node.removeAttribute("display");
 
+		this.current_loc = this.response.config.node_names.indexOf(d);
+
 		this.textLine1.textContent = d;
+		this.textLine2.textContent = `Capacity: ${this.response.beds[this.current_loc].toFixed(0)}`;
+		this.update(this.current_t);
 
 		this.highlight = e.srcElement.cloneNode();
 		this.highlight.setAttribute("fill", "none");
@@ -593,7 +608,8 @@ class MapTooltip {
 			this.bottomTab.node().removeAttribute("display");
 		}
 
-		const labelWidth = d.length * 12 * 0.6 + 20;
+		const maxTextLength = d3.max([this.textLine1, this.textLine2, this.textLine3].map(l => l.textContent.length));
+		const labelWidth = maxTextLength * 12 * 0.6 + 20;
 		if (labelWidth > 120) {
 			this.bubble.attr("width", labelWidth);
 			this.bubble.attr("x", -labelWidth/2);
@@ -612,6 +628,29 @@ class MapTooltip {
 
 	build() {
 		this.svg.append(() => this.tooltipContainer);
+	}
+
+	update(t) {
+		this.current_t = t;
+
+		const locIdx = this.current_loc;
+		const capacity = this.response.beds[locIdx];
+
+		if (this.metric_name == "overflow_dynamic_notransfers") {
+			const required_capacity = this.response.active_null[locIdx][this.current_t];
+			this.textLine3.textContent = `Required Capacity: ${required_capacity.toFixed(0)}`;
+		} else if (this.metric_name == "overflow_dynamic_transfers") {
+			const required_capacity = this.response.active[locIdx][this.current_t];
+			this.textLine3.textContent = `Required Capacity: ${required_capacity.toFixed(0)}`;
+		} else if (this.metric_name == "load_notransfers") {
+			const active = this.response.active_null[locIdx][this.current_t];
+			const load = active / capacity;
+			this.textLine3.textContent = `Occupancy: ${(load * 100).toFixed(0)}%`;
+		} else if (this.metric_name == "load_transfers") {
+			const active = this.response.active[locIdx][this.current_t];
+			const load = active / capacity;
+			this.textLine3.textContent = `Occupancy: ${(load * 100).toFixed(0)}%`;
+		}
 	}
 }
 
