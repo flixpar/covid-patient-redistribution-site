@@ -28,6 +28,8 @@ function createSurgeTimeline(response, add_description=true) {
 
 	const fig = makeSurgeTimeline(response, true, true);
 	section.appendChild(fig);
+
+	generateFigureDownloadButtons(fig, "surgetimeline");
 }
 
 function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
@@ -136,6 +138,7 @@ function makeSurgeTimelineAxis(svg, xScale, response, debug=false) {
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-width", 0.25)
 			.attr("stroke-opacity", 0.65)
+			.attr("stroke", "black")
 		);
 
 	svg.append("g")
@@ -161,6 +164,10 @@ function makeSurgeTimelineAxis(svg, xScale, response, debug=false) {
 		.call(g => g.selectAll(".tick line")
 			.attr("stroke-width", 0.5)
 			.attr("stroke-opacity", 1.0)
+			.attr("stroke", "black")
+		)
+		.call(g => g.selectAll(".tick text")
+			.attr("fill", "black")
 		);
 
 	svg.append("g")
