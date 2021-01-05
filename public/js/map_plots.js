@@ -25,8 +25,11 @@ let mapPlotIntervals = [];
 
 let storedGeometry = null;
 
+import {overflowmapDescription} from "./figure_text.js";
+import {generateFigureDownloadButtons} from "./patients_common.js";
 
-function createMap(rawdata, metric, transfers="both", add_description=true) {
+
+export function createMap(rawdata, metric, transfers="both", add_description=true) {
 	let data1, data2;
 	let colorscale;
 	let plotTitle, colorbarLabel;

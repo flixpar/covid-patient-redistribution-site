@@ -16,8 +16,10 @@ const bedsLineWidth = 8;
 
 const addPoints = true;
 
+import {activeplotDescription} from "./figure_text.js";
 
-function createActivePlot(active, active_null, capacity, config, add_description=true) {
+
+export function createActivePlot(active, active_null, capacity, config, add_description=true) {
 	const N = capacity.length;
 	const T = config.dates.length;
 	const C = capacity[0].length;

@@ -1,4 +1,8 @@
-toTitlecase = s => s.split(' ').map(w => w[0].toUpperCase() + w.substr(1)).join(' ');
+import {getSection, createInfo} from "./patients_common.js";
+export {setupTable, setupTableFilter, setupDownloads};
+
+
+const toTitlecase = s => s.split(' ').map(w => w[0].toUpperCase() + w.substr(1)).join(' ');
 
 function setupTable(table_data, is_wide=false, table_id=null, title=null, replace=false) {
 
@@ -26,7 +30,7 @@ function setupTable(table_data, is_wide=false, table_id=null, title=null, replac
 	const nrows = table_data[cols[0]].length;
 	for (let i = 0; i < nrows; i++) {
 		let row = document.createElement("tr");
-		for (colName of cols) {
+		for (const colName of cols) {
 			const val = table_data[colName][i];
 			let el = document.createElement("td");
 			if (typeof val == "string") {

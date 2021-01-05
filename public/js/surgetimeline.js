@@ -11,8 +11,12 @@ const surgeTimelineColorscale = {
 	2: "red",
 };
 
+import {generateFigureDownloadButtons} from "./patients_common.js";
+import {surgeTimelineDescription} from "./figure_text.js";
+import {getDateIntervals} from "./loadplots.js";
 
-function createSurgeTimeline(response, add_description=true) {
+
+export function createSurgeTimeline(response, add_description=true) {
 	const section = document.getElementById("section-results-surgetimeline");
 	if (add_description) {
 		let description = document.createElement("p");

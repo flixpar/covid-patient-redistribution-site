@@ -1,7 +1,15 @@
-console.log("Starting!");
-
-let container = document.getElementById("result-area");
-let recentResponse = null;
+export {
+	makeSection,
+	getSection,
+	createInfo,
+	showProgressbar,
+	hideProgressbar,
+	ajaxErrorHandler,
+	validateForm,
+	generateFigureDownloadButtons,
+	getRegions,
+	createHospitalsSelect,
+};
 
 
 function makeSection(sectionInfo) {
@@ -83,7 +91,7 @@ function hideProgressbar() {
 function ajaxErrorHandler() {
 	$("#error-area").removeClass("is-hidden");
 	$("#progressbar-area").hide();
-	container.innerHTML = "";
+	document.getElementById("result-area").innerHTML = "";
 }
 
 function setDefaultDates() {
@@ -289,7 +297,7 @@ function getRegions() {
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
 		region_select.innerHTML = "";
-		for (region of regions) {
+		for (const region of regions) {
 			let opt = document.createElement("option");
 			opt.text = region.region_name;
 			if (region.region_name == default_region) {
@@ -478,4 +486,8 @@ function createHospitalsSelect(data, staticPage=true) {
 
 	}
 }
+
+const tooltip_content = {
+	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
+};
 

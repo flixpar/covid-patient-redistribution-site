@@ -1,26 +1,26 @@
+import * as common from "./patients_common.js";
+import {createMap} from "./map_plots.js";
+import {createSurgeTimeline} from "./surgetimeline.js";
+import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
+import {createTransfersSankey} from "./transfers_sankey.js";
+import {createActivePlot} from "./activeplot.js";
+import {createStatsSummary} from "./metrics.js";
+import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
+import {enableHowtoButtons} from "./figure_text.js";
+
 let hospitals_meta_list = null;
+let recentResponse = null;
+
 
 function handleResponse(response, status, xhr) {
 	console.log("Updating...");
-	hideProgressbar();
-	container.innerHTML = "";
-
+	common.hideProgressbar();
+	document.getElementById("result-area").innerHTML = "";
 	recentResponse = response;
-
-	const summary_data = response.summary;
-	const full_results = response.full_results;
-	const sent_matrix  = response.sent_matrix;
-	const net_sent     = response.net_sent;
-	const sent         = response.sent;
-	const beds         = response.beds;
-	const capacity     = response.capacity;
-	const active_patients = response.active;
-	const active_patients_nosent = response.active_null;
-	const config       = response.config;
 
 	makeSections();
 
-	let section = getSection("casestudy-info");
+	let section = common.getSection("casestudy-info");
 	let sectionContainer = section.parentElement;
 	sectionContainer.remove();
 
@@ -29,14 +29,14 @@ function handleResponse(response, status, xhr) {
 	createMap(response, "overflow_dynamic");
 	createMap(response, "load", "transfers", false);
 
-	createActivePlot(active_patients, active_patients_nosent, capacity, config);
+	createActivePlot(response.active, response.active_null, response.capacity, response.config);
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
 	createSurgeTimeline(response);
 
-	setupTable(summary_data, is_wide=true, table_id="summary-table", title="Summary Statistics");
-	setupTable(full_results, is_wide=true, table_id="full-table",    title="Full Results");
+	setupTable(response.summary, true, "summary-table", "Summary Statistics");
+	setupTable(response.full_results, true, "full-table", "Full Results");
 	setupTableFilter("full-table");
 
 	setupDownloads(response);
@@ -59,8 +59,8 @@ function makeSections() {
 		{title: "Raw Results",                  identifier: "results-raw",         showDefault: false},
 	]
 
-	for (s of sectionInfo) {
-		makeSection(s)
+	for (const s of sectionInfo) {
+		common.makeSection(s)
 	}
 }
 
@@ -71,22 +71,22 @@ function getHospitals() {
 	};
 	let request = $.get("/api/hospital-list", data, d => {
 		hospitals_meta_list = d;
-		createHospitalsSelect(d, false);
+		common.createHospitalsSelect(d, false);
 	});
 	return request;
 }
 
-getRegions();
+common.getRegions();
 let getHospitalsRequest = getHospitals();
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
 document.getElementById("form-regiontype").addEventListener("change", () => {
-	let req = getRegions();
+	let req = common.getRegions();
 	req.done(() => getHospitals());
 });
 
 function sendUpdateQuery() {
-	if (!validateForm()) {
+	if (!common.validateForm()) {
 		return;
 	}
 
@@ -119,8 +119,8 @@ function sendUpdateQuery() {
 		dataType: "json",
 		data: JSON.stringify(data),
 		success: handleResponse,
-		beforeSend: showProgressbar,
-		error: ajaxErrorHandler,
+		beforeSend: common.showProgressbar,
+		error: common.ajaxErrorHandler,
 	});
 }
 
@@ -146,6 +146,6 @@ const tooltip_content = {
 $("label").each((i, el) => {
 	const k = el.getAttribute("for");
 	if (k in tooltip_content) {
-		createInfo(el, tooltip_content[k]);
+		common.createInfo(el, tooltip_content[k]);
 	}
 });

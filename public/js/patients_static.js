@@ -1,7 +1,19 @@
+import * as common from "./patients_common.js";
+import {createMap} from "./map_plots.js";
+import {createSurgeTimeline} from "./surgetimeline.js";
+import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
+import {createTransfersSankey} from "./transfers_sankey.js";
+import {createStatsSummary} from "./metrics.js";
+import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
+import {enableHowtoButtons} from "./figure_text.js";
+
+let recentResponse = null;
+
+
 function handleResponse(response, status, xhr) {
 	recentResponse = response;
 	const newResponse = filterResponse(response);
-	hideProgressbar();
+	common.hideProgressbar();
 	generateContent(newResponse);
 }
 
@@ -9,24 +21,16 @@ function generateContent(response) {
 	console.log("Updating...");
 	clearContent();
 
-	const summary_data = response.summary;
-	const full_results = response.full_results;
-	const capacity     = response.capacity;
-	const active_patients = response.active;
-	const active_patients_nosent = response.active_null;
-	const config       = response.config;
-
-	createStatsSummary(response);
-
 	createMap(response, "overflow_dynamic");
-
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
 	createSurgeTimeline(response);
 
-	setupTable(summary_data, is_wide=true, table_id="summary-table", title="Summary Statistics");
-	setupTable(full_results, is_wide=true, table_id="full-table",    title="Full Results");
+	createStatsSummary(response);
+
+	setupTable(response.summary, true, "summary-table", "Summary Statistics");
+	setupTable(response.full_results, true, "full-table", "Full Results");
 	setupTableFilter("full-table");
 
 	setupDownloads(response);
@@ -48,17 +52,17 @@ const sectionInfo = [
 ];
 
 function makeSections() {
-	for (s of sectionInfo) {
-		makeSection(s);
-		let e = getSection(s.identifier);
+	for (const s of sectionInfo) {
+		common.makeSection(s);
+		let e = common.getSection(s.identifier);
 	}
 }
 makeSections();
 
 function clearContent() {
-	for (s of sectionInfo) {
+	for (const s of sectionInfo) {
 		if (s.reset) {
-			let section = getSection(s.identifier);
+			let section = common.getSection(s.identifier);
 			section.innerHTML = "";
 		}
 	}
@@ -69,12 +73,12 @@ function getHospitals() {
 		region_type: $("#form-regiontype")[0].value,
 		region: $("#form-region")[0].value,
 	};
-	let request = $.get("/api/hospital-list", data, d => createHospitalsSelect(d));
+	let request = $.get("/api/hospital-list", data, d => common.createHospitalsSelect(d));
 	return request;
 }
 
 function createParametersForm() {
-	let section = getSection("parameters");
+	let section = common.getSection("parameters");
 
 	let formContainer = document.createElement("div");
 	formContainer.id = "static-params-form";
@@ -93,7 +97,7 @@ function createParametersForm() {
 
 	formContainer.appendChild(selectArea);
 
-	let genRegionsRequest = getRegions();
+	let genRegionsRequest = common.getRegions();
 	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());
 
 	regionSelect.addEventListener("change", () => getHospitals());
@@ -223,7 +227,7 @@ function listParameters(response) {
 	if (document.getElementById("parameters-table") != null) {
 		document.getElementById("parameters-table").replaceWith(table);
 	} else {
-		let section = getSection("parameters");
+		let section = common.getSection("parameters");
 		section.appendChild(table);
 	}
 }
@@ -303,19 +307,18 @@ function sendUpdateQuery(latest=true) {
 		type: "get",
 		contentType: "application/json; charset=utf-8",
 		success: handleResponse,
-		beforeSend: showProgressbar,
-		error: ajaxErrorHandler,
+		beforeSend: common.showProgressbar,
+		error: common.ajaxErrorHandler,
 	});
 }
 
 const tooltip_content = {
 	"form-patient-type": "Restrict the focus to patients requiring a certain level of care, and the capacity available for those patients.",
 	"form-scenario": "Each forecast scenario is a set of assumptions about the severity of the COVID outbreak which can be used to forecast hospitalizations.",
-	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
 };
 $("label").each((i, el) => {
 	const k = el.getAttribute("for");
 	if (k in tooltip_content) {
-		createInfo(el, tooltip_content[k]);
+		common.createInfo(el, tooltip_content[k]);
 	}
 });
