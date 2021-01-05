@@ -21,7 +21,7 @@ function generateContent(response) {
 	console.log("Updating...");
 	clearContent();
 
-	createMap(response, "overflow_dynamic");
+	createMap(response, "overflow_dynamic", "transfers");
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
