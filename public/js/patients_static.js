@@ -41,7 +41,7 @@ function generateContent(response) {
 }
 
 const sectionInfo = [
-	{title: "Parameters",                      identifier: "parameters",          reset:false, showDefault: true},
+	{title: "Parameter Selection",                      identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true, subtitle: "Where are additional COVID beds required?"},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
 	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
@@ -80,6 +80,15 @@ function getHospitals() {
 function createParametersForm() {
 	let section = common.getSection("parameters");
 
+	let infoText = "Choose the hospitals and patient types you would like to see from the list below. The results for the state of your choice for the next three weeks are shown. If you would like to modify these settings (e.g., choose a particular health system or a different timeline, please visit our “Details” page).";
+	let infoTextArea = document.createElement("p");
+	infoTextArea.textContent = infoText;
+	infoTextArea.style.marginBottom = "20px";
+	section.appendChild(infoTextArea);
+
+	let infoHover1 = common.createInfo("The mathematical models have run previously for all the hospitals in the state (based on HHS data) and the ensemble forecast (CDC) from today’s date until the next three weeks.");
+	infoTextArea.appendChild(infoHover1);
+
 	let formContainer = document.createElement("div");
 	formContainer.id = "static-params-form";
 	section.appendChild(formContainer);
@@ -87,9 +96,9 @@ function createParametersForm() {
 	let selectArea = document.createElement("div");
 	selectArea.id = "static-params-form-select-area";
 
-	let regionSelect = createSelect(["MD"], 0, "Region", "form-region");
+	let regionSelect = createSelect(["MD"], 0, "State", "form-region");
 	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
-	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "Patient Type", "form-patient-type");
+	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "COVID Patient Type", "form-patient-type");
 
 	selectArea.appendChild(regionSelect);
 	selectArea.appendChild(scenarioSelect);
