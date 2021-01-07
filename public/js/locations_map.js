@@ -5,11 +5,15 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZ
 export function createLocationsMap(response) {
 	let mapContainer = document.createElement("div");
 	let mapContent = document.createElement("div");
+	let geocoderElem = document.createElement("div");
 
 	mapContainer.className = "map-wrapper";
 	mapContent.id = "map";
+	geocoderElem.id = "geocoder";
+	geocoderElem.className = "geocoder";
 
 	mapContainer.appendChild(mapContent);
+	mapContainer.appendChild(geocoderElem);
 	document.getElementById("result-area").appendChild(mapContainer);
 
 	const pos = response.current_location;
@@ -26,6 +30,15 @@ export function createLocationsMap(response) {
 		new mapboxgl.NavigationControl({showCompass: false}),
 		"top-left"
 	);
+
+	let geocoder = new MapboxGeocoder({
+		accessToken: mapboxgl.accessToken,
+		mapboxgl: mapboxgl,
+		countries: "us",
+		types: "region,postcode,district,place,address",
+		marker: true,
+	});
+	document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
 	map.on("load", e => {
 		addMarkers(map, response);
