@@ -80,7 +80,7 @@ function getHospitals() {
 function createParametersForm() {
 	let section = common.getSection("parameters");
 
-	let infoText = "Choose the hospitals and patient types you would like to see from the list below. The results for the state of your choice for the next three weeks are shown. If you would like to modify these settings (e.g., choose a particular health system or a different timeline, please visit our “Details” page).";
+	let infoText = "Choose the State, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from 1/6/2020 to 1/15/2020. To display individual hospitals, please select them from the list below. If you would like to change the timeline or choose specific healthcare systems, please visit our “Details” page.";
 	let infoTextArea = document.createElement("p");
 	infoTextArea.textContent = infoText;
 	infoTextArea.style.marginBottom = "20px";
