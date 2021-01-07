@@ -40,16 +40,21 @@ export function createLocationsMap(response) {
 	});
 	document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
-	map.on("load", e => {
-		addMarkers(map, response);
+	geocoder.on("result", e => {
+		const loc = {lat: e.result.center[1], long: e.result.center[0]};
+		$.get("/api/hospital-selection", loc, g => {
+			addMarkers(map, g);
+		});
 	});
 
-	return mapContainer;
+	return map;
 }
 
-async function addMarkers(map, response) {
+export async function addMarkers(map, response) {
+	const randomID = Math.random().toString(36).substring(7);
+
 	const hospitals_geojson = computeData(response);
-	map.addSource("hospitals", {
+	map.addSource(`hospitals-${randomID}`, {
 		type: "geojson",
 		data: hospitals_geojson,
 	});
