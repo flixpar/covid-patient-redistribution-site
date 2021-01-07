@@ -41,7 +41,7 @@ function generateContent(response) {
 }
 
 const sectionInfo = [
-	{title: "Parameter Selection",                      identifier: "parameters",          reset:false, showDefault: true},
+	{title: "Parameter Selection",             identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true, subtitle: "Where are additional COVID beds required?"},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
 	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
@@ -86,7 +86,7 @@ function createParametersForm() {
 	infoTextArea.style.marginBottom = "20px";
 	section.appendChild(infoTextArea);
 
-	let infoHover1 = common.createInfo("The mathematical models have run previously for all the hospitals in the state (based on HHS data) and the ensemble forecast (CDC) from today’s date until the next three weeks.");
+	let infoHover1 = common.createInfo(null, "The mathematical models have run previously for all the hospitals in the state (based on HHS data) and the ensemble forecast (CDC) from today’s date until the next three weeks.");
 	infoTextArea.appendChild(infoHover1);
 
 	let formContainer = document.createElement("div");
