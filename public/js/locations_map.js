@@ -45,6 +45,7 @@ async function addMarkers(map, response) {
 
 	const markerImgElem = await getMarkerImg();
 
+	let markers = [];
 	hospitals_geojson.features.forEach(pt => {
 		let el = document.createElement("div");
 		el.id = "marker-" + pt.properties.id;
@@ -61,14 +62,65 @@ async function addMarkers(map, response) {
 			<h3>${pt.properties.name}</h3>
 			<p>Score: ${(pt.properties.score*100).toFixed(0)}/100</p>
 		`;
-		const popup = new mapboxgl.Popup({offset: 15}).setHTML(popupContent);
+		// <p>Occupancy: ${(pt.properties.occupancy*100).toFixed(0)}%</p>
+		const popup = new mapboxgl.Popup({offset: 15, focusAfterOpen: false}).setHTML(popupContent);
 
 		let marker = new mapboxgl.Marker(el)
 			.setLngLat(pt.geometry.coordinates)
 			.setPopup(popup)
 			.addTo(map);
+		markers.push(marker);
 	});
 
+	const mapBBox = map._canvas.getBoundingClientRect();
+	let openMarker = null;
+
+	map.on("mousemove", e => {
+		let pt = e.lngLat.wrap();
+		pt.long = pt.lng;
+
+		const distances = response.locations.map(l => haversine_distance(pt, l));
+		const minIdx = d3.minIndex(distances);
+		const marker = markers[minIdx];
+
+		const mouseXY = e.point;
+		const markerBBox = marker.getElement().getBoundingClientRect();
+		const dist = Math.sqrt((mouseXY.x - markerBBox.x + mapBBox.x)**2 + (mouseXY.y - markerBBox.y + mapBBox.y)**2);
+
+		if (openMarker != marker && openMarker != null) {
+			openMarker.togglePopup();
+			openMarker = null;
+		}
+
+		const popup = marker.getPopup();
+		if (dist < 40) {
+			if (!popup.isOpen()) {
+				marker.togglePopup();
+				openMarker = marker;
+			}
+		} else {
+			if (popup.isOpen()) {
+				marker.togglePopup();
+				openMarker = null;
+			}
+		}
+	});
+
+}
+
+function haversine_distance(loc1, loc2) {
+	const R = 6371e3;
+
+	const phi1 = loc1.lat * (Math.PI/180);
+	const phi2 = loc2.lat * (Math.PI/180);
+	const deltaPhi = (loc2.lat-loc1.lat) * (Math.PI/180);
+	const deltaLambda = (loc2.long-loc1.long) * (Math.PI/180);
+
+	const a = (Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2)) + (Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2));
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+	const dist = R * c / 1000;
+	return dist;
 }
 
 async function getMarkerImg() {
