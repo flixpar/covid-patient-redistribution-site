@@ -24,12 +24,6 @@ export function createSurgeTimeline(response, add_description=true) {
 		section.appendChild(description);
 	}
 
-	let title = document.createElement("h5");
-	title.className = "title is-5";
-	title.style.textAlign = "center";
-	title.textContent = "Surge Timeline";
-	section.appendChild(title);
-
 	const fig = makeSurgeTimeline(response, true, true);
 	section.appendChild(fig);
 
