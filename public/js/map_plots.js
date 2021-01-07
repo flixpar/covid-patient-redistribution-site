@@ -7,15 +7,15 @@ const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 5});
 
 const stackHorizontal = true;
 
-const styleID = "flixpar/ckix2q40h5dur19p54z64ts67";
+const styleID = "flixpar/ckji5ze386yqx19phi3ziiyya";
 const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
 const pointSizeUniform = true;
 const pointSizeMult = 0.75;
 const thicknessMult = 0.5;
 
-const showAmbulance = false;
-const moveAmbulance = false;
+const showAmbulance = true;
+const moveAmbulance = true;
 
 const mapPlotFont = "sans-serif";
 
@@ -692,7 +692,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 
 						return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) translate(0,-256)`;
 					})
-					.attr("fill", "black")
+					.attr("fill", "darkred")
 					.attr("stroke", "none")
 					.attr("d", ambulancePathStr);
 
