@@ -202,12 +202,14 @@ input[type="range"] {
 #static-params-form-select-area {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	margin-bottom: 10px;
 }
 
 #static-params-form-select-area > .field {
 	width: 30%;
+	min-width: 30%;
 }
 
 @media only screen and (max-width: 600px) {

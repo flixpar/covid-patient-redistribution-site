@@ -46,7 +46,7 @@ const sectionInfo = [
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
 	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
-	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: true},
+	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: false},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
 	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
 ];
@@ -80,7 +80,10 @@ function getHospitals() {
 function createParametersForm() {
 	let section = common.getSection("parameters");
 
-	let infoText = "Choose the State, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from 1/6/2020 to 1/15/2020. To display individual hospitals, please select them from the list below. If you would like to change the timeline or choose specific healthcare systems, please visit our “Details” page.";
+	const start_date = "2020-12-30";
+	const end_date = "2021-01-16";
+
+	let infoText = `Choose the state, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. If you would like to change the timeline or choose specific healthcare systems, please visit our “Details” page.`;
 	let infoTextArea = document.createElement("p");
 	infoTextArea.textContent = infoText;
 	infoTextArea.style.marginBottom = "20px";
@@ -100,9 +103,15 @@ function createParametersForm() {
 	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "COVID Patient Type", "form-patient-type");
 
+	let startdate_select = createSelect(["2020-12-30"], 0, "Start Date", "form-startdate");
+	let enddate_select = createSelect(["2020-01-16"], 0, "End Date", "form-enddate");
+
 	selectArea.appendChild(regionSelect);
 	selectArea.appendChild(scenarioSelect);
 	selectArea.appendChild(patienttypeSelect);
+
+	selectArea.appendChild(startdate_select);
+	selectArea.appendChild(enddate_select);
 
 	formContainer.appendChild(selectArea);
 
