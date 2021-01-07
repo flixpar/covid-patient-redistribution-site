@@ -287,8 +287,11 @@ function createInfo(parentElement, content) {
 	el.src = "img/info.svg";
 	el.className = "info-icon";
 	el.setAttribute("data-tippy-content", content);
-	parentElement.appendChild(el);
+	if (parentElement != null) {
+		parentElement.appendChild(el);
+	}
 	tippy(el, {delay: [null, 250]});
+	return el;
 }
 
 function getRegions() {
@@ -333,7 +336,7 @@ function createHospitalsSelect(data, staticPage=true) {
 	let selectAreaHeader = document.createElement("label");
 	selectAreaHeader.className = "label";
 	selectAreaHeader.style.marginBottom = "0.2rem";
-	selectAreaHeader.textContent = "Hospitals";
+	selectAreaHeader.textContent = "Hospitals to Display";
 	selectAreaHeader.htmlFor = "hospitalselect";
 	selectAreaField.appendChild(selectAreaHeader);
 	if (!staticPage) {
