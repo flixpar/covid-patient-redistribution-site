@@ -27,9 +27,9 @@ ${generateHowto("When the occupancy of a hospital (the thinner curves) enter the
 `;
 
 export const overflowmapDescription = `
-A map of the daily predicted required additional COVID-19 beds for each selected hospital with and without optimal transfers (right and left maps, respectively).
+A map of the daily required additional COVID-19 beds for each selected hospital (based on CDC's forecast) when patients are transferred optimally.
 <br><br>
-<b>Insights:</b> The hospitals that become red in the right figure will need additional COVID-19 beds added.
+<b>Insights:</b> When a hospital becomes red, it will require additional COVID-19 beds by the amount displayed on the map (hover over a hospital for details).
 <br><br>
 ${generateHowto("The green dot indicates that the hospital will operate within capacity on the displayed date. A red dot, conversely, means that the hospital requires additional beds. The darker the red, the more beds are needed. These bed shortages can be mitigated by utilizing the available capacity in near-by hospitals by transferring patients (the figure on the right). The arrows (and their thickness) show where (and how many) patients should be moved to minimize the bed shortage. “Other Hospitals” refers to the rest of the hospitals that were not chosen by the user to be visualized.")}
 `;
