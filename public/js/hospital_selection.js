@@ -1,7 +1,7 @@
 let recentResponse = null;
 const apiKey = "d8c1e45132c880c51bd4310f76b12ad9cf21d04c5ae1f1a2ccbb8c4c";
 
-import {createLocationsMap} from "./locations_map.js";
+import {createLocationsMap, addMarkers} from "./locations_map.js";
 
 
 function handleResponse(response, status, xhr) {
@@ -14,7 +14,10 @@ function handleResponse(response, status, xhr) {
 function generateContent(response) {
 	console.log("Updating...");
 	clearContent();
-	createLocationsMap(response);
+	let map = createLocationsMap(response);
+	map.on("load", () => {
+		addMarkers(map, response);
+	});
 }
 
 function clearContent() {
