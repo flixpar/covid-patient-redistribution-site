@@ -137,17 +137,19 @@ function createStatsSummary(rawdata, add_description=true) {
 	const overflow_reduction = (overflow_nosent - overflow_sent) / overflow_nosent;
 
 	const maxoverflow_nosent = d3.sum(d3.range(N).map(i => d3.max(overflow_nosent_byloc[i])));
-	const maxoverflow_sent = d3.sum(d3.range(N).map(i => d3.max(overflow_byloc[i])));;
+	const maxoverflow_sent = d3.sum(d3.range(N).map(i => d3.max(overflow_byloc[i])));
+	const maxoverflow_reduction = (maxoverflow_nosent - maxoverflow_sent) / maxoverflow_nosent;
 
 	const sent_total = d3.sum(rawdata.sent, x => d3.sum(x, z => d3.sum(z)));
 	const sent_pct = sent_total / rawdata.total_patients;
 
-	addMetric("Required Surge Capacity (Without Optimal Transfers)", overflow_nosent);
-	addMetric("Required Surge Capacity (With Optimal Transfers)", overflow_sent);
-	addMetric("Reduction in Required Surge Capacity", (overflow_reduction * 100).toFixed(2) + "%");
+	addMetric("Total Required Additional Beds (Without Optimal Transfers)", maxoverflow_nosent);
+	addMetric("Total Required Additional Beds (With Optimal Transfers)", maxoverflow_sent);
+	addMetric("Reduction in Total Required Additional Beds", (maxoverflow_reduction * 100).toFixed(2) + "%");
 	addMetricSeparator();
-	addMetric("Max Required Surge Capacity (Without Optimal Transfers)", maxoverflow_nosent);
-	addMetric("Max Required Surge Capacity (With Optimal Transfers)", maxoverflow_sent);
+	addMetric("Total Required Additional Bed-Days (Without Optimal Transfers)", overflow_nosent);
+	addMetric("Total Required Additional Bed-Days (With Optimal Transfers)", overflow_sent);
+	addMetric("Reduction in Total Required Additional Bed-Days", (overflow_reduction * 100).toFixed(2) + "%");
 	addMetricSeparator();
 	addMetric("Transferred Patients", sent_total);
 	addMetric("Perecent of Patients Transferred", (sent_pct * 100).toFixed(2) + "%");
@@ -161,7 +163,4 @@ function createStatsSummary(rawdata, add_description=true) {
 	}
 
 	section.appendChild(table);
-
-	let hr = document.createElement("hr");
-	section.appendChild(hr);
 }
