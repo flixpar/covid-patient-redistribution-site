@@ -857,7 +857,7 @@ class MapTooltip {
 		this.current_loc = this.response.config.node_names.indexOf(d);
 
 		this.textLine1.textContent = d;
-		this.textLine2.textContent = `Capacity: ${this.response.beds[this.current_loc].toFixed(0)}`;
+		this.textLine2.textContent = `Current Capacity: ${this.response.beds[this.current_loc].toFixed(0)}`;
 		this.update(this.current_t);
 
 		this.highlight = e.srcElement.cloneNode();
@@ -1011,8 +1011,10 @@ class MapEdgeTooltip {
 	show(e,d) {
 		this.node.removeAttribute("display");
 
+		const transfers = (d.weight < 1) ? "<1" : d.weight.toFixed(0);
+
 		this.textLine1.textContent = `${d.nameA} → ${d.nameB}`;
-		this.textLine2.textContent = `Transfers: ${d.weight.toFixed(2)}`;
+		this.textLine2.textContent = `Transfers: ${transfers}`;
 
 		const bbox = e.srcElement.getBBox();
 		const xCenter = bbox.x + (bbox.width / 2);
