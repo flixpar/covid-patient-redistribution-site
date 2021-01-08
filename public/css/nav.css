@@ -10,7 +10,8 @@
 	margin-right: 5px;
 }
 
-.navbar-brand > a {
+.navbar-brand > .navbar-item {
+	font-size: 1.5em;
 	font-weight: bold;
 }
 
