@@ -333,9 +333,10 @@ function makeTimeline(svg, response) {
 	svg.append("g").call(xAxis);
 	svg.append("g").call(xAxisLabels);
 
-	const buttonPadding = 4;
-	let buttonBackground = svg.append("rect")
-		.attr("transform", `translate(${mapMargin.left}, ${timelineY})`)
+	const buttonScale = 1.4;
+	const buttonPadding = 4 * buttonScale;
+	svg.append("rect")
+		.attr("transform", `translate(${mapMargin.left}, ${timelineY}) scale(${buttonScale})`)
 		.attr("x", 0)
 		.attr("y", -buttonPadding)
 		.attr("width", 12 + (2*buttonPadding))
@@ -344,16 +345,17 @@ function makeTimeline(svg, response) {
 		.attr("fill", "#ebebeb")
 		.attr("stroke", "none");
 
-	let playButton = svg.append("polygon")
-		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${timelineY})`)
+	svg.append("polygon")
+		.attr("id", "play-button")
+		.attr("transform", `translate(${mapMargin.left+buttonPadding+2}, ${timelineY}) scale(${buttonScale})`)
 		.attr("fill", "black")
 		.attr("stroke", "none")
-		.attr("cursor", "pointer")
 		.attr("visibility", "hidden")
 		.attr("points", "0,0 0,15 11,7.5");
 
 	let pauseButton = svg.append("g")
-		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${timelineY})`)
+		.attr("id", "pause-button")
+		.attr("transform", `translate(${mapMargin.left+buttonPadding+2}, ${timelineY}) scale(${buttonScale})`)
 		.attr("fill", "black")
 		.attr("stroke", "none");
 	pauseButton
@@ -365,23 +367,19 @@ function makeTimeline(svg, response) {
 		.attr("x", "8")
 		.attr("width", "3")
 		.attr("height", "15");
-	pauseButton
-		.append("rect")
-		.attr("fill-opacity", "0%")
-		.attr("width", "12")
-		.attr("height", "15")
-		.attr("cursor", "pointer");
 
-	pauseButton.on("click", e => {
-		pauseButton.attr("visibility", "hidden");
-		playButton.attr("visibility", "visible");
-		svg.node().dispatchEvent(new Event("pauseMap"));
-	});
-	playButton.on("click", e => {
-		playButton.attr("visibility", "hidden");
-		pauseButton.attr("visibility", "visible");
-		svg.node().dispatchEvent(new Event("playMap"));
-	});
+	svg.append("rect")
+		.attr("transform", `translate(${mapMargin.left}, ${timelineY}) scale(${buttonScale})`)
+		.attr("x", 0)
+		.attr("y", -buttonPadding)
+		.attr("width", 12 + (2*buttonPadding))
+		.attr("height", 15 + (2*buttonPadding))
+		.attr("rx", 4)
+		.attr("fill", "black")
+		.attr("stroke", "none")
+		.attr("fill-opacity", 0)
+		.attr("cursor", "pointer")
+		.on("click", () => svg.node().dispatchEvent(new Event("togglePlayMap")));
 
 	let line = svg.append("line")
 		.attr("transform", `translate(${xScale(dates[0])})`)
@@ -521,8 +519,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 
 	const mapURL = (x, y, z) => `https://api.mapbox.com/styles/v1/${styleID}/tiles/${z}/${x}/${y}@2x?access_token=${accessToken}`
 
-	svg.append("g")
-		.attr("pointer-events", "none")
+	let mapTilesArea = svg.append("g")
 		.selectAll("image")
 		.data(tiles, d => d).join("image")
 			.attr("xlink:href", d => mapURL(...d3.tileWrap(d)))
@@ -531,6 +528,10 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 			.attr("width", tiles.scale)
 			.attr("height", tiles.scale)
 			.attr("clip-path", `url(#${clipId})`);
+
+	mapTilesArea.on("click", () => {
+		globalSVG.node().dispatchEvent(new Event("togglePlayMap"));
+	});
 
 	const C = rawdata.capacity[0].length;
 
@@ -766,14 +767,17 @@ function setupMapAnimations(svg, response) {
 		}
 	}
 
-	svg.node().addEventListener("pauseMap", e => {
-		svg.attr("anim-state", "paused");
-		svg.selectAll("*").interrupt();
-	});
-	svg.node().addEventListener("playMap", e => {
+	svg.node().addEventListener("togglePlayMap", e => {
 		if (svg.attr("anim-state") == "paused") {
+			svg.select("#play-button").attr("visibility", "hidden");
+			svg.select("#pause-button").attr("visibility", "visible");
 			svg.attr("anim-state", "play");
 			executeTimestep(parseInt(svg.attr("timestep")));
+		} else {
+			svg.select("#play-button").attr("visibility", "visible");
+			svg.select("#pause-button").attr("visibility", "hidden");
+			svg.attr("anim-state", "paused");
+			svg.selectAll("*").interrupt();
 		}
 	});
 
