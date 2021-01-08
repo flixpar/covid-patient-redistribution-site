@@ -806,7 +806,7 @@ class MapTooltip {
 			.attr("text-anchor", "middle");
 
 		this.bubble = tooltipNode.append("rect")
-			.attr("x", -60)
+			.attr("x", -62)
 			.attr("y", 8)
 			.attr("width", 120)
 			.attr("height", 56)
@@ -821,14 +821,14 @@ class MapTooltip {
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.0);
 		this.bottomTab = tooltipNode.append("rect")
-			.attr("transform", "translate(0, 35) rotate(45)")
+			.attr("transform", "translate(0, 53) rotate(45)")
 			.attr("width", 12)
 			.attr("height", 12)
 			.attr("fill", "white")
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.0);
 		this.bubbleBackground = tooltipNode.append("rect")
-			.attr("x", -60)
+			.attr("x", -62)
 			.attr("y", 8)
 			.attr("width", 120)
 			.attr("height", 56)
@@ -873,13 +873,13 @@ class MapTooltip {
 		const yCenter = bbox.y + (bbox.height / 2);
 		const yOffset = bbox.height / 2;
 
-		const positionBottom = (yCenter+yOffset+40 <= mapHeight);
+		const positionBottom = (yCenter+yOffset+56 <= mapHeight);
 		if (positionBottom) {
 			this.node.setAttribute("transform", `translate(${xCenter},${yCenter+yOffset})`);
 			this.topTab.node().removeAttribute("display");
 			this.bottomTab.node().setAttribute("display", "none");
 		} else {
-			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-45-10})`);
+			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-56-10})`);
 			this.topTab.node().setAttribute("display", "none");
 			this.bottomTab.node().removeAttribute("display");
 		}
@@ -1024,17 +1024,6 @@ class MapEdgeTooltip {
 		const xCenter = bbox.x + (bbox.width / 2);
 		const yCenter = bbox.y + (bbox.height / 2);
 		const yOffset = 0;
-
-		const positionBottom = (yCenter+yOffset+40 <= mapHeight);
-		if (positionBottom) {
-			this.node.setAttribute("transform", `translate(${xCenter},${yCenter+yOffset})`);
-			this.topTab.node().removeAttribute("display");
-			this.bottomTab.node().setAttribute("display", "none");
-		} else {
-			this.node.setAttribute("transform", `translate(${xCenter},${yCenter-yOffset-45-10})`);
-			this.topTab.node().setAttribute("display", "none");
-			this.bottomTab.node().removeAttribute("display");
-		}
 
 		const maxTextLength = d3.max([this.textLine1, this.textLine2].map(l => l.textContent.length));
 		const labelWidth = maxTextLength * 12 * 0.6 + 20;
