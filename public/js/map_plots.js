@@ -689,10 +689,11 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 
 						const scale = 0.005 * linkWidthScale(d.weight) * thicknessMult;
 						const angle = Math.atan2(ptB[1]-ptA[1], ptB[0]-ptA[0]) * (180 / Math.PI);
+						const flip = (ptA[0] > ptB[0]) ? -1 : 1;
 
-						return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) translate(0,-256)`;
+						return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) scale(1,${flip}) translate(0,-256)`;
 					})
-					.attr("fill", "darkred")
+					.attr("fill", "#ad4242")
 					.attr("stroke", "none")
 					.attr("d", ambulancePathStr);
 
@@ -707,8 +708,9 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 
 							const scale = 0.005 * linkWidthScale(d.weight) * thicknessMult;
 							const angle = Math.atan2(ptB[1]-ptA[1], ptB[0]-ptA[0]) * (180 / Math.PI);
+							const flip = (ptA[0] > ptB[0]) ? -1 : 1;
 
-							return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) translate(0,-256)`;
+							return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) scale(1,${flip}) translate(0,-256)`;
 						})
 						.transition()
 							.duration(mapAnimationFrameTime)
@@ -720,8 +722,9 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 
 								const scale = 0.005 * linkWidthScale(d.weight) * thicknessMult;
 								const angle = Math.atan2(ptB[1]-ptA[1], ptB[0]-ptA[0]) * (180 / Math.PI);
+								const flip = (ptA[0] > ptB[0]) ? -1 : 1;
 
-								return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) translate(0,-256)`;
+								return `translate(${pt[0]}, ${pt[1]}) rotate(${angle}) scale(${scale}) scale(1,${flip}) translate(0,-256)`;
 							});
 				}
 			}
