@@ -1,9 +1,9 @@
 const mapHeight = 500;
 const mapWidth  = 1000;
 
-const mapPlotMargin = ({top: 0, right:  0, bottom:  0, left:  0});
+const mapPlotMargin = ({top: 0,  right:  0, bottom:  0, left:  0});
 const mapPadding    = ({top: 30, right: 20, bottom: 20, left: 20});
-const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 5});
+const mapMargin     = ({top: 25, right: 10, bottom: 10, left:  5});
 
 const stackHorizontal = true;
 
@@ -13,6 +13,8 @@ const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNz
 const pointSizeUniform = true;
 const pointSizeMult = 0.75;
 const thicknessMult = 0.5;
+
+const showColorscale = false;
 
 const showAmbulance = true;
 const moveAmbulance = true;
@@ -138,28 +140,29 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	let g1, g2, g3;
 	let labelPosition;
 	if (stackHorizontal) {
-		plotWidth = 0.45 * mapWidth;
+		plotWidth = 0.5 * mapWidth;
 		plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
 
 		g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
 		g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
-		g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 2*plotWidth}, ${mapPlotMargin.top})`);
 
 		labelPosition = "top";
 	} else {
-		plotWidth = 0.9 * mapWidth;
+		plotWidth = 1.0 * mapWidth;
 		plotHeight = 0.5 * (mapHeight - mapPlotMargin.top - mapPlotMargin.bottom);
 
 		g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10}, ${mapPlotMargin.top - 15})`);
 		g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10}, ${mapPlotMargin.top - 15 + plotHeight})`);
-		g3 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + 10 + plotWidth}, ${mapPlotMargin.top})`);
 
 		labelPosition = "left";
 	}
 
 	g1 = makeMap(g1, svg, rawdata, data1, null, colorscale, geometries, plotWidth, plotHeight, metric_name+"_notransfers", make_dynamic, "(Without Optimal Transfers)", labelPosition);
 	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, metric_name+"_transfers", make_dynamic, "(With Optimal Transfers)", labelPosition);
-	g3 = makeColorbar(g3, colorscale, colorbar_label);
+
+	if (showColorscale) {
+		svg = makeColorbar(svg, colorscale, colorbar_label);
+	}
 
 	if (debugMap) {
 		svg.append("rect")
@@ -193,14 +196,15 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, metric_name, plot_title, colorbarLabel) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
-	const plotWidth = 0.9 * mapWidth;
+	const plotWidth = 1.0 * mapWidth;
 	const plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
 
 	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
-	let g2 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left + plotWidth}, ${mapPlotMargin.top})`);
-
 	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, metric_name, make_dynamic, plot_title);
-	g2 = makeColorbar(g2, colorscale, colorbarLabel);
+
+	if (showColorscale) {
+		svg = makeColorbar(svg, colorscale, colorbarLabel);
+	}
 
 	svg = makeTimeline(svg, rawdata);
 
@@ -213,12 +217,20 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 }
 
 function makeColorbar(svg, colorscale, colorbarLabel=null) {
+	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+
+	let container = svg.append("g")
+		.attr("transform", `translate(${viewBox[2] + 10}, ${mapPlotMargin.top})`);
+
+	viewBox[2] += 90;
+	svg.attr("viewBox", viewBox);
+
 	const cbarHeight = 0.8 * mapHeight;
 
 	const randomID = Math.random().toString(36).substring(7);
 	const gradId = "linear-gradient" + "-" + randomID;
 
-	let defs = svg.append("defs");
+	let defs = container.append("defs");
 	let linearGradient = defs.append("linearGradient")
 		.attr("id", gradId)
 		.attr("x1", 0)
@@ -234,7 +246,7 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 		.domain([0, colorscale.maxValue])
 		.range([(mapHeight/2) + (cbarHeight/2), (mapHeight/2) - (cbarHeight/2)]);
 
-	svg.append("rect")
+	container.append("rect")
 		.attr("x", 0)
 		.attr("y", (mapHeight/2) - (cbarHeight/2))
 		.attr("width", 20)
@@ -248,10 +260,10 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line").attr("stroke", "#4a4a4a"))
 		.call(g => g.selectAll(".tick text").attr("fill", "#4a4a4a"));
-	svg.append("g").call(colorAxis);
+	container.append("g").call(colorAxis);
 
 	if (colorbarLabel != null) {
-		svg.append("text")
+		container.append("text")
 			.attr("text-anchor", "middle")
 			.attr("transform", `rotate(90) translate(${mapHeight/2},-65)`)
 			.style("font-family", mapPlotFont)
@@ -283,9 +295,10 @@ function makeTimeline(svg, response) {
 	const xInterval = getDateIntervals(dates);
 	const dateFormat = "%m/%d/%y";
 
+	const colorScaleOffset = showColorscale ? 90 : 5;
 	const xScale = d3.scaleUtc()
 		.domain(d3.extent(dates))
-		.range([mapMargin.left + 30, mapMargin.left + (0.88*mapWidth)]);
+		.range([mapMargin.left + 50, viewBox[2] - colorScaleOffset]);
 
 	const xAxis = g => g
 		.attr("transform", `translate(0, ${viewBox[3]+20})`)
