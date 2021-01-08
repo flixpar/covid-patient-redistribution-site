@@ -97,23 +97,37 @@ function createParametersForm() {
 	section.appendChild(formContainer);
 
 	let selectArea = document.createElement("div");
-	selectArea.id = "static-params-form-select-area";
+	selectArea.className = "static-params-form-area";
 
 	let regionSelect = createSelect(["MD"], 0, "State", "form-region");
 	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "COVID Patient Type", "form-patient-type");
 
-	let startdate_select = createSelect(["2020-12-30"], 0, "Start Date", "form-startdate");
-	let enddate_select = createSelect(["2020-01-16"], 0, "End Date", "form-enddate");
-
 	selectArea.appendChild(regionSelect);
 	selectArea.appendChild(scenarioSelect);
 	selectArea.appendChild(patienttypeSelect);
 
-	selectArea.appendChild(startdate_select);
-	selectArea.appendChild(enddate_select);
+	let datesFormText = `
+		<fieldset class="static-params-form-area" disabled>
+			<div class="field">
+				<label class="label" for="form-startdate" style="margin-bottom: 0.2em;">Start Date</label>
+				<div class="control">
+					<input type="date" value=${start_date} class="input" id="form-startdate">
+				</div>
+			</div>
+			<div class="field">
+				<label class="label" for="form-enddate" style="margin-bottom: 0.2em;">End Date</label>
+				<div class="control">
+					<input type="date" value=${end_date} class="input" id="form-enddate">
+				</div>
+			</div>
+		</fieldset>
+	`;
+	let datesFormElem = document.createElement("div");
+	datesFormElem.innerHTML = datesFormText;
 
 	formContainer.appendChild(selectArea);
+	formContainer.appendChild(datesFormElem);
 
 	let genRegionsRequest = common.getRegions();
 	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());

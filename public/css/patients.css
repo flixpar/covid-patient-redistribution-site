@@ -199,7 +199,7 @@ input[type="range"] {
 	margin: auto;
 }
 
-#static-params-form-select-area {
+.static-params-form-area {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -207,7 +207,7 @@ input[type="range"] {
 	margin-bottom: 10px;
 }
 
-#static-params-form-select-area > .field {
+.static-params-form-area > .field {
 	width: 30%;
 	min-width: 30%;
 }
