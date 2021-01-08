@@ -857,7 +857,7 @@ class MapTooltip {
 		this.current_loc = this.response.config.node_names.indexOf(d);
 
 		this.textLine1.textContent = d;
-		this.textLine2.textContent = `Current Capacity: ${this.response.beds[this.current_loc].toFixed(0)}`;
+		this.textLine2.textContent = `Total Beds: ${this.response.beds[this.current_loc].toFixed(0)}`;
 		this.update(this.current_t);
 
 		this.highlight = e.srcElement.cloneNode();
@@ -933,18 +933,22 @@ class MapTooltip {
 
 		if (this.metric_name == "overflow_dynamic_notransfers") {
 			const required_capacity = this.response.active_null[locIdx][this.current_t];
-			this.textLine3.textContent = `Required Capacity: ${required_capacity.toFixed(0)}`;
+			const textColor = (required_capacity > capacity) ? "red" : "green";
+			this.textLine3.innerHTML = `Current Patients: <tspan fill="${textColor}">${required_capacity.toFixed(0)}</tspan>`;
 		} else if (this.metric_name == "overflow_dynamic_transfers") {
 			const required_capacity = this.response.active[locIdx][this.current_t];
-			this.textLine3.textContent = `Required Capacity: ${required_capacity.toFixed(0)}`;
+			const textColor = (required_capacity > capacity) ? "red" : "green";
+			this.textLine3.innerHTML = `Current Patients: <tspan fill="${textColor}">${required_capacity.toFixed(0)}</tspan>`;
 		} else if (this.metric_name == "load_notransfers") {
 			const active = this.response.active_null[locIdx][this.current_t];
 			const load = active / capacity;
-			this.textLine3.textContent = `Occupancy: ${(load * 100).toFixed(0)}%`;
+			const textColor = (load > 1.02) ? "red" : "green";
+			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
 		} else if (this.metric_name == "load_transfers") {
 			const active = this.response.active[locIdx][this.current_t];
 			const load = active / capacity;
-			this.textLine3.textContent = `Occupancy: ${(load * 100).toFixed(0)}%`;
+			const textColor = (load > 1.02) ? "red" : "green";
+			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
 		}
 	}
 }
