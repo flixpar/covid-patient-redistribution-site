@@ -9,7 +9,7 @@ export {createTransfersSankey};
 
 function createTransfersSankey(response, add_description=true) {
 	const graph = toGraph(response, false);
-	const fig = makeTransfersSankey(graph);
+	const fig = makeTransfersSankey(response, graph);
 
 	const section = document.getElementById("section-results-transfers");
 	section.appendChild(fig);
@@ -24,12 +24,14 @@ function createTransfersSankey(response, add_description=true) {
 	}
 }
 
-function makeTransfersSankey(graph) {
+function makeTransfersSankey(response, graph) {
 
 	let svg = d3.create("svg").attr("viewBox", [0, 0, transfersSankeySize.width, transfersSankeySize.height]);
 
 	const {nodes, links} = toSankey(graph);
-	const nLocs = nodes.length;
+
+	const locationNames = response.config.node_names;
+	const nLocs = locationNames.length;
 
 	// Tooltip //
 	let tooltip = new TransfersSankeyTooltip(svg, graph);
@@ -66,9 +68,17 @@ function makeTransfersSankey(graph) {
 		.text("Patients Sent");
 
 	// color scale
-	const colorScale = d3.scaleOrdinal()
+	const _colorScale = d3.scaleOrdinal()
 		.domain(d3.range(nLocs))
-		.range(d3.range(nLocs).map(x => d3.interpolatePlasma(x/nLocs)))
+		.range(d3.range(nLocs).map(x => d3.interpolatePlasma(x/nLocs)));
+	const otherHospitalsIdx = locationNames.indexOf("Other Hospitals");
+	const colorScale = x => {
+		if (x == otherHospitalsIdx) {
+			return "#dbdbdb";
+		} else {
+			return _colorScale(x);
+		}
+	}
 
 	// Nodes //
 
@@ -81,7 +91,7 @@ function makeTransfersSankey(graph) {
 		.attr("y", d => d.y0)
 		.attr("height", d => d.y1 - d.y0)
 		.attr("width", d => d.x1 - d.x0)
-		.attr("fill", d => colorScale(d.index))
+		.attr("fill", d => colorScale(d.idx))
 		.append("title")
 		.text(d => `${d.name.substring(0,d.name.length-4)}\n${d3.format(",.0f")(d.value)}`);
 
@@ -118,10 +128,10 @@ function makeTransfersSankey(graph) {
 		.attr("x2", d => d.target.x0);
 	gradient.append("stop")
 		.attr("offset", "0%")
-		.attr("stop-color", d => colorScale(d.source.index));
+		.attr("stop-color", d => colorScale(d.source.idx));
 	gradient.append("stop")
 		.attr("offset", "100%")
-		.attr("stop-color", d => colorScale(d.target.index));
+		.attr("stop-color", d => colorScale(d.target.idx));
 
 	// link paths
 	link.append("path")
@@ -168,8 +178,8 @@ function toGraph(response, excludeSelf=false) {
 		return d3.sum(locInd.map(j => totalSent[j][i])) > 0;
 	});
 
-	const srcNodes = srcNames.map(colName => {return {name: colName+"-src"}});
-	const dstNodes = dstNames.map(colName => {return {name: colName+"-dst"}});
+	const srcNodes = srcNames.map(colName => {return {name: colName+"-src", idx: locNames.indexOf(colName)}});
+	const dstNodes = dstNames.map(colName => {return {name: colName+"-dst", idx: locNames.indexOf(colName)}});
 	const nodes = srcNodes.concat(dstNodes);
 
 	let links = [];
