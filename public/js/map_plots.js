@@ -1023,7 +1023,8 @@ class MapEdgeTooltip {
 		const bbox = e.srcElement.getBBox();
 		const xCenter = bbox.x + (bbox.width / 2);
 		const yCenter = bbox.y + (bbox.height / 2);
-		const yOffset = 0;
+
+		this.node.setAttribute("transform", `translate(${xCenter},${yCenter})`);
 
 		const maxTextLength = d3.max([this.textLine1, this.textLine2].map(l => l.textContent.length));
 		const labelWidth = maxTextLength * 12 * 0.6 + 20;
