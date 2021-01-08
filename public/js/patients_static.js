@@ -83,13 +83,13 @@ function createParametersForm() {
 	const start_date = "2020-12-30";
 	const end_date = "2021-01-16";
 
-	let infoText = `Choose the state, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. If you would like to change the timeline or choose specific healthcare systems, please visit our “Details” page.`;
+	let infoText = `Choose the state, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. To see more options, please visit our "Details" page.`;
 	let infoTextArea = document.createElement("p");
 	infoTextArea.textContent = infoText;
 	infoTextArea.style.marginBottom = "20px";
 	section.appendChild(infoTextArea);
 
-	let infoHover1 = common.createInfo(null, "The mathematical models have run previously for all the hospitals in the state (based on HHS data) and the ensemble forecast (CDC) from today’s date until the next three weeks.");
+	let infoHover1 = common.createInfo(null, `This page optimizes the best transfer strategy considering all hospitals in the state of your choice for the specified timeline mentioned above. If you would like to change the timeline or choose specific healthcare systems instead of states, please visit our "Details" page.`);
 	infoTextArea.appendChild(infoHover1);
 
 	let formContainer = document.createElement("div");
