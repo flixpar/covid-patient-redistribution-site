@@ -27,6 +27,9 @@ export function createSurgeTimeline(response, add_description=true) {
 	const fig = makeSurgeTimeline(response, true, true);
 	section.appendChild(fig);
 
+	const figOptions = addSurgeTimelineOptions(response);
+	section.appendChild(figOptions);
+
 	generateFigureDownloadButtons(fig, "surgetimeline");
 }
 
@@ -34,6 +37,7 @@ function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
 	const N = response.config.node_names.length;
 
 	let svg = d3.create("svg").attr("viewBox", [0, 0, surgeTimelinePlotWidth, N*surgeTimelineBarHeight]);
+	svg.attr("id", "surgetimeline-figure");
 
 	const yScale = d3.scaleBand()
 		.domain(d3.range(N))
@@ -64,6 +68,7 @@ function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
 		.attr("height", yScale.bandwidth())
 		.attr("width", d => xScale(d.endDate.addDays(1)) - xScale(d.startDate) - 2*surgeTimelineBarPadding.width)
 		.attr("fill", d => d.color)
+		.attr("cursor", "pointer")
 		.on("mouseover", (e,d) => tooltip.show(e,d))
 		.on("mouseout", (e,d) => tooltip.hide(e,d));
 
@@ -418,4 +423,40 @@ function computeSurgeTimelineData(response, withTransfers=true) {
 	}
 
 	return timelineData;
+}
+
+function addSurgeTimelineOptions(response) {
+	let select = document.createElement("select");
+	select.id = "surgetimeline-options-select";
+
+	const optionNames = ["With Optimal Transfers", "Without Optimal Transfers"];
+	for (let c = 0; c < optionNames.length; c++) {
+		let opt = document.createElement("option");
+		opt.text = optionNames[c];
+		opt.value = c;
+		select.appendChild(opt);
+	}
+
+	let selectLabel = document.createElement("label");
+	selectLabel.innerHTML = "Use transfers: ";
+	selectLabel.for = "surgetimeline-options-select";
+
+	select.addEventListener("change", e => {
+		e.preventDefault();
+
+		const sel = e.target;
+		const includeTransfers = (sel.options[sel.selectedIndex].value == 0);
+
+		const fig = makeSurgeTimeline(response, true, includeTransfers);
+		document.getElementById("surgetimeline-figure").replaceWith(fig);
+	});
+
+	let selectField = document.createElement("div");
+	selectField.style.textAlign = "center";
+	selectField.style.marginBottom = "10px";
+
+	selectField.appendChild(selectLabel);
+	selectField.appendChild(select);
+
+	return selectField;
 }
