@@ -137,7 +137,7 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	let plotWidth, plotHeight;
-	let g1, g2, g3;
+	let g1, g2;
 	let labelPosition;
 	if (stackHorizontal) {
 		plotWidth = 0.5 * mapWidth;
@@ -175,13 +175,7 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 			.attr("stroke-width", 2.0);
 	}
 
-	svg.append("text")
-		.attr("x", (0.9*mapWidth)/2)
-		.attr("y", 20)
-		.attr("text-anchor", "middle")
-		.style("font-family", mapPlotFont)
-		.style("font-size", "20px")
-		.text(plot_title);
+	svg = addTitle(svg, plot_title, 20);
 
 	svg = makeTimeline(svg, rawdata);
 
@@ -449,6 +443,22 @@ function makeTimeline(svg, response) {
 	return svg;
 }
 
+function addTitle(svg, titleText, titleSize) {
+	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+	viewBox[1] -= titleSize + 5;
+	viewBox[3] += titleSize + 5;
+	svg.attr("viewBox", viewBox);
+
+	svg.append("text")
+		.attr("x", viewBox[2]/2)
+		.attr("y", -3)
+		.attr("text-anchor", "middle")
+		.style("font-family", mapPlotFont)
+		.style("font-size", titleSize + "px")
+		.text(titleText);
+	return svg;
+}
+
 ////////////////////////////
 ///////// Plot Maps ////////
 ////////////////////////////
@@ -585,18 +595,6 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		}
 	}
 
-	// date background
-	svg.append("rect")
-		.attr("id", "date-background")
-		.attr("x", (plotWidth/2) - 70)
-		.attr("y", 24)
-		.attr("width", 140)
-		.attr("height", 20)
-		.attr("rx", 5).attr("ry", 5)
-		.attr("fill", "white")
-		.attr("opacity", 0.65)
-		.attr("stroke", "none");
-
 	// setup arrow
 	const markerBoxWidth = 2
 	const markerBoxHeight = 2.8
@@ -659,9 +657,9 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 		const dateString = dates[t].toISOString().split("T")[0];
 		svg.append("text")
 			.attr("id", "date-label")
-			.attr("x", plotWidth/2)
-			.attr("y", 40)
-			.attr("text-anchor", "middle")
+			.attr("x", plotWidth-5)
+			.attr("y", 20)
+			.attr("text-anchor", "end")
 			.style("font-size", 15)
 			.style("font-family", mapPlotFont)
 			.text("Date: " + dateString);
