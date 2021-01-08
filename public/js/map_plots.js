@@ -289,10 +289,10 @@ function makeTimeline(svg, response) {
 	const xInterval = getDateIntervals(dates);
 	const dateFormat = "%m/%d/%y";
 
-	const colorScaleOffset = showColorscale ? 90 : 5;
+	const colorScaleOffset = showColorscale ? 90 : 8;
 	const xScale = d3.scaleUtc()
 		.domain(d3.extent(dates))
-		.range([mapMargin.left + 50, viewBox[2] - colorScaleOffset]);
+		.range([mapMargin.left + 70, viewBox[2] - colorScaleOffset]);
 
 	const timelineY = viewBox[3] + viewBox[1] + 20;
 
