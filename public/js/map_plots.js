@@ -7,7 +7,7 @@ const mapMargin     = ({top: 25, right: 20, bottom: 10, left: 5});
 
 const stackHorizontal = true;
 
-const styleID = "flixpar/ckji5ze386yqx19phi3ziiyya";
+const styleID = "flixpar/ckjny4kzy3alx19o4bi0von7c";
 const accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
 const pointSizeUniform = true;
