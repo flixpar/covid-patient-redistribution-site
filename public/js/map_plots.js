@@ -294,8 +294,10 @@ function makeTimeline(svg, response) {
 		.domain(d3.extent(dates))
 		.range([mapMargin.left + 50, viewBox[2] - colorScaleOffset]);
 
+	const timelineY = viewBox[3] + viewBox[1] + 20;
+
 	const xAxis = g => g
-		.attr("transform", `translate(0, ${viewBox[3]+20})`)
+		.attr("transform", `translate(0, ${timelineY})`)
 		.call(d3.axisBottom(xScale)
 			.ticks(d3.utcDay.every(1))
 			.tickSize(15)
@@ -309,7 +311,7 @@ function makeTimeline(svg, response) {
 		);
 
 	const xAxisLabels = g => g
-		.attr("transform", `translate(0, ${viewBox[3]+20})`)
+		.attr("transform", `translate(0, ${timelineY})`)
 		.style("font-family", "monospace")
 		.style("font-size", "11px")
 		.call(d3.axisBottom(xScale)
@@ -333,7 +335,7 @@ function makeTimeline(svg, response) {
 
 	const buttonPadding = 4;
 	let buttonBackground = svg.append("rect")
-		.attr("transform", `translate(${mapMargin.left}, ${viewBox[3]+20})`)
+		.attr("transform", `translate(${mapMargin.left}, ${timelineY})`)
 		.attr("x", 0)
 		.attr("y", -buttonPadding)
 		.attr("width", 12 + (2*buttonPadding))
@@ -343,7 +345,7 @@ function makeTimeline(svg, response) {
 		.attr("stroke", "none");
 
 	let playButton = svg.append("polygon")
-		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${viewBox[3]+20})`)
+		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${timelineY})`)
 		.attr("fill", "black")
 		.attr("stroke", "none")
 		.attr("cursor", "pointer")
@@ -351,7 +353,7 @@ function makeTimeline(svg, response) {
 		.attr("points", "0,0 0,15 11,7.5");
 
 	let pauseButton = svg.append("g")
-		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${viewBox[3]+20})`)
+		.attr("transform", `translate(${mapMargin.left+buttonPadding}, ${timelineY})`)
 		.attr("fill", "black")
 		.attr("stroke", "none");
 	pauseButton
@@ -383,8 +385,8 @@ function makeTimeline(svg, response) {
 
 	let line = svg.append("line")
 		.attr("transform", `translate(${xScale(dates[0])})`)
-		.attr("y1", viewBox[3]+20)
-		.attr("y2", viewBox[3]+20+15)
+		.attr("y1", timelineY)
+		.attr("y2", timelineY+15)
 		.attr("stroke", "red")
 		.attr("stroke-width", 1.5);
 
@@ -405,13 +407,13 @@ function makeTimeline(svg, response) {
 		.attr("transform", `translate(${xScale(dates[0])})`)
 		.attr("visibility", "hidden");
 	let hoverLine = hoverLineComponent.append("line")
-		.attr("y1", viewBox[3]+20)
-		.attr("y2", viewBox[3]+20+15)
+		.attr("y1", timelineY)
+		.attr("y2", timelineY+15)
 		.attr("stroke", "red")
 		.attr("stroke-width", 1)
 		.attr("stroke-opacity", 0.7);
 	let hoverLineText = hoverLineComponent.append("text")
-		.attr("y", viewBox[3]+20+11)
+		.attr("y", timelineY+11)
 		.attr("fill", "red")
 		.attr("dx", "12px")
 		.style("font-family", "monospace")
@@ -420,7 +422,7 @@ function makeTimeline(svg, response) {
 
 	let xAxisArea = svg.append("rect")
 		.attr("x", xScale(dates[0]))
-		.attr("y", viewBox[3]+20)
+		.attr("y", timelineY)
 		.attr("width", xScale(dates[T-1]) - xScale(dates[0]))
 		.attr("height", 32)
 		.attr("fill", "black")
