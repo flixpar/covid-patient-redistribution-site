@@ -41,6 +41,7 @@ th {
 	height: 1em;
 	margin-left: 3px;
 	vertical-align: text-bottom;
+	cursor: pointer;
 }
 
 .caption {
@@ -203,13 +204,13 @@ input[type="range"] {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	margin-bottom: 10px;
 }
 
 .static-params-form-area > .field {
-	width: 30%;
-	min-width: 30%;
+	width: 45%;
+	min-width: 45%;
 }
 
 @media only screen and (max-width: 600px) {
