@@ -48,9 +48,9 @@ function load_hhs(
 	N = length(hospital_ind)
 	T = (end_date - start_date).value + 1
 
-	hospitals = data.location_ids[hospital_ind]
+	hospital_ids = data.location_ids[hospital_ind]
 	hospital_names = data.location_names[hospital_ind]
-	hospital_abbrevs = data.location_names_short[hospital_ind]
+	hospital_abbrevs = data.location_names[hospital_ind]
 
 	bedtype = (patient_type == :all) ? :allbeds : patient_type
 	casesdata = data.casesdata[scenario,bedtype]
@@ -78,7 +78,7 @@ function load_hhs(
 	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
 
-	node_locations = Dict(h[1] => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for h in hospitals)
+	node_locations = Dict(name => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for (name,h) in zip(hospital_names, hospital_ids))
 
 	adj = fully_connected(N)
 
@@ -94,7 +94,7 @@ function load_hhs(
 		node_locations = node_locations,
 		node_names = hospital_names,
 		node_names_abbrev = hospital_abbrevs,
-		node_ids = hospitals,
+		node_ids = hospital_ids,
 		extent = extent,
 		capacity_names = capacity_names,
 	)
