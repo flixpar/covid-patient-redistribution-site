@@ -13,6 +13,7 @@
 .navbar-brand > .navbar-item {
 	font-size: 1.5em;
 	font-weight: bold;
+	margin-right: 10px;
 }
 
 #navbar-menu {
