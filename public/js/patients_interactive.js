@@ -41,7 +41,7 @@ function handleResponse(response, status, xhr) {
 
 	setupDownloads(response);
 
-	enableHowtoButtons();
+	enableHiddenTextButtons();
 
 	console.log("Done.");
 }

@@ -15,7 +15,7 @@ The occupancy forecast of the entire state for the time duration of choice.
 <br><br>
 <b>Insights:</b> If the blue curve enters the red region, the state needs to increase bed capacity to be able to meet the predicted demand. The date and the minimum required additional beds depend on when the blue curve starts to enter the red zone and by how far it surpasses the current capacity (the red line).
 <br><br>
-${generateHowto("When the occupancy (blue curve) is in the green region, the occupancy level (ICU or Acute COVID-19 beds, depending on what was selected above) is within the capacity of the state. If it enters the red region, there will be a bed shortage.")}
+${generateHiddenText("When the occupancy (blue curve) is in the green region, the occupancy level (ICU or Acute COVID-19 beds, depending on what was selected above) is within the capacity of the state. If it enters the red region, there will be a bed shortage.")}
 `;
 
 export const loadplotsDescription = `
@@ -23,7 +23,7 @@ The occupancy forecast for each hospital (as selected above) for the time durati
 <br><br>
 <b>Insights for individual hospitals:</b> If a hospital enters the red region, there will be a bed shortage at that hospital. The shortage can be mitigated by either adding more COVID-19 beds (left figure) or optimally transferring patients to other hospitals that have extra capacity (right figure).
 <br><br>
-${generateHowto("When the occupancy of a hospital (the thinner curves) enter the green region, the occupancy level of that hospital (ICU, Acute, or total COVID-19 beds) is within the capacity of the hospital.")}
+${generateHiddenText("When the occupancy of a hospital (the thinner curves) enter the green region, the occupancy level of that hospital (ICU, Acute, or total COVID-19 beds) is within the capacity of the hospital.")}
 `;
 
 export const overflowmapDescription = `
@@ -31,7 +31,7 @@ A map of the daily required additional COVID-19 beds for each selected hospital 
 <br><br>
 <b>Insights:</b> When a hospital becomes red, it will require additional COVID-19 beds by the amount displayed on the map (hover over a hospital for details).
 <br><br>
-${generateHowto("The green dot indicates that the hospital will operate within capacity on the displayed date. A red dot, conversely, means that the hospital requires additional beds. The darker the red, the more beds are needed. These bed shortages can be mitigated by utilizing the available capacity in near-by hospitals by transferring patients (the figure on the right). The arrows (and their thickness) show where (and how many) patients should be moved to minimize the bed shortage. “Other Hospitals” refers to the rest of the hospitals that were not chosen by the user to be visualized.")}
+${generateHiddenText("The green dot indicates that the hospital will operate within capacity on the displayed date. A red dot, conversely, means that the hospital requires additional beds. The darker the red, the more beds are needed. These bed shortages can be mitigated by utilizing the available capacity in near-by hospitals by transferring patients (the figure on the right). The arrows (and their thickness) show where (and how many) patients should be moved to minimize the bed shortage. “Other Hospitals” refers to the rest of the hospitals that were not chosen by the user to be visualized.")}
 `;
 
 export const dashboardDescription = ``;
@@ -44,10 +44,10 @@ export const metricsDescription = ``;
 
 export const surgeTimelineDescription = ``;
 
-function generateHowto(text) {
-	const descriptionId = "description-howto-" + Math.random().toString(36).substr(2, 5);;
+function generateHiddenText(text) {
+	const descriptionId = "description-hidden-" + Math.random().toString(36).substr(2, 5);;
 	const contentStr = `
-	<span class="description-howto-label" data-for="${descriptionId}">
+	<span class="description-hidden-label" data-for="${descriptionId}">
 		How to read this figure
 		<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
 		<ion-icon class="icon-expand-text hidden" name="caret-down-outline"></ion-icon>
@@ -58,8 +58,8 @@ function generateHowto(text) {
 	return contentStr;
 }
 
-export function enableHowtoButtons() {
-	document.querySelectorAll(".description-howto-label").forEach(elem => {
+export function enableHiddenTextButtons() {
+	document.querySelectorAll(".description-hidden-label").forEach(elem => {
 		elem.addEventListener("click", e => {
 			document.getElementById(elem.dataset.for).classList.toggle("hidden");
 			elem.querySelectorAll(".icon-expand-text").forEach(i => {

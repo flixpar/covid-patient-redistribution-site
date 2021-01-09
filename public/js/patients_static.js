@@ -35,7 +35,7 @@ function generateContent(response) {
 
 	setupDownloads(response);
 
-	enableHowtoButtons();
+	enableHiddenTextButtons();
 
 	console.log("Done.");
 }
