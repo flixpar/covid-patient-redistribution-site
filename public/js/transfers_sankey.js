@@ -151,6 +151,7 @@ function toSankey(graph) {
 	const sankey = d3.sankey()
 		.nodeId(d => d.name)
 		.nodeAlign(d3[`sankey${align[0].toUpperCase()}${align.slice(1)}`])
+		.nodeSort(null)
 		.nodeWidth(15)
 		.nodePadding(10)
 		.extent([[transfersSankeyMargins.left, transfersSankeyMargins.top], [transfersSankeySize.width - transfersSankeyMargins.right, transfersSankeySize.height - transfersSankeyMargins.bottom]]);

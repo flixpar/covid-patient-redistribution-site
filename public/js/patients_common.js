@@ -96,7 +96,7 @@ function ajaxErrorHandler() {
 
 function setDefaultDates() {
 	let start_date = new Date();
-	let end_date   = new Date(2021, 0, 16);
+	let end_date   = new Date(2021, 0, 23);
 	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
 	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
 }

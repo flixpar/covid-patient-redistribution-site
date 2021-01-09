@@ -107,6 +107,8 @@ function createParametersForm() {
 	selectArea.appendChild(scenarioSelect);
 	selectArea.appendChild(patienttypeSelect);
 
+	scenarioSelect.style.display = "none";
+
 	let datesFormText = `
 		<fieldset class="static-params-form-area" disabled>
 			<div class="field">
