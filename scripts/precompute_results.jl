@@ -7,8 +7,9 @@ push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
 include("../src/EndpointHandler.jl")
 
 
+STARTDATE = Date(2020, 12, 30)
+ENDDATE   = Date(2021, 01, 30)
 REGIONS = deserialize("../data/regions_hhs.jlser")
-params_date_range = today():Day(1):(today()+Day(2))
 params_list = [
 	(scenario=:moderate, patient_type=:icu),
 	(scenario=:moderate, patient_type=:acute),
@@ -20,7 +21,7 @@ default_params = (
 	capacity_util = 1.0,
 	uncertainty_level = :default,
 	los_param = "default_dist",
-	end_date = Date(2021, 01, 16),
+	end_date = ENDDATE,
 	smoothness = false,
 )
 results_path = "../public/results-static/"
@@ -71,8 +72,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
 		mkpath(results_path)
 	end
 	println("Precomputing results!")
-	for start_date in params_date_range, params_ in params_list, region in REGIONS
-		params = merge(params_, (;start_date, region))
+	for params_ in params_list, region in REGIONS
+		params = merge(params_, (;start_date = STARTDATE, region = region))
 		precompute_result(params)
 	end
 end
