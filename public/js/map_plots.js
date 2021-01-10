@@ -100,7 +100,7 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 		links = createStaticLinks(rawdata.sent, rawdata.config);
 	}
 
-	const section = document.getElementById("section-results-overflowmap");
+	const section = document.getElementById("section-results-maps");
 
 	let figContainer = document.createElement("div");
 	section.appendChild(figContainer);
@@ -424,7 +424,7 @@ function makeTimeline(svg, response) {
 		.attr("y1", timelineY)
 		.attr("y2", timelineY+15)
 		.attr("stroke", "red")
-		.attr("stroke-width", 1.5);
+		.attr("stroke-width", 2.5);
 
 	function animate(e) {
 		const t = e.detail.t;
@@ -701,9 +701,9 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 			.attr("x", plotWidth-5)
 			.attr("y", 20)
 			.attr("text-anchor", "end")
-			.style("font-size", 15)
-			.style("font-family", mapPlotFont)
-			.text("Date: " + dateString);
+			.attr("font-size", 15)
+			.attr("font-family", mapPlotFont)
+			.html(`<tspan font-weight="bold">Date:</tspan> ${dateString}`);
 
 		if (links != null) {
 			svg.selectAll(".map-edges").remove();
