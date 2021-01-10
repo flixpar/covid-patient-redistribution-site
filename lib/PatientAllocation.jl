@@ -89,7 +89,7 @@ function patient_redistribution(
 
 	if solver != :default
 		solver_lookup = Dict(:auto => -1, :primalsimplex => 0, :dualsimplex => 1, :barrier => 2, :all => 3)
-		set_optimizer_attribute(model, "Solver", solver_lookup[solver])
+		set_optimizer_attribute(model, "Method", solver_lookup[solver])
 	end
 
 	if threads > 0

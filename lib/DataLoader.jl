@@ -29,6 +29,7 @@ function load_hhs(
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
+		covid_capacity_proportion::Real=0.4,
 		dist_threshold::Real=600,
 	)
 	@assert(start_date < end_date)
@@ -72,8 +73,6 @@ function load_hhs(
 			discharged[i,1] = 0.0
 		end
 	end
-
-	covid_capacity_proportion = 0.4
 
 	default_capacity_level = 1
 	beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_proportion
