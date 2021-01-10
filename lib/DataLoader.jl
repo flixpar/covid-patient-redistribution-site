@@ -29,6 +29,7 @@ function load_hhs(
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
+		dist_threshold::Real=600,
 	)
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
@@ -81,7 +82,9 @@ function load_hhs(
 
 	node_locations = Dict(name => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for (name,h) in zip(hospital_names, hospital_ids))
 
-	adj = fully_connected(N)
+	locs = [haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for h in hospital_ids]
+	dist_matrix = haversine_distance_matrix(locs)
+	adj = (0 .< dist_matrix .<= dist_threshold)
 
 	extent = (extent_type = :points, extent_regions = [])
 
