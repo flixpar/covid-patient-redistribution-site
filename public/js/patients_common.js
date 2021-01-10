@@ -100,7 +100,7 @@ function ajaxErrorHandler() {
 
 function setDefaultDates() {
 	let start_date = new Date();
-	let end_date   = new Date(2021, 0, 23);
+	let end_date   = new Date(2021, 0, 30);
 	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
 	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
 }
@@ -299,7 +299,7 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions() {
-	const default_region = "MD";
+	const default_region = {state: "MD"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
@@ -307,7 +307,8 @@ function getRegions() {
 		for (const region of regions) {
 			let opt = document.createElement("option");
 			opt.text = region.region_name;
-			if (region.region_name == default_region) {
+			opt.value = region.region_id;
+			if (region.region_id == default_region[regiontype]) {
 				opt.selected = true;
 			}
 			region_select.appendChild(opt);
