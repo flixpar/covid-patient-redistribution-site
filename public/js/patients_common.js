@@ -119,7 +119,13 @@ function validateForm() {
 		alert(`Date selection outside of valid range. Valid date range is ${valid_range_str}.`);
 	}
 
-	return dates_valid;
+	const nHospitalsSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
+	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 16);
+	if (!nHospitalsAllowed) {
+		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-16 hospitals.`);
+	}
+
+	return (dates_valid && nHospitalsAllowed);
 }
 
 function generateFigureDownloadButtons(figureNode, figureName) {
