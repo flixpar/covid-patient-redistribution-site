@@ -2,6 +2,8 @@ using Dates
 using JSON
 using Serialization
 
+push!(LOAD_PATH, normpath(@__DIR__, "..", "src"))
+push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"))
 include("../src/EndpointHandler.jl")
 
 
@@ -66,7 +68,7 @@ function precompute_result(params)
 	)
 
 	d = replace(string(params.start_date), "-" => "")
-	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_name).json")
+	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_id).json")
 	write(fn, JSON.json(result))
 
 	if VERBOSE
@@ -84,6 +86,10 @@ if abspath(PROGRAM_FILE) == @__FILE__
 	println("Precomputing results!")
 	for params_ in params_list, region in REGIONS
 		params = merge(params_, (;start_date = STARTDATE, region = region))
-		precompute_result(params)
+		try
+			precompute_result(params)
+		catch e
+			println("Error with: $(params)")
+		end
 	end
 end
