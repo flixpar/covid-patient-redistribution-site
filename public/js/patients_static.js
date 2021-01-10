@@ -71,7 +71,7 @@ function clearContent() {
 function getHospitals() {
 	const data = {
 		region_type: $("#form-regiontype")[0].value,
-		region: $("#form-region")[0].value,
+		region_id: $("#form-region")[0].value,
 	};
 	let request = $.get("/api/hospital-list", data, d => common.createHospitalsSelect(d));
 	return request;

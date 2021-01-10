@@ -16,6 +16,7 @@ export handle_patients_request
 export get_hospital_list
 export get_regions_list
 export handle_hospital_selection
+export complete_region
 
 
 function handle_patients_request(
@@ -145,7 +146,7 @@ function handle_patients_request(
 		:nodes_meta => nodes_meta,
 		:capacity_names => data.capacity_names,
 		:node_type => "hospital",
-		:region    => "us",
+		:region    => region,
 		:extent    => data.extent,
 		:capacity_util => capacity_util,
 		:default_capacity_level => default_capacity_level,
