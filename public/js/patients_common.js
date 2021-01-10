@@ -107,16 +107,16 @@ function setDefaultDates() {
 setDefaultDates();
 
 function validateForm() {
-	const data_start_date = "2020-03-25";
-	const data_end_date   = "2021-06-30";
+	const data_start_date = "2020-08-01";
+	const data_end_date   = "2021-01-30";
 
 	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
 	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
 
-	const dates_valid = (new Date(data_start_date) <= start_date) && (end_date < new Date(data_end_date));
+	const dates_valid = (new Date(data_start_date) <= start_date) && (end_date <= new Date(data_end_date));
 	if (!dates_valid) {
 		const valid_range_str = `${data_start_date} to ${data_end_date}`;
-		alert(`Date selection outside of valid range. Valid date range for ${region} is ${valid_range_str}.`);
+		alert(`Date selection outside of valid range. Valid date range is ${valid_range_str}.`);
 	}
 
 	return dates_valid;
