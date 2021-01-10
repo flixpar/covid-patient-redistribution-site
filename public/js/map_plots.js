@@ -1189,7 +1189,7 @@ function createDynamicLinks(sent, config) {
 				const p1 = config.node_locations[s1];
 				const p2 = config.node_locations[s2];
 				const v = sent[i][j][t];
-				if (v < 0.9) continue;
+				if (v < 0.1) continue;
 				let link = {
 					type: "LineString",
 					coordinates: [[p1.long, p1.lat], [p2.long, p2.lat]],
