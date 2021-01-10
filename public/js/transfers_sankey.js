@@ -180,10 +180,10 @@ function toGraph(response, excludeSelf=false) {
 	}));
 
 	const srcNames = locNames.filter((_,i) => {
-		return d3.sum(totalSent[i]) > 0;
+		return d3.sum(totalSent[i]) > 1;
 	});
 	const dstNames = locNames.filter((_, i) => {
-		return d3.sum(locInd.map(j => totalSent[j][i])) > 0;
+		return d3.sum(locInd.map(j => totalSent[j][i])) > 1;
 	});
 
 	const srcNodes = srcNames.map(colName => {return {name: colName+"-src", idx: locNames.indexOf(colName)}});
@@ -194,7 +194,7 @@ function toGraph(response, excludeSelf=false) {
 	locNames.forEach((locName, i) => {
 		for (let j = 0; j < N; j++) {
 			const v = totalSent[i][j];
-			if (v == 0) {continue;}
+			if (v < 1) {continue;}
 			if (excludeSelf && i == j) {continue;}
 			links.push({source: locName+"-src", target: locNames[j]+"-dst", value: v});
 		}

@@ -1038,7 +1038,8 @@ class MapEdgeTooltip {
 			.attr("height", 12)
 			.attr("fill", "white")
 			.attr("stroke", "gray")
-			.attr("stroke-width", 1.0);
+			.attr("stroke-width", 1.0)
+			.attr("visibility", "hidden");
 		this.bubbleBackground = tooltipNode.append("rect")
 			.attr("x", -60)
 			.attr("y", 8)
@@ -1188,7 +1189,7 @@ function createDynamicLinks(sent, config) {
 				const p1 = config.node_locations[s1];
 				const p2 = config.node_locations[s2];
 				const v = sent[i][j][t];
-				if (v <= 0) continue;
+				if (v < 0.9) continue;
 				let link = {
 					type: "LineString",
 					coordinates: [[p1.long, p1.lat], [p2.long, p2.lat]],
@@ -1213,7 +1214,7 @@ function createStaticLinks(sent, config) {
 
 		const v1 = d3.sum(sent[i][j]);
 		const v2 = d3.sum(sent[j][i]);
-		if (v1 + v2 <= 0) continue;
+		if (v1 + v2 <= 0.2) continue;
 
 		let v = v1 - v2;
 		let s1 = config.node_names[i];
