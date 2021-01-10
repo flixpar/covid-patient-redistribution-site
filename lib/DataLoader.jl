@@ -12,6 +12,7 @@ export load_hhs
 export los_dist_default
 export hospitals_list
 export regions_list
+export complete_region
 
 projectbasepath = joinpath(@__DIR__, "../")
 
@@ -110,13 +111,16 @@ function los_dist_default(bedtype::Symbol)
 	end
 end
 
-function filter_hospitals(data; region=nothing, names=nothing)
-	if !isnothing(region) && region.region_type == :state
-		hospitals_info = filter(h -> h.state == region.region_name, data.location_meta)
-	elseif !isnothing(region) && region.region_type == :hospital_system
-		hospitals_info = filter(h -> !ismissing(h.system_name) && (h.system_name == region.region_name), data.location_meta)
-	elseif !isnothing(region)
-		error("Unsupported region type")
+function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
+	if !isnothing(region)
+		col_lookup = Dict(
+			:state => :state_abbrev,
+			:hospital_system => :system_id,
+			:hrr => :hrr_id,
+			:hsa => :hsa_id,
+		)
+		col = col_lookup[region.region_type]
+		hospitals_info = filter(h -> !ismissing(h[col]) && (h[col] == region.region_id), data.location_meta)
 	else
 		hospitals_info = data.location_meta
 	end
@@ -180,6 +184,21 @@ function regions_list(region_type::Symbol=:all)
 		filter!(r -> r.region_type == region_type, data)
 	end
 	return data
+end
+
+function complete_region(r)
+	regions = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	filter!(region -> region.region_type == r.region_type, regions)
+	if haskey(r, :region_id) && !haskey(r, :region_name)
+		region_idx = findfirst(region -> region.region_id == r.region_id, regions)
+		region = regions[region_idx]
+	elseif haskey(r, :region_name) && !haskey(r, :region_id)
+		region_idx = findfirst(region -> region.region_name == r.region_name, regions)
+		region = regions[region_idx]
+	else
+		region = r
+	end
+	return region
 end
 
 function haversine_distance(loc1, loc2)

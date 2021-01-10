@@ -67,7 +67,7 @@ function makeSections() {
 function getHospitals() {
 	const data = {
 		region_type: $("#form-regiontype")[0].value,
-		region: $("#form-region")[0].value,
+		region_id: $("#form-region")[0].value,
 	};
 	let request = $.get("/api/hospital-list", data, d => {
 		hospitals_meta_list = d;
@@ -96,9 +96,9 @@ function sendUpdateQuery() {
 
 	const data = {
 		alloclevel: $("#form-level")[0].value,
-		region: $("#form-region")[0].value,
-		regiontype: $("#form-regiontype")[0].value,
-		hospitals: selectedHospitalNames,
+		region_type: $("#form-regiontype")[0].value,
+		region_id: $("#form-region")[0].value,
+		hospitals: selectedHospitalIds,
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
