@@ -8,10 +8,17 @@ export {createTransfersSankey};
 
 
 function createTransfersSankey(response, add_description=true) {
+	const section = document.getElementById("section-results-transfers");
+
+	if (!checkTransfers(response)) {
+		let text = document.createElement("p");
+		text.textContent = "No transfers";
+		section.appendChild(text);
+		return;
+	}
+
 	const graph = toGraph(response, false);
 	const fig = makeTransfersSankey(response, graph);
-
-	const section = document.getElementById("section-results-transfers");
 	section.appendChild(fig);
 
 	generateFigureDownloadButtons(fig, "transfer-flows");
@@ -196,6 +203,11 @@ function toGraph(response, excludeSelf=false) {
 	return {nodes, links}
 }
 
+function checkTransfers(response) {
+	const totalSent = d3.sum(response.sent, x => d3.sum(x, y => d3.sum(y)));
+	return totalSent > 0;
+}
+
 class TransfersSankeyTooltip {
 	constructor(svg, response) {
 		this.svg = svg;
@@ -254,7 +266,9 @@ class TransfersSankeyTooltip {
 
 		const transferText = `${d.source.name.substring(0,d.source.name.length-4)} → ${d.target.name.substring(0,d.target.name.length-4)}`;
 		this.textLine1.textContent = transferText;
-		this.textLine2.textContent = "Transfers: " + d.value.toFixed(0);
+
+		const transferAmount = (d.value < 1) ? "<1" : d.value.toFixed(0)
+		this.textLine2.textContent = "Transfers: " + transferAmount;
 
 		this.highlight = e.srcElement.cloneNode();
 		this.highlight.setAttribute("stroke", "white");
