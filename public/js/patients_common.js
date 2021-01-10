@@ -304,8 +304,8 @@ function createInfo(parentElement, content) {
 	return el;
 }
 
-function getRegions() {
-	const default_region = {state: "MD"};
+function getRegions(exclude) {
+	const default_region = {state: "MD", hospital_system: "HSI00000730", hrr: "56", hsa: "33014"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
@@ -317,6 +317,7 @@ function getRegions() {
 			if (region.region_id == default_region[regiontype]) {
 				opt.selected = true;
 			}
+			if (exclude.indexOf(region.region_id) >= 0) {continue;}
 			region_select.appendChild(opt);
 		}
 	});
