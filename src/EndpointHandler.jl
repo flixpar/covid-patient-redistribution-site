@@ -148,8 +148,16 @@ function handle_patients_request(
 		:node_type => "hospital",
 		:region    => region,
 		:extent    => data.extent,
-		:capacity_util => capacity_util,
 		:default_capacity_level => default_capacity_level,
+		:params => (;
+			scenario,
+			bedtype = patient_type,
+			objective,
+			constrain_integer,
+			capacity_util,
+			uncertainty_level,
+			los_param,
+		),
 	)
 
 	outcomes = Dict(

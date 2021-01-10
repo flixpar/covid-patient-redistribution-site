@@ -9,7 +9,11 @@ export {
 	generateFigureDownloadButtons,
 	getRegions,
 	createHospitalsSelect,
+	updateText,
+	toTitlecase,
 };
+
+import {enableHiddenTextButtons} from "./figure_text.js";
 
 
 function makeSection(sectionInfo) {
@@ -496,3 +500,16 @@ const tooltip_content = {
 	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
 };
 
+const toTitlecase = s => s.split(" ").map(w => w[0].toUpperCase() + w.substr(1)).join(" ");
+
+function updateText(response) {
+	enableHiddenTextButtons();
+
+	const region = toTitlecase(response.config.region.region_name);
+	let totalLooadSectionTitle = document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title");
+	totalLooadSectionTitle.textContent = `COVID-19 Occupancy in ${region}`;
+
+	for (let elem of document.querySelectorAll(".region-text")) {
+		elem.textContent = region;
+	}
+}

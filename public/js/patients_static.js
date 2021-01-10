@@ -5,7 +5,6 @@ import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
 import {createTransfersSankey} from "./transfers_sankey.js";
 import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
-import {enableHowtoButtons} from "./figure_text.js";
 
 let recentResponse = null;
 
@@ -35,7 +34,7 @@ function generateContent(response) {
 
 	setupDownloads(response);
 
-	enableHiddenTextButtons();
+	common.updateText(response);
 
 	console.log("Done.");
 }
