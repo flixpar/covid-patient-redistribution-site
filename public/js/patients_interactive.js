@@ -90,10 +90,9 @@ function sendUpdateQuery() {
 		return;
 	}
 
-	const selectedHospitalNames = hospitals_meta_list.map((h,i) => {
-		const c = document.getElementById(`hospitalselect-${i}`).checked;
-		return c ? h.name : null;
-	}).filter(x => x != null);
+	const selectedHospitalIds = Array.from(document.querySelectorAll(".hospitalselect-checkbox"))
+		.map(c => c.checked ? c.value : null)
+		.filter(x => x != null);
 
 	const data = {
 		alloclevel: $("#form-level")[0].value,
