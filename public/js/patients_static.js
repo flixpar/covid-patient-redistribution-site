@@ -42,9 +42,9 @@ function generateContent(response) {
 
 const sectionInfo = [
 	{title: "Parameter Selection",             identifier: "parameters",          reset:false, showDefault: true},
-	{title: "Required Surge Capacity Map",     identifier: "results-overflowmap", reset:true,  showDefault: true, subtitle: "Where are additional COVID beds required?"},
-	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transfered?"},
-	{title: "Timeline",                        identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When is additional capacity needed?"},
+	{title: "Occupancy and Surge Capacity Map", identifier: "results-maps",       reset:true,  showDefault: true, subtitle: "How busy are hospitals? Where are more beds needed?"},
+	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transferred?"},
+	{title: "Capacity Timeline",               identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When are additional beds needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
 	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: false},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
@@ -83,13 +83,13 @@ function createParametersForm() {
 	const start_date = "2020-12-30";
 	const end_date = "2021-01-16";
 
-	let infoText = `Choose the state, patient type (ICU or acute), and COVID-19 forecast scenario to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. To see more options, please visit our "Details" page.`;
+	let infoText = `Choose a state and patient type (ICU or acute) to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. Click on “Update” to see the results. To see more options, please visit our "Details" page.`;
 	let infoTextArea = document.createElement("p");
 	infoTextArea.textContent = infoText;
 	infoTextArea.style.marginBottom = "20px";
 	section.appendChild(infoTextArea);
 
-	let infoHover1 = common.createInfo(null, `This page optimizes the best transfer strategy considering all hospitals in the state of your choice for the specified timeline mentioned above. If you would like to change the timeline or choose specific healthcare systems instead of states, please visit our "Details" page.`);
+	let infoHover1 = common.createInfo(null, `This page computes an optimal transfer strategy for all hospitals in the selected state (including those not displayed). If you would like to change this setting or the timeline, please visit our “Details” page.`);
 	infoTextArea.appendChild(infoHover1);
 
 	let formContainer = document.createElement("div");
@@ -347,7 +347,7 @@ function sendUpdateQuery(latest=true) {
 }
 
 const tooltip_content = {
-	"form-patient-type": "Restrict the focus to patients requiring a certain level of care, and the capacity available for those patients.",
+	"form-patient-type": "Choose ICU or acute COVID-19 patients. Each patient type requires a certain level of care and beds, and hospitals have different capacities for each.",
 	"form-scenario": "Each forecast scenario is a set of assumptions about the severity of the COVID outbreak which can be used to forecast hospitalizations.",
 };
 $("label").each((i, el) => {
