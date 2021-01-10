@@ -28,9 +28,10 @@ const debugMap = false;
 
 let storedGeometry = null;
 
-import {overflowmapDescription} from "./figure_text.js";
+import {generateHiddenText} from "./figure_text.js";
 import {generateFigureDownloadButtons} from "./patients_common.js";
 import {getDateIntervals} from "./loadplots.js";
+import {toTitlecase} from "./patients_common.js";
 
 
 export function createMap(rawdata, metric, transfers="both", add_description=true) {
@@ -38,7 +39,6 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 	let colorscale;
 	let plotTitle, colorbarLabel;
 	let dynamic;
-	let description = null;
 
 	if (metric == "load") {
 		dynamic = true;
@@ -80,7 +80,6 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 		colorscale = getOverflowColorscale(data.overflow_null);
 		plotTitle = "Required Additional COVID Beds";
 		colorbarLabel = "Number of Additional Beds";
-		description = overflowmapDescription;
 	} else if (metric == "overflow" || metric == "overflow_static") {
 		dynamic = false;
 		const data = extractDataStatic(rawdata);
@@ -106,7 +105,8 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 	let figContainer = document.createElement("div");
 	section.appendChild(figContainer);
 
-	if (add_description && description != null) {
+	if (add_description) {
+		const description = generateDescription(rawdata);
 		let descriptionElem = document.createElement("p");
 		descriptionElem.className = "caption";
 		descriptionElem.innerHTML = description;
@@ -208,6 +208,44 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, g
 	svg.node().dispatchEvent(new Event("buildTooltips"));
 
 	return svg.node();
+}
+
+function generateDescription(response) {
+
+	const region = toTitlecase(response.config.region.region_name);
+	const regionTitle = region;
+	const startDate = response.config.start_date;
+	const endDate = response.config.end_date;
+	const bedtype = (response.config.params.bedtype == "icu") ? "ICU" : response.config.params.bedtype;
+	const regiontype = response.config.region.region_type;
+
+	const N = response.config.node_names.length;
+	const T = response.config.dates.length;
+
+	const overflow_sent_byloc = d3.range(N).map(i => response.active[i].map(x => Math.max(0, x - response.beds[i])));
+	const overflow_nosent_byloc = d3.range(N).map(i => response.active_null[i].map(x => Math.max(0, x - response.beds[i])));
+	const maxoverflow_transfers = d3.sum(d3.range(N).map(i => d3.max(overflow_sent_byloc[i]))).toFixed(0);
+	const maxoverflow_notransfers = d3.sum(d3.range(N).map(i => d3.max(overflow_nosent_byloc[i]))).toFixed(0);
+
+	const maxTotalActive = d3.max(d3.range(T).map(t => d3.sum(response.active_null, x => x[t])));
+	const totalCapacity = d3.sum(response.beds);
+	const hasSystemOverflow = maxTotalActive > totalCapacity;
+
+	let insightsText = ``;
+	if (!hasSystemOverflow) {
+		insightsText = `${regionTitle} is within capacity from ${startDate} to ${endDate}, but not all of its hospitals might be. Optimally transferring patients can save beds and reduce the number of over-capacity hospitals. If optimal transfers are used, the total number of required additional beds in ${region} reduces from ${maxoverflow_notransfers} to ${maxoverflow_transfers} ${bedtype} beds. Some hospitals may remain over capacity if they are far from other hospitals or are currently severely over capacity. The map shows daily hospitals' predicted occupancy, whether (and by how much) additional beds are needed, and how many patients should be transferred.`;
+	} else {
+		insightsText = `${regionTitle} is over capacity based on HHS and CDC data. The ${regiontype} needs to add at least ${maxoverflow_transfers} more ${bedtype} beds, even when using optimal transfers. The additional beds can be added in one location or distributed among hospitals (see the map to find the minimum capacity needed for the selected hospitals). Optimal patient transfers can prevent some hospitals from going over capacity and can balance the load across the state. Since there are no available beds to transfer the patients to, many hospitals may remain over capacity.<br>The map shows daily hospitals' predicted occupancy, whether (and by how much) additional beds are needed, and how many patients should be transferred.`;
+	}
+
+	const description = `
+		The map shows the daily capacity and occupancy of the hospitals you selected in ${region}. You can pause the loop to see more details and hover over the hospitals and arrows to display the capacity and the daily number of patients and transfers. These results are based on HHS and CDC data and JHU CCSE’s mathematical optimization models.
+		<br><br>
+		<b>Insights:</b> ${insightsText}
+		<br><br>
+		${generateHiddenText("The map shows the daily status of the selected hospitals. A green dot means the hospital is within capacity and a red dot means it is going over capacity. Hover over each hospital to see its capacity (number of beds) and occupancy (number of patients) for each day. If the number of patients grows larger than the capacity, additional beds are needed despite transferring patients. Hover over the arrows with ambulances to see how many patients should be transferred each day and to which hospitals.")}
+	`;
+	return description;
 }
 
 function makeColorbar(svg, colorscale, colorbarLabel=null) {
