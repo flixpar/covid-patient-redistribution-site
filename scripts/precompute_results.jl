@@ -2,14 +2,15 @@ using Dates
 using JSON
 using Serialization
 
-push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
-push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));
 include("../src/EndpointHandler.jl")
 
 
 STARTDATE = Date(2020, 12, 30)
 ENDDATE   = Date(2021, 01, 30)
-REGIONS = deserialize("../data/regions_hhs.jlser")
+
+REGIONTYPE = :state
+SKIPREGIONS = []
+
 params_list = [
 	(scenario=:moderate, patient_type=:icu),
 	(scenario=:moderate, patient_type=:acute),
@@ -28,6 +29,10 @@ default_params = (
 )
 results_path = "../public/results-static/"
 VERBOSE = true
+
+REGIONS = deserialize("../data/regions_hhs.jlser")
+filter!(r -> r.region_type == REGIONTYPE, REGIONS)
+filter!(r -> !(r.region_id in SKIPREGIONS), REGIONS)
 
 
 function precompute_result(params)
