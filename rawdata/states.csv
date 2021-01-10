@@ -1,0 +1,53 @@
+state,abbrev,fips,capital_city,main_city,lat,long
+Alabama,AL,1,Montgomery,Birmingham,32.318231,-86.902298
+Alaska,AK,2,Juneau,Anchorage,63.588753,-154.493062
+Arizona,AZ,4,Phoenix,Phoenix,34.048928,-111.093731
+Arkansas,AR,5,Little Rock,Little Rock,35.20105,-91.831833
+California,CA,6,Sacramento,Los Angeles,36.778261,-119.417932
+Colorado,CO,8,Denver,Denver,39.550051,-105.782067
+Connecticut,CT,9,Hartford,Bridgeport,41.603221,-73.087749
+Delaware,DE,10,Dover,Wilmington,38.910832,-75.52767
+District of Columbia,DC,11,Washington DC,Washington,38.905985,-77.033418
+Florida,FL,12,Tallahassee,Jacksonville,27.664827,-81.515754
+Georgia,GA,13,Atlanta,Atlanta,32.157435,-82.907123
+Hawaii,HI,15,Honolulu,Honolulu,19.898682,-155.665857
+Idaho,ID,16,Boise,Boise,44.068202,-114.742041
+Illinois,IL,17,Springfield,Chicago,40.633125,-89.398528
+Indiana,IN,18,Indianapolis,Indianapolis,40.551217,-85.602364
+Iowa,IA,19,Des Moines,Des Moines,41.878003,-93.097702
+Kansas,KS,20,Topeka,Wichita,39.011902,-98.484246
+Kentucky,KY,21,Frankfort,Louisville,37.839333,-84.270018
+Louisiana,LA,22,Baton Rouge,New Orleans,31.244823,-92.145024
+Maine,ME,23,Augusta,Portland,45.253783,-69.445469
+Maryland,MD,24,Annapolis,Baltimore,39.045755,-76.641271
+Massachusetts,MA,25,Boston,Boston,42.407211,-71.382437
+Michigan,MI,26,Lansing,Detroit,44.314844,-85.602364
+Minnesota,MN,27,Saint Paul,Minneapolis,46.729553,-94.6859
+Mississippi,MS,28,Jackson,Jackson,32.354668,-89.398528
+Missouri,MO,29,Jefferson City,Kansas City,37.964253,-91.831833
+Montana,MT,30,Helena,Billings,46.879682,-110.362566
+Nebraska,NE,31,Lincoln,Omaha,41.492537,-99.901813
+Nevada,NV,32,Carson City,Las Vegas,38.80261,-116.419389
+New Hampshire,NH,33,Concord,Manchester,43.193852,-71.572395
+New Jersey,NJ,34,Trenton,Newark,40.058324,-74.405661
+New Mexico,NM,35,Santa Fe,Albuquerque,34.97273,-105.032363
+New York,NY,36,Albany,New York City,43.299428,-74.217933
+North Carolina,NC,37,Raleigh,Charlotte,35.759573,-79.0193
+North Dakota,ND,38,Bismarck,Fargo,47.551493,-101.002012
+Ohio,OH,39,Columbus,Columbus,40.417287,-82.907123
+Oklahoma,OK,40,Oklahoma City,Oklahoma City,35.007752,-97.092877
+Oregon,OR,41,Salem,Portland,43.804133,-120.554201
+Pennsylvania,PA,42,Harrisburg,Philadelphia,41.203322,-77.194525
+Puerto Rico,PR,72,San Juan,San Juan,18.220833,-66.590149
+Rhode Island,RI,44,Providence,Providence,41.580095,-71.477429
+South Carolina,SC,45,Columbia,Charleston,33.836081,-81.163725
+South Dakota,SD,46,Pierre,Sioux Falls,43.969515,-99.901813
+Tennessee,TN,47,Nashville,Nashville,35.517491,-86.580447
+Texas,TX,48,Austin,Houston,31.968599,-99.901813
+Utah,UT,49,Salt Lake City,Salt Lake City,39.32098,-111.093731
+Vermont,VT,50,Montpelier,Burlington,44.558803,-72.577841
+Virginia,VA,51,Richmond,Virginia Beach,37.431573,-78.656894
+Washington,WA,53,Olympia,Seattle,47.751074,-120.740139
+West Virginia,WV,54,Charleston,Charleston,38.597626,-80.454903
+Wisconsin,WI,55,Madison,Milwaukee,43.78444,-88.787868
+Wyoming,WY,56,Cheyenne,Cheyenne,43.075968,-107.290284
