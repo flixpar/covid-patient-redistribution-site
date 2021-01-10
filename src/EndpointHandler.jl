@@ -163,8 +163,6 @@ function handle_patients_request(
 	outcomes = Dict(
 		:summary => results.summary_table,
 		:full_results => results.complete_table,
-		:sent_matrix => results.sent_matrix_table,
-		:net_sent => results.netsent,
 		:sent => permutedims(sent, (3,2,1)),
 		:beds => data.beds,
 		:capacity => permutedims(data.capacity, (2,1)),
