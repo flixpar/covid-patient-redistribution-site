@@ -280,8 +280,9 @@ function makeHorizontalColorScale(labels, colors) {
 const bisectDate = d3.bisector(d => d.date).left;
 function bisect(lines, date, yval) {
 	const line1 = lines[0];
+	const T = line1.length;
 	const i = bisectDate(line1, date, 1);
-	const a = line1[i - 1], b = line1[i];
+	const a = line1[(i<=0)?0:(i-1)], b = line1[(i>=T)?(T-1):i];
 	const d = date - a.date > b.date - date ? b.date : a.date;
 	const v = lines.map(l => l.findIndex(x => x.date == d));
 	const j = d3.minIndex(v.map((x,k) => Math.abs(lines[k][x].value - yval)));
