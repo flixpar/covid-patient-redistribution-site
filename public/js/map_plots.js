@@ -491,6 +491,7 @@ function addTitle(svg, titleText, titleSize) {
 	svg.attr("viewBox", viewBox);
 
 	svg.append("text")
+		.attr("class", "map-title")
 		.attr("x", viewBox[2]/2)
 		.attr("y", -3)
 		.attr("text-anchor", "middle")
@@ -623,6 +624,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, pl
 	if (title != null) {
 		if (titlePosition == "top") {
 			svg.append("text")
+				.attr("class", "map-subtitle")
 				.attr("x", plotWidth/2)
 				.attr("y", 20)
 				.attr("text-anchor", "middle")
@@ -631,6 +633,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, pl
 				.text(title);
 		} else if (titlePosition == "left") {
 			svg.append("text")
+				.attr("class", "map-subtitle")
 				.attr("transform", `translate(4,${plotHeight/2}) rotate(-90)`)
 				.attr("text-anchor", "middle")
 				.style("font-family", mapPlotFont)
