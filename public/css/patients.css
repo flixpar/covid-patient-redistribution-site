@@ -213,6 +213,13 @@ input[type="range"] {
 	min-width: 45%;
 }
 
+#params-form-submit {
+	width: 45%;
+	margin: auto;
+	margin-top: 25px;
+	display: flex;
+}
+
 @media only screen and (max-width: 600px) {
 	.section {
 		width: 95%;
