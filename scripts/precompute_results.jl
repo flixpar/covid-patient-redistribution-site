@@ -23,6 +23,8 @@ default_params = (
 	los_param = "default_dist",
 	end_date = ENDDATE,
 	smoothness = false,
+	solver = :auto,
+	threads = Sys.CPU_THREADS-1,
 )
 results_path = "../public/results-static/"
 VERBOSE = true
@@ -51,8 +53,11 @@ function precompute_result(params)
 		params.start_date,
 		default_params.end_date,
 
-		verbose=VERBOSE,
 		smoothness=default_params.smoothness,
+
+		solver=default_params.solver,
+		threads=default_params.threads,
+		verbose=VERBOSE,
 	)
 
 	d = replace(string(params.start_date), "-" => "")
