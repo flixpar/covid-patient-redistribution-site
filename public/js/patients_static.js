@@ -99,7 +99,7 @@ function createParametersForm() {
 	selectArea.className = "static-params-form-area";
 
 	let regionSelect = createSelect(["MD"], 0, "State", "form-region");
-	let scenarioSelect = createSelect(["Optimistic", "Moderate", "Pessimistic"], 1, "Forecast Scenario", "form-scenario");
+	let scenarioSelect = createSelect(["Moderate"], 0, "Forecast Scenario", "form-scenario");
 	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "COVID Patient Type", "form-patient-type");
 
 	selectArea.appendChild(regionSelect);
@@ -130,7 +130,8 @@ function createParametersForm() {
 	formContainer.appendChild(selectArea);
 	formContainer.appendChild(datesFormElem);
 
-	let genRegionsRequest = common.getRegions();
+	const excludeRegions = ["CA", "TX"];
+	let genRegionsRequest = common.getRegions(excludeRegions);
 	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());
 
 	regionSelect.addEventListener("change", () => getHospitals());
