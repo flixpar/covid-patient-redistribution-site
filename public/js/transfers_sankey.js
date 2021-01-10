@@ -19,7 +19,7 @@ function createTransfersSankey(response, add_description=true) {
 	if (add_description) {
 		let description = document.createElement("p");
 		description.className = "caption";
-		description.innerHTML = transfersSankeyDescription;
+		description.innerHTML = transfersSankeyDescription(response);
 		section.appendChild(description);
 	}
 }

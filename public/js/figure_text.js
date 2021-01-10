@@ -1,5 +1,5 @@
-export const transfersSankeyDescription = `
-The ribbons show the volume of patients that should be moved between hospitals. “Other Hospitals” refers to the rest of the hospitals in the selected state that were not chosen by the user to be displayed.
+export const transfersSankeyDescription = (response) => `
+For the hospitals you selected to display, the ribbons show the total number of patients that should be moved between hospitals (from the left-hand side to the right-hand side hospitals) from ${response.config.start_date} to ${response.config.end_date}. “Other Hospitals” refers to hospitals that were not selected for display.
 `;
 
 export const activeplotDescription = `
@@ -24,7 +24,9 @@ ${generateHiddenText("When the occupancy of a hospital (the thinner curves) ente
 
 export const metricsDescription = ``;
 
-export const surgeTimelineDescription = ``;
+export const surgeTimelineDescription = (response) => `
+This timetable shows the ${response.config.params.bedtype == "icu" ? "ICU" : response.config.params.bedtype} capacity levels for your selected hospitals. Use the dropdown menu at the bottom (“Use Transfers”) to see how capacity levels will change if optimal transfers are used or not used. Hospitals shown in red are over-capacity and require additional beds to meet their patients' needs.
+`;
 
 export function generateHiddenText(text) {
 	const descriptionId = "description-hidden-" + Math.random().toString(36).substr(2, 5);;

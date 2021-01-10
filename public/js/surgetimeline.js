@@ -20,7 +20,7 @@ export function createSurgeTimeline(response, add_description=true) {
 	const section = document.getElementById("section-results-surgetimeline");
 	if (add_description) {
 		let description = document.createElement("p");
-		description.innerHTML = surgeTimelineDescription;
+		description.innerHTML = surgeTimelineDescription(response);
 		section.appendChild(description);
 	}
 
