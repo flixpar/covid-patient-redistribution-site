@@ -268,12 +268,9 @@ function listParameters(response) {
 function filterResponse(response_) {
 	let response = JSON.parse(JSON.stringify(response_));
 
-	const selectedHospitalNames = response.config.nodes_meta.map((h,i) => {
-		const j = response.config.node_names.indexOf(h.name);
-		const c = document.getElementById(`hospitalselect-${j}`).checked;
-		return c ? h.name : null;
-	}).filter(x => x != null);
-	const selectedInd = selectedHospitalNames.map(h => response.config.node_names.indexOf(h)).sort();
+	const selectedHospitalIds = Array.from(document.querySelectorAll(".hospitalselect-checkbox:checked")).map(elem => elem.value);
+	const selectedInd = selectedHospitalIds.map(i => response.config.nodes_meta.findIndex(h => h.hospital_id == i));
+	const selectedHospitalNames = selectedInd.map(i => response.config.node_names[i]);
 
 	const N = response_.config.node_names.length;
 	const T = response_.admitted[0].length;
