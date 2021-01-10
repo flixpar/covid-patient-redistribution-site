@@ -158,12 +158,18 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:ic
 
 	default_capacity_level = 1
 	beds = casesdata.capacity[hospitals_ind, default_capacity_level]
+	empty_ind = findall(beds .== 0)
 
 	load = initial ./ beds
-	load[beds .== 0] .= 1.0
+	load[empty_ind] .= 1.0
 
-	default_hospitals_ind = sortperm(beds, rev=true)
-	default_hospitals_ind = default_hospitals_ind[1:min(NDEFAULT, length(default_hospitals_ind))]
+	n_total = min(NDEFAULT, length(hospitals_ind) - length(empty_ind))
+	n_size = Int(ceil(n_total * 0.75))
+	n_load = n_total - n_size
+
+	default_hospitals_ind_size = setdiff(sortperm(beds, rev=true), empty_ind)
+	default_hospitals_ind_load = setdiff(sortperm(load, rev=true), empty_ind)
+	default_hospitals_ind = vcat(default_hospitals_ind_size[1:n_size], default_hospitals_ind_load[1:n_load])
 
 	if DEBUG && NDEDBUG < NDEFAULT
 		default_hospitals_ind = default_hospitals_ind[1:min(NDEDBUG, length(default_hospitals_ind))]
