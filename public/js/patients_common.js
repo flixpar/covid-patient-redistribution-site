@@ -368,7 +368,7 @@ function createHospitalsSelect(data, staticPage=true) {
 		tagText.className = "tag";
 		tagDelete.className = "tag is-delete is-danger is-light";
 
-		tagText.innerText = h.name;
+		tagText.innerText = h.hospital_name;
 		tagDelete.addEventListener("click", e => {
 			document.getElementById(`hospitalselect-${i}`).checked = false;
 			document.getElementById(`hospitalselect-label-${i}`).classList.remove("hospital-select-item-selected");
@@ -382,7 +382,7 @@ function createHospitalsSelect(data, staticPage=true) {
 	}
 
 	data.forEach((h,i) => {
-		if (h.default) {
+		if (h.is_default) {
 			generateTag(h,i);
 		}
 	});
@@ -412,7 +412,7 @@ function createHospitalsSelect(data, staticPage=true) {
 		let nshow = 0;
 		for (let i = 0; i < data.length; i++) {
 			const h = data[i];
-			if (h.name.toLowerCase().indexOf(searchText) >= 0) {
+			if (h.hospital_name.toLowerCase().indexOf(searchText) >= 0) {
 				document.getElementById(`hospitalselect-label-${i}`).style.display = "block";
 				nshow += 1;
 			} else {
@@ -446,10 +446,12 @@ function createHospitalsSelect(data, staticPage=true) {
 
 		let checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
+		checkbox.className = "hospitalselect-checkbox";
 		checkbox.id = `hospitalselect-${i}`;
+		checkbox.value = h.hospital_id;
 		s.appendChild(checkbox);
 
-		if (h.default) {
+		if (h.is_default) {
 			checkbox.checked = true;
 			s.classList.add("hospital-select-item-selected");
 		}
@@ -464,7 +466,7 @@ function createHospitalsSelect(data, staticPage=true) {
 		});
 
 		let label = document.createElement("span");
-		label.textContent = h.name;
+		label.textContent = h.hospital_name;
 		s.appendChild(label);
 
 		let loadLabel = document.createElement("span");

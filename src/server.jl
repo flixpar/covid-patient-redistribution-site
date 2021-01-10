@@ -59,7 +59,7 @@ route("/api/patients", method=POST) do
 
 	if isnothing(input["hospitals"])
 		default_locations = get_hospital_list(region=region)
-		hospitals_list = [h["name"] for h in default_locations if h["default"]]
+		hospitals_list = [h.id for h in default_locations if h["default"]]
 	else
 		hospitals_list = string.(input["hospitals"])
 	end

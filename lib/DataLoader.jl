@@ -36,7 +36,7 @@ function load_hhs(
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
-	hospital_ind = filter_hospitals(data, region=region, names=hospital_list)
+	hospital_ind = filter_hospitals(data, region=region, ids=hospital_list)
 
 	if DEBUG
 		beds_ = data.casesdata[:moderate,:allbeds].capacity[hospital_ind,1]
@@ -124,8 +124,11 @@ function filter_hospitals(data; region=nothing, names=nothing)
 	if !isnothing(names) && !isempty(names)
 		hospitals_info = filter(h -> h.name in names, hospitals_info)
 	end
+	if !isnothing(ids) && !isempty(ids)
+		hospitals_info = filter(h -> h.id in ids, hospitals_info)
+	end
 
-	unique!(h -> h.name, hospitals_info)
+	unique!(h -> h.id, hospitals_info)
 	hospitals_ind = [h.index for h in hospitals_info]
 	filter!(x -> !isnothing(x), hospitals_ind)
 	sort!(hospitals_ind)
@@ -133,11 +136,12 @@ function filter_hospitals(data; region=nothing, names=nothing)
 	return hospitals_ind
 end
 
-function hospitals_list(;region=nothing, names=nothing, bedtype=:icu, scenario=:moderate)
+function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate)
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
-	hospitals_ind = filter_hospitals(data, region=region, names=names)
-	hospitals = data.location_names[hospitals_ind]
+	hospitals_ind = filter_hospitals(data, region=region, names=names, ids=ids)
+	hospital_names = data.location_names[hospitals_ind]
+	hospital_ids = data.location_ids[hospitals_ind]
 
 	casesdata = data.casesdata[scenario, bedtype]
 
@@ -159,12 +163,13 @@ function hospitals_list(;region=nothing, names=nothing, bedtype=:icu, scenario=:
 	end
 
 	hospitals_meta = [
-		Dict(
-			"name" => hospitals[i],
-			"current_load" => load[i],
-			"default" => i in default_hospitals_ind,
+		(
+			hospital_name = hospital_names[i],
+			hospital_id = hospital_ids[i],
+			current_load = load[i],
+			is_default = (i in default_hospitals_ind),
 		)
-		for i in 1:length(hospitals)
+		for i in 1:length(hospital_ids)
 	]
 	return hospitals_meta
 end
