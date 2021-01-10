@@ -7,7 +7,7 @@ push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"))
 include("../src/EndpointHandler.jl")
 
 
-STARTDATE = Date(2020, 12, 30)
+STARTDATE = Date(2021, 01, 01)
 ENDDATE   = Date(2021, 01, 30)
 
 REGIONTYPE = :state

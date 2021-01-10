@@ -32,10 +32,12 @@ function handle_patients_request(
 		los_param::String,
 
 		start_date::Date,
-		end_date::Date,
+		end_date::Date;
 
-		;verbose::Bool=false,
 		smoothness::Bool=true,
+		solver::Symbol=:default,
+		threads::Int=-1,
+		verbose::Bool=false,
 	)
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario), Patient type: $(patient_type)"
@@ -74,6 +76,8 @@ function handle_patients_request(
 			capacity_cushion=(1.0-capacity_util),
 			transfer_budget=transfer_budget,
 			constrain_integer=constrain_integer,
+			solver=solver,
+			threads=threads,
 			verbose=verbose,
 		)
 	elseif objective == :loadbalance
