@@ -30,7 +30,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	if (add_description) {
 		let description = document.createElement("p");
 		description.className = "caption";
-		description.innerHTML = overallloadplotDescription;
+		description.innerHTML = overallloadplotDescription(rawdata);
 		section.appendChild(description);
 	}
 }
