@@ -80,7 +80,7 @@ function createParametersForm() {
 	let section = common.getSection("parameters");
 
 	const start_date = "2020-12-30";
-	const end_date = "2021-01-16";
+	const end_date = "2021-01-30";
 
 	let infoText = `Choose a state and patient type (ICU or acute) to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. Click on “Update” to see the results. To see more options, please visit our "Details" page.`;
 	let infoTextArea = document.createElement("p");
