@@ -138,7 +138,7 @@ function createParametersForm() {
 	let selectUpdateButton = document.createElement("button");
 	selectUpdateButton.textContent = "Update";
 	selectUpdateButton.type = "button";
-	selectUpdateButton.className = "button is-info is-fullwidth";
+	selectUpdateButton.className = "button is-info";
 	selectUpdateButton.id = "params-form-submit";
 	formContainer.appendChild(selectUpdateButton);
 
