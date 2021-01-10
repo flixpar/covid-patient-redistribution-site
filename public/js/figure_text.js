@@ -2,10 +2,6 @@ export const transfersSankeyDescription = `
 The ribbons show the volume of patients that should be moved between hospitals. “Other Hospitals” refers to the rest of the hospitals in the selected state that were not chosen by the user to be displayed.
 `;
 
-export const ridgeplotDescription = `
-This figure shows the net number of COVID patients sent and received by each location over time. Areas shaded green represent times when a location is receiving more patients than it is sending, whereas areas shaded red represent times when a location is sending more patients than it is receiving.
-`;
-
 export const activeplotDescription = `
 The following figures illustrate the number of hospitalized COVID patients (per day) for each healthcare facility. The blue curve shows the forecasted number of patients (without any transfers) and the green shows this number assuming optimal transfers are made. The horizontal line shows the reported capacity for each facility. Note that hospitals that are over capacity (blue curve above the capacity line) can expect that the load will be lightened with optimal transfers as patients are transferred out. Hospitals that are within capacity (blue curve under the capacity line) will receive additional patients and the green curve will be closer (but still under) the capacity line. The goal is to distribute the load within the system instead of having some healthcare facilities be overwhelmed with patients while other hospitals have excess capacity that can be used.
 `;
@@ -25,12 +21,6 @@ The occupancy forecast for each hospital (as selected above) for the time durati
 <br><br>
 ${generateHiddenText("When the occupancy of a hospital (the thinner curves) enter the green region, the occupancy level of that hospital (ICU, Acute, or total COVID-19 beds) is within the capacity of the hospital.")}
 `;
-
-export const dashboardDescription = ``;
-
-export const transfersDescription = ``;
-
-export const admittedDescription = ``;
 
 export const metricsDescription = ``;
 
