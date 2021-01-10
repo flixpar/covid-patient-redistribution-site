@@ -113,27 +113,30 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 		section.appendChild(descriptionElem);
 	}
 
-	loadGeometry().then(geometry => {
-		let fig;
-		if (transfers == "both") {
-			fig = makeGroupedChoropleth(dynamic, rawdata, data1, data2, links, colorscale, geometry, metric, plotTitle, colorbarLabel);
-		} else if (transfers == "no_transfers") {
-			plotTitle += " (Without Optimal Transfers)";
-			fig = makeSingleChoropleth(dynamic, rawdata, data1, links, colorscale, geometry, metric+"_notransfers", plotTitle, colorbarLabel);
-		} else if (transfers == "transfers") {
-			plotTitle += " (With Optimal Transfers)";
-			fig = makeSingleChoropleth(dynamic, rawdata, data2, links, colorscale, geometry, metric+"_transfers", plotTitle, colorbarLabel);
-		}
-		figContainer.appendChild(fig);
-		generateFigureDownloadButtons(fig, "hospitals-map");
-	});
+	let fig;
+	if (transfers == "both") {
+		fig = makeGroupedChoropleth(dynamic, rawdata, data1, data2, links, colorscale, metric, plotTitle, colorbarLabel);
+		metric += "_both";
+	} else if (transfers == "no_transfers") {
+		plotTitle += " (Without Optimal Transfers)";
+		metric += "_notransfers";
+		fig = makeSingleChoropleth(dynamic, rawdata, data1, links, colorscale, metric, plotTitle, colorbarLabel);
+	} else if (transfers == "transfers") {
+		plotTitle += " (With Optimal Transfers)";
+		metric += "_transfers";
+		fig = makeSingleChoropleth(dynamic, rawdata, data2, links, colorscale, metric, plotTitle, colorbarLabel);
+	}
+	fig.id = `hospitalsmap-${metric}`;
+	fig.classList.add("hospitalsmap");
+	figContainer.appendChild(fig);
+	generateFigureDownloadButtons(fig, "hospitals-map");
 }
 
 ////////////////////////////
 ////// Plot Components /////
 ////////////////////////////
 
-function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, geometries, metric_name, plot_title, colorbar_label) {
+function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, colorscale, metric_name, plot_title, colorbar_label) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	let plotWidth, plotHeight;
@@ -157,8 +160,8 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 		labelPosition = "left";
 	}
 
-	g1 = makeMap(g1, svg, rawdata, data1, null, colorscale, geometries, plotWidth, plotHeight, metric_name+"_notransfers", make_dynamic, "(Without Optimal Transfers)", labelPosition);
-	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, geometries, plotWidth, plotHeight, metric_name+"_transfers", make_dynamic, "(With Optimal Transfers)", labelPosition);
+	g1 = makeMap(g1, svg, rawdata, data1, null, colorscale, plotWidth, plotHeight, metric_name+"_notransfers", make_dynamic, "(Without Optimal Transfers)", labelPosition);
+	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, plotWidth, plotHeight, metric_name+"_transfers", make_dynamic, "(With Optimal Transfers)", labelPosition);
 
 	if (showColorscale) {
 		svg = makeColorbar(svg, colorscale, colorbar_label);
@@ -187,14 +190,14 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	return svg.node();
 }
 
-function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, geometries, metric_name, plot_title, colorbarLabel) {
+function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, metric_name, plot_title, colorbarLabel) {
 	let svg = d3.create("svg").attr("viewBox", [0, 0, mapWidth, mapHeight]);
 
 	const plotWidth = 1.0 * mapWidth;
 	const plotHeight = mapHeight - mapPlotMargin.top - mapPlotMargin.bottom;
 
 	let g1 = svg.append("g").attr("transform", `translate(${mapPlotMargin.left}, ${mapPlotMargin.top})`);
-	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, geometries, plotWidth, plotHeight, metric_name, make_dynamic, plot_title);
+	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, plotWidth, plotHeight, metric_name, make_dynamic, plot_title);
 
 	if (showColorscale) {
 		svg = makeColorbar(svg, colorscale, colorbarLabel);
@@ -501,7 +504,7 @@ function addTitle(svg, titleText, titleSize) {
 ///////// Plot Maps ////////
 ////////////////////////////
 
-function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, plotWidth, plotHeight, metric_name, dynamic=true, title=null, titlePosition="top") {
+function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, plotHeight, metric_name, dynamic=true, title=null, titlePosition="top") {
 
 	const colorRegions = false;
 
@@ -511,7 +514,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, geometries, p
 	const edgeTooltip = new MapEdgeTooltip(svg, globalSVG, rawdata);
 	const tooltip = new MapTooltip(svg, globalSVG, rawdata, metric_name);
 
-	const selected_extent = getExtent(rawdata.config, geometries);
+	const selected_extent = getExtent(rawdata.config, null);
 	let map_projection = d3.geoMercator().fitExtent(
 		[
 			[mapMargin.left+mapPadding.left, mapMargin.top+mapPadding.top],
@@ -1260,7 +1263,7 @@ function loadGeometry(load_counties=false) {
 }
 
 function getExtent(config, geometries) {
-	if (config.extent.extent_type == "states") {
+	if (config.extent.extent_type == "states" && geometries != null) {
 		const selected_states = geometries.states.features.filter(s => {
 			return config.extent.extent_regions.indexOf(s.properties.name) >= 0
 		});
