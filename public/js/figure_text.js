@@ -44,7 +44,7 @@ export const metricsDescription = ``;
 
 export const surgeTimelineDescription = ``;
 
-function generateHiddenText(text) {
+export function generateHiddenText(text) {
 	const descriptionId = "description-hidden-" + Math.random().toString(36).substr(2, 5);;
 	const contentStr = `
 	<span class="description-hidden-label" data-for="${descriptionId}">

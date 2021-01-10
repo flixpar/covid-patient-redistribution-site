@@ -6,7 +6,6 @@ import {createTransfersSankey} from "./transfers_sankey.js";
 import {createActivePlot} from "./activeplot.js";
 import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
-import {enableHowtoButtons} from "./figure_text.js";
 
 let hospitals_meta_list = null;
 let recentResponse = null;
@@ -41,7 +40,7 @@ function handleResponse(response, status, xhr) {
 
 	setupDownloads(response);
 
-	enableHiddenTextButtons();
+	common.updateText(response);
 
 	console.log("Done.");
 }
