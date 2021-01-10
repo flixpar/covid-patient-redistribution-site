@@ -510,6 +510,16 @@ function updateText(response) {
 	let totalLooadSectionTitle = document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title");
 	totalLooadSectionTitle.textContent = `COVID-19 Occupancy in ${region}`;
 
+	const mapTitle = "COVID-19 Capacity, Occupancy, and Optimal Transfers";
+	for (let map of document.querySelectorAll(".hospitalsmap")) {
+		const metric = map.id.substring(13);
+		if (metric.indexOf("_both") > 0) {
+			map.querySelector(".map-title").textContent = mapTitle;
+		} else {
+			map.querySelector(".map-subtitle").textContent = mapTitle;
+		}
+	}
+
 	for (let elem of document.querySelectorAll(".region-text")) {
 		elem.textContent = region;
 	}
