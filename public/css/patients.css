@@ -230,7 +230,7 @@ input[type="range"] {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .icon-expand-text {
