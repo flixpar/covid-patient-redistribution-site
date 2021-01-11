@@ -79,8 +79,8 @@ export async function addMarkers(map, response) {
 		const popupContent = `
 			<h3>${pt.properties.name}</h3>
 			<p>Score: ${(pt.properties.score*100).toFixed(0)}/100</p>
+			<p>Occupancy: ${(pt.properties.occupancy*100).toFixed(0)}%</p>
 		`;
-		// <p>Occupancy: ${(pt.properties.occupancy*100).toFixed(0)}%</p>
 		const popup = new mapboxgl.Popup({offset: 15, focusAfterOpen: false}).setHTML(popupContent);
 
 		let marker = new mapboxgl.Marker(el)
@@ -154,20 +154,19 @@ function computeData(response) {
 		features: [],
 	};
 
-	const n = response.hospitals.length;
-	for (let i = 0; i < n; i++) {
+	for (const h of response.data) {
 		const pt = {
 			type: "feature",
 			geometry: {
 				type: "Point",
-				coordinates: [response.locations[i].long, response.locations[i].lat],
+				coordinates: [h.long, h.lat],
 			},
 			properties: {
-				name: response.hospitals[i][0],
-				id: response.hospitals[i][1],
-				score: response.scores[i],
-				distance: response.distances[i],
-				occupancy: response.load[i],
+				name: h.hospital,
+				id: h.hospital_id,
+				score: h.score,
+				distance: h.distance,
+				occupancy: h.total_load,
 			},
 		};
 		geojson.features.push(pt);
@@ -177,8 +176,9 @@ function computeData(response) {
 }
 
 function getScoreColorscale(response) {
-	const minScore = d3.min(response.scores);
-	const maxScore = d3.max(response.scores);
+	const scores = response.data.map(h => h.score);
+	const minScore = d3.min(scores);
+	const maxScore = d3.max(scores);
 	const colorscale = d3.scaleSequential(d3.interpolateRdYlGn).domain([minScore, maxScore]);
 	return colorscale;
 }
