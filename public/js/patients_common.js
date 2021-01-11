@@ -304,7 +304,7 @@ function createInfo(parentElement, content) {
 	return el;
 }
 
-function getRegions(exclude) {
+function getRegions(exclude=[]) {
 	const default_region = {state: "MD", hospital_system: "HSI00000730", hrr: "56", hsa: "33014"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
@@ -401,6 +401,7 @@ function createHospitalsSelect(data, staticPage=true) {
 
 	let selectAreaSearchContainer = document.createElement("div");
 	selectAreaSearchContainer.className = "control has-icons-left";
+	selectAreaSearchContainer.style.marginTop = "5px";
 	selectAreaSearchContainer.style.marginBottom = "5px";
 	selectAreaContainer.appendChild(selectAreaSearchContainer);
 
