@@ -3,19 +3,8 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZ
 
 import {populateLocationsTable} from "./hospital_selection.js";
 
+
 export function createLocationsMap(response) {
-	let mapContainer = document.createElement("div");
-	let mapContent = document.createElement("div");
-	let geocoderElem = document.createElement("div");
-
-	mapContainer.className = "map-wrapper";
-	mapContent.id = "map";
-	geocoderElem.id = "geocoder";
-	geocoderElem.className = "geocoder";
-
-	mapContainer.appendChild(mapContent);
-	mapContainer.appendChild(geocoderElem);
-	document.getElementById("result-area").appendChild(mapContainer);
 
 	const pos = response.current_location;
 	let map = new mapboxgl.Map({
@@ -37,9 +26,11 @@ export function createLocationsMap(response) {
 		mapboxgl: mapboxgl,
 		countries: "us",
 		types: "region,postcode,district,place,address",
-		marker: true,
+		marker: false,
+		placeholder: "Search for a location",
 	});
 	document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+	document.querySelector("#geocoder input").classList.add("input");
 
 	geocoder.on("result", e => {
 		const loc = {lat: e.result.center[1], long: e.result.center[0]};
@@ -53,61 +44,49 @@ export function createLocationsMap(response) {
 }
 
 export async function addMarkers(map, response) {
-	const randomID = Math.random().toString(36).substring(7);
-
-	const hospitals_geojson = computeData(response);
-	map.addSource(`hospitals-${randomID}`, {
-		type: "geojson",
-		data: hospitals_geojson,
-	});
 
 	const colorscale = getScoreColorscale(response);
 
 	const markerImgElem = await getMarkerImg();
 
-	let markers = [];
-	hospitals_geojson.features.forEach(pt => {
+	const markers = response.data.map(h => {
 		let el = document.createElement("div");
-		el.id = "marker-" + pt.properties.id;
+		el.id = "marker-" + h.hospital_id;
 		el.className = "marker";
 
 		let im = markerImgElem.cloneNode(true);
-		const c = colorscale(pt.properties.score);
+		const c = colorscale(h.score);
 		im.querySelector("path").setAttribute("fill", c);
 		im.querySelector("path").setAttribute("stroke", "black");
 		im.querySelector("path").setAttribute("stroke-width", "20px");
 		el.appendChild(im);
 
 		const popupContent = `
-			<h3>${pt.properties.name}</h3>
-			<p>Score: ${(pt.properties.score*100).toFixed(0)}/100</p>
-			<p>Occupancy: ${(pt.properties.occupancy*100).toFixed(0)}%</p>
+			<h3>${h.hospital}</h3>
+			<p>Score: ${(h.score*100).toFixed(0)}/100</p>
+			<p>Occupancy: ${(h.total_load*100).toFixed(0)}%</p>
 		`;
 		const popup = new mapboxgl.Popup({offset: 15, focusAfterOpen: false}).setHTML(popupContent);
 
 		let marker = new mapboxgl.Marker(el)
-			.setLngLat(pt.geometry.coordinates)
+			.setLngLat([h.long, h.lat])
 			.setPopup(popup)
 			.addTo(map);
-		markers.push(marker);
+		return marker;
 	});
 
-	const mapBBox = map._canvas.getBoundingClientRect();
 	let openMarker = null;
 
 	map.on("mousemove", e => {
-		let pt = e.lngLat.wrap();
-		pt.long = pt.lng;
+		let mousePoint = e.point;
 
-		const distances = response.locations.map(l => haversine_distance(pt, l));
+		const points = response.data.map(h => map.project([h.long, h.lat]));
+		const distances = points.map(p => l2distance(mousePoint, p));
 		const minIdx = d3.minIndex(distances);
 		const marker = markers[minIdx];
+		const dist = distances[minIdx];
 
-		const mouseXY = e.point;
-		const markerBBox = marker.getElement().getBoundingClientRect();
-		const dist = Math.sqrt((mouseXY.x - markerBBox.x + mapBBox.x)**2 + (mouseXY.y - markerBBox.y + mapBBox.y)**2);
-
-		if (openMarker != marker && openMarker != null) {
+		if (openMarker != null && openMarker != marker) {
 			openMarker.togglePopup();
 			openMarker = null;
 		}
@@ -126,6 +105,10 @@ export async function addMarkers(map, response) {
 		}
 	});
 
+}
+
+function l2distance(loc1, loc2) {
+	return Math.sqrt((loc1.x - loc2.x)**2 + (loc1.y - loc2.y)**2);
 }
 
 function haversine_distance(loc1, loc2) {
