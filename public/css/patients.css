@@ -150,7 +150,7 @@ input[type="range"] {
 .hospital-select-area {
 	display: flex;
 	flex-direction: column;
-	max-height: 300px;
+	max-height: 200px;
 	overflow-y: scroll;
 }
 
@@ -180,7 +180,7 @@ input[type="range"] {
 }
 
 .hospital-select-list {
-	max-height: 150px;
+	max-height: 100px;
 	overflow-y: scroll;
 
 	border-bottom: 1px solid lightgray;
