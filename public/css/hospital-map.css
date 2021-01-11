@@ -28,18 +28,26 @@
 	overflow: scroll;
 }
 
-.marker {
-	border: none;
-	cursor: pointer;
-	height: 24px;
-	width: 18px;
-}
-
 #main-content-area {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	flex-wrap: wrap;
+	flex-wrap: wrap-reverse;
+}
+
+@media (max-width: 750px) {
+	#map-area {
+		width: 100%;
+		min-width: 100%;
+		margin-bottom: 25px;
+	}
+	#map {
+		min-width: 0px;
+	}
+	#table-area {
+		width: 100%;
+		min-width: 100%;
+	}
 }
 
 #geocoder {
@@ -59,6 +67,13 @@
 
 #geocoder .suggestions {
 	top: 100%;
+}
+
+.marker {
+	border: none;
+	cursor: pointer;
+	height: 24px;
+	width: 18px;
 }
 
 .section {
