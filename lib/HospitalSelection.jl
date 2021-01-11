@@ -12,48 +12,41 @@ export score_hospitals
 
 
 function score_hospitals(loc, n=30)
-	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
-	hospitals = data.location_ids
+	data = deserialize(joinpath(projectbasepath, "data/hhs_current_load.jlser"))
 
-	default_loc = (lat = 0.0, long = 0.0)
-	locations = [haskey(data.locations_latlong, h) ? data.locations_latlong[h] : default_loc for h in hospitals]
-	distances = [haskey(data.locations_latlong, h) ? haversine_distance(loc, data.locations_latlong[h]) : Inf for h in hospitals]
+	locations = [(lat=h.lat, long=h.long) for h in data]
+	distances = [haversine_distance(loc, h) for h in locations]
 
-	selected = sort(sortperm(distances)[1:n])
+	selected = sort(partialsortperm(distances, 1:n))
 
-	hospitals = hospitals[selected]
-	locations = locations[selected]
+	data = data[selected]
 	distances = distances[selected]
-
-	casesdata = data.casesdata[:moderate, :icu]
-	day0_idx = (today() - data.start_date).value + 1
-	initial = casesdata.active[selected, day0_idx]
-	beds = casesdata.capacity[selected, 1] .* 0.4
-	available = beds .- initial
-	load = initial ./ beds
-	load[beds .== 0] .= 1.0
 
 	distance_scores = -distances
 	distance_scores = distance_scores .- minimum(distance_scores)
 	distance_scores = distance_scores ./ maximum(distance_scores)
 
-	available_scores = available
+	available_scores = [h.total_beds - h.total_occupancy for h in data]
 	available_scores = available_scores .- minimum(available_scores)
 	available_scores = available_scores ./ maximum(available_scores)
 
-	load_scores = -load
+	load_scores = [-h.total_load for h in data]
 	load_scores = load_scores .- minimum(load_scores)
 	load_scores = load_scores ./ maximum(load_scores)
 
 	weights = [0.4, 0.2, 0.4]
 	scores = [sum(weights .* z) for z in zip(distance_scores, load_scores, available_scores)]
 
+	data = [merge(h, (
+		distance = distances[i],
+		distance_score = distance_scores[i],
+		available_score = available_scores[i],
+		load_score = load_scores[i],
+		score = scores[i],
+	)) for (i,h) in enumerate(data)]
+
 	response = (;
-		hospitals,
-		scores,
-		locations,
-		distances,
-		load,
+		data,
 		current_location = loc,
 	)
 	return response
