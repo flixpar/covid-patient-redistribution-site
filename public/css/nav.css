@@ -18,13 +18,25 @@
 
 #navbar-menu {
 	text-align: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
 }
 
 #navbar-title > a {
 	color: #4a4a4a;
 	font-weight: bold;
+}
+
+@media (min-width: 1024px) {
+	#navbar-menu {
+		display: flex;
+	}
+}
+
+@media (max-width: 1023px) {
+	.navbar-brand > .navbar-item {
+		max-width: calc(100vw - 4em);
+		margin-right: 0;
+	}
 }

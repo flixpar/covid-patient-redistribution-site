@@ -1,25 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
+	const navbarBurger = document.querySelector(".navbar-burger");
+	if (navbarBurger == null) {return;}
 
-	// Get all "navbar-burger" elements
-	const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll(".navbar-burger"), 0);
+	navbarBurger.addEventListener("click", () => {
+		const targetId = navbarBurger.dataset.target;
+		const target = document.getElementById(targetId);
 
-	// Check if there are any navbar burgers
-	if ($navbarBurgers.length > 0) {
-
-		// Add a click event on each of them
-		$navbarBurgers.forEach( el => {
-			el.addEventListener("click", () => {
-
-				// Get the target from the "data-target" attribute
-				const target = el.dataset.target;
-				const $target = document.getElementById(target);
-
-				// Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-				el.classList.toggle("is-active");
-				$target.classList.toggle("is-active");
-
-			});
-		});
-	}
-
+		navbarBurger.classList.toggle("is-active");
+		target.classList.toggle("is-active");
+	});
 });
