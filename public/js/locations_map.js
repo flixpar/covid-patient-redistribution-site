@@ -1,6 +1,7 @@
 const mapboxStyle = "mapbox://styles/flixpar/ckji5ze386yqx19phi3ziiyya";
 mapboxgl.accessToken = "pk.eyJ1IjoiZmxpeHBhciIsImEiOiJja2kyN2l5dHIxanF0MnNrYjltZXNzbDJyIn0._W2ABd-tjVMdDqncb9ny9A";
 
+import {populateLocationsTable} from "./hospital_selection.js";
 
 export function createLocationsMap(response) {
 	let mapContainer = document.createElement("div");
@@ -44,6 +45,7 @@ export function createLocationsMap(response) {
 		const loc = {lat: e.result.center[1], long: e.result.center[0]};
 		$.get("/api/hospital-selection", loc, g => {
 			addMarkers(map, g);
+			populateLocationsTable(g);
 		});
 	});
 
