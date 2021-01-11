@@ -1,0 +1,74 @@
+#map-wrapper {
+	position: relative;
+	width: 100%;
+	overflow: visible;
+}
+
+#map {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	min-width: 400px;
+	overflow: visible;
+	height: calc(100vh - 13em);
+}
+
+#map-area {
+	width: 70%;
+	min-width: 400px;
+	height: calc(100vh - 13em);
+	overflow: hidden;
+}
+
+#table-area {
+	width: 29%;
+	min-width: 250px;
+	height: calc(100vh - 13em);
+	overflow: scroll;
+}
+
+.marker {
+	border: none;
+	cursor: pointer;
+	height: 24px;
+	width: 18px;
+}
+
+#main-content-area {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+#geocoder {
+	width: 100%;
+}
+
+#geocoder > .mapboxgl-ctrl-geocoder {
+	width: 100%;
+	max-width: 100%;
+	z-index: 100;
+}
+
+#geocoder input {
+	padding-left: 35px;
+	background-color: transparent;
+}
+
+#geocoder .suggestions {
+	top: 100%;
+}
+
+.section {
+	width: 94%;
+	margin: auto;
+	padding-top: 0.5em;
+}
+
+.container {
+	padding-top: 1em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid lightgray;
+}
