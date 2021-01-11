@@ -160,7 +160,7 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 
 async function getSVGData(svg) {
 	let imgCvt = {};
-	for (imgNode of svg.querySelectorAll("image")) {
+	for (const imgNode of svg.querySelectorAll("image")) {
 		const u = imgNode.href.baseVal;
 		if (imgCvt[u] == null) {
 			imgCvt[u] = await encodeImage(u);
@@ -170,7 +170,7 @@ async function getSVGData(svg) {
 	let serializer = new XMLSerializer();
 	let source = serializer.serializeToString(svg);
 
-	for (k in imgCvt) {
+	for (const k in imgCvt) {
 		const v = imgCvt[k];
 		source = source.replaceAll(k, v);
 	}
@@ -257,7 +257,7 @@ async function downloadFigureAsPDF(figureNode, fn) {
 	let svg = figureNode.cloneNode(true);
 
 	let imgCvt = {};
-	for (imgNode of svg.querySelectorAll("image")) {
+	for (const imgNode of svg.querySelectorAll("image")) {
 		const u = imgNode.href.baseVal;
 		if (imgCvt[u] == null) {
 			imgCvt[u] = await encodeImage(u);
