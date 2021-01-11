@@ -14,6 +14,7 @@ function generateContent(response) {
 	console.log("Updating...");
 	let map = createLocationsMap(response);
 	map.on("load", () => {
+		map.resize();
 		addMarkers(map, response);
 	});
 	populateLocationsTable(response);
