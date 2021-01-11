@@ -42,7 +42,7 @@
 		margin-bottom: 25px;
 	}
 	#map {
-		min-width: 0px;
+		min-width: 100%;
 	}
 	#table-area {
 		width: 100%;
@@ -86,4 +86,11 @@
 	padding-top: 1em;
 	padding-bottom: 1em;
 	border-bottom: 1px solid lightgray;
+}
+
+@media (max-width: 750px) {
+	.section {
+		padding: 0;
+		padding-top: 0.25em;
+	}
 }
