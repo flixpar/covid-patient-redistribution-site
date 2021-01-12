@@ -180,9 +180,8 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 
 	svg = addTitle(svg, plot_title, 20);
 
-	svg = makeTimeline(svg, rawdata);
-
 	if (make_dynamic) {
+		svg = makeTimeline(svg, rawdata);
 		setupMapAnimations(svg, rawdata);
 	}
 	svg.node().dispatchEvent(new Event("buildTooltips"));
@@ -203,9 +202,8 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, m
 		svg = makeColorbar(svg, colorscale, colorbarLabel);
 	}
 
-	svg = makeTimeline(svg, rawdata);
-
 	if (make_dynamic) {
+		svg = makeTimeline(svg, rawdata);
 		setupMapAnimations(svg, rawdata);
 	}
 	svg.node().dispatchEvent(new Event("buildTooltips"));
