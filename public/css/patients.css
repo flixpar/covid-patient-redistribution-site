@@ -225,7 +225,8 @@ input[type="range"] {
 	cursor: pointer;
 }
 
-.description-howto-text {
+.description-hidden-label {
+	cursor: pointer;
 }
 
 .hidden {
@@ -239,4 +240,9 @@ input[type="range"] {
 
 table.is-hoverable-custom > tr:hover {
 	background-color: #fafafa;
+}
+
+.abbrev-text {
+	color: #3273dc;
+	cursor: pointer;
 }
