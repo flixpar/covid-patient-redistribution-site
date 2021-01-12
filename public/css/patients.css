@@ -156,6 +156,7 @@ input[type="range"] {
 
 .hospital-select-area.static-page {
 	max-height: 180px;
+	border-bottom: 1px solid gray;
 }
 
 .hospital-select-item {
