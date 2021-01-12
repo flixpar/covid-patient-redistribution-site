@@ -9,4 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		navbarBurger.classList.toggle("is-active");
 		target.classList.toggle("is-active");
 	});
+
+	document.querySelectorAll("#navbar-main > .navbar-item").forEach(elem => {
+		if (window.location.pathname == elem.pathname) {
+			elem.classList.add("is-active");
+		}
+	});
 });
