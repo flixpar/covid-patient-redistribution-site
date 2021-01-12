@@ -54,8 +54,8 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 		data1 = data.max_load_null;
 		data2 = data.max_load;
 		colorscale = getLoadColorscale(data.max_load_null);
-		plotTitle = "Max COVID Patient Load";
-		colorbarLabel = "Normalized Load";
+		plotTitle = "Peak COVID Patient Load";
+		colorbarLabel = "Occupancy";
 	} else if (metric == "mean_load") {
 		dynamic = false;
 		const data = extractDataStatic(rawdata);
@@ -164,7 +164,7 @@ function makeGroupedChoropleth(make_dynamic, rawdata, data1, data2, links, color
 	g2 = makeMap(g2, svg, rawdata, data2, links, colorscale, plotWidth, plotHeight, metric_name+"_transfers", make_dynamic, "(With Optimal Transfers)", labelPosition);
 
 	if (showColorscale) {
-		svg = makeColorbar(svg, colorscale, colorbar_label);
+		svg = makeColorbar(svg, colorscale, colorbar_label, metric_name);
 	}
 
 	if (debugMap) {
@@ -199,7 +199,7 @@ function makeSingleChoropleth(make_dynamic, rawdata, data1, links, colorscale, m
 	g1 = makeMap(g1, svg, rawdata, data1, links, colorscale, plotWidth, plotHeight, metric_name, make_dynamic, plot_title);
 
 	if (showColorscale) {
-		svg = makeColorbar(svg, colorscale, colorbarLabel);
+		svg = makeColorbar(svg, colorscale, colorbarLabel, metric_name);
 	}
 
 	if (make_dynamic) {
@@ -249,7 +249,7 @@ function generateDescription(response) {
 	return description;
 }
 
-function makeColorbar(svg, colorscale, colorbarLabel=null) {
+function makeColorbar(svg, colorscale, colorbarLabel, metric) {
 	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
 
 	let container = svg.append("g")
@@ -279,6 +279,11 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 		.domain([0, colorscale.maxValue])
 		.range([(mapHeight/2) + (cbarHeight/2), (mapHeight/2) - (cbarHeight/2)]);
 
+	let tickTextFormat = (x) => x;
+	if (metric.indexOf("load") >= 0) {
+		tickTextFormat = d3.format(".0%");
+	}
+
 	container.append("rect")
 		.attr("x", 0)
 		.attr("y", (mapHeight/2) - (cbarHeight/2))
@@ -289,7 +294,7 @@ function makeColorbar(svg, colorscale, colorbarLabel=null) {
 		.attr("transform", `translate(20,0)`)
 		.style("font-family", mapPlotFont)
 		.style("font-size", "11px")
-		.call(d3.axisRight(colorbarScale).ticks(5))
+		.call(d3.axisRight(colorbarScale).ticks(5).tickFormat(tickTextFormat))
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line").attr("stroke", "#4a4a4a"))
 		.call(g => g.selectAll(".tick text").attr("fill", "#4a4a4a"));
