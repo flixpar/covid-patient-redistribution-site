@@ -33,6 +33,7 @@
 				<a href="/patients-interactive" class="navbar-item">Customize Results</a>
 				<a href="/hospital-selection" class="navbar-item">Nearby Hospitals</a>
 				<a href="/about" class="navbar-item">About</a>
+				<a href="/aboutus" class="navbar-item">About Us</a>
 			</div>
 		</div>
 	</nav>
@@ -40,42 +41,28 @@
 	<section class="section">
 
 		<div class="container">
-			<h1 class="title is-3">About Us</h1>
-
-			<p>We provide models and an interactive tool to find the optimal patient transfers for hospitals that are experiencing a large number of COVID-19 patients. To read more about the problem, please visit the <a href="/home">home page.</a></p>
-			<br>
-
-			<b>Team:</b> <a href="https://felixparker.com/">Felix Parker</a>, Fardin Ganjkhanloo, Farzin Ahmadi, and Professor <a href="https://systems.jhu.edu/kimia/">Kimia Ghobadi</a>
-			<br><br>
-
-			<b>Our team is affiliated with:</b><br>
-			<a href="https://systems.jhu.edu/">The Center for Systems Science and Engineering</a><br>
-			<a href="https://malonecenter.jhu.edu/">The Malone Center for Engineering in Healthcare</a><br>
-			<a href="https://cdem.jh.edu/">The Center for Data Science in Emergency Medicine</a><br>
-			<a href="https://engineering.jhu.edu/case/">Department of Civil and Systems Engineering</a><br>
-			<a href="https://www.jhu.edu/">Johns Hopkins University</a><br>
-			<br>
-
-			<b>Links</b><br>
-			<!-- <a href="https://covid-hospital-operations.com/html/presentation.html">Our talk at the INFORMS 2020 Annual Meeting</a><br> -->
-			<a href="https://arxiv.org/abs/2011.03528">Our paper (preprint)</a><br>
-			<a href="https://github.com/flixpar/covid-patient-redistribution-site">GitHub repository for this website</a><br>
-			<a href="https://github.com/flixpar/covid-resource-allocation">GitHub repository for the paper</a><br>
-			<br>
-
-			<p><b>Contact Information:</b> For further information, please contact us at <span class="eml">fparker9 at jhu.edu</span> or <span class="eml">kghobad1 at jhu.edu</span>.</p>
+			<h1 class="title">Optimal Hospital Capacity Management for COVID-19</h1>
+			<p>
+				<b>Introduction.</b> The COVID-19 pandemic has put an unprecedented strain on healthcare capacity around the globe. To accommodate the surge in patients, healthcare facilities have responded by both reducing demand, through canceling elective procedures, and by increasing capacity, through opening up new COVID-19-suitable beds and calling in additional personnel. While these measures have proven effective, increased hospital load and delays in elective care may result in adverse effects for patients. Additionally, increasing COVID-19 capacity is costly, slow, and may not be feasible for all healthcare centers. We aim to develop data-driven strategies to handle the COVID-19 patient surge more effectively by using coordination between hospitals.
+				<br><br>
+				<b>Capacity Management.</b> We use mathematical optimization to determine optimal strategies to reduce the burden of COVID-19 on hospitals. In particular, we focus on patient transfers. In practice, hospitals, even those in the same region or system, experience very different COVID patient loads, meaning that some may have unused capacity even while COVID overwhelms other hospitals. Patient transfers can balance these uneven loads and ensure that all capacity to care for patients is efficiently used. Patient transfers were used by some hospital systems that were hit particularly hard during the first wave of the pandemic, but these transfers were generally made reactively as hospitals ran out of capacity rather than planned. Optimal coordinated transfers have potential to significantly help hospitals cope with the burden of COVID and ensure that all patients receive the best possible level of care. We aim to demonstrate the benefits of this approach on this website using real-world data.
+				<br><br>
+				<b>Dashboard.</b> This website is a platform to explore hospital capacity management during COVID-19 and investigate the impacts that optimal patient transfers can have. The <a href="/patients-static">Dashboard</a> page describes our hospital capacity management insights with interactive figures, including the map below, based on precomputed results. The <a href="/patients-interactive">Customize Results</a> page allows for more control over the model and hospitals selected, and runs our model in real-time. The <a href="/hospital-selection">Nearby Hospitals</a> page shows hospitals near you and scores them according to their distance and current occupancy.
+				<img src="/img/home/hospitals-map.svg" style="width: 80%; margin: auto; display: block; margin-top: 8px;">
+				<br>
+				<b>Data.</b> This website uses <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data on hospital occupancy and COVID-19 hospitalizations</a> published by the US Department of Health and Human Services (HHS) for past COVID-19 hospital occupancy. To project this data into the future we use the US Center for Disease Control’s (CDC’s) county-level <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts of COVID-19 cases</a>, which is an ensemble of models from many forecasting teams, and deaggregate these forecasts to the hospital-level.
+				<br><br>
+				<b>Patient Transfer Optimization.</b> Our goal is to transfer patients from areas that are (or soon will be) overloaded to areas that are (and expected to remain) under capacity. These transfers must be done with care so that locations receiving patients do not later run out of capacity by accepting too many patients. The operational constraints and overheads of transferring patients between two facilities also need to be considered for each pair of hospitals. Our models use linear and mixed-integer programming to recommend the optimal number of patients to be transferred between each pair of hospitals (each day) to best utilize the available capacity. The results also provide insight into the minimum required capacity at each hospital and enable an early warning if extra beds are needed.
+				<br><br>
+				<b>About us.</b> We are a team from the Johns Hopkins Center for Systems Science and Engineering and Malone Center for Engineering in Healthcare. For more information, or to contact us, please visit the <a href="/about">About</a> page.
+				<br><br>
+				<b>Additional information.</b> For more information about our approach, see <a href="https://arxiv.org/abs/2011.03528">our paper</a> for details on the technical aspects of our methodology or <a href="https://github.com/flixpar/covid-patient-redistribution-site">our GitHub repository</a> which implements our models and data processing.
+				<!-- <a href="https://covid-hospital-operations.com/html/presentation.html">Our talk</a> at the INFORMS 2020 Annual Meeting also further explains our approach. -->
+			</p>
 		</div>
 
 	</section>
 
-	<style>
-		.eml {
-			background-color: #f9f9f9;
-			border: 1px solid lightgray;
-			border-radius: 4px;
-			padding: 0 2px 0 2px;
-		}
-	</style>
 </body>
 
 </html>
