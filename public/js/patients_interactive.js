@@ -40,6 +40,7 @@ function handleResponse(response, status, xhr) {
 
 	setupDownloads(response);
 
+	common.generateAllFigureDownloadButtons();
 	common.updateText(response);
 
 	console.log("Done.");

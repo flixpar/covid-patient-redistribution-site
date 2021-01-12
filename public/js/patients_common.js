@@ -7,6 +7,7 @@ export {
 	ajaxErrorHandler,
 	validateForm,
 	generateFigureDownloadButtons,
+	generateAllFigureDownloadButtons,
 	getRegions,
 	createHospitalsSelect,
 	updateText,
@@ -156,6 +157,13 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	pdfButton.className = "button is-light is-small";
 	pdfButton.addEventListener("click", () => downloadFigureAsPDF(figureNode, figureName+".pdf"))
 	buttonsContainer.appendChild(pdfButton);
+}
+
+function generateAllFigureDownloadButtons() {
+	for (const fig of document.querySelectorAll(".figure")) {
+		const figName = fig.getAttribute("figure-name");
+		generateFigureDownloadButtons(fig, figName);
+	}
 }
 
 async function getSVGData(svg) {

@@ -21,7 +21,8 @@ function createTransfersSankey(response, add_description=true) {
 	const fig = makeTransfersSankey(response, graph);
 	section.appendChild(fig);
 
-	generateFigureDownloadButtons(fig, "transfer-flows");
+	fig.classList.add("figure");
+	fig.setAttribute("figure-name", "transfer-flows");
 
 	if (add_description) {
 		let description = document.createElement("p");
