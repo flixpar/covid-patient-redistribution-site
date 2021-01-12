@@ -40,8 +40,8 @@ function generateContent(response) {
 }
 
 const sectionInfo = [
-	{title: "Parameter Selection",             identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Occupancy and Surge Capacity Map", identifier: "results-maps",       reset:true,  showDefault: true, subtitle: "How busy are hospitals? Where are more beds needed?"},
+	{title: "Hospital Selection",              identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transferred?"},
 	{title: "Capacity Timeline",               identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When are additional beds needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
@@ -72,81 +72,36 @@ function getHospitals() {
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
 	};
-	let request = $.get("/api/hospital-list", data, d => common.createHospitalsSelect(d));
+	let request = $.get("/api/hospital-list", data, d => common.createHospitalsSelect(d, true, false));
 	return request;
 }
 
 function createParametersForm() {
-	let section = common.getSection("parameters");
-
-	const start_date = "2021-01-01";
-	const end_date = "2021-01-30";
-
-	let infoText = `Select a state and patient type (ICU or acute) to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. Click on "Update" to see the results. For more options, visit the <a href="/patients-interactive">Customize Results</a> page.`;
-	let infoTextArea = document.createElement("p");
-	infoTextArea.innerHTML = infoText;
-	infoTextArea.style.marginBottom = "20px";
-	section.appendChild(infoTextArea);
-
-	let infoHover1 = common.createInfo(null, `This page computes an optimal transfer strategy for all hospitals in the selected state (including those not displayed). If you would like to change this setting or the timeline, visit the Customize Results page.`);
-	infoTextArea.appendChild(infoHover1);
-
-	let formContainer = document.createElement("div");
-	formContainer.id = "static-params-form";
-	section.appendChild(formContainer);
-
-	let selectArea = document.createElement("div");
-	selectArea.className = "static-params-form-area";
-
-	let regionSelect = createSelect(["MD"], 0, "State", "form-region");
-	let scenarioSelect = createSelect(["Moderate"], 0, "Forecast Scenario", "form-scenario");
-	let patienttypeSelect = createSelect(["ICU", "Acute"], 0, "COVID Patient Type", "form-patient-type");
-
-	selectArea.appendChild(regionSelect);
-	selectArea.appendChild(scenarioSelect);
-	selectArea.appendChild(patienttypeSelect);
-
-	scenarioSelect.style.display = "none";
-
-	let datesFormText = `
-		<fieldset class="static-params-form-area" disabled>
-			<div class="field">
-				<label class="label" for="form-startdate" style="margin-bottom: 0.2em;">Start Date</label>
-				<div class="control">
-					<input type="date" value=${start_date} class="input" id="form-startdate">
-				</div>
-			</div>
-			<div class="field">
-				<label class="label" for="form-enddate" style="margin-bottom: 0.2em;">End Date</label>
-				<div class="control">
-					<input type="date" value=${end_date} class="input" id="form-enddate">
-				</div>
-			</div>
-		</fieldset>
-	`;
-	let datesFormElem = document.createElement("div");
-	datesFormElem.innerHTML = datesFormText;
-
-	formContainer.appendChild(selectArea);
-	formContainer.appendChild(datesFormElem);
+	let regionSelect = document.getElementById("form-region");
+	let patienttypeSelect = document.getElementById("form-patient-type");
 
 	const excludeRegions = ["CA", "TX"];
-	let genRegionsRequest = common.getRegions(excludeRegions);
-	let getHospitalsRequest = genRegionsRequest.then(() => getHospitals());
+	let getRegionsRequest = common.getRegions(excludeRegions);
+	let getHospitalsRequest = getRegionsRequest.then(() => getHospitals());
+	getHospitalsRequest.then(() => sendUpdateQuery());
 
-	regionSelect.addEventListener("change", () => getHospitals());
+	regionSelect.addEventListener("change", () => getHospitals().then(() => sendUpdateQuery()));
+	patienttypeSelect.addEventListener("change", () => getHospitals().then(() => sendUpdateQuery()));
+
+	let parametersFormSection = common.getSection("parameters");
+
+	let hospitalSelectField = document.createElement("div");
+	hospitalSelectField.id = "hospital-select-field";
+	parametersFormSection.appendChild(hospitalSelectField);
 
 	let selectUpdateButton = document.createElement("button");
 	selectUpdateButton.textContent = "Update";
 	selectUpdateButton.type = "button";
 	selectUpdateButton.className = "button is-info";
 	selectUpdateButton.id = "params-form-submit";
-	formContainer.appendChild(selectUpdateButton);
+	parametersFormSection.appendChild(selectUpdateButton);
 
-	getHospitalsRequest.done(() => {
-		sendUpdateQuery();
-		selectUpdateButton.addEventListener("click", () => sendUpdateQuery());
-	});
+	selectUpdateButton.addEventListener("click", () => sendUpdateQuery());
 }
 
 function createSelect(optionNames, defaultIdx, labelText, selectId) {
@@ -333,7 +288,7 @@ function sendUpdateQuery(latest=true) {
 	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
 	const fn = `${start_date_str}_${scenario}_${patient_type}_state_${region}.json`;
 	console.log(`Fetching: ${fn}`)
-	$.ajax({
+	let request = $.ajax({
 		url: `/results-static/${fn}`,
 		type: "get",
 		contentType: "application/json; charset=utf-8",
@@ -341,6 +296,7 @@ function sendUpdateQuery(latest=true) {
 		beforeSend: common.showProgressbar,
 		error: common.ajaxErrorHandler,
 	});
+	return request;
 }
 
 const tooltip_content = {

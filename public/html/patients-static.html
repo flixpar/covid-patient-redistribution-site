@@ -50,10 +50,30 @@
 				<br><br>
 				This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals using mathematical optimization models developed by the Johns Hopkins Center for Systems Science and Engineering (JHU CSSE), data on hospitalizations from the US Department of Health and Human Services (HHS), and COVID case forecasts from the US Center for Disease Control (CDC). Visit the <a href="/home">home page</a> for more details on our methodology and data. You can use this dashboard to see which hospitals are over capacity, the optimal transfer strategy between them, and when each hospital (and US state) will need additional beds.
 
+				<br><br>
+				Select a state and patient type (ICU or acute) to see hospital occupancies and optimal transfers from <b><span class="fill-value" data-contentid="start_date">2021-01-01</span></b> to <b><span class="fill-value" data-contentid="end_date">2021-01-30</span></b>. <span class="info-text">To select hospitals, go to the "Select Parameters" section. For more options go to the "Compute Results" page.</span>
 			</p>
+			<div id="static-params-form">
+				<div class="field">
+					<div class="select is-fullwidth">
+						<select id="form-region">
+							<option value="MD">Maryland</option>
+						</select>
+					</div>
+				</div>
+				<div class="field">
+					<div class="select is-fullwidth">
+						<select id="form-patient-type">
+							<option value="icu">ICU</option>
+							<option value="acute">Acute</option>
+						</select>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<form id="form" autocomplete="off">
+			<input type="hidden" id="form-scenario" value="moderate">
 			<input type="hidden" id="form-objective" value="minoverflow">
 			<input type="hidden" id="form-transferbudget" value="15">
 			<input type="hidden" id="form-utilization" value="1.0">

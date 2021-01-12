@@ -196,21 +196,13 @@ input[type="range"] {
 }
 
 #static-params-form {
-	width: 95%;
-	margin: auto;
-}
-
-.static-params-form-area {
 	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-	margin-bottom: 10px;
+	justify-content: space-between;
 }
 
-.static-params-form-area > .field {
-	width: 45%;
-	min-width: 45%;
+#static-params-form > .field {
+	width: 49%;
+	min-width: 49%;
 }
 
 #params-form-submit {
