@@ -25,7 +25,8 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	overallLoadPlot.id = "overallloadplot";
 	overallLoadPlotContainer.appendChild(overallLoadPlot);
 
-	generateFigureDownloadButtons(overallLoadPlot, "load-overall");
+	overallLoadPlot.classList.add("figure");
+	overallLoadPlot.setAttribute("figure-name", "load-overall");
 
 	if (add_description) {
 		let description = document.createElement("p");
@@ -42,7 +43,8 @@ function createLoadPlots(rawdata, add_description=true) {
 	loadPlots.id = "loadplots";
 	section.appendChild(loadPlots);
 
-	generateFigureDownloadButtons(loadPlots, "load-hospitals");
+	loadPlots.classList.add("figure");
+	loadPlots.setAttribute("figure-name", "load-hospitals");
 
 	if (add_description) {
 		let description = document.createElement("p");

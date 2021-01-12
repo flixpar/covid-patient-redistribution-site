@@ -129,7 +129,9 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 	fig.id = `hospitalsmap-${metric}`;
 	fig.classList.add("hospitalsmap");
 	figContainer.appendChild(fig);
-	generateFigureDownloadButtons(fig, "hospitals-map");
+
+	fig.classList.add("figure");
+	fig.setAttribute("figure-name", "hospitals-map");
 }
 
 ////////////////////////////

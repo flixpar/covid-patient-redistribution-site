@@ -30,7 +30,8 @@ export function createSurgeTimeline(response, add_description=true) {
 	const fig = makeSurgeTimeline(response, true, true);
 	section.appendChild(fig);
 
-	generateFigureDownloadButtons(fig, "surgetimeline");
+	fig.classList.add("figure");
+	fig.setAttribute("figure-name", "surgetimeline");
 }
 
 function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
