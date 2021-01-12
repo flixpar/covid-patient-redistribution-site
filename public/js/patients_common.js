@@ -525,6 +525,12 @@ function updateText(response) {
 		}
 	}
 
+	for (let elem of document.querySelectorAll(".abbrev-text")) {
+		const fulltext = elem.dataset.fulltext;
+		elem.setAttribute("data-tippy-content", fulltext);
+		tippy(elem, {delay: [null, 250]});
+	}
+
 	for (let elem of document.querySelectorAll(".info-text")) {
 		const text = elem.textContent;
 		const info = createInfo(null, text);
