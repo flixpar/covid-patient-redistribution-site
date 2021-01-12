@@ -495,6 +495,51 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		selectArea.classList.add("static-page");
 		selectAreaList.classList.add("static-page");
 	}
+
+	let buttonsContainer = document.createElement("div");
+	buttonsContainer.className = "buttons";
+	buttonsContainer.style.marginTop = "8px";
+	buttonsContainer.style.display = "flex";
+	buttonsContainer.style.justifyContent = "space-between";
+
+	function addButton(buttonText, f) {
+		let button = document.createElement("button");
+		button.type = "button";
+		button.className = "button is-light is-small";
+		button.style.width = "32%";
+		button.textContent = buttonText;
+		if (f != null) {
+			button.addEventListener("click", f);
+		}
+		buttonsContainer.appendChild(button);
+		return button;
+	}
+
+	function checkElem(elem) {
+		if (!elem.checked) {
+			elem.click();
+		}
+	}
+	function uncheckElem(elem) {
+		if (elem.checked) {
+			elem.click();
+		}
+	}
+
+	addButton("Select All", () => document.querySelectorAll(".hospitalselect-checkbox").forEach(elem => checkElem(elem)));
+	addButton("Select None", () => document.querySelectorAll(".hospitalselect-checkbox").forEach(elem => uncheckElem(elem)));
+	addButton("Reset", () => {
+		data.forEach((h,i) => {
+			let elem = document.getElementById(`hospitalselect-${i}`);
+			if (h.is_default) {
+				checkElem(elem);
+			} else {
+				uncheckElem(elem);
+			}
+		});
+	});
+
+	selectAreaContainer.appendChild(buttonsContainer);
 }
 
 const tooltip_content = {
