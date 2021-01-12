@@ -84,11 +84,11 @@ function createParametersForm() {
 
 	let infoText = `Select a state and patient type (ICU or acute) to see hospital occupancies and optimal transfers from ${start_date} to ${end_date}. To display individual hospitals, please select them from the list below. Click on "Update" to see the results. For more options, visit the <a href="/patients-interactive">Customize Results</a> page.`;
 	let infoTextArea = document.createElement("p");
-	infoTextArea.textContent = infoText;
+	infoTextArea.innerHTML = infoText;
 	infoTextArea.style.marginBottom = "20px";
 	section.appendChild(infoTextArea);
 
-	let infoHover1 = common.createInfo(null, `This page computes an optimal transfer strategy for all hospitals in the selected state (including those not displayed). If you would like to change this setting or the timeline, visit the <a>Customize Results</a> page.`);
+	let infoHover1 = common.createInfo(null, `This page computes an optimal transfer strategy for all hospitals in the selected state (including those not displayed). If you would like to change this setting or the timeline, visit the Customize Results page.`);
 	infoTextArea.appendChild(infoHover1);
 
 	let formContainer = document.createElement("div");
