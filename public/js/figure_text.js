@@ -41,12 +41,12 @@ export const overallloadplotDescription = (response) => {
 	return text;
 }
 
-export const loadplotsDescription = `
-The occupancy forecast for each hospital (as selected above) for the time duration of choice. Left figure displays the occupancy when patients are not transferred, and the right figure displays occupancy when optimal patient transfers is utilized.
+export const loadplotsDescription = (response) => `
+The occupancy forecast for each selected hospital from ${response.config.start_date} to ${response.config.end_date}. The left figure displays the occupancy assuming that patients are not transferred, and the right figure displays occupancy assuming that optimal patient transfers are utilized.
 <br><br>
-<b>Insights for individual hospitals:</b> If a hospital enters the red region, there will be a bed shortage at that hospital. The shortage can be mitigated by either adding more COVID-19 beds (left figure) or optimally transferring patients to other hospitals that have extra capacity (right figure).
+<b>Insights for individual hospitals:</b> If a hospital enters the red region, there will be a COVID bed shortage at that hospital. The shortage can be mitigated by either adding more COVID-19 beds (left figure) or optimally transferring patients to other hospitals that have extra capacity (right figure).
 <br><br>
-${generateHiddenText("When the occupancy of a hospital (the thinner curves) enter the green region, the occupancy level of that hospital (ICU, Acute, or total COVID-19 beds) is within the capacity of the hospital.")}
+${generateHiddenText("When the occupancy of a hospital enters the green region, the occupancy level of that hospital is within the capacity of that hospital.")}
 `;
 
 export const metricsDescription = ``;
