@@ -17,7 +17,7 @@ route("/") do
 end
 
 route("/home") do
-	serve_static_file("html/home.html")
+	redirect("/about")
 end
 
 route("/patients-static") do
@@ -34,6 +34,10 @@ end
 
 route("/about") do
 	serve_static_file("html/about.html")
+end
+
+route("/aboutus") do
+	serve_static_file("html/aboutus.html")
 end
 
 route("/api/patients", method=POST) do
