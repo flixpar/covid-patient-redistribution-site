@@ -324,39 +324,24 @@ function getRegions(exclude=[]) {
 	return request;
 }
 
-function createHospitalsSelect(data, staticPage=true) {
-	if (document.getElementById("hospital-select-container") != null) {
-		if (staticPage) {
-			document.getElementById("hospital-select-field").remove();
-		} else {
-			document.getElementById("hospital-select-field").innerHTML = "";
-		}
-	}
-
-	let selectAreaField;
-	if (staticPage) {
-		selectAreaField = document.createElement("div");
-		selectAreaField.className = "field";
-		selectAreaField.id = "hospital-select-field";
-
-		let section = document.getElementById("static-params-form");
-		section.insertBefore(selectAreaField, document.getElementById("params-form-submit"));
-	} else {
-		selectAreaField = document.getElementById("hospital-select-field");
-	}
+function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
+	let selectAreaField = document.getElementById("hospital-select-field");
+	selectAreaField.innerHTML = "";
 
 	let selectAreaHeader = document.createElement("label");
 	selectAreaHeader.className = "label";
 	selectAreaHeader.style.marginBottom = "0.2rem";
 	selectAreaHeader.textContent = "Hospitals to Display";
 	selectAreaHeader.htmlFor = "hospitalselect";
-	selectAreaField.appendChild(selectAreaHeader);
 	if (!staticPage) {
 		selectAreaHeader.classList.add("column");
 		selectAreaHeader.classList.add("is-one-third");
 	}
 
-	createInfo(selectAreaHeader, tooltip_content["hospitalselect"]);
+	if (includeLabel) {
+		selectAreaField.appendChild(selectAreaHeader);
+		createInfo(selectAreaHeader, tooltip_content["hospitalselect"]);
+	}
 
 	let selectAreaContainer = document.createElement("div");
 	selectAreaContainer.className = "hospital-select-container";
@@ -501,7 +486,6 @@ function createHospitalsSelect(data, staticPage=true) {
 	if (staticPage) {
 		selectArea.classList.add("static-page");
 		selectAreaList.classList.add("static-page");
-
 	}
 }
 
@@ -530,5 +514,20 @@ function updateText(response) {
 
 	for (let elem of document.querySelectorAll(".region-text")) {
 		elem.textContent = region;
+	}
+
+	for (let elem of document.querySelectorAll(".fill-value")) {
+		const contentid = elem.dataset.contentid;
+		if (contentid == "start_date") {
+			elem.textContent = response.config.start_date;
+		} else if (contentid == "end_date") {
+			elem.textContent = response.config.end_date;
+		}
+	}
+
+	for (let elem of document.querySelectorAll(".info-text")) {
+		const text = elem.textContent;
+		const info = createInfo(null, text);
+		elem.replaceWith(info);
 	}
 }
