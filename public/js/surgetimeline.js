@@ -24,11 +24,11 @@ export function createSurgeTimeline(response, add_description=true) {
 		section.appendChild(description);
 	}
 
-	const fig = makeSurgeTimeline(response, true, true);
-	section.appendChild(fig);
-
 	const figOptions = addSurgeTimelineOptions(response);
 	section.appendChild(figOptions);
+
+	const fig = makeSurgeTimeline(response, true, true);
+	section.appendChild(fig);
 
 	generateFigureDownloadButtons(fig, "surgetimeline");
 }
@@ -437,10 +437,6 @@ function addSurgeTimelineOptions(response) {
 		select.appendChild(opt);
 	}
 
-	let selectLabel = document.createElement("label");
-	selectLabel.innerHTML = "Use transfers: ";
-	selectLabel.for = "surgetimeline-options-select";
-
 	select.addEventListener("change", e => {
 		e.preventDefault();
 
@@ -452,10 +448,11 @@ function addSurgeTimelineOptions(response) {
 	});
 
 	let selectField = document.createElement("div");
-	selectField.style.textAlign = "center";
-	selectField.style.marginBottom = "10px";
+	selectField.className = "select is-fullwidth is-small";
+	selectField.style.width = "40%";
+	selectField.style.marginLeft = "30%";
+	selectField.style.marginBottom = "12px";
 
-	selectField.appendChild(selectLabel);
 	selectField.appendChild(select);
 
 	return selectField;
