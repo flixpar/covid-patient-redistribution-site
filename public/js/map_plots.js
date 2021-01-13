@@ -333,7 +333,7 @@ function makeTimeline(svg, response) {
 	const T = dates.length;
 
 	const xInterval = getDateIntervals(dates);
-	const dateFormat = "%m/%d/%y";
+	const dateFormat = d3.timeFormat("%m/%d/%y");
 
 	const colorScaleOffset = showColorscale ? 90 : 8;
 	const xScale = d3.scaleUtc()
@@ -363,7 +363,7 @@ function makeTimeline(svg, response) {
 		.call(d3.axisBottom(xScale)
 			.ticks(xInterval)
 			.tickSize(15)
-			.tickFormat(d3.timeFormat(dateFormat))
+			.tickFormat(dateFormat)
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
@@ -427,15 +427,24 @@ function makeTimeline(svg, response) {
 		.attr("cursor", "pointer")
 		.on("click", () => svg.node().dispatchEvent(new Event("togglePlayMap")));
 
-	let line = svg.append("line")
-		.attr("transform", `translate(${xScale(dates[0])})`)
+	let line = svg.append("g")
+		.attr("transform", `translate(${xScale(dates[0])})`);
+	line.append("line")
 		.attr("y1", timelineY)
 		.attr("y2", timelineY+15)
 		.attr("stroke", "red")
 		.attr("stroke-width", 2.5);
+	let lineText = line.append("text")
+		.attr("y", timelineY+11)
+		.attr("x", 8)
+		.attr("fill", "red")
+		.style("font-family", "monospace")
+		.style("font-size", "11px")
+		.text(dateFormat(dates[0]));
 
 	function animate(e) {
 		const t = e.detail.t;
+		lineText.text(dateFormat(dates[t]));
 		if (t == 0) {
 			line.attr("transform", `translate(${xScale(dates[t])})`);
 		} else {
@@ -479,7 +488,7 @@ function makeTimeline(svg, response) {
 		const scaleFactor = mapWidth / svg.node().clientWidth;
 		const xPos = e.layerX * scaleFactor;
 		const date = xScale.invert(xPos).addDays(-1);
-		hoverLineText.text(date.toISOString().slice(0,10));
+		hoverLineText.text(dateFormat(date));
 		hoverLineComponent.attr("transform", `translate(${xPos})`);
 	});
 	xAxisArea.on("click", e => {
