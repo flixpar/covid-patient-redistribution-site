@@ -52,7 +52,7 @@ ${generateHiddenText("When the occupancy of a hospital enters the green region, 
 export const metricsDescription = ``;
 
 export const surgeTimelineDescription = (response) => `
-This timetable shows the ${response.config.params.bedtype == "icu" ? "ICU" : response.config.params.bedtype} capacity levels for your selected hospitals. Use the dropdown menu at the bottom (“Use Transfers”) to see how capacity levels will change if optimal transfers are used or not used. Hospitals shown in red are over-capacity and require additional beds to meet their patients' needs.
+This timeline shows the ${response.config.params.bedtype == "icu" ? "ICU" : response.config.params.bedtype} capacity levels for the selected hospitals. You can toggle between using optimal transfers and no transfers from the menu below to see the difference in results. Hospitals shown in red are over-capacity and require additional beds to meet their patients' needs.
 `;
 
 export function generateHiddenText(text) {
