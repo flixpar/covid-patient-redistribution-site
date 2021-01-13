@@ -404,6 +404,8 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 	selectAreaSearchInput.placeholder = "Search";
 	selectAreaSearchContainer.appendChild(selectAreaSearchInput);
 
+	if (staticPage) {selectAreaSearchInput.classList.add("is-small");}
+
 	let selectAreaSearchIconContainer = document.createElement("span");
 	selectAreaSearchIconContainer.className = "icon is-left";
 	let selectAreaSearchIcon = document.createElement("ion-icon");

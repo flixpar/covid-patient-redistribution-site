@@ -155,7 +155,7 @@ input[type="range"] {
 }
 
 .hospital-select-area.static-page {
-	max-height: 180px;
+	max-height: 120px;
 	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;
 }
@@ -167,6 +167,10 @@ input[type="range"] {
 	padding: 1px 5px 1px 5px;
 
 	white-space: nowrap;
+}
+
+.hospital-select-area.static-page > .hospital-select-item {
+	font-size: small;
 }
 
 .hospital-select-item:hover {
@@ -190,7 +194,11 @@ input[type="range"] {
 }
 
 .hospital-select-list.static-page {
-	max-height: 80px;
+	max-height: 60px;
+}
+
+.hospital-select-list.static-page .tag {
+	font-size: x-small;
 }
 
 .hospitalselect-tag {
