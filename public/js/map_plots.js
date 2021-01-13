@@ -482,6 +482,24 @@ function makeTimeline(svg, response) {
 		hoverLineText.text(date.toISOString().slice(0,10));
 		hoverLineComponent.attr("transform", `translate(${xPos})`);
 	});
+	xAxisArea.on("click", e => {
+		const scaleFactor = mapWidth / svg.node().clientWidth;
+		const xPos = e.layerX * scaleFactor;
+		const date = xScale.invert(xPos).addDays(-1);
+
+		const startDate = dates[0];
+		const t = Math.ceil((date - startDate) / (60*60*24*1000)) + 1;
+		svg.attr("timestep", t);
+
+		const paused = (svg.attr("anim-state") == "paused");
+		if (!paused) {svg.node().dispatchEvent(new Event("togglePlayMap"));}
+
+		svg.node().dispatchEvent(new CustomEvent("updateMap", {detail: {t: t, jump: true}}));
+		svg.selectAll("*").interrupt();
+		line.attr("transform", `translate(${xPos})`);
+
+		if (!paused) {svg.node().dispatchEvent(new Event("togglePlayMap"));}
+	});
 
 	viewBox[3] += timelineHeight;
 	svg.attr("viewBox", viewBox);
@@ -805,6 +823,7 @@ function setupMapAnimations(svg, response) {
 	svg.attr("anim-state", "play");
 	svg.attr("timestep", 0);
 
+	let currentTimer = null;
 	function executeTimestep(t) {
 		if (svg.attr("anim-state") == "play") {
 			svg.attr("timestep", t);
@@ -812,7 +831,7 @@ function setupMapAnimations(svg, response) {
 
 			const stepTime = (t != T-1) ? mapAnimationFrameTime : mapAnimationDelayTime;
 			const next_t = (t != T-1) ? t+1 : 0;
-			d3.timeout(() => executeTimestep(next_t), stepTime);
+			currentTimer = d3.timeout(() => executeTimestep(next_t), stepTime);
 		}
 	}
 
@@ -827,6 +846,7 @@ function setupMapAnimations(svg, response) {
 			svg.select("#pause-button").attr("visibility", "hidden");
 			svg.attr("anim-state", "paused");
 			svg.selectAll("*").interrupt();
+			currentTimer.stop();
 		}
 	});
 
