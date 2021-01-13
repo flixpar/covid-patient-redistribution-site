@@ -364,7 +364,7 @@ function makeTimeline(svg, response) {
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
-			.attr("stroke-width", 1.0)
+			.attr("stroke-width", 1.8)
 			.attr("stroke-opacity", 1.0)
 			.attr("stroke", "black")
 		)
