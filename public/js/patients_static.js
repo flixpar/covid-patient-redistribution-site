@@ -41,11 +41,11 @@ function generateContent(response) {
 
 const sectionInfo = [
 	{title: "Occupancy and Surge Capacity Map", identifier: "results-maps",       reset:true,  showDefault: true, subtitle: "How busy are hospitals? Where are more beds needed?"},
-	{title: "Hospital Selection",              identifier: "parameters",          reset:false, showDefault: true},
+	{title: "Displayed Hospitals",             identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transferred?"},
 	{title: "Capacity Timeline",               identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When are additional beds needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
-	{title: "Hospital COVID Occupancy",        identifier: "results-load",        reset:true,  showDefault: false},
+	{title: "COVID-19 Occupancy by Hospital",  identifier: "results-load",        reset:true,  showDefault: false},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
 	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
 ];
