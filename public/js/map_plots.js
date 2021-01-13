@@ -220,7 +220,9 @@ function generateDescription(response) {
 	const startDate = response.config.start_date;
 	const endDate = response.config.end_date;
 	const bedtype = (response.config.params.bedtype == "icu") ? "ICU" : response.config.params.bedtype;
-	const regiontype = response.config.region.region_type;
+
+	const regionTypeLookup = {state: "state", hospital_system: "hospital system", hrr: "hospital referral region (HRR)", hsa: "hospital service area (HSA)"};
+	const regiontype = regionTypeLookup[response.config.region.region_type];
 
 	const N = response.config.node_names.length;
 	const T = response.config.dates.length;
@@ -236,9 +238,9 @@ function generateDescription(response) {
 
 	let insightsText = ``;
 	if (!hasSystemOverflow) {
-		insightsText = `The ${regionTitle} hospital system is expected to be within capacity from ${startDate} to ${endDate}, but some hospitals in the system may still approach or exceed their capacity. Optimally transferring patients can ease the burden on hospitals with a higher COVID patient volume. If optimal transfers are used, we estimate that the total number of additional beds required in ${region} would reduce from ${maxoverflow_notransfers} to ${maxoverflow_transfers} ${bedtype} beds. Some hospitals may remain over capacity due to operational constraints or if they are currently severely over capacity. The map shows daily hospitals' predicted occupancy, whether (and by how much) additional beds are needed, and how many patients should be transferred.`;
+		insightsText = `${regionTitle}'s hospital system is expected to be within its COVID capacity from ${startDate} to ${endDate}, but some hospitals in the system may still approach or exceed their capacity. Optimally transferring patients can ease the burden on such hospitals. If optimal transfers are used, we estimate that the total number of additional beds required in ${region} would reduce from ${maxoverflow_notransfers} to ${maxoverflow_transfers} ${bedtype} beds. Some hospitals may remain over capacity due to operational constraints or if they are currently severely over capacity.`;
 	} else {
-		insightsText = `${regionTitle} is expected to go over capacity during the selected time period. The ${regiontype} needs to add at least ${maxoverflow_transfers} more ${bedtype} beds, even when using optimal transfers. The additional beds can be added in one location or distributed among hospitals (see the map to find the minimum capacity needed for the selected hospitals). Optimal patient transfers can prevent some hospitals from going over capacity and can balance the load across the state. Since there are no available beds to transfer the patients to, many hospitals may remain over capacity.<br>The map shows daily hospitals' predicted occupancy, whether (and by how much) additional beds are needed, and how many patients should be transferred.`;
+		insightsText = `${regionTitle}'s hospital system is expected to go over its COVID capacity during the selected time period. The ${regiontype} needs to add at least ${maxoverflow_transfers} more ${bedtype} beds, even if optimal transfers are used. The additional beds can be added in one location or be distributed among hospitals (see the map to find the minimum capacity needed for the selected hospitals). Using optimal patient transfers can prevent some hospitals from going over capacity and balance the load across the ${regiontype}. Since there are no available beds to transfer the patients to, many hospitals may remain over capacity.`;
 	}
 
 	const description = `
