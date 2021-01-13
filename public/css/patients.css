@@ -156,6 +156,7 @@ input[type="range"] {
 
 .hospital-select-area.static-page {
 	max-height: 180px;
+	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;
 }
 
@@ -246,4 +247,22 @@ table.is-hoverable-custom > tr:hover {
 .abbrev-text {
 	color: #3273dc;
 	cursor: pointer;
+}
+
+.warning-popup {
+	position: fixed;
+	top: 30vh;
+	left: 25vw;
+	height: auto;
+	width: 50vw;
+}
+
+#background-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	background-color: rgba(0,0,0,0.15);
 }
