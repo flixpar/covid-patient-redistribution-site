@@ -325,15 +325,12 @@ function makeTimeline(svg, response) {
 		return date;
 	}
 
-	let dates = response.config.dates.map(d => new Date(Date.parse(d)));
-	dates.shift();
-	dates.push(dates[dates.length-1].addDays(1));
-	dates.shift();
+	let dates = response.config.dates.map(d => new Date(d));
 	dates.push(dates[dates.length-1].addDays(1));
 	const T = dates.length;
 
 	const xInterval = getDateIntervals(dates);
-	const dateFormat = d3.timeFormat("%m/%d/%y");
+	const dateFormat = d3.utcFormat("%m/%d/%y");
 
 	const colorScaleOffset = showColorscale ? 90 : 8;
 	const xScale = d3.scaleUtc()
@@ -444,7 +441,7 @@ function makeTimeline(svg, response) {
 
 	function animate(e) {
 		const t = e.detail.t;
-		lineText.text(dateFormat(dates[t]));
+		lineText.text(dateFormat(dates[Math.max(0,t-1)]));
 		if (t == 0) {
 			line.attr("transform", `translate(${xScale(dates[t])})`);
 		} else {
@@ -487,7 +484,7 @@ function makeTimeline(svg, response) {
 	xAxisArea.on("mousemove", e => {
 		const scaleFactor = mapWidth / svg.node().clientWidth;
 		const xPos = e.layerX * scaleFactor;
-		const date = xScale.invert(xPos).addDays(-1);
+		const date = xScale.invert(xPos);
 		hoverLineText.text(dateFormat(date));
 		hoverLineComponent.attr("transform", `translate(${xPos})`);
 	});
@@ -733,7 +730,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, pl
 		}
 
 		svg.selectAll("#date-label").remove();
-		const dateString = dates[t].toISOString().split("T")[0];
+		const dateString = dates[Math.max(0,t-1)].toISOString().split("T")[0];
 		svg.append("text")
 			.attr("id", "date-label")
 			.attr("x", plotWidth-5)
