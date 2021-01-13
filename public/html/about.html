@@ -33,15 +33,21 @@
 				<a href="/patients-interactive" class="navbar-item is-tab">Customize Results</a>
 				<a href="/hospital-selection" class="navbar-item is-tab">Nearby Hospitals</a>
 				<a href="/about" class="navbar-item is-tab">About</a>
-				<a href="/aboutus" class="navbar-item is-tab">About Us</a>
 			</div>
 		</div>
 	</nav>
 
 	<section class="section">
 
-		<div class="container">
-			<h1 class="title">Optimal Hospital Capacity Management for COVID-19</h1>
+		<div class="content-tabs tabs is-centered">
+			<ul>
+				<li class="is-active" data-tabfor="about-main"><a>About</a></li>
+				<li data-tabfor="about-us"><a>About Us</a></li>
+			</ul>
+		</div>
+
+		<div class="container" id="about-main">
+			<h4 class="title is-4">Optimal Hospital Capacity Management for COVID-19</h4>
 			<p>
 				<b>Introduction.</b> The COVID-19 pandemic has put an unprecedented strain on healthcare capacity around the globe. To accommodate the surge in patients, healthcare facilities have responded by both reducing demand, through canceling elective procedures, and by increasing capacity, through opening up new COVID-19-suitable beds and calling in additional personnel. While these measures have proven effective, increased hospital load and delays in elective care may result in adverse effects for patients. Additionally, increasing COVID-19 capacity is costly, slow, and may not be feasible for all healthcare centers. We aim to develop data-driven strategies to handle the COVID-19 patient surge more effectively by using coordination between hospitals.
 				<br><br>
@@ -54,14 +60,69 @@
 				<br><br>
 				<b>Patient Transfer Optimization.</b> Our goal is to transfer patients from areas that are (or soon will be) overloaded to areas that are (and expected to remain) under capacity. These transfers must be done with care so that locations receiving patients do not later run out of capacity by accepting too many patients. The operational constraints and overheads of transferring patients between two facilities also need to be considered for each pair of hospitals. Our models use linear and mixed-integer programming to recommend the optimal number of patients to be transferred between each pair of hospitals (each day) to best utilize the available capacity. The results also provide insight into the minimum required capacity at each hospital and enable an early warning if extra beds are needed.
 				<br><br>
-				<b>About us.</b> We are a team from the Johns Hopkins Center for Systems Science and Engineering and Malone Center for Engineering in Healthcare. For more information, or to contact us, please visit the <a href="/aboutus">About Us</a> page.
+				<b>About us.</b> We are a team from the Johns Hopkins Center for Systems Science and Engineering and Malone Center for Engineering in Healthcare. For more information, or to contact us, please visit the <a>About Us</a> tab.
 				<br><br>
 				<b>Additional information.</b> For more information about our approach, see <a href="https://arxiv.org/abs/2011.03528">our paper</a> for details on the technical aspects of our methodology or <a href="https://github.com/flixpar/covid-patient-redistribution-site">our GitHub repository</a> which implements our models and data processing.
 				<!-- <a href="https://covid-hospital-operations.com/html/presentation.html">Our talk</a> at the INFORMS 2020 Annual Meeting also further explains our approach. -->
 			</p>
 		</div>
 
+		<div class="container is-hidden" id="about-us">
+			<h4 class="title is-4">About Us</h4>
+
+			<p>We provide models and an interactive tool to find the optimal patient transfers for hospitals that are experiencing a large number of COVID-19 patients. To read more about the problem, please visit the <a href="/home">home page.</a></p>
+			<br>
+
+			<b>Team:</b> <a href="https://felixparker.com/">Felix Parker</a>, Fardin Ganjkhanloo, Farzin Ahmadi, and Professor <a href="https://systems.jhu.edu/kimia/">Kimia Ghobadi</a>
+			<br><br>
+
+			<b>Our team is affiliated with:</b><br>
+			<a href="https://systems.jhu.edu/">The Center for Systems Science and Engineering</a><br>
+			<a href="https://malonecenter.jhu.edu/">The Malone Center for Engineering in Healthcare</a><br>
+			<a href="https://cdem.jh.edu/">The Center for Data Science in Emergency Medicine</a><br>
+			<a href="https://engineering.jhu.edu/case/">Department of Civil and Systems Engineering</a><br>
+			<a href="https://www.jhu.edu/">Johns Hopkins University</a><br>
+			<br>
+
+			<b>Links</b><br>
+			<!-- <a href="https://covid-hospital-operations.com/html/presentation.html">Our talk at the INFORMS 2020 Annual Meeting</a><br> -->
+			<a href="https://arxiv.org/abs/2011.03528">Our paper (preprint)</a><br>
+			<a href="https://github.com/flixpar/covid-patient-redistribution-site">GitHub repository for this website</a><br>
+			<a href="https://github.com/flixpar/covid-resource-allocation">GitHub repository for the paper</a><br>
+			<br>
+
+			<p><b>Contact Information:</b> For further information, please contact us at <span class="eml">fparker9 at jhu.edu</span> or <span class="eml">kghobad1 at jhu.edu</span>.</p>
+		</div>
+
 	</section>
+
+	<style>
+		.eml {
+			background-color: #f9f9f9;
+			border: 1px solid lightgray;
+			border-radius: 4px;
+			padding: 0 2px 0 2px;
+		}
+		.tabs {
+			margin-bottom: 0px !important;
+		}
+	</style>
+
+	<script>
+		let tabs = Array.from(document.querySelectorAll(".content-tabs li"));
+		tabs.forEach(elem => {
+			elem.addEventListener("click", () => {
+				let oldActive = tabs.find(t => t.classList.contains("is-active"));
+				if (elem == oldActive) {return;}
+
+				oldActive.classList.remove("is-active");
+				document.getElementById(oldActive.dataset.tabfor).classList.add("is-hidden");
+
+				elem.classList.add("is-active");
+				document.getElementById(elem.dataset.tabfor).classList.remove("is-hidden");
+			});
+		});
+	</script>
 
 </body>
 
