@@ -875,13 +875,16 @@ function createMapTransfersSelect(rawdata, metric, transfersDefault, add_descrip
 	let selectInput = document.createElement("select");
 
 	selectContainer.className = "field";
-	selectWrapper.className = "select is-fullwidth";
-	selectInput.className = "select-bold-text";
-
-	selectContainer.style.width = "30%";
-	selectContainer.style.marginLeft = "35%";
+	selectContainer.style.display = "flex";
+	selectContainer.style.justifyContent = "center";
 	selectContainer.style.marginBottom = "10px";
+
+	selectWrapper.className = "select is-fullwidth";
+	selectWrapper.style.width = "35%";
+	selectWrapper.style.minWidth = "fit-content";
 	selectWrapper.style.marginBottom = "10px";
+	
+	selectInput.className = "select-bold-text";
 
 	selectWrapper.appendChild(selectInput);
 	selectContainer.appendChild(selectWrapper);

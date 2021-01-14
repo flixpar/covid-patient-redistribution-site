@@ -27,7 +27,7 @@ export function createSurgeTimeline(response, add_description=true) {
 	const figOptions = addSurgeTimelineOptions(response);
 	section.appendChild(figOptions);
 
-	const fig = makeSurgeTimeline(response, true, true);
+	const fig = makeSurgeTimeline(response, true, false);
 	section.appendChild(fig);
 
 	fig.classList.add("figure");
@@ -451,13 +451,19 @@ function addSurgeTimelineOptions(response) {
 		document.getElementById("surgetimeline-figure").replaceWith(fig);
 	});
 
-	let selectField = document.createElement("div");
-	selectField.className = "select is-fullwidth";
-	selectField.style.width = "40%";
-	selectField.style.marginLeft = "30%";
-	selectField.style.marginTop= "15px";
+	let selectWrapper = document.createElement("div");
+	selectWrapper.className = "select is-fullwidth";
+	selectWrapper.style.width = "35%";
+	selectWrapper.style.minWidth = "fit-content";
+	selectWrapper.style.marginTop= "15px";
+	selectWrapper.style.marginBottom= "10px";
+	selectWrapper.appendChild(select);
 
-	selectField.appendChild(select);
+	let selectField = document.createElement("div");
+	selectField.className = "field";
+	selectField.style.display = "flex";
+	selectField.style.justifyContent = "center";
+	selectField.appendChild(selectWrapper);
 
 	return selectField;
 }
