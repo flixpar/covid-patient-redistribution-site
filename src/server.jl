@@ -17,7 +17,7 @@ route("/") do
 end
 
 route("/home") do
-	redirect("/about")
+	serve_static_file("html/home.html")
 end
 
 route("/patients-static") do
