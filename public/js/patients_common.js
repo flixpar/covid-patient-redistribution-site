@@ -542,7 +542,11 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		});
 	});
 
-	selectAreaContainer.appendChild(buttonsContainer);
+	let footerAreaContainer = document.createElement("div");
+	footerAreaContainer.id = "hospitalselect-footer";
+
+	footerAreaContainer.appendChild(buttonsContainer);
+	selectAreaContainer.appendChild(footerAreaContainer);
 }
 
 const tooltip_content = {
