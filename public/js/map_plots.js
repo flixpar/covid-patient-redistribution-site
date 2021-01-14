@@ -551,7 +551,7 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, pl
 	const T = dates.length;
 
 	const edgeTooltip = new MapEdgeTooltip(svg, globalSVG, rawdata);
-	const tooltip = new MapTooltip(svg, globalSVG, rawdata, metric_name);
+	const tooltip = new MapTooltip(svg, globalSVG, rawdata, metric_name, colorscale);
 
 	const selected_extent = getExtent(rawdata.config, null);
 	let map_projection = d3.geoMercator().fitExtent(
@@ -909,11 +909,12 @@ function createMapTransfersSelect(rawdata, metric, transfersDefault, add_descrip
 ////////////////////////////
 
 class MapTooltip {
-	constructor(svg, globalSVG, response, metric_name) {
+	constructor(svg, globalSVG, response, metric_name, colorscale) {
 		this.svg = svg;
 		this.globalSVG = globalSVG;
 		this.response = response;
 		this.metric_name = metric_name;
+		this.colorscale = colorscale;
 		this.highlight = null;
 		this.current_t = 0;
 		this.current_loc = 0;
@@ -1057,21 +1058,23 @@ class MapTooltip {
 
 		if (this.metric_name == "overflow_dynamic_notransfers") {
 			const required_capacity = this.response.active_null[locIdx][this.current_t];
-			const textColor = (required_capacity > capacity) ? "red" : "green";
+			const overflow = Math.max(0, required_capacity - capacity);
+			const textColor = this.colorscale(overflow);
 			this.textLine3.innerHTML = `Current Patients: <tspan fill="${textColor}">${required_capacity.toFixed(0)}</tspan>`;
 		} else if (this.metric_name == "overflow_dynamic_transfers") {
 			const required_capacity = this.response.active[locIdx][this.current_t];
-			const textColor = (required_capacity > capacity) ? "red" : "green";
+			const overflow = Math.max(0, required_capacity - capacity);
+			const textColor = this.colorscale(overflow);
 			this.textLine3.innerHTML = `Current Patients: <tspan fill="${textColor}">${required_capacity.toFixed(0)}</tspan>`;
 		} else if (this.metric_name == "load_notransfers") {
 			const active = this.response.active_null[locIdx][this.current_t];
 			const load = active / capacity;
-			const textColor = (load > 1.02) ? "red" : "green";
+			const textColor = this.colorscale(load);
 			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
 		} else if (this.metric_name == "load_transfers") {
 			const active = this.response.active[locIdx][this.current_t];
 			const load = active / capacity;
-			const textColor = (load > 1.02) ? "red" : "green";
+			const textColor = this.colorscale(load);
 			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
 		}
 	}
@@ -1408,9 +1411,11 @@ function getLoadColorscale(data) {
 	const maxValue = Math.min(4.0, d3.max(data.flat()));
 
 	function colorscale(x) {
-		if (x >= 0 && x <= 1) {
+		if (x >= 0 && x <= 0.95) {
 			return "green";
-		} else if (x > 1) {
+		} else if (x <= 1.05) {
+			return "gold";
+		} else if (x > 1.05) {
 			return d3.scaleSequential(d3.interpolateReds).domain([1-(0.5*maxValue), maxValue])(x);
 		} else {
 			return null;
