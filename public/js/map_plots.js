@@ -106,11 +106,11 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 
 	const section = document.getElementById("section-results-maps");
 
-	let figContainer = document.createElement("div");
-	section.appendChild(figContainer);
-
 	let tfrSelect = createMapTransfersSelect(rawdata, metric, transfers, add_description);
 	section.appendChild(tfrSelect);
+
+	let figContainer = document.createElement("div");
+	section.appendChild(figContainer);
 
 	if (add_description) {
 		const description = generateDescription(rawdata);
@@ -874,11 +874,12 @@ function createMapTransfersSelect(rawdata, metric, transfersDefault, add_descrip
 	let selectInput = document.createElement("select");
 
 	selectContainer.className = "field";
-	selectWrapper.className = "select is-fullwidth is-small";
+	selectWrapper.className = "select is-fullwidth";
 
 	selectContainer.style.width = "30%";
 	selectContainer.style.marginLeft = "35%";
-	selectContainer.style.marginTop = "10px";
+	selectContainer.style.marginBottom = "10px";
+	selectWrapper.style.marginBottom = "10px";
 
 	selectWrapper.appendChild(selectInput);
 	selectContainer.appendChild(selectWrapper);
