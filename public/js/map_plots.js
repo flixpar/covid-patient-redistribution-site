@@ -100,10 +100,17 @@ export function createMap(rawdata, metric, transfers="both", add_description=tru
 		links = createStaticLinks(rawdata.sent, rawdata.config);
 	}
 
+	if (transfers == "no_transfers") {
+		links = null;
+	}
+
 	const section = document.getElementById("section-results-maps");
 
 	let figContainer = document.createElement("div");
 	section.appendChild(figContainer);
+
+	let tfrSelect = createMapTransfersSelect(rawdata, metric, transfers, add_description);
+	section.appendChild(tfrSelect);
 
 	if (add_description) {
 		const description = generateDescription(rawdata);
@@ -859,6 +866,42 @@ function setupMapAnimations(svg, response) {
 	});
 
 	executeTimestep(0);
+}
+
+function createMapTransfersSelect(rawdata, metric, transfersDefault, add_description) {
+	let selectContainer = document.createElement("div");
+	let selectWrapper = document.createElement("div");
+	let selectInput = document.createElement("select");
+
+	selectContainer.className = "field";
+	selectWrapper.className = "select is-fullwidth is-small";
+
+	selectContainer.style.width = "30%";
+	selectContainer.style.marginLeft = "35%";
+	selectContainer.style.marginTop = "10px";
+
+	selectWrapper.appendChild(selectInput);
+	selectContainer.appendChild(selectWrapper);
+
+	function addOption(text, value) {
+		let opt = document.createElement("option");
+		opt.text = text;
+		opt.value = (value == null) ? text : value;
+		if (opt.value == transfersDefault) {opt.selected = true;}
+		selectInput.appendChild(opt);
+	}
+
+	addOption("With Optimal Transfers", "transfers");
+	addOption("Without Optimal Transfers", "no_transfers");
+	addOption("Both", "both");
+
+	selectInput.addEventListener("change", e => {
+		const tfrValue = selectInput.value;
+		document.getElementById("section-results-maps").innerHTML = "";
+		createMap(rawdata, metric, tfrValue, add_description);
+	});
+
+	return selectContainer;
 }
 
 ////////////////////////////
