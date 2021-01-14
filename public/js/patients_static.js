@@ -75,6 +75,7 @@ function getHospitals() {
 	let request = $.get("/api/hospital-list", data, d => {
 		d = selectDefaultHospitals(d);
 		common.createHospitalsSelect(d, true, false);
+		addUpdateButton();
 	});
 	return request;
 }
@@ -96,13 +97,16 @@ function createParametersForm() {
 	let hospitalSelectField = document.createElement("div");
 	hospitalSelectField.id = "hospital-select-field";
 	parametersFormSection.appendChild(hospitalSelectField);
+}
 
+function addUpdateButton() {
 	let selectUpdateButton = document.createElement("button");
-	selectUpdateButton.textContent = "Update";
+	selectUpdateButton.textContent = "Update Page";
 	selectUpdateButton.type = "button";
-	selectUpdateButton.className = "button is-info";
-	selectUpdateButton.id = "params-form-submit";
-	parametersFormSection.appendChild(selectUpdateButton);
+	selectUpdateButton.className = "button is-info is-small";
+	document.querySelector("#hospitalselect-buttons-container").appendChild(selectUpdateButton);
+
+	document.querySelectorAll("#hospitalselect-buttons-container button").forEach(elem => elem.style.width = "24%");
 
 	selectUpdateButton.addEventListener("click", () => {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
