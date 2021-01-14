@@ -82,13 +82,19 @@ th {
 }
 
 .results-section-header-title {
-	margin-bottom: 0 !important;
-	padding: 5px;
+	font-size: 1.7em !important;
 }
 
 .results-section-header-subtitle {
+	font-size: 1.15em !important;
+}
+
+.results-section-header-title:last-child {
 	margin-bottom: 10px !important;
-	padding: 5px;
+}
+
+.results-section-header-subtitle:last-child {
+	margin-bottom: 10px !important;
 }
 
 .results-section-content {
