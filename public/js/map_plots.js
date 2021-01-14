@@ -1072,12 +1072,14 @@ class MapTooltip {
 			const active = this.response.active_null[locIdx][this.current_t];
 			const load = active / capacity;
 			const textColor = this.colorscale(load);
-			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
+			const loadText = (capacity == 0) ? "—" : ((load * 100).toFixed(0) + "%");
+			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${loadText}</tspan>`;
 		} else if (this.metric_name == "load_transfers") {
 			const active = this.response.active[locIdx][this.current_t];
 			const load = active / capacity;
 			const textColor = this.colorscale(load);
-			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${(load * 100).toFixed(0)}%</tspan>`;
+			const loadText = (capacity == 0) ? "—" : ((load * 100).toFixed(0) + "%");
+			this.textLine3.innerHTML = `Occupancy: <tspan fill="${textColor}">${loadText}</tspan>`;
 		}
 	}
 }
@@ -1396,7 +1398,7 @@ function getOverflowColorscale(data) {
 		} else if (x > overflow_thresh) {
 			return d3.scaleSequential(d3.interpolateReds).domain([overflow_thresh-(maxValue/2), maxValue])(x);
 		} else {
-			return null;
+			return "gray";
 		}
 	}
 
@@ -1420,7 +1422,7 @@ function getLoadColorscale(data) {
 		} else if (x > 1.05) {
 			return d3.scaleSequential(d3.interpolateReds).domain([1-(0.5*maxValue), maxValue])(x);
 		} else {
-			return null;
+			return "gray";
 		}
 	}
 
