@@ -115,13 +115,20 @@ function addUpdateButton() {
 	document.querySelector("#hospitalselect-buttons-container").style.display = "block";
 	document.querySelector("#hospitalselect-buttons-container").style.marginBottom = "0px";
 	document.querySelector("#hospitalselect-buttons-container").style.marginTop = "4px";
+	document.querySelector("#hospitalselect-buttons-container").style.width = "32%";
 
 	document.querySelector("#hospitalselect-footer").style.display = "flex";
 	document.querySelector("#hospitalselect-footer").style.justifyContent = "space-between";
 
-	document.querySelectorAll("#hospitalselect-footer button").forEach(elem => elem.style.width = "auto");
+	document.querySelectorAll("#hospitalselect-buttons-container button").forEach(elem => elem.style.width = "31%");
+	document.querySelectorAll("#hospitalselect-buttons-container button").forEach(elem => elem.style.marginRight = "2%");
+	document.querySelectorAll("#hospitalselect-buttons-container button").forEach(elem => elem.style.minWidth = "100px");
+
 	document.querySelectorAll("#hospitalselect-footer button").forEach(elem => elem.style.marginBottom = "0px");
-	selectUpdateButton.style.minWidth = "250px";
+
+	updateButtonContainer.style.width = "32%";
+	selectUpdateButton.style.width = "100%";
+	selectUpdateButton.style.minWidth = "100px";
 
 	selectUpdateButton.addEventListener("click", () => {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
