@@ -20,7 +20,7 @@ function generateContent(response) {
 	console.log("Updating...");
 	clearContent();
 
-	createMap(response, "overflow_dynamic", "transfers");
+	createMap(response, "load", "transfers");
 	createOverallLoadPlot(response);
 	createLoadPlots(response);
 	createTransfersSankey(response);
