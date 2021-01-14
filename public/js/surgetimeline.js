@@ -429,6 +429,7 @@ function computeSurgeTimelineData(response, withTransfers=true) {
 function addSurgeTimelineOptions(response) {
 	let select = document.createElement("select");
 	select.id = "surgetimeline-options-select";
+	select.className = "select-bold-text";
 
 	const optionNames = ["With Optimal Transfers", "Without Optimal Transfers"];
 	for (let c = 0; c < optionNames.length; c++) {

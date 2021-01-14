@@ -876,6 +876,7 @@ function createMapTransfersSelect(rawdata, metric, transfersDefault, add_descrip
 
 	selectContainer.className = "field";
 	selectWrapper.className = "select is-fullwidth";
+	selectInput.className = "select-bold-text";
 
 	selectContainer.style.width = "30%";
 	selectContainer.style.marginLeft = "35%";
