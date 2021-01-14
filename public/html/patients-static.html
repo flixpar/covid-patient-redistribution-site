@@ -46,10 +46,28 @@
 
 		<div class="container">
 			<p>
-				With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
-				<br><br>
-				This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals. You can use it to see which hospitals are over capacity, when and how many additional beds are needed at each hospital (or US state), and the optimal transfer strategy between hospitals. We use mathematical optimization models developed by the <a class="abbrev-text" data-fulltext="Johns Hopkins Center for Systems Science and Engineering" href="https://systems.jhu.edu/">JHU CSSE</a>, hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the <a class="abbrev-text" data-fulltext="US Department of Health and Human Services" href="https://www.hhs.gov/">HHS</a><span class="info-text">Latest data from 2021-01-10</span>, and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the <a class="abbrev-text" data-fulltext="US Centers for Disease Control" href="https://www.cdc.gov/">CDC</a><span class="info-text">Latest forecast from 2021-01-04</span>. To learn more, visit the <a href="/about">about page</a>.
-				<br><br>
+				<span class="description-hidden-label" data-for="static-page-p1">
+					How can we better manage COVID capacity in hospital systems?
+					<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
+					<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
+					<br>
+				</span>
+				<span id="static-page-p1" class="description-hidden-text is-hidden">
+					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+					To find the optimal number of patients to transfer and where to transfer them to, we use mathematical optimization models developed by the <a class="abbrev-text" data-fulltext="Johns Hopkins Center for Systems Science and Engineering" href="https://systems.jhu.edu/">JHU CSSE</a>, hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the <a class="abbrev-text" data-fulltext="US Department of Health and Human Services" href="https://www.hhs.gov/">HHS</a><span class="info-text">Latest data from 2021-01-10</span>, and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the <a class="abbrev-text" data-fulltext="US Centers for Disease Control" href="https://www.cdc.gov/">CDC</a><span class="info-text">Latest forecast from 2021-01-04</span>. To learn more, visit the <a href="/about">about page</a>.
+					<br><br>
+				</span>
+				<span class="description-hidden-label" data-for="static-page-p2">
+					What is this dashboard?
+					<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
+					<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
+					<br>
+				</span>
+				<span id="static-page-p2" class="description-hidden-text is-hidden">
+					This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals. You can use it to see which hospitals are over capacity, when and how many additional beds are needed at each hospital (or US state), and the optimal transfer strategy between hospitals.
+					<br>
+				</span>
+				<br>
 				<b>Select a state and patient type (ICU or acute) to see the results for <i><span class="fill-value" data-contentid="start_date">2021-01-01</span></i> to <i><span class="fill-value" data-contentid="end_date">2021-01-30</span></i>.</b> <span class="info-text">To select hospitals, go to the "Select Parameters" section. For more options go to the "Compute Results" page.</span>
 			</p>
 			<div id="static-params-form">
