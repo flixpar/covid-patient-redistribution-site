@@ -29,7 +29,7 @@ function makeSection(sectionInfo) {
 	sectionContent.className = "results-section-content is-collapsible";
 	sectionHeader.className = "results-section-header";
 	sectionHeaderTitle.className = "title is-3 results-section-header-title";
-	sectionHeaderSubtitle.className = "title is-5 results-section-header-subtitle";
+	sectionHeaderSubtitle.className = "subtitle is-5 results-section-header-subtitle";
 
 	const sectionID = "section-" + sectionInfo.identifier;
 	sectionContent.id = sectionID;
@@ -555,10 +555,11 @@ function updateText(response) {
 	enableHiddenTextButtons();
 
 	const region = toTitlecase(response.config.region.region_name);
-	let totalLooadSectionTitle = document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title");
-	totalLooadSectionTitle.textContent = `COVID-19 Occupancy in ${region}`;
 
 	const mapTitle = "COVID-19 Capacity, Occupancy, and Optimal Transfers";
+	document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title").textContent = `COVID-19 Occupancy in ${region}`;
+	document.querySelector(".results-section-header[data-target=section-results-maps] .results-section-header-title").textContent = `Occupancy and Optimal Transfers in ${region}`;
+
 	for (let map of document.querySelectorAll(".hospitalsmap")) {
 		const metric = map.id.substring(13);
 		if (metric.indexOf("_both") > 0) {
