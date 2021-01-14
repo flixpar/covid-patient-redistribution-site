@@ -82,7 +82,12 @@ route("/api/hospital-list", method=GET) do
 	else
 		region = nothing
 	end
-	response = get_hospital_list(region=region)
+	if haskey(@params, :ndefault)
+		ndefault = @params(:ndefault)
+	else
+		ndefault = 16
+	end
+	response = get_hospital_list(region=region, ndefault=ndefault)
 	return json(response)
 end
 

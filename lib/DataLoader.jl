@@ -16,7 +16,7 @@ export complete_region
 
 projectbasepath = joinpath(@__DIR__, "../")
 
-NDEFAULT = 12
+NDEFAULT = 16
 
 DEBUG = false
 NDEDBUG = 6
@@ -142,7 +142,7 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 	return hospitals_ind
 end
 
-function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate)
+function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate, ndefault=NDEFAULT)
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
 	hospitals_ind = filter_hospitals(data, region=region, names=names, ids=ids)
@@ -162,7 +162,8 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:ic
 	load = initial ./ beds
 	load[beds .== 0] .= 1.0
 
-	n_total = min(NDEFAULT, length(hospitals_ind) - length(small_ind))
+	ndefault = isnothing(ndefault) ? NDEFAULT : ndefault
+	n_total = min(ndefault, length(hospitals_ind) - length(small_ind))
 	n_size = Int(ceil(n_total * 0.75))
 	n_load = n_total - n_size
 
