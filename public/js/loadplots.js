@@ -20,8 +20,10 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	overallLoadPlotContainer.style.marginLeft = "12.5%";
 	section.appendChild(overallLoadPlotContainer);
 
+	const plotTitle = `Total COVID Occupancy in ${rawdata.config.region.region_name}`;
+
 	const overallData = extractOverallLoadData(rawdata, 0);
-	const overallLoadPlot = makeOverallLoadPlot(overallData);
+	const overallLoadPlot = makeOverallLoadPlot(overallData, plotTitle);
 	overallLoadPlot.id = "overallloadplot";
 	overallLoadPlotContainer.appendChild(overallLoadPlot);
 
@@ -39,7 +41,8 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 function createLoadPlots(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-load");
 
-	const loadPlots = makeLoadPlots(rawdata);
+	const plotTitle = `COVID Occupancy by Hospital in ${rawdata.config.region.region_name}`;
+	const loadPlots = makeLoadPlots(rawdata, plotTitle);
 	loadPlots.id = "loadplots";
 	section.appendChild(loadPlots);
 
@@ -54,7 +57,7 @@ function createLoadPlots(rawdata, add_description=true) {
 	}
 }
 
-function makeLoadPlots(rawdata, capacityLevel=0) {
+function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacityLevel=0) {
 	const loadData = extractLoadData(rawdata, capacityLevel);
 
 	const betweenMargin = 100;
@@ -90,7 +93,7 @@ function makeLoadPlots(rawdata, capacityLevel=0) {
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
 		.style("font-size", "30px")
-		.text("COVID Occupancy by Hospital");
+		.text(plotTitle);
 
 	makeYLabel(svg, "Occupancy");
 
@@ -226,7 +229,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 	return svg;
 }
 
-function makeOverallLoadPlot(overall_load) {
+function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 	const labelsWidth = 45;
 	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth+labelsWidth, loadPlotsHeight]);
 
@@ -236,7 +239,7 @@ function makeOverallLoadPlot(overall_load) {
 		.attr("text-anchor", "middle")
 		.style("font-family", loadPlotsFont)
 		.style("font-size", "22px")
-		.text("Total COVID Occupancy");
+		.text(plotTitle);
 
 	const maxLoadVal = d3.max(overall_load, y => y.value)
 	const maxY = Math.min(5.0, Math.max(2.0, Math.ceil(maxLoadVal)));
