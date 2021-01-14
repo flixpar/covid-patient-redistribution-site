@@ -35,6 +35,7 @@ export function createLocationsMap(response) {
 	geocoder.on("result", e => {
 		const loc = {lat: e.result.center[1], long: e.result.center[0]};
 		$.get("/api/hospital-selection", loc, g => {
+			map.getContainer().dispatchEvent(new Event("clearMarkers"));
 			addMarkers(map, g);
 			populateLocationsTable(g);
 		});
@@ -49,7 +50,7 @@ export async function addMarkers(map, response) {
 
 	const markerImgElem = await getMarkerImg();
 
-	const markers = response.data.map(h => {
+	let markers = response.data.map(h => {
 		let el = document.createElement("div");
 		el.id = "marker-" + h.hospital_id;
 		el.className = "marker";
@@ -78,6 +79,8 @@ export async function addMarkers(map, response) {
 	let openMarker = null;
 
 	map.on("mousemove", e => {
+		if (markers == null) {return;}
+
 		let mousePoint = e.point;
 
 		const points = response.data.map(h => map.project([h.long, h.lat]));
@@ -103,6 +106,12 @@ export async function addMarkers(map, response) {
 				openMarker = null;
 			}
 		}
+	});
+
+	map.getContainer().addEventListener("clearMarkers", () => {
+		if (markers == null) {return;}
+		markers.forEach(m => m.remove());
+		markers = null;
 	});
 
 }
