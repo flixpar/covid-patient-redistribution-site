@@ -61,20 +61,21 @@ export function generateHiddenText(text) {
 	<span class="description-hidden-label" data-for="${descriptionId}">
 		How to read this figure
 		<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
-		<ion-icon class="icon-expand-text hidden" name="caret-down-outline"></ion-icon>
+		<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
 	</span>
 	<br>
-	<span id="${descriptionId}" class="description-howto-text hidden">${text}</span>
+	<span id="${descriptionId}" class="description-hidden-text is-hidden">${text}</span>
 	`;
 	return contentStr;
 }
 
 export function enableHiddenTextButtons() {
 	document.querySelectorAll(".description-hidden-label").forEach(elem => {
+		// document.getElementById(elem.dataset.for).classList.add("is-hidden");
 		elem.addEventListener("click", e => {
-			document.getElementById(elem.dataset.for).classList.toggle("hidden");
+			document.getElementById(elem.dataset.for).classList.toggle("is-hidden");
 			elem.querySelectorAll(".icon-expand-text").forEach(i => {
-				i.classList.toggle("hidden");
+				i.classList.toggle("is-hidden");
 			})
 		});
 	});
