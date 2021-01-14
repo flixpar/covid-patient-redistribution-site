@@ -172,7 +172,7 @@ input[type="range"] {
 
 	padding: 1px 5px 1px 5px;
 
-	white-space: nowrap;
+	white-space: normal;
 }
 
 .hospital-select-area.static-page > .hospital-select-item {
