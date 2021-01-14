@@ -1,0 +1,34 @@
+.section {
+	width: 90%;
+	max-width: none;
+}
+
+#home-main {
+	display: flex;
+	flex-direction: column;
+}
+
+.homepage-section-preview {
+	width: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	border: 1px solid transparent;
+}
+
+.homepage-section-preview > .preview-img {
+	width: 50%;
+}
+
+.homepage-section-preview > .content {
+	width: 40%;
+}
+
+.homepage-section-preview:hover {
+	cursor: pointer;
+	border: 1px solid lightgray;
+}
+
+.homepage-section-preview:hover .title {
+	color: #3273dc;
+}
