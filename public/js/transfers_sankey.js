@@ -46,6 +46,8 @@ function makeTransfersSankey(response, graph) {
 
 	// Title + Axis Labels //
 
+	const region = response.config.region.region_name;
+	const titleText = `Total Optimal Patient Transfers in ${region}`;
 	svg.append("text")
 		.attr("x", transfersSankeySize.width/2)
 		.attr("y", 15)
@@ -53,7 +55,7 @@ function makeTransfersSankey(response, graph) {
 		.style("font-family", "Helvetica")
 		.style("font-size", "18px")
 		.attr("fill", "black")
-		.text("Optimal Patient Transfers");
+		.text(titleText);
 
 	svg.append("text")
 		.attr("x", transfersSankeySize.width-transfersSankeyMargins.right+25)
