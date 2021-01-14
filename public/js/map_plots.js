@@ -238,6 +238,7 @@ function generateDescription(response) {
 	const overflow_nosent_byloc = d3.range(N).map(i => response.active_null[i].map(x => Math.max(0, x - response.beds[i])));
 	const maxoverflow_transfers = d3.sum(d3.range(N).map(i => d3.max(overflow_sent_byloc[i]))).toFixed(0);
 	const maxoverflow_notransfers = d3.sum(d3.range(N).map(i => d3.max(overflow_nosent_byloc[i]))).toFixed(0);
+	const maxoverflow_reduction = ((maxoverflow_notransfers - maxoverflow_transfers) / maxoverflow_notransfers * 100).toFixed(1);
 
 	const maxTotalActive = d3.max(d3.range(T).map(t => d3.sum(response.active_null, x => x[t])));
 	const totalCapacity = d3.sum(response.beds);
@@ -245,7 +246,7 @@ function generateDescription(response) {
 
 	let insightsText = ``;
 	if (!hasSystemOverflow) {
-		insightsText = `${regionTitle}'s hospital system is expected to be within its COVID capacity from ${startDate} to ${endDate}, but some hospitals in the system may still approach or exceed their capacity. Optimally transferring patients can ease the burden on such hospitals. If optimal transfers are used, we estimate that the total number of additional beds required in ${region} would reduce from ${maxoverflow_notransfers} to ${maxoverflow_transfers} ${bedtype} beds. Some hospitals may remain over capacity due to operational constraints or if they are currently severely over capacity.`;
+		insightsText = `${regionTitle}'s hospital system is expected to be within its COVID capacity from ${startDate} to ${endDate}, but some hospitals in the system may still approach or exceed their capacity. Optimally transferring patients can ease the burden on such hospitals. If optimal transfers are used, we estimate that the total number of additional beds required in ${region} would reduce from ${maxoverflow_notransfers} to ${maxoverflow_transfers} ${bedtype} beds (${maxoverflow_reduction}% reduction). Some hospitals may remain over capacity due to operational constraints or if they are currently severely over capacity. If there are no edges on the map, no patient transfers were necessary.`;
 	} else {
 		insightsText = `${regionTitle}'s hospital system is expected to go over its COVID capacity during the selected time period. The ${regiontype} needs to add at least ${maxoverflow_transfers} more ${bedtype} beds, even if optimal transfers are used. The additional beds can be added in one location or be distributed among hospitals (see the map to find the minimum capacity needed for the selected hospitals). Using optimal patient transfers can prevent some hospitals from going over capacity and balance the load across the ${regiontype}. Since there are no available beds to transfer the patients to, many hospitals may remain over capacity.`;
 	}
