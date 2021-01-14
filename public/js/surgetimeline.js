@@ -439,6 +439,8 @@ function addSurgeTimelineOptions(response) {
 		select.appendChild(opt);
 	}
 
+	select.children[1].selected = true;
+
 	select.addEventListener("change", e => {
 		e.preventDefault();
 
