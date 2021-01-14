@@ -499,6 +499,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 	}
 
 	let buttonsContainer = document.createElement("div");
+	buttonsContainer.id = "hospitalselect-buttons-container";
 	buttonsContainer.className = "buttons";
 	buttonsContainer.style.marginTop = "8px";
 	buttonsContainer.style.display = "flex";
