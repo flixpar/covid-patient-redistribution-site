@@ -104,9 +104,24 @@ function addUpdateButton() {
 	selectUpdateButton.textContent = "Update Page";
 	selectUpdateButton.type = "button";
 	selectUpdateButton.className = "button is-info is-small";
-	document.querySelector("#hospitalselect-buttons-container").appendChild(selectUpdateButton);
 
-	document.querySelectorAll("#hospitalselect-buttons-container button").forEach(elem => elem.style.width = "24%");
+	let updateButtonContainer = document.createElement("div");
+	updateButtonContainer.className = "buttons";
+	updateButtonContainer.style.marginTop = "4px";
+	updateButtonContainer.style.marginBottom = "0px";
+	updateButtonContainer.appendChild(selectUpdateButton);
+	document.querySelector("#hospitalselect-footer").appendChild(updateButtonContainer);
+
+	document.querySelector("#hospitalselect-buttons-container").style.display = "block";
+	document.querySelector("#hospitalselect-buttons-container").style.marginBottom = "0px";
+	document.querySelector("#hospitalselect-buttons-container").style.marginTop = "4px";
+
+	document.querySelector("#hospitalselect-footer").style.display = "flex";
+	document.querySelector("#hospitalselect-footer").style.justifyContent = "space-between";
+
+	document.querySelectorAll("#hospitalselect-footer button").forEach(elem => elem.style.width = "auto");
+	document.querySelectorAll("#hospitalselect-footer button").forEach(elem => elem.style.marginBottom = "0px");
+	selectUpdateButton.style.minWidth = "250px";
 
 	selectUpdateButton.addEventListener("click", () => {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
