@@ -449,10 +449,10 @@ function addSurgeTimelineOptions(response) {
 	});
 
 	let selectField = document.createElement("div");
-	selectField.className = "select is-fullwidth is-small";
+	selectField.className = "select is-fullwidth";
 	selectField.style.width = "40%";
 	selectField.style.marginLeft = "30%";
-	selectField.style.marginBottom = "12px";
+	selectField.style.marginTop= "15px";
 
 	selectField.appendChild(select);
 
