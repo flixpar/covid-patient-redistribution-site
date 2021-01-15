@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" href="/css/nav.css">
 	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="/css/about.css">
 
 	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
 	<script src="/js/menu.js"></script>
@@ -19,7 +20,7 @@
 
 	<nav class="navbar" role="navigation" aria-label="main navigation">
 		<div class="navbar-brand">
-			<a href="/patients-static" class="navbar-item">COVID-19 Capacity Management</a>
+			<a href="/home" class="navbar-item">COVID-19 Capacity Management</a>
 			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
@@ -41,12 +42,72 @@
 
 		<div class="content-tabs tabs is-centered">
 			<ul>
-				<li class="is-active" data-tabfor="about-main"><a>About</a></li>
-				<li data-tabfor="about-us"><a>About Us</a></li>
+				<li class="is-active"><a href="#home">Home</a></li>
+				<li><a href="/about#about">About</a></li>
+				<li><a href="/about#aboutus">About Us</a></li>
 			</ul>
 		</div>
 
-		<div class="container" id="about-main">
+		<div id="about-home" data-anchor="home">
+
+			<div class="container">
+				<h4 class="title is-4" style="margin-bottom: 12px;">COVID-19 Hospital Capacity Management</h4>
+
+				<p style="margin-bottom: 10px;">
+					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+				</p>
+				<p>
+					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS), and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC). To learn more, visit the <a href="/about#about">About tab</a>.
+				</p>
+			</div>
+
+			<div class="container" id="home-main">
+
+				<div class="homepage-section-preview box" id="dashboard-preview" data-link="/patients-static">
+					<video class="preview-img" autoplay loop muted>
+						<source src="/img/hospitals-map-preview-anim.mp4" type="video/mp4">
+					</video>
+					<div class="content">
+						<h6 class="title is-6">Dashboard</h6>
+						<p>Our main dashboard page, which investigates the COVID occupancy of hospitals for any state in the US and how transfers could be used between those hospitals. It can be used to analyze:</p>
+						<ul>
+							<li>The current and future occupancy of hospitals in the state of your choice</li>
+							<li>If more beds are needed in the state and where</li>
+							<li>The best strategy for transferring patients between hospitals</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="homepage-section-preview box" id="nearby-preview" data-link="/hospital-selection">
+					<img src="/img/nearbymap-preview.png" class="preview-img">
+					<div class="content">
+						<h6 class="title is-6">Nearby Hospitals</h6>
+						<p>A map to find hospitals near you (or any place of interest) and determine which hospitals currently are the least stressed. It includes:</p>
+						<ul>
+							<li>The status of hospitals around you</li>
+							<li>A scoring system to advise on which hospitals to go to</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="homepage-section-preview box" id="details-preview" data-link="/patients-interactive">
+					<img src="/img/surgetimeline-preview.svg" class="preview-img">
+					<div class="content">
+						<h6 class="title is-6">Customize Results</h6>
+						<p>For interested users, our Customize Results page can run our models with your choice of parameters, including:</p>
+						<ul>
+							<li>Region type (hospital system, Hospital Service Area, Hospital Referral Region, and state)</li>
+							<li>Start and end date</li>
+							<li>Patient transfer budget</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="container is-hidden" id="about-main" data-anchor="about">
 			<h4 class="title is-4">Optimal Hospital Capacity Management for COVID-19</h4>
 			<p>
 				<b>Introduction.</b> The COVID-19 pandemic has put an unprecedented strain on healthcare capacity around the globe. To accommodate the surge in patients, healthcare facilities have responded by both reducing demand, through canceling elective procedures, and by increasing capacity, through opening up new COVID-19-suitable beds and calling in additional personnel. While these measures have proven effective, increased hospital load and delays in elective care may result in adverse effects for patients. Additionally, increasing COVID-19 capacity is costly, slow, and may not be feasible for all healthcare centers. We aim to develop data-driven strategies to handle the COVID-19 patient surge more effectively by using coordination between hospitals.
@@ -60,14 +121,14 @@
 				<br><br>
 				<b>Patient Transfer Optimization.</b> Our goal is to transfer patients from areas that are (or soon will be) overloaded to areas that are (and expected to remain) under capacity. These transfers must be done with care so that locations receiving patients do not later run out of capacity by accepting too many patients. The operational constraints and overheads of transferring patients between two facilities also need to be considered for each pair of hospitals. Our models use linear and mixed-integer programming to recommend the optimal number of patients to be transferred between each pair of hospitals (each day) to best utilize the available capacity. The results also provide insight into the minimum required capacity at each hospital and enable an early warning if extra beds are needed.
 				<br><br>
-				<b>About us.</b> We are a team from the Johns Hopkins Center for Systems Science and Engineering and Malone Center for Engineering in Healthcare. For more information, or to contact us, please visit the <a>About Us</a> tab.
+				<b>About us.</b> We are a team from the Johns Hopkins Center for Systems Science and Engineering and Malone Center for Engineering in Healthcare. For more information, or to contact us, please visit the <a href="/about#aboutus">About Us</a> tab.
 				<br><br>
 				<b>Additional information.</b> For more information about our approach, see <a href="https://arxiv.org/abs/2011.03528">our paper</a> for details on the technical aspects of our methodology or <a href="https://github.com/flixpar/covid-patient-redistribution-site">our GitHub repository</a> which implements our models and data processing.
 				<!-- <a href="https://covid-hospital-operations.com/html/presentation.html">Our talk</a> at the INFORMS 2020 Annual Meeting also further explains our approach. -->
 			</p>
 		</div>
 
-		<div class="container is-hidden" id="about-us">
+		<div class="container is-hidden" id="about-us"  data-anchor="aboutus">
 			<h4 class="title is-4">About Us</h4>
 
 			<p>We provide models and an interactive tool to find the optimal patient transfers for hospitals that are experiencing a large number of COVID-19 patients. To read more about the problem, please visit the <a href="/home">home page.</a></p>
@@ -96,30 +157,34 @@
 
 	</section>
 
-	<style>
-		.eml {
-			background-color: #f9f9f9;
-			border: 1px solid lightgray;
-			border-radius: 4px;
-			padding: 0 2px 0 2px;
-		}
-		.tabs {
-			margin-bottom: 0px !important;
-		}
-	</style>
-
 	<script>
 		let tabs = Array.from(document.querySelectorAll(".content-tabs li"));
-		tabs.forEach(elem => {
+		function updateTabContent() {
+			let newAnchor = location.hash;
+			let newTab = tabs.find(t => t.children[0].hash == newAnchor);
+
+			let oldTab = tabs.find(t => t.classList.contains("is-active"));
+			let oldAnchor = oldTab.children[0].hash;
+
+			if (newAnchor == oldAnchor || (newAnchor == "" && oldAnchor == "#home")) {return;}
+
+			let newSection = document.querySelector(`div[data-anchor=${newAnchor.substring(1)}]`);
+			let oldSection = document.querySelector(`div[data-anchor=${oldAnchor.substring(1)}]`);
+
+			oldTab.classList.remove("is-active");
+			oldSection.classList.add("is-hidden");
+
+			newTab.classList.add("is-active");
+			newSection.classList.remove("is-hidden");
+		}
+		updateTabContent();
+		window.addEventListener("hashchange", updateTabContent);
+	</script>
+
+	<script>
+		document.querySelectorAll(".homepage-section-preview").forEach(elem => {
 			elem.addEventListener("click", () => {
-				let oldActive = tabs.find(t => t.classList.contains("is-active"));
-				if (elem == oldActive) {return;}
-
-				oldActive.classList.remove("is-active");
-				document.getElementById(oldActive.dataset.tabfor).classList.add("is-hidden");
-
-				elem.classList.add("is-active");
-				document.getElementById(elem.dataset.tabfor).classList.remove("is-hidden");
+				window.location.href = elem.dataset.link;
 			});
 		});
 	</script>

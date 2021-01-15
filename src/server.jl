@@ -13,11 +13,11 @@ using EndpointHandler
 
 
 route("/") do
-	redirect("/patients-static")
+	redirect("/home")
 end
 
 route("/home") do
-	serve_static_file("html/home.html")
+	serve_static_file("html/about.html")
 end
 
 route("/patients-static") do
