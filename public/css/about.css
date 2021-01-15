@@ -46,3 +46,23 @@
 .tabs {
 	margin-bottom: 0px !important;
 }
+
+@media only screen and (max-width: 600px) {
+	.section {
+		width: 100%;
+	}
+	.homepage-section-preview {
+		flex-direction: column;
+	}
+	.homepage-section-preview > .preview-img {
+		width: 100%;
+		height: auto;
+		margin-bottom: 10px;
+	}
+	.homepage-section-preview > .content {
+		width: 100%;
+	}
+	.homepage-section-preview > .content > .title {
+		margin-bottom: 10px;
+	}
+}
