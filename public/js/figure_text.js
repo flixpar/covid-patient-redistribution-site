@@ -76,7 +76,7 @@ export function enableHiddenTextButtons() {
 			document.getElementById(elem.dataset.for).classList.toggle("is-hidden");
 			elem.querySelectorAll(".icon-expand-text").forEach(i => {
 				i.classList.toggle("is-hidden");
-			})
+			});
 		});
 	});
 }

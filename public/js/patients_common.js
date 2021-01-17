@@ -558,12 +558,15 @@ const toTitlecase = s => s.split(" ").map(w => w[0].toUpperCase() + w.substr(1))
 function updateText(response) {
 	enableHiddenTextButtons();
 
+	const isMobile = (window.innerWidth < 600);
+
 	const region = toTitlecase(response.config.region.region_name);
 
 	document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title").textContent = `COVID-19 Occupancy in ${region}`;
 	document.querySelector(".results-section-header[data-target=section-results-maps] .results-section-header-title").textContent = `Occupancy and Optimal Transfers in ${region}`;
 
-	const mapTitle = `COVID-19 Capacity, Occupancy, and Optimal Transfers in ${region}`;
+	let mapTitle = `COVID-19 Capacity, Occupancy, and Optimal Transfers in ${region}`;
+	if (isMobile) {mapTitle = `COVID-19 Occupancy, and Optimal Transfers`;}
 	for (let map of document.querySelectorAll(".hospitalsmap")) {
 		const metric = map.id.substring(13);
 		if (metric.indexOf("_both") > 0) {
@@ -596,5 +599,23 @@ function updateText(response) {
 		const text = elem.textContent;
 		const info = createInfo(null, text);
 		elem.replaceWith(info);
+	}
+
+	if (isMobile) {
+		let selector = document.querySelector(`.description-hidden-label[data-for=static-page-p2]`);
+		let p1 = document.getElementById("static-page-p1");
+		let p2 = document.getElementById("static-page-p2");
+
+		p1.parentElement.remove();
+		selector.parentElement.insertBefore(p1, p2);
+		p1.classList.add("is-hidden");
+		p1.style.marginBottom = "1em";
+		p1.style.display = "block";
+
+		selector.addEventListener("click", e => {
+			p1.classList.toggle("is-hidden");
+		});
+
+		document.querySelectorAll("#static-text-container .info-icon").forEach(e => e.classList.add("is-hidden"));
 	}
 }
