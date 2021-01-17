@@ -333,6 +333,10 @@ function getRegions(exclude=[]) {
 }
 
 function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
+	const nDefaultSize = staticPage ? 20 : 10;
+	const nDefaultLoad = staticPage ?  4 :  2;
+	data = selectDefaultHospitals(data, nDefaultSize, nDefaultLoad);
+
 	let selectAreaField = document.getElementById("hospital-select-field");
 	selectAreaField.innerHTML = "";
 
@@ -547,6 +551,31 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 
 	footerAreaContainer.appendChild(buttonsContainer);
 	selectAreaContainer.appendChild(footerAreaContainer);
+}
+
+function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
+	const N = hospitals.length;
+
+	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].current_load - hospitals[b].current_load);
+	const selectedByLoad = byLoadInd.slice(N-nLoad);
+
+	const bySizeInd = d3.range(N).sort((a,b) => hospitals[a].total_beds - hospitals[b].total_beds);
+	const selectedBySize = bySizeInd.slice(N-nSize);
+
+	const selected = selectedBySize.concat(selectedByLoad);
+	selected.forEach(i => hospitals[i].is_default = true);
+
+	d3.range(N).forEach(i => {
+		if (hospitals[i].total_beds < 1.5) {
+			hospitals[i].is_default = false;
+		} else {
+			if (hospitals[i].is_default == null) {
+				hospitals[i].is_default = false;
+			}
+		}
+	});
+
+	return hospitals;
 }
 
 const tooltip_content = {

@@ -73,7 +73,6 @@ function getHospitals() {
 		region_id: $("#form-region")[0].value,
 	};
 	let request = $.get("/api/hospital-list", data, d => {
-		d = selectDefaultHospitals(d);
 		common.createHospitalsSelect(d, true, false);
 		addUpdateButton();
 	});
@@ -353,18 +352,6 @@ function filterResponse(response_) {
 	response.sent[n][n] = d3.range(T).map(t => d3.sum(unselectedInd, i => d3.sum(unselectedInd, j => response_.sent[i][j][t])));
 
 	return response;
-}
-
-function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
-	return hospitals;
-
-	const N = hospitals.length;
-	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].current_load - hospitals[b].current_load);
-	const selected = byLoadInd.slice(0,4).concat(byLoadInd.slice(N-4));
-
-	selected.forEach(i => hospitals[i].is_default = true);
-
-	return hospitals;
 }
 
 function sendUpdateQuery(latest=true) {
