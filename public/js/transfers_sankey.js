@@ -1,7 +1,6 @@
 const transfersSankeySize = {height: 600, width: 1000};
 const transfersSankeyMargins = {top: 25, bottom: 5, left: 30, right: 30};
 
-import {generateFigureDownloadButtons} from "./patients_common.js";
 import {transfersSankeyDescription} from "./figure_text.js";
 
 export {createTransfersSankey};

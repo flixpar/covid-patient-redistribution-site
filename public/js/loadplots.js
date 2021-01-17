@@ -5,7 +5,6 @@ const loadPlotsFont = "Helvetica";
 const loadPlotsLegendFont = "Monospace";
 const loadPlotsShowPoints = false;
 
-import {generateFigureDownloadButtons} from "./patients_common.js";
 import {loadplotsDescription, overallloadplotDescription} from "./figure_text.js";
 
 export {createOverallLoadPlot, createLoadPlots};

@@ -11,7 +11,6 @@ const surgeTimelineColorscale = {
 	2: "red",
 };
 
-import {generateFigureDownloadButtons} from "./patients_common.js";
 import {surgeTimelineDescription} from "./figure_text.js";
 import {getDateIntervals} from "./loadplots.js";
 
