@@ -44,18 +44,20 @@
 			<h4 class="title is-4">Hospital Occupancy Dashboard</h4>
 		</div>
 
-		<div class="container">
+		<div class="container" id="static-text-container">
 			<p style="margin-bottom: 12px;">
-				This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals. You can use it to see which hospitals are over capacity, when and how many additional beds are needed at each hospital (or US state), and the optimal transfer strategy between hospitals.
+				<span id="static-page-p1" class="description-hidden-text">
+					This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals. You can use it to see which hospitals are over capacity, when and how many additional beds are needed at each hospital (or US state), and the optimal transfer strategy between hospitals.
+				</span>
 			</p>
 			<p style="margin-bottom: 12px;">
-				<span class="description-hidden-label" data-for="static-page-p1">
+				<span class="description-hidden-label" data-for="static-page-p2">
 					<b>How can we better manage COVID capacity in hospital systems?</b>
 					<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
 					<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
 					<br>
 				</span>
-				<span id="static-page-p1" class="description-hidden-text is-hidden">
+				<span id="static-page-p2" class="description-hidden-text is-hidden">
 					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
 					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS)<span class="info-text">Latest data from 2021-01-10</span>, and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC)<span class="info-text">Latest forecast from 2021-01-04</span>. To learn more, visit the <a href="/about">About page</a>.
 				</span>

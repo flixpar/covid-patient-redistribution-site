@@ -1,5 +1,7 @@
-const mapHeight = 500;
-const mapWidth  = 1000;
+const isMobile = (window.innerWidth < 600);
+
+const mapHeight = isMobile ? 650: 500;
+const mapWidth  = isMobile ? 500: 1000;
 
 const mapPlotMargin = ({top: 0,  right:  0, bottom:  0, left:  0});
 const mapPadding    = ({top: 30, right: 20, bottom: 20, left: 20});
@@ -662,14 +664,25 @@ function makeMap(svg, globalSVG, rawdata, data, links, colorscale, plotWidth, pl
 
 	if (title != null) {
 		if (titlePosition == "top") {
-			svg.append("text")
-				.attr("class", "map-subtitle")
-				.attr("x", plotWidth/2)
-				.attr("y", 20)
-				.attr("text-anchor", "middle")
-				.style("font-family", mapPlotFont)
-				.style("font-size", "16px")
-				.text(title);
+			if (isMobile) {
+				svg.append("text")
+					.attr("class", "map-subtitle")
+					.attr("x", mapMargin.left)
+					.attr("y", 20)
+					.attr("text-anchor", "left")
+					.style("font-family", mapPlotFont)
+					.style("font-size", "16px")
+					.text(title);
+			} else {
+				svg.append("text")
+					.attr("class", "map-subtitle")
+					.attr("x", plotWidth/2)
+					.attr("y", 20)
+					.attr("text-anchor", "middle")
+					.style("font-family", mapPlotFont)
+					.style("font-size", "16px")
+					.text(title);
+			}
 		} else if (titlePosition == "left") {
 			svg.append("text")
 				.attr("class", "map-subtitle")
