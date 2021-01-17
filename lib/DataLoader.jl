@@ -143,48 +143,32 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 end
 
 function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate, ndefault=NDEFAULT)
-	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
+	hospitals_info = deserialize(joinpath(projectbasepath, "data/hhs_current_load_covid.jlser"))
 
-	hospitals_ind = filter_hospitals(data, region=region, names=names, ids=ids)
-	hospital_names = data.location_names[hospitals_ind]
-	hospital_ids = data.location_ids[hospitals_ind]
-
-	casesdata = data.casesdata[scenario, bedtype]
-
-	day0 = today()
-	day0_idx = (day0 - data.start_date).value + 1
-	initial = casesdata.active[hospitals_ind, day0_idx]
-
-	default_capacity_level = 1
-	beds = casesdata.capacity[hospitals_ind, default_capacity_level]
-	small_ind = findall(beds .<= 2)
-
-	load = initial ./ beds
-	load[beds .== 0] .= 1.0
-
-	ndefault = isnothing(ndefault) ? NDEFAULT : ndefault
-	n_total = min(ndefault, length(hospitals_ind) - length(small_ind))
-	n_size = Int(ceil(n_total * 0.75))
-	n_load = n_total - n_size
-
-	default_hospitals_ind_size = setdiff(sortperm(beds, rev=true), small_ind)
-	default_hospitals_ind_load = setdiff(sortperm(load, rev=true), small_ind)
-	default_hospitals_ind = vcat(default_hospitals_ind_size[1:n_size], default_hospitals_ind_load[1:n_load])
-
-	if DEBUG && NDEDBUG < NDEFAULT
-		default_hospitals_ind = default_hospitals_ind[1:min(NDEDBUG, length(default_hospitals_ind))]
+	if !isnothing(region)
+		col_lookup = Dict(
+			:state => :state_abbrev,
+			:hospital_system => :system_id,
+			:hrr => :hrr_id,
+			:hsa => :hsa_id,
+		)
+		col = col_lookup[region.region_type]
+		filter!(h -> !ismissing(h[col]) && (h[col] == region.region_id), hospitals_info)
+	else
+		hospitals_info = data
 	end
 
-	hospitals_meta = [
-		(
-			hospital_name = hospital_names[i],
-			hospital_id = hospital_ids[i],
-			current_load = load[i],
-			is_default = (i in default_hospitals_ind),
-		)
-		for i in 1:length(hospital_ids)
-	]
-	return hospitals_meta
+	if !isnothing(names) && !isempty(names)
+		filter!(h -> h.hospital in names, hospitals_info)
+	end
+	if !isnothing(ids) && !isempty(ids)
+		filter!(h -> h.hospital_id in ids, hospitals_info)
+	end
+
+	cols_cvt = Dict(:hospital => :hospital_name, :hospital_id => :hospital_id, :total_load => :current_load, :total_beds => :total_beds)
+	hospitals_info = [Dict(cols_cvt[c] => h[c] for c in keys(cols_cvt)) for h in hospitals_info]
+
+	return hospitals_info
 end
 
 function regions_list(region_type::Symbol=:all)
