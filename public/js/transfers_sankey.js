@@ -182,10 +182,10 @@ function toGraph(response, excludeSelf=false) {
 	}));
 
 	const srcNames = locNames.filter((_,i) => {
-		return d3.sum(totalSent[i]) > 1;
+		return d3.some(totalSent[i], z => z > 1);
 	});
 	const dstNames = locNames.filter((_, i) => {
-		return d3.sum(locInd.map(j => totalSent[j][i])) > 1;
+		return d3.some(locInd.map(j => totalSent[j][i]), z => z > 1);
 	});
 
 	const srcNodes = srcNames.map(colName => {return {name: colName+"-src", idx: locNames.indexOf(colName)}});
