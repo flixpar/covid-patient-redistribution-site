@@ -31,7 +31,6 @@ const debugMap = false;
 let storedGeometry = null;
 
 import {generateHiddenText} from "./figure_text.js";
-import {generateFigureDownloadButtons} from "./patients_common.js";
 import {getDateIntervals} from "./loadplots.js";
 import {toTitlecase} from "./patients_common.js";
 
