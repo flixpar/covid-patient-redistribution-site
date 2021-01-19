@@ -48,7 +48,7 @@
 
 	<section class="section">
 
-		<div class="content-tabs tabs is-centered">
+		<div class="content-tabs tabs is-centered is-hidden">
 			<ul>
 				<li class="is-active"><a href="#home">Overview</a></li>
 				<li><a href="/about#about">Read More</a></li>
@@ -59,14 +59,8 @@
 		<div id="about-home" data-anchor="home">
 
 			<div class="container">
-				<h4 class="title is-4" style="margin-bottom: 12px;">COVID-19 Hospital Capacity Management</h4>
-
-				<p style="margin-bottom: 10px;">
-					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
-				</p>
-				<p>
-					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS), and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC). To learn more, visit the <a href="/about#about">About tab</a>.
-				</p>
+				<h4 class="title is-4" style="margin-bottom: 12px;">COVID-19 Hospital Capacity Management using Mathematical Models</h4>
+				<p>This website shows how to transfer patients to optimally use the available capacity of hospitals in the US. You can find out how many additional beds are needed per hospital or region.</p>
 			</div>
 
 			<div class="container" id="home-main">
@@ -75,42 +69,91 @@
 					<video class="preview-img" autoplay loop muted playsinline>
 						<source src="/img/hospitals-map-preview-anim.mp4" type="video/mp4">
 					</video>
-					<div class="content">
-						<h6 class="title is-6">Dashboard</h6>
-						<p>Our main dashboard page, which investigates the COVID occupancy of hospitals for any state in the US and how transfers could be used between those hospitals. It can be used to analyze:</p>
-						<ul>
-							<li>The current and future occupancy of hospitals in the state of your choice</li>
-							<li>If more beds are needed in the state and where</li>
-							<li>The best strategy for transferring patients between hospitals</li>
-						</ul>
+					<div class="preview-content">
+						<a href="/patients-static" class="title-link">
+							<h6 class="title is-6">State-level Hospital Occupancy and Optimal Transfers</h6>
+							<h6 class="subtitle is-6">Dashboard</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-a">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-a" class="description-hidden-text is-hidden">
+								You can choose 1) state, 2) patient type, and 3) displayed hospitals to see:
+								<div class="content">
+									<ul style="margin-top: 0px;">
+										<li>The current and future occupancy of the hospitals in the state you selected.</li>
+										<li>If more beds are needed and how many.</li>
+										<li>The best strategy for transferring patients between hospitals.</li>
+									</ul>
+								</div>
+							</span>
+						</div>
 					</div>
 				</div>
 
 				<div class="homepage-section-preview box" id="nearby-preview" data-link="/hospital-selection">
 					<img src="/img/nearbymap-preview.png" class="preview-img">
-					<div class="content">
-						<h6 class="title is-6">Nearby Hospitals</h6>
-						<p>A map to find hospitals near you (or any place of interest) and determine which hospitals currently are the least stressed. It includes:</p>
-						<ul>
-							<li>The status of hospitals around you</li>
-							<li>A scoring system to advise on which hospitals to go to</li>
-						</ul>
+					<div class="preview-content">
+						<a href="/patients-static" class="title-link">
+							<h6 class="title is-6">Hospital Occupancy Near You</h6>
+							<h6 class="subtitle is-6">Nearby Hospitals</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-b">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-b" class="description-hidden-text is-hidden">
+								<p>Enter a zip code to see how the nearby hospitals are ranked based on their potential to accept new patients. The more stressed or further away the hospital, the lower its rank will be.</p>
+							</span>
+						</div>
 					</div>
 				</div>
 
 				<div class="homepage-section-preview box" id="details-preview" data-link="/patients-interactive">
-					<img src="/img/surgetimeline-preview.svg" class="preview-img">
-					<div class="content">
-						<h6 class="title is-6">Customize Results</h6>
-						<p>For interested users, our Customize Results page can run our models with your choice of parameters, including:</p>
-						<ul>
-							<li>Region type (hospital system, Hospital Service Area, Hospital Referral Region, and state)</li>
-							<li>Start and end date</li>
-							<li>Patient transfer budget</li>
-						</ul>
+					<img src="/img/transferflows-preview.svg" class="preview-img">
+					<div class="preview-content">
+						<a href="/patients-static" class="title-link">
+							<h6 class="title is-6">Customizable Hospital Occupancy and Optimal Transfers</h6>
+							<h6 class="subtitle is-6">Customize Results</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-c">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-c" class="description-hidden-text is-hidden content">
+								<p>
+									This page is almost fully customizable. You can choose any US Health System, Hospital Service Area, Hospital Referral Region, and State. For instance, select Hopkins System or NYC Health + Hospital System, or Houston Trauma Area from the dropdown menus and run the models on the spot to see the results.
+									<br>
+									Other customizable parameters include:
+								</p>
+								<ul>
+									<li>The maximum number of daily transfers per hospital</li>
+									<li>The time period (start and end date)</li>
+									<li>Strategic decision preferences, e.g., creating additional beds in one location or increasing the beds for all hospitals.</li>
+								</ul>
+							</span>
+						</div>
 					</div>
 				</div>
 
+			</div>
+
+			<div class="container">
+				<p>
+					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+					<br><br>
+					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS), and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC). To learn more, visit the <a href="/about#about">About tab</a>.
+				</p>
 			</div>
 
 		</div>
@@ -191,11 +234,23 @@
 
 	<script>
 		document.querySelectorAll(".homepage-section-preview").forEach(elem => {
-			elem.addEventListener("click", () => {
+			const imgElem = elem.querySelector(".preview-img");
+			imgElem.addEventListener("click", () => {
 				window.location.href = elem.dataset.link;
 			});
 		});
 	</script>
+
+	<script>
+		document.querySelectorAll(".description-hidden-label").forEach(elem => {
+			elem.addEventListener("click", e => {
+				document.getElementById(elem.dataset.for).classList.toggle("is-hidden");
+				elem.querySelectorAll(".icon-expand-text").forEach(i => i.classList.toggle("is-hidden"));
+			});
+		});
+	</script>
+
+	<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
 
 </body>
 
