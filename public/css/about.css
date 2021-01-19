@@ -80,10 +80,10 @@
 		height: auto;
 		margin-bottom: 10px;
 	}
-	.homepage-section-preview > .content {
+	.homepage-section-preview > .preview-content {
 		width: 100%;
 	}
-	.homepage-section-preview > .content > .title {
+	.homepage-section-preview .title-link {
 		margin-bottom: 10px;
 	}
 }
