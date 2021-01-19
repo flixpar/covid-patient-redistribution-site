@@ -33,7 +33,15 @@
 				<a href="/patients-static" class="navbar-item is-tab">Dashboard</a>
 				<a href="/patients-interactive" class="navbar-item is-tab">Customize Results</a>
 				<a href="/hospital-selection" class="navbar-item is-tab">Nearby Hospitals</a>
-				<a href="/about#about" class="navbar-item is-tab">About</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a href="/about#about" class="navbar-link">About</a>
+
+					<div class="navbar-dropdown">
+						<a href="/about#home" class="navbar-item">Overview</a>
+						<a href="/about#about" class="navbar-item">Read More</a>
+						<a href="/about#aboutus" class="navbar-item">About Us</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -42,8 +50,8 @@
 
 		<div class="content-tabs tabs is-centered">
 			<ul>
-				<li class="is-active"><a href="#home">Home</a></li>
-				<li><a href="/about#about">About</a></li>
+				<li class="is-active"><a href="#home">Overview</a></li>
+				<li><a href="/about#about">Read More</a></li>
 				<li><a href="/about#aboutus">About Us</a></li>
 			</ul>
 		</div>

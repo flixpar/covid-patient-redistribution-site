@@ -15,4 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			elem.classList.add("is-active");
 		}
 	});
+
+	document.querySelector(".navbar-dropdown").addEventListener("click", () => document.activeElement.blur());	
 });
