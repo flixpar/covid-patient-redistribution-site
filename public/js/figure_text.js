@@ -59,7 +59,7 @@ export function generateHiddenText(text) {
 	const descriptionId = "description-hidden-" + Math.random().toString(36).substr(2, 5);;
 	const contentStr = `
 	<span class="description-hidden-label" data-for="${descriptionId}">
-		How to read this figure
+		<i>How to read this figure</i>
 		<ion-icon class="icon-expand-text" name="caret-forward-outline"></ion-icon>
 		<ion-icon class="icon-expand-text is-hidden" name="caret-down-outline"></ion-icon>
 	</span>
