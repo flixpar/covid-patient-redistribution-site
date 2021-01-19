@@ -153,7 +153,7 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:ic
 			:hsa => :hsa_id,
 		)
 		col = col_lookup[region.region_type]
-		filter!(h -> !ismissing(h[col]) && (h[col] == region.region_id), hospitals_info)
+		filter!(h -> !ismissing(h[col]) && (string(h[col]) == region.region_id), hospitals_info)
 	else
 		hospitals_info = data
 	end
