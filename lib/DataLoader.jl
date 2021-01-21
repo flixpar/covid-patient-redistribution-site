@@ -104,12 +104,11 @@ function load_hhs(
 end
 
 function los_dist_default(bedtype::Symbol)
-	if bedtype == :icu
-		return Gamma(1.77595, 5.9512)
-	elseif bedtype == :acute
-		return Gamma(2.601, 3.8046)
+	losdata = deserialize(joinpath(projectbasepath, "data/hhs_los_est.jlser"))
+	if haskey(losdata, bedtype)
+		return losdata[bedtype]
 	else
-		return Gamma(2.244, 4.4988)
+		return losdata[:allbeds]
 	end
 end
 
