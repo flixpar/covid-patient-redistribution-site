@@ -69,7 +69,7 @@ function load_hhs(
 	discharged = Array{Float64,2}(undef, N, T)
 	for i in 1:N
 		discharged[i,:] = initial[i] .* (pdf.(casesdata.los_dist, 0:T-1))
-		if isinf(discharged[i,1])
+		if isinf(discharged[i,1]) || isnan(discharged[i,1])
 			discharged[i,1] = 0.0
 		end
 	end
