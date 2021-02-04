@@ -201,9 +201,8 @@ function computeData(response) {
 }
 
 function getScoreColorscale(response) {
-	const scores = response.data.map(h => h.score);
-	const minScore = d3.min(scores);
-	const maxScore = d3.max(scores);
+	const minScore = 0.2;
+	const maxScore = 0.9;
 	const colorscale = d3.scaleSequential(d3.interpolateRdYlGn).domain([minScore, maxScore]);
 	return colorscale;
 }
