@@ -76,6 +76,13 @@
 	width: 18px;
 }
 
+.loc-marker {
+	border: none;
+	cursor: pointer;
+	height: 22px;
+	width: 22px;
+}
+
 .section {
 	width: 94%;
 	margin: auto;
