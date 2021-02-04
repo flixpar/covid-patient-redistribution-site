@@ -46,6 +46,8 @@ export function createLocationsMap(response) {
 
 export async function addMarkers(map, response) {
 
+	let locMarker = addLocMarker(map, response.current_location);
+
 	const colorscale = getScoreColorscale(response);
 
 	const markerImgElem = await getMarkerImg();
@@ -75,6 +77,9 @@ export async function addMarkers(map, response) {
 			.addTo(map);
 		return marker;
 	});
+
+	markers.push(locMarker);
+	response.data.push(response.current_location);
 
 	let openMarker = null;
 
@@ -114,6 +119,32 @@ export async function addMarkers(map, response) {
 		markers = null;
 	});
 
+}
+
+function addLocMarker(map, loc) {
+	let el = document.createElement("div");
+	el.id = "marker-currentloc";
+	el.className = "loc-marker";
+
+	let svg = d3.create("svg").attr("viewBox", [0, 0, 20, 20]);
+	svg.append("circle")
+		.attr("cx", 10)
+		.attr("cy", 10)
+		.attr("r", 10)
+		.attr("stroke", "white")
+		.attr("stroke-width", 2)
+		.attr("fill", "blue");
+	el.appendChild(svg.node());
+
+	const popupContent = `<h3>Current Location</h3>`;
+	const popup = new mapboxgl.Popup({offset: 15, focusAfterOpen: false}).setHTML(popupContent);
+
+	let marker = new mapboxgl.Marker(el)
+		.setLngLat([loc.long, loc.lat])
+		.setPopup(popup)
+		.addTo(map);
+
+	return marker;
 }
 
 function l2distance(loc1, loc2) {
