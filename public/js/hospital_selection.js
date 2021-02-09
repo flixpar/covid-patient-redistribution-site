@@ -66,17 +66,8 @@ export function populateLocationsTable(response) {
 	section.appendChild(table);
 }
 
-function getData() {
-	$.ajax({
-		url: `https://api.ipdata.co/?api-key=${apiKey}`,
-		success: (d) => {
-			const loc = {lat: d.latitude, long: d.longitude};
-			$.get("/api/hospital-selection", loc, handleResponse);
-		},
-		error: () => {
-			const loc = {lat: 39.3299013, long: -76.6205177};
-			$.get("/api/hospital-selection", loc, handleResponse);
-		}
-	});
+function getDefaultData() {
+	const loc = {lat: 39.3299013, long: -76.6205177};
+	$.get("/api/hospital-selection", loc, handleResponse);
 }
-getData();
+getDefaultData();

@@ -99,17 +99,19 @@ function ajaxErrorHandler() {
 	document.getElementById("result-area").innerHTML = "";
 }
 
-function setDefaultDates() {
+function setDefaultDates(debug=false) {
 	let start_date = new Date();
-	let end_date   = new Date("2021-02-27");
+	let end_date   = new Date();
+	end_date.setMonth(end_date.getMonth() + 1);
+	if (debug) {end_date = new Date("2021-02-20");}
 	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
 	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
 }
 setDefaultDates();
 
 function validateForm() {
-	const data_start_date = "2020-08-01";
-	const data_end_date   = "2021-02-27";
+	const data_start_date = "2021-01-01";
+	const data_end_date   = "2021-06-30";
 
 	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
 	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
@@ -121,9 +123,9 @@ function validateForm() {
 	}
 
 	const nHospitalsSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
-	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 16);
+	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 32);
 	if (!nHospitalsAllowed) {
-		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-16 hospitals.`);
+		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-32 hospitals.`);
 	}
 
 	return (dates_valid && nHospitalsAllowed);

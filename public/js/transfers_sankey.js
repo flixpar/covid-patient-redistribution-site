@@ -207,7 +207,7 @@ function toGraph(response, excludeSelf=false) {
 
 function checkTransfers(response) {
 	const totalSent = d3.sum(response.sent, x => d3.sum(x, y => d3.sum(y)));
-	return totalSent > 0;
+	return totalSent > 1;
 }
 
 class TransfersSankeyTooltip {
