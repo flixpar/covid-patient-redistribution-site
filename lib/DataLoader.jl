@@ -8,7 +8,7 @@ using Distributions
 using Dates
 using LinearAlgebra
 
-export load_hhs
+export load_data
 export los_dist_default
 export hospitals_list
 export regions_list
@@ -22,7 +22,7 @@ DEBUG = false
 NDEDBUG = 6
 
 
-function load_hhs(
+function load_data(
 		region::NamedTuple,
 		hospital_list::Array{String,1},
 		scenario::Symbol,
@@ -35,7 +35,7 @@ function load_hhs(
 	@assert(start_date < end_date)
 	@assert(patient_type in [:icu, :acute, :all])
 
-	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
+	data = deserialize(joinpath(projectbasepath, "data/data.jlser"))
 
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
@@ -104,7 +104,11 @@ function load_hhs(
 end
 
 function los_dist_default(bedtype::Symbol)
-	losdata = deserialize(joinpath(projectbasepath, "data/hhs_los_est.jlser"))
+	losdata = (
+		allbeds = Gamma(2.244, 4.4988),
+		acute = Gamma(2.601, 3.8046),
+		icu = Gamma(1.77595, 5.9512),
+	)
 	if haskey(losdata, bedtype)
 		return losdata[bedtype]
 	else
@@ -119,6 +123,9 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 			:hospital_system => :system_id,
 			:hrr => :hrr_id,
 			:hsa => :hsa_id,
+			:city => :city,
+			:county => :county,
+			:healthcareregion => :healthcare_region,
 		)
 		col = col_lookup[region.region_type]
 		hospitals_info = filter(h -> !ismissing(h[col]) && (h[col] == region.region_id), data.location_meta)
@@ -142,7 +149,7 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 end
 
 function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate, ndefault=NDEFAULT)
-	hospitals_info = deserialize(joinpath(projectbasepath, "data/hhs_current_load_covid.jlser"))
+	hospitals_info = deserialize(joinpath(projectbasepath, "data/current_load_covid.jlser"))
 
 	if !isnothing(region)
 		col_lookup = Dict(
@@ -150,6 +157,9 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:ic
 			:hospital_system => :system_id,
 			:hrr => :hrr_id,
 			:hsa => :hsa_id,
+			:city => :city,
+			:county => :county,
+			:healthcareregion => :healthcare_region,
 		)
 		col = col_lookup[region.region_type]
 		filter!(h -> !ismissing(h[col]) && (string(h[col]) == region.region_id), hospitals_info)
@@ -171,7 +181,7 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:ic
 end
 
 function regions_list(region_type::Symbol=:all)
-	data = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	data = deserialize(joinpath(projectbasepath, "data/regions.jlser"))
 	if region_type != :all
 		filter!(r -> r.region_type == region_type, data)
 	end
@@ -179,7 +189,7 @@ function regions_list(region_type::Symbol=:all)
 end
 
 function complete_region(r)
-	regions = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	regions = deserialize(joinpath(projectbasepath, "data/regions.jlser"))
 	filter!(region -> region.region_type == r.region_type, regions)
 	if haskey(r, :region_id) && !haskey(r, :region_name)
 		region_idx = findfirst(region -> region.region_id == r.region_id, regions)

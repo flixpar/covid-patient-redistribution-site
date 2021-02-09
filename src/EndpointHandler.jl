@@ -44,7 +44,7 @@ function handle_patients_request(
 
 	@assert patient_type in [:acute, :icu, :all]
 
-	data = load_hhs(region, location_ids, scenario, patient_type, start_date, end_date)
+	data = load_data(region, location_ids, scenario, patient_type, start_date, end_date)
 	default_capacity_level = 1
 
 	if los_param == "default_dist"

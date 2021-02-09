@@ -12,7 +12,7 @@ export score_hospitals
 
 
 function score_hospitals(loc, n=20)
-	data = deserialize(joinpath(projectbasepath, "data/hhs_current_load.jlser"))
+	data = deserialize(joinpath(projectbasepath, "data/current_load.jlser"))
 
 	locations = [(lat=h.lat, long=h.long) for h in data]
 	distances = [haversine_distance(loc, h) for h in locations]
