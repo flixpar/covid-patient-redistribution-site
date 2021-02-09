@@ -101,7 +101,7 @@ function ajaxErrorHandler() {
 
 function setDefaultDates() {
 	let start_date = new Date();
-	let end_date   = new Date("2021-02-13");
+	let end_date   = new Date("2021-02-27");
 	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
 	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
 }
@@ -109,7 +109,7 @@ setDefaultDates();
 
 function validateForm() {
 	const data_start_date = "2020-08-01";
-	const data_end_date   = "2021-02-13";
+	const data_end_date   = "2021-02-27";
 
 	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
 	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
