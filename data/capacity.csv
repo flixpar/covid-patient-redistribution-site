@@ -1,0 +1,56 @@
+hospital,hospital_id,capacity_icu,capacity_acute,capacity_allbeds
+Anne Arundel Medical Center,h39740093,40,284,324
+Atlantic General Hospital,h92616877,9,43,51
+Baltimore Convention Center Field Hospital,h94720559,0,26,23
+Baltimore Washington Medical Center,h75227743,30,206,236
+Bowie Medical Center,h26261837,0,10,10
+Calvert Memorial Hospital,h51968182,6,54,59
+Carroll Hospital Center,h73144964,10,112,123
+Charles Regional (UM),h61059656,12,98,111
+Chestertown (UMSRH),h95946725,2,11,13
+Doctors Community Hospital,h82233897,22,187,209
+Dorchester (UMSRH),h63139553,0,9,9
+Easton (UMSRH),h48881906,6,66,72
+Edward McCready Memorial Hospital,h55609821,0,0,0
+Fort Washington ACS,h30119195,3,1,5
+Fort Washington Hospital,h24459724,4,23,27
+Franklin Square (MedStar),h41936996,43,269,313
+Frederick Memorial Hospital,h27068501,19,219,238
+Garrett Memorial Hospital (WVU),h89650230,4,41,46
+Germantown EC,h88962860,0,0,0
+Good Samaritan Hospital (MedStar),h99606414,28,142,170
+Grace Medical Center,h55471441,0,8,8
+Greater Baltimore Medical Center,h65349594,24,204,228
+Harbor Hospital (MedStar),h26221809,13,74,87
+Harford Memorial Hospital (UMUCH),h63170115,6,62,68
+Holy Cross Germantown,h47529315,12,55,67
+Holy Cross Hospital,h32841492,50,315,365
+Howard County General Hospital (JHM),h01871291,30,163,193
+Jessup Corrections ACS,h81795503,0,15,0
+Johns Hopkins Bayview Medical Center,h71848553,51,211,262
+Johns Hopkins Hospital,h31492371,124,553,677
+Laurel Regional Medical Center,h22336124,14,38,52
+Maryland Corrections Hagerstown ACS,h91796760,0,15,0
+Mercy Medical Center,h10665696,17,149,166
+Meritus Medical Center,h04568025,24,176,200
+Midtown (UM),h97946900,16,61,78
+Montgomery Medical Center (MedStar),h02352027,7,79,86
+Northwest Hospital,h39982428,17,110,127
+Peninsula Regional Medical Center,h89427760,39,209,247
+Prince George's ACS,h51272781,1,1,3
+Prince George's Hospital Center,h21463235,37,126,163
+Queenstown Emergency Center,h68471469,0,0,0
+Shady Grove Adventist Hospital,h27400796,20,156,175
+Sinai Hospital of Baltimore,h91609912,35,265,300
+Southern Maryland Hospital (MedStar),h94551343,27,113,140
+St. Agnes Hospital,h90902269,19,170,189
+St. Joseph's (UM),h04231605,22,126,147
+St. Mary's Hospital,h60750772,12,85,97
+Suburban Hospital,h44191077,26,151,177
+Union Hospital of Cecil County,h36169128,9,77,86
+Union Memorial Hospital (MedStar),h27405358,27,137,164
+University of Maryland Medical Center,h35874312,203,359,562
+Upper Chesapeake Medical Center (UMUCH),h05131983,23,178,200
+Washington Adventist ACS,h39760140,0,19,19
+Western Maryland Medical Center (UPMC),h30194845,14,143,158
+White Oak Medical Center,h51938610,24,150,174
