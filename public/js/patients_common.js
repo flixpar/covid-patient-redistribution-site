@@ -316,7 +316,7 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions(exclude=[]) {
-	const default_region = {state: "MD", hospital_system: "HSI00000730", hrr: "56", hsa: "33014"};
+	const default_region = {state: "MD", city: "Baltimore", county: "Baltimore City", healthcareregion: "Region III", hrr: "223", hsa: "21002"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
@@ -336,9 +336,7 @@ function getRegions(exclude=[]) {
 }
 
 function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
-	const nDefaultSize = staticPage ? 20 : 10;
-	const nDefaultLoad = staticPage ?  4 :  2;
-	data = selectDefaultHospitals(data, nDefaultSize, nDefaultLoad);
+	data = selectDefaultHospitals(data, 16, 4, staticPage);
 
 	let selectAreaField = document.getElementById("hospital-select-field");
 	selectAreaField.innerHTML = "";
@@ -556,8 +554,13 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 	selectAreaContainer.appendChild(footerAreaContainer);
 }
 
-function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
+function selectDefaultHospitals(hospitals, nSize=20, nLoad=4, selectAll=false) {
 	const N = hospitals.length;
+
+	if (selectAll) {
+		nSize = N;
+		nLoad = 0;
+	}
 
 	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].current_load - hospitals[b].current_load);
 	const selectedByLoad = byLoadInd.slice(N-nLoad);

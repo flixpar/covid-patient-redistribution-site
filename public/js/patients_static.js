@@ -83,8 +83,7 @@ function createParametersForm() {
 	let regionSelect = document.getElementById("form-region");
 	let patienttypeSelect = document.getElementById("form-patient-type");
 
-	const excludeRegions = ["CA", "TX"];
-	let getRegionsRequest = common.getRegions(excludeRegions);
+	let getRegionsRequest = common.getRegions();
 	let getHospitalsRequest = getRegionsRequest.then(() => getHospitals());
 	getHospitalsRequest.then(() => sendUpdateQuery());
 
