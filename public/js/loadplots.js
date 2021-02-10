@@ -209,9 +209,9 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 
 	svg.append("rect")
 		.attr("x", 0)
-		.attr("y", -loadPlotsMargin.top)
+		.attr("y", -100)
 		.attr("width", loadPlotsWidth)
-		.attr("height", loadPlotsMargin.top)
+		.attr("height", 100)
 		.attr("stroke", "none")
 		.attr("fill", "white")
 		.attr("opacity", 1.0);
