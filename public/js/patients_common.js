@@ -123,9 +123,9 @@ function validateForm() {
 	}
 
 	const nHospitalsSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
-	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 32);
+	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 100);
 	if (!nHospitalsAllowed) {
-		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-32 hospitals.`);
+		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-100 hospitals.`);
 	}
 
 	return (dates_valid && nHospitalsAllowed);

@@ -7,8 +7,8 @@ push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"))
 include("../src/EndpointHandler.jl")
 
 
-STARTDATE = Date(2021, 01, 01)
-ENDDATE   = Date(2021, 01, 30)
+STARTDATE = Date(2021, 02, 10)
+ENDDATE   = Date(2021, 04, 10)
 
 REGIONTYPE = :state
 SKIPREGIONS = []
@@ -32,7 +32,7 @@ default_params = (
 results_path = "../public/results-static/"
 VERBOSE = true
 
-REGIONS = deserialize("../data/regions_hhs.jlser")
+REGIONS = deserialize("../data/regions.jlser")
 filter!(r -> r.region_type == REGIONTYPE, REGIONS)
 filter!(r -> !(r.region_id in SKIPREGIONS), REGIONS)
 
@@ -67,7 +67,7 @@ function precompute_result(params)
 		verbose=VERBOSE,
 	)
 
-	d = replace(string(params.start_date), "-" => "")
+	d = "latest"
 	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_id).json")
 	write(fn, JSON.json(result))
 
