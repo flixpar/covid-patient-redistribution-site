@@ -132,50 +132,12 @@ function addUpdateButton() {
 	selectUpdateButton.addEventListener("click", () => {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
 		if (nSelected > 50) {
-			warnManyHospitals(nSelected).then(c => {
+			common.warnManyHospitals(nSelected).then(c => {
 				if (c) {handleResponse(recentResponse);}
 			});
 		} else {
 			handleResponse(recentResponse);
 		}
-	});
-}
-
-function warnManyHospitals(n) {
-	let overlay = document.createElement("div");
-	overlay.id = "background-overlay";
-	document.body.appendChild(overlay);
-
-	const warningElemText = `
-		<div class="message is-warning is-light warning-popup">
-			<div class="message-header">
-				<p>Warning</p>
-				<button class="delete" aria-label="delete" id="warning-close"></button>
-			</div>
-			<div class="message-body">
-				<p>You have selected more hospitals than is recommended. The page may run slow as a result.</p>
-				<div style="float: right; margin-top: 10px; margin-bottom: 10px;">
-					<button class="button is-warning is-light" id="warning-cancel">Cancel</button>
-					<button class="button is-warning" id="warning-continue">Continue</button>
-				</div>
-			</div>
-		</div>
-	`;
-	let tempElem = document.createElement("div");
-	tempElem.innerHTML = warningElemText;
-	let warningElem = tempElem.children[0];
-	document.body.appendChild(warningElem);
-
-	function removeWarning() {
-		overlay.remove();
-		warningElem.remove();
-	}
-
-	return new Promise(resolve => {
-		overlay.addEventListener("click", () => {removeWarning(); resolve(true)});
-		warningElem.querySelector("#warning-continue").addEventListener("click", () => {removeWarning(); resolve(true)});
-		warningElem.querySelector("#warning-close").addEventListener("click", () => {removeWarning(); resolve(true)});
-		warningElem.querySelector("#warning-cancel").addEventListener("click", () => {removeWarning(); resolve(false)});
 	});
 }
 
