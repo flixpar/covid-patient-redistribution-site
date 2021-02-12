@@ -83,8 +83,7 @@ function createParametersForm() {
 	let regionSelect = document.getElementById("form-region");
 	let patienttypeSelect = document.getElementById("form-patient-type");
 
-	const excludeRegions = ["CA", "TX"];
-	let getRegionsRequest = common.getRegions(excludeRegions);
+	let getRegionsRequest = common.getRegions();
 	let getHospitalsRequest = getRegionsRequest.then(() => getHospitals());
 	getHospitalsRequest.then(() => sendUpdateQuery());
 
@@ -131,7 +130,7 @@ function addUpdateButton() {
 
 	selectUpdateButton.addEventListener("click", () => {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
-		if (nSelected > 50) {
+		if (nSelected > 65) {
 			warnManyHospitals(nSelected).then(c => {
 				if (c) {handleResponse(recentResponse);}
 			});

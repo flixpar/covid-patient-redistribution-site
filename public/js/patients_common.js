@@ -121,9 +121,9 @@ function validateForm() {
 	}
 
 	const nHospitalsSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
-	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 16);
+	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 64);
 	if (!nHospitalsAllowed) {
-		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-16 hospitals.`);
+		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-64 hospitals.`);
 	}
 
 	return (dates_valid && nHospitalsAllowed);
@@ -333,8 +333,8 @@ function getRegions(exclude=[]) {
 }
 
 function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
-	const nDefaultSize = staticPage ? 20 : 10;
-	const nDefaultLoad = staticPage ?  4 :  2;
+	const nDefaultSize = staticPage ? 50 : 10;
+	const nDefaultLoad = staticPage ?  8 :  2;
 	data = selectDefaultHospitals(data, nDefaultSize, nDefaultLoad);
 
 	let selectAreaField = document.getElementById("hospital-select-field");
@@ -557,10 +557,10 @@ function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
 	const N = hospitals.length;
 
 	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].current_load - hospitals[b].current_load);
-	const selectedByLoad = byLoadInd.slice(N-nLoad);
+	const selectedByLoad = byLoadInd.slice((N > nLoad) ? N-nLoad : 0);
 
 	const bySizeInd = d3.range(N).sort((a,b) => hospitals[a].total_beds - hospitals[b].total_beds);
-	const selectedBySize = bySizeInd.slice(N-nSize);
+	const selectedBySize = bySizeInd.slice((N > nSize) ? N-nSize : 0);
 
 	const selected = selectedBySize.concat(selectedByLoad);
 	selected.forEach(i => hospitals[i].is_default = true);
