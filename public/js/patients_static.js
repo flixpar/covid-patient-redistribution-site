@@ -355,19 +355,8 @@ function filterResponse(response_) {
 }
 
 function filterHospitalSelect(response) {
-	const nodes_meta = response.config.nodes_meta;
-	let nRemoved = 0;
-	document.querySelectorAll(".hospitalselect-checkbox").forEach(c => {
-		const c_id = c.value;
-		const i = nodes_meta.findIndex(h => h.hospital_id == c_id);
-		if (i < 0) {
-			c.parentElement.remove();
-			nRemoved += 1;
-		} else {
-			c.id = `hospitalselect-${i}`;
-		}
-	});
-	console.log(`Removed ${nRemoved} hospitals from list`);
+	common.createHospitalsSelect(response.config.nodes_meta, true, false);
+	addUpdateButton();
 }
 
 function sendUpdateQuery(latest=true) {
