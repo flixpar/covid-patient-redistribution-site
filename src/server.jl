@@ -62,16 +62,26 @@ route("/api/patients", method=POST) do
 		default_locations = get_hospital_list(region=region)
 		hospitals_list = [h.id for h in default_locations if h["default"]]
 	else
-		hospitals_list = string.(input["hospitals"])
+		hospitals_list = Array{String,1}(input["hospitals"])
 	end
+
+	covid_capacity_proportion = haskey(input, "covid_capacity_proportion") ? parse(Float64, input["covid_capacity_proportion"]) : 0.4
+	dist_threshold = haskey(input, "dist_threshold") ? parse(Float64, input["dist_threshold"]) : 600.0
+
+	use_smoothness = haskey(input, "smoothness") ? (input["smoothness"] == "true") : true
+	verbose = haskey(input, "verbose") ? (input["verbose"] == "true") : false
 
 	response = handle_patients_request(
 		region, hospitals_list,
 		scenario, patient_type,
 		objective, constrain_integer,
-		transfer_budget,
-		capacity_util, uncertainty_level, los,
+		transfer_budget, capacity_util,
+		covid_capacity_proportion,
+		dist_threshold,
+		uncertainty_level, los,
 		start_date, end_date,
+		smoothness=use_smoothness,
+		verbose=verbose,
 	)
 	return json(response)
 end
