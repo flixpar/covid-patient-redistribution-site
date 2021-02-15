@@ -60,7 +60,7 @@
 
 			<div class="container">
 				<h4 class="title is-4" style="margin-bottom: 12px;">COVID-19 Hospital Capacity Management using Mathematical Models</h4>
-				<p>This website shows how to transfer patients to optimally use the available capacity of hospitals in the US. You can find out how many additional beds are needed per hospital or region.</p>
+				<p>This website shows how to transfer patients to optimally use the available capacity of hospitals in Maryland. You can find out how many additional beds are needed per hospital or region.</p>
 			</div>
 
 			<div class="container" id="home-main">
@@ -132,9 +132,9 @@
 							</span>
 							<span id="content-c" class="description-hidden-text is-hidden content">
 								<p>
-									This page is almost fully customizable. You can choose any US hospital system, Hospital Service Area (HSA), Hospital Referral Region (HRR), or state. For instance, select Johns Hopkins Health System, NYC Health and Hospitals, or Houston, TX HRR from the dropdown menus and run the models in real time to see the results.
+									This page is almost fully customizable. You can select any hospitals in Maryland, set the parameters of the model, and get the results in real-time.
 									<br>
-									Other customizable parameters include:
+									The customizable parameters include:
 								</p>
 								<ul>
 									<li>The maximum number of allowed daily patient transfers per hospital</li>
@@ -150,9 +150,9 @@
 
 			<div class="container">
 				<p>
-					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+					With the ongoing COVID-19 pandemic, many hospitals in Maryland are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
 					<br><br>
-					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS), and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC). To learn more, visit the <a href="/about#about">About tab</a>.
+					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE) and a hospitalization forecast for Maryland developed by the Johns Hopkins Hospital. To learn more, visit the <a href="/about#about">About tab</a>.
 				</p>
 			</div>
 
@@ -168,7 +168,7 @@
 				<b>Dashboard.</b> This website is a platform to explore hospital capacity management during COVID-19 and investigate the impacts that optimal patient transfers can have. The <a href="/patients-static">Dashboard</a> page describes our hospital capacity management insights with interactive figures, including the map below, based on precomputed results. The <a href="/patients-interactive">Customize Results</a> page allows for more control over the model and hospitals selected, and runs our model in real-time. The <a href="/hospital-selection">Nearby Hospitals</a> page shows hospitals near you and scores them according to their distance and current occupancy.
 				<img src="/img/hospitals-map-preview.svg" style="width: 80%; margin: auto; display: block; margin-top: 8px;">
 				<br>
-				<b>Data.</b> This website uses <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data on hospital occupancy and COVID-19 hospitalizations</a> published by the US Department of Health and Human Services (HHS) for past COVID-19 hospital occupancy. To project this data into the future we use the US Center for Disease Control’s (CDC’s) county-level <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts of COVID-19 cases</a>, which is an ensemble of models from many forecasting teams, and deaggregate these forecasts to the hospital-level.
+				<b>Data.</b> This website uses a forecast of COVID-19 hospitalizations for each hospital in Maryland developed by the Johns Hopkins Hospital. It also uses hospital capacities reported by those hospitals.
 				<br><br>
 				<b>Patient Transfer Optimization.</b> Our goal is to transfer patients from areas that are (or soon will be) overloaded to areas that are (and expected to remain) under capacity. These transfers must be done with care so that locations receiving patients do not later run out of capacity by accepting too many patients. The operational constraints and overheads of transferring patients between two facilities also need to be considered for each pair of hospitals. Our models use linear and mixed-integer programming to recommend the optimal number of patients to be transferred between each pair of hospitals (each day) to best utilize the available capacity. The results also provide insight into the minimum required capacity at each hospital and enable an early warning if extra beds are needed.
 				<br><br>
