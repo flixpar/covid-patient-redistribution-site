@@ -130,6 +130,22 @@
 				</div>
 
 				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-covidcapacity">Percent of Capacity used for COVID</label>
+					<span class="pct-input-span input column is-two-thirds">
+						<input type="number" id="form-covidcapacity" value="40" max="100" min="5" class="pct-input">
+						%
+					</span>
+				</div>
+
+				<div class="field is-horizontal">
+					<label class="label column is-one-third" for="form-transferdistance">Transfer Distance Threshold</label>
+					<span class="pct-input-span input column is-two-thirds">
+						<input type="number" id="form-transferdistance" value="200" step="100" class="pct-input">
+						miles
+					</span>
+				</div>
+
+				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-utilization">Capacity Utilization</label>
 					<div class="select is-fullwidth">
 						<select id="form-utilization">

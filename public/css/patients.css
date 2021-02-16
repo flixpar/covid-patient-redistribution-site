@@ -294,3 +294,22 @@ table.is-hoverable-custom > tr:hover {
 .select-bold-text {
 	font-weight: bold;
 }
+
+.pct-input-span {
+	padding: 0 !important;
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.pct-input {
+	border: none;
+	font-size: 1rem;
+	padding: 0;
+	color: #363636;
+	text-align: right;
+	max-width: 75px;
+}
+
+.pct-input:focus {
+	outline: none;
+}
