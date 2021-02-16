@@ -9,9 +9,9 @@ import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
 let recentResponse = null;
 
 
-function handleResponse(response, status, xhr) {
+function handleResponse(response, changeHospitalSelect=true) {
 	recentResponse = response;
-	filterHospitalSelect(response);
+	if(changeHospitalSelect) {filterHospitalSelect(response);}
 	const newResponse = filterResponse(response);
 	common.hideProgressbar();
 	generateContent(newResponse);
@@ -133,10 +133,10 @@ function addUpdateButton() {
 		const nSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
 		if (nSelected > 65) {
 			warnManyHospitals(nSelected).then(c => {
-				if (c) {handleResponse(recentResponse);}
+				if (c) {handleResponse(recentResponse, false);}
 			});
 		} else {
-			handleResponse(recentResponse);
+			handleResponse(recentResponse, false);
 		}
 	});
 }
@@ -372,7 +372,7 @@ function sendUpdateQuery(latest=true) {
 		url: `/results-static/${fn}`,
 		type: "get",
 		contentType: "application/json; charset=utf-8",
-		success: handleResponse,
+		success: (r, ...x) => handleResponse(r, true),
 		beforeSend: common.showProgressbar,
 		error: common.ajaxErrorHandler,
 	});
