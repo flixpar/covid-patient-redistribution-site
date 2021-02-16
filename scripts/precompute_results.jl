@@ -7,8 +7,8 @@ push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"))
 include("../src/EndpointHandler.jl")
 
 
-STARTDATE = Date(2021, 01, 01)
-ENDDATE   = Date(2021, 01, 30)
+STARTDATE = Date(2021, 02, 14)
+ENDDATE   = Date(2021, 03, 06)
 
 REGIONTYPE = :state
 SKIPREGIONS = []
@@ -26,6 +26,7 @@ default_params = (
 	los_param = "default_dist",
 	end_date = ENDDATE,
 	smoothness = false,
+	max_hospitals = 250,
 	solver = :auto,
 	threads = Sys.CPU_THREADS-1,
 )
@@ -44,9 +45,15 @@ function precompute_result(params)
 		println("region: $(params.region), start date: $(params.start_date), scenario: $(params.scenario), patient type: $(params.patient_type)")
 	end
 
+	hospitals = EndpointHandler.hospitals_list(region=params.region)
+	n_hospitals = min(length(hospitals), default_params.max_hospitals)
+	hospital_inds = sortperm(hospitals, rev=true, by=(h -> h[:total_beds]))[1:n_hospitals]
+	hospital_ids = [hospitals[i][:hospital_id] for i in sort(hospital_inds)]
+	println("Number of hospitals: $(n_hospitals)")
+
 	result = EndpointHandler.handle_patients_request(
 		params.region,
-		String[],
+		hospital_ids,
 		params.scenario,
 		params.patient_type,
 
@@ -68,7 +75,7 @@ function precompute_result(params)
 	)
 
 	d = replace(string(params.start_date), "-" => "")
-	fn = joinpath(results_path, "$(d)_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_id).json")
+	fn = joinpath(results_path, "latest_$(params.scenario)_$(params.patient_type)_$(params.region.region_type)_$(params.region.region_id).json")
 	write(fn, JSON.json(result))
 
 	if VERBOSE
@@ -89,7 +96,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
 		try
 			precompute_result(params)
 		catch e
-			println("Error with: $(params)")
+			println("Error with: $(params)\nError: $(e)")
+			throw(e)
 		end
 	end
 end

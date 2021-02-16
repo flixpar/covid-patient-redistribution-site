@@ -16,8 +16,6 @@ export complete_region
 
 projectbasepath = joinpath(@__DIR__, "../")
 
-NDEFAULT = 16
-
 DEBUG = false
 NDEDBUG = 6
 
@@ -141,7 +139,7 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 	return hospitals_ind
 end
 
-function hospitals_list(;region=nothing, names=nothing, ids=nothing, bedtype=:icu, scenario=:moderate, ndefault=NDEFAULT)
+function hospitals_list(;region=nothing, names=nothing, ids=nothing)
 	hospitals_info = deserialize(joinpath(projectbasepath, "data/hhs_current_load_covid.jlser"))
 
 	if !isnothing(region)
