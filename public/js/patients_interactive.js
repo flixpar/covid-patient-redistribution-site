@@ -92,6 +92,7 @@ function sendUpdateQuery() {
 	const selectedHospitalIds = Array.from(document.querySelectorAll(".hospitalselect-checkbox"))
 		.map(c => c.checked ? c.value : null)
 		.filter(x => x != null);
+	const use_smoothness = selectedHospitalIds < 32;
 
 	const data = {
 		alloclevel: $("#form-level")[0].value,
@@ -104,8 +105,11 @@ function sendUpdateQuery() {
 		integer: $("#form-integer")[0].value,
 		transferbudget: $("#form-transferbudget")[0].value,
 		utilization: $("#form-utilization")[0].value,
+		covid_capacity_proportion: ($("#form-covidcapacity")[0].value / 100).toString(),
+		dist_threshold: ($("#form-transferdistance")[0].value * 1.61).toString(),
 		uncertaintylevel: $("#form-uncertainty")[0].value,
 		los: $("#form-los")[0].value,
+		smoothness: use_smoothness,
 		start_date: $("#form-start-date")[0].value,
 		end_date: $("#form-end-date")[0].value,
 	}
@@ -140,6 +144,8 @@ const tooltip_content = {
 	"form-utilization": "Percentage of the total capacity that can be used in practice.",
 	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",
 	"form-integer": "Use the mixed-integer programming formulation or not.",
+	"form-covidcapacity": "The percent of total capacity that a hospital can devote to COVID patients.",
+	"form-transferdistance": "The maximum distance that a patient can be transferred.",
 };
 $("label").each((i, el) => {
 	const k = el.getAttribute("for");
