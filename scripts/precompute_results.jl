@@ -22,6 +22,8 @@ default_params = (
 	constrain_integer = false,
 	transfer_budget = Inf,
 	capacity_util = 1.0,
+	covid_capacity_proportion = (b -> b == :icu ? 0.5 : 0.4),
+	dist_threshold = 600.0,
 	uncertainty_level = :default,
 	los_param = "default_dist",
 	end_date = ENDDATE,
@@ -61,6 +63,8 @@ function precompute_result(params)
 		default_params.constrain_integer,
 		default_params.transfer_budget,
 		default_params.capacity_util,
+		default_params.covid_capacity_proportion(params.patient_type),
+		default_params.dist_threshold,
 		default_params.uncertainty_level,
 		default_params.los_param,
 
