@@ -111,10 +111,10 @@ async function getDates() {
 
 async function setDefaultDates() {
 	let start_date = new Date();
-	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
-
-	const dates = await getDates();
-	document.getElementById("form-end-date").value = dates.forecast_end;
+	getDates().then(dates => {
+		document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
+		document.getElementById("form-end-date").value = dates.forecast_end;
+	});
 }
 setDefaultDates();
 
