@@ -99,17 +99,45 @@ function ajaxErrorHandler() {
 	document.getElementById("result-area").innerHTML = "";
 }
 
-function setDefaultDates() {
+async function getDates() {
+	if (getDates.dates == null) {
+		const dates = await (await fetch("/json/dates.json")).json();
+		getDates.dates = dates;
+		return dates;
+	} else {
+		return getDates.dates;
+	}
+}
+
+async function setDefaultDates() {
 	let start_date = new Date();
-	let end_date   = new Date("2021-03-27");
 	document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
-	document.getElementById("form-end-date").value = end_date.toISOString().slice(0, 10);
+
+	const dates = await getDates();
+	document.getElementById("form-end-date").value = dates.forecast_end;
 }
 setDefaultDates();
 
-function validateForm() {
-	const data_start_date = "2020-08-01";
-	const data_end_date   = "2021-03-27";
+function fillDataDates() {
+	for (let elem of document.querySelectorAll(".fill-value")) {
+		const contentid = elem.dataset.contentid;
+		if (contentid == "hhsdata_update_date") {
+			getDates().then(d => {
+				elem.textContent = d.hhsdata_update;
+			});
+		} else if (contentid == "forecast_update_date") {
+			getDates().then(d => {
+				elem.textContent = d.forecast_update;
+			});
+		}
+	}
+}
+fillDataDates();
+
+async function validateForm() {
+	const data_dates = await getDates();
+	const data_start_date = data_dates.hhsdata_start;
+	const data_end_date   = data_dates.forecast_end;
 
 	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
 	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
