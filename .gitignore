@@ -23,3 +23,7 @@ backup/
 # static results
 public/results-static/
 
+# large data
+rawdata/forecasts/
+rawdata/forecasts_old/
+rawdata/hospitalization_data/
