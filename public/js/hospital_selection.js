@@ -66,6 +66,18 @@ export function populateLocationsTable(response) {
 	section.appendChild(table);
 }
 
+function fillMissingText() {
+	for (let elem of document.querySelectorAll(".fill-value")) {
+		const contentid = elem.dataset.contentid;
+		if (contentid == "hhsdata_update_date") {
+			fetch("/json/dates.json").then(r => r.json()).then(dates => {
+				elem.textContent = dates.hhsdata_update;
+			});
+		}
+	}
+}
+fillMissingText();
+
 function getData() {
 	$.ajax({
 		url: `https://api.ipdata.co/?api-key=${apiKey}`,
