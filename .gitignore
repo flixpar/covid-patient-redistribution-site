@@ -27,3 +27,6 @@ public/results-static/
 rawdata/forecasts/
 rawdata/forecasts_old/
 rawdata/hospitalization_data/
+
+# analysis
+analysis/
