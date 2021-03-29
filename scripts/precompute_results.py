@@ -2,7 +2,6 @@ import requests
 
 regions = requests.get("https://covid-hospital-operations.com/api/regions-list", params={"region_type": "state"}).json()
 regions = [r["region_id"] for r in regions]
-regions = regions[:3]
 
 patient_types = ["icu", "acute", "all"]
 covid_capacity_proportions = {"icu": "0.5", "acute": "0.3", "all": "0.4"}
@@ -26,6 +25,7 @@ default_params = {
 	"los": "default_dist",
 	"start_date": start_date,
 	"end_date": end_date,
+	"max_hospitals": 150,
 	"smoothness": "false",
 	"verbose": "false",
 }
@@ -35,7 +35,16 @@ for patient_type in patient_types:
 	covid_capacity_proportion = covid_capacity_proportions[patient_type]
 	for region_id in regions:
 		print("Region:", region_id)
-		params = {**default_params,
+
+		hospitals = requests.get("https://covid-hospital-operations.com/api/hospital-list?region_type=state&region_id=RI", params={"region_type": default_params["region_type"], "region_id": region_id}).json()
+		if len(hospitals) > default_params["max_hospitals"]:
+			hospitals = sorted(hospitals, key=(lambda h: h["total_beds"]), reverse=True)
+			hospital_ids = [h["hospital_id"] for h in hospitals[:default_params["max_hospitals"]]]
+			hospitals_list = {"hospitals": hospital_ids}
+		else:
+			hospitals_list = {}
+
+		params = {**default_params, **hospitals_list,
 			"region_id": region_id,
 			"patient_type": patient_type,
 			"covid_capacity_proportion": covid_capacity_proportion,
