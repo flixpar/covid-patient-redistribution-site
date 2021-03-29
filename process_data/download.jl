@@ -5,7 +5,7 @@ using Dates
 include("util.jl")
 
 
-function download_hhs_latest(;DEBUG=true)
+function download_hhs_latest(;DEBUG=false)
 	if DEBUG return true end
 
 	meta_url = "https://healthdata.gov/api/views/anag-cw7u.json"
@@ -26,7 +26,7 @@ function download_hhs_latest(;DEBUG=true)
 	return true
 end
 
-function download_forecast_latest(;DEBUG=true)
+function download_forecast_latest(;DEBUG=false)
 	if DEBUG return true end
 
 	forecast_url(d) = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-processed/COVIDhub-ensemble/$(d)-COVIDhub-ensemble.csv"
