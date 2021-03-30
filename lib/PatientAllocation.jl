@@ -32,7 +32,8 @@ function patient_redistribution(
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
 		severity_weighting::Bool=false, setup_cost::Real=0,
 
-		timelimit::Int=30,
+		timelimit::Real=Inf,
+		mipgap::Real=0.0,
 		solver::Symbol=:default,
 		threads::Int=-1,
 		verbose::Bool=false,
@@ -83,8 +84,12 @@ function patient_redistribution(
 	model = Model(Gurobi.Optimizer)
 	if !verbose set_silent(model) end
 
-	if constrain_integer && (timelimit > 0)
+	if constrain_integer && (timelimit > 0) && !isinf(timelimit)
 		set_optimizer_attribute(model, "TimeLimit", timelimit)
+	end
+
+	if constrain_integer && (mipgap > 0)
+		set_optimizer_attribute(model, "MIPGap", mipgap)
 	end
 
 	if solver != :default
@@ -182,7 +187,10 @@ function patient_loadbalance(
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		setup_cost::Real=0,
 
-		timelimit::Int=30,
+		timelimit::Real=Inf,
+		mipgap::Real=0.0,
+		solver::Symbol=:default,
+		threads::Int=-1,
 		verbose::Bool=false,
 	)
 
@@ -213,9 +221,21 @@ function patient_loadbalance(
 	model = Model(Gurobi.Optimizer)
 	if !verbose set_silent(model) end
 
-	if constrain_integer
+	if constrain_integer && (timelimit > 0) && !isinf(timelimit)
 		set_optimizer_attribute(model, "TimeLimit", timelimit)
-		set_optimizer_attribute(model, "MIPGap", 0.05)
+	end
+
+	if constrain_integer && (mipgap > 0)
+		set_optimizer_attribute(model, "MIPGap", mipgap)
+	end
+
+	if solver != :default
+		solver_lookup = Dict(:auto => -1, :primalsimplex => 0, :dualsimplex => 1, :barrier => 2, :all => 3)
+		set_optimizer_attribute(model, "Method", solver_lookup[solver])
+	end
+
+	if threads > 0
+		set_optimizer_attribute(model, "Threads", threads)
 	end
 
 	###############
@@ -312,7 +332,10 @@ function patient_hybridmodel(
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
 		severity_weighting::Bool=false, setup_cost::Real=0,
 
-		timelimit::Int=30,
+		timelimit::Real=Inf,
+		mipgap::Real=0.0,
+		solver::Symbol=:default,
+		threads::Int=-1,
 		verbose::Bool=false,
 	)
 
@@ -361,9 +384,21 @@ function patient_hybridmodel(
 	model = Model(Gurobi.Optimizer)
 	if !verbose set_silent(model) end
 
-	if constrain_integer
+	if constrain_integer && (timelimit > 0) && !isinf(timelimit)
 		set_optimizer_attribute(model, "TimeLimit", timelimit)
-		set_optimizer_attribute(model, "MIPGap", 0.05)
+	end
+
+	if constrain_integer && (mipgap > 0)
+		set_optimizer_attribute(model, "MIPGap", mipgap)
+	end
+
+	if solver != :default
+		solver_lookup = Dict(:auto => -1, :primalsimplex => 0, :dualsimplex => 1, :barrier => 2, :all => 3)
+		set_optimizer_attribute(model, "Method", solver_lookup[solver])
+	end
+
+	if threads > 0
+		set_optimizer_attribute(model, "Threads", threads)
 	end
 
 	###############
