@@ -149,7 +149,7 @@ function patient_redistribution(
 	enforce_adj!(model, sent, adj_matrix)
 	enforce_no_artificial_overflow!(model, no_artificial_overflow, active_patients, active_null, capacity)
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
-	enforce_minsendamt!(model, sent, min_send_amt)
+	enforce_minsendamt!(model, sent, min_send_amt, constrain_integer)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
 	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
@@ -292,7 +292,7 @@ function patient_loadbalance(
 	enforce_adj!(model, sent, adj_matrix)
 	enforce_no_artificial_overflow!(model, no_artificial_overflow, active_patients, active_null, capacity)
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
-	enforce_minsendamt!(model, sent, min_send_amt)
+	enforce_minsendamt!(model, sent, min_send_amt, constrain_integer)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
 	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
@@ -462,7 +462,7 @@ function patient_hybridmodel(
 	enforce_adj!(model, sent, adj_matrix)
 	enforce_no_artificial_overflow!(model, no_artificial_overflow, active_patients, active_null, capacity)
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
-	enforce_minsendamt!(model, sent, min_send_amt)
+	enforce_minsendamt!(model, sent, min_send_amt, constrain_integer)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
 	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
@@ -568,14 +568,18 @@ function enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, a
 end
 
 # enforce minimum transfer amount if enabled
-function enforce_minsendamt!(model, sent, min_send_amt)
+function enforce_minsendamt!(model, sent, min_send_amt, constrain_integer)
 	if min_send_amt > 0
 		N, _, T = size(sent)
-		semi_cont_set = MOI.Semicontinuous(Float64(min_send_amt), Inf)
+		if constrain_integer
+			semi_set = MOI.Semiinteger(Int(min_send_amt), Inf)
+		else
+			semi_set = MOI.Semicontinuous(Float64(min_send_amt), Inf)
+		end
 		for i in 1:N, j in 1:N, t in 1:T
 			if !is_fixed(sent[i,j,t])
 				delete_lower_bound(sent[i,j,t])
-				@constraint(model, sent[i,j,t] in semi_cont_set)
+				@constraint(model, sent[i,j,t] in semi_set)
 			end
 		end
 	end
