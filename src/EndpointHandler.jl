@@ -70,7 +70,7 @@ function handle_patients_request(
 		data.admitted,
 		data.adj,
 		los_dist,
-		objective=objective,
+		obj=objective,
 		sent_penalty=0.01,
 		smoothness_penalty=0.001*s,
 		active_smoothness_penalty=0.01*s,
