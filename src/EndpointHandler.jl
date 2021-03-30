@@ -63,69 +63,25 @@ function handle_patients_request(
 
 	s = smoothness ? 1 : 0
 
-	if objective == :minoverflow
-		model = patient_redistribution(
-			data.capacity,
-			data.initial,
-			data.discharged,
-			data.admitted,
-			data.adj,
-			los_dist,
-			sent_penalty=0.01,
-			smoothness_penalty=0.001*s,
-			active_smoothness_penalty=0.01*s,
-			admitted_smoothness_penalty=0.25*s,
-			capacity_cushion=(1.0-capacity_util),
-			transfer_budget=transfer_budget,
-			constrain_integer=constrain_integer,
-			solver=solver,
-			threads=threads,
-			verbose=verbose,
-		)
-	elseif objective == :loadbalance
-		model = patient_loadbalance(
-			data.capacity[:,default_capacity_level],
-			data.initial,
-			data.discharged,
-			data.admitted,
-			data.adj,
-			los_dist,
-			sent_penalty=0.01,
-			smoothness_penalty=0.001*s,
-			active_smoothness_penalty=0.01*s,
-			admitted_smoothness_penalty=0.25*s,
-			capacity_cushion=(1.0-capacity_util),
-			constrain_integer=constrain_integer,
-			verbose=verbose,
-		)
-	elseif objective == :hybrid
-		capacity_weights = ones(Int, C)
-		capacity_weights[end] = 4
-		overflowmin_weight = 0.5
-		loadbalance_weight = 2.0
-
-		model = patient_hybridmodel(
-			data.capacity,
-			data.initial,
-			data.discharged,
-			data.admitted,
-			data.adj,
-			los_dist,
-			overflowmin_weight=overflowmin_weight,
-			loadbalance_weight=loadbalance_weight,
-			sent_penalty=5.0,
-			smoothness_penalty=0,
-			active_smoothness_penalty=0.01*s,
-			admitted_smoothness_penalty=0.25*s,
-			capacity_cushion=(1.0-capacity_util),
-			capacity_weights=capacity_weights,
-			transfer_budget=transfer_budget,
-			constrain_integer=constrain_integer,
-			verbose=verbose,
-		)
-	else
-		error("Invalid objective: $(objective)")
-	end
+	model = patient_redistribution(
+		data.capacity,
+		data.initial,
+		data.discharged,
+		data.admitted,
+		data.adj,
+		los_dist,
+		objective=objective,
+		sent_penalty=0.01,
+		smoothness_penalty=0.001*s,
+		active_smoothness_penalty=0.01*s,
+		admitted_smoothness_penalty=0.25*s,
+		capacity_cushion=(1.0-capacity_util),
+		transfer_budget=transfer_budget,
+		constrain_integer=constrain_integer,
+		solver=solver,
+		threads=threads,
+		verbose=verbose,
+	)
 	sent = value.(model[:sent])
 
 	results = PatientAllocationResults.results_all(
