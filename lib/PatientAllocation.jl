@@ -27,6 +27,7 @@ function patient_redistribution(
 		node_weights::Array{<:Real,1}=Int[],
 		objective_weights::Array{<:Real}=Int[],
 		transfer_budget::Array{<:Real,1}=Int[],
+		total_transfer_budget::Real=Inf,
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
@@ -150,7 +151,7 @@ function patient_redistribution(
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
 	enforce_minsendamt!(model, sent, min_send_amt)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
-	enforce_transferbudget!(model, sent, transfer_budget)
+	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
@@ -183,6 +184,8 @@ function patient_loadbalance(
 		active_smoothness_penalty::Real=0, admitted_smoothness_penalty::Real=0,
 		constrain_integer::Bool=false,
 		capacity_weights::Array{<:Real,1}=Int[],
+		transfer_budget::Array{<:Real,1}=Int[],
+		total_transfer_budget::Real=Inf,
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		setup_cost::Real=0,
@@ -291,6 +294,7 @@ function patient_loadbalance(
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
 	enforce_minsendamt!(model, sent, min_send_amt)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
+	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
@@ -327,6 +331,7 @@ function patient_hybridmodel(
 		node_weights::Array{<:Real,1}=Int[],
 		objective_weights::Array{<:Real}=Int[],
 		transfer_budget::Array{<:Real,1}=Int[],
+		total_transfer_budget::Real=Inf,
 
 		sendreceive_gap::Int=0, min_send_amt::Real=0,
 		balancing_thresh::Real=1.0, balancing_penalty::Real=0,
@@ -459,7 +464,7 @@ function patient_hybridmodel(
 	enforce_no_worse_overflow!(model, no_worse_overflow, active_patients, active_null, capacity)
 	enforce_minsendamt!(model, sent, min_send_amt)
 	enforce_sendreceivegap!(model, sent, sendreceive_gap)
-	enforce_transferbudget!(model, sent, transfer_budget)
+	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
@@ -592,12 +597,15 @@ function enforce_sendreceivegap!(model, sent, sendreceive_gap)
 end
 
 # enforce an upper limit on the number of transfers per hospital-day
-function enforce_transferbudget!(model, sent, transfer_budget)
+function enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 	N, _, T = size(sent)
 	for i in 1:N
 		if !isinf(transfer_budget[i])
 			@constraint(model, [t=1:T], sum(sent[i,:,t]) <= transfer_budget[i])
 		end
+	end
+	if !isinf(total_transfer_budget)
+		@constraint(model, sum(sent) ≤ total_transfer_budget)
 	end
 end
 
