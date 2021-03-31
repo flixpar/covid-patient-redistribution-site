@@ -15,7 +15,7 @@ include("util.jl")
 function estimate_los()
 	rawdata = DataFrame(CSV.File("../data/hospitalization_data.csv"))
 
-	function estimate_los_single(data; time_limit=1.0)
+	function estimate_los_single(data; time_limit=20.0)
 	
 		function unpack_params(params)
 			alpha, theta = params

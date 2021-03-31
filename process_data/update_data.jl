@@ -26,7 +26,6 @@ estimate_capacity()
 println("Estimating LOS")
 estimate_los()
 println("Extracting metadata")
-extract_dates_metadata()
 extract_metadata()
 
 println("Disaggregating forecast")
@@ -35,6 +34,7 @@ disaggregate_forecast()
 
 println("Packaging main data")
 package_main_data()
+extract_dates_metadata()
 
 println("Packaging load data")
 package_load_data()
