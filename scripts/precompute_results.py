@@ -1,12 +1,14 @@
 import requests
 
-regions = requests.get("https://covid-hospital-operations.com/api/regions-list", params={"region_type": "state"}).json()
+URL = "https://covid-hospital-operations.com"
+
+regions = requests.get(f"{URL}/api/regions-list", params={"region_type": "state"}).json()
 regions = [r["region_id"] for r in regions]
 
 patient_types = ["icu", "acute", "all"]
 covid_capacity_proportions = {"icu": "0.5", "acute": "0.3", "all": "0.4"}
 
-dates = requests.get("https://covid-hospital-operations.com/json/dates.json").json()
+dates = requests.get(f"{URL}/json/dates.json").json()
 start_date = dates["forecast_start"]
 end_date = dates["forecast_end"]
 
@@ -36,7 +38,7 @@ for patient_type in patient_types:
 	for region_id in regions:
 		print("Region:", region_id)
 
-		hospitals = requests.get("https://covid-hospital-operations.com/api/hospital-list?region_type=state&region_id=RI", params={"region_type": default_params["region_type"], "region_id": region_id}).json()
+		hospitals = requests.get(f"{URL}/api/hospital-list", params={"region_type": default_params["region_type"], "region_id": region_id}).json()
 		if len(hospitals) > default_params["max_hospitals"]:
 			hospitals = sorted(hospitals, key=(lambda h: h["total_beds"]), reverse=True)
 			hospital_ids = [h["hospital_id"] for h in hospitals[:default_params["max_hospitals"]]]
@@ -52,6 +54,7 @@ for patient_type in patient_types:
 
 		fn = f"../public/results-static/latest_{scenario}_{patient_type}_state_{region_id}.json"
 
-		response = requests.post("https://covid-hospital-operations.com/api/patients", json=params)
+		response = requests.post(f"{URL}/api/patients", json=params)
 		with open(fn, "w") as f:
 			f.write(response.text)
+
