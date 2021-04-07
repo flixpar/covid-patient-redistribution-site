@@ -27,6 +27,7 @@ println("Estimating LOS")
 estimate_los()
 println("Extracting metadata")
 extract_metadata()
+extract_regions_metadata()
 
 println("Disaggregating forecast")
 convert_cases()
