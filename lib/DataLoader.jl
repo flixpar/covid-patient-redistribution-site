@@ -10,6 +10,7 @@ using LinearAlgebra
 
 export load_hhs
 export los_dist_default
+export los_dist_regional
 export hospitals_list
 export regions_list
 export complete_region
@@ -107,6 +108,15 @@ function los_dist_default(bedtype::Symbol)
 		return losdata[bedtype]
 	else
 		return losdata[:allbeds]
+	end
+end
+
+function los_dist_regional(region, bedtype::Symbol)
+	losdata = deserialize(joinpath(projectbasepath, "data/regional_los_est.jlser"))
+	if haskey(losdata, (region.region_type, region.region_id, bedtype))
+		return losdata[region.region_type, region.region_id, bedtype]
+	else
+		return los_dist_default(bedtype)
 	end
 end
 

@@ -51,6 +51,8 @@ function handle_patients_request(
 
 	if los_param == "default_dist"
 		los_dist = los_dist_default(patient_type)
+	elseif los_param == "regional_dist"
+		los_dist = los_dist_regional(region, patient_type)
 	elseif !isnothing(tryparse(Int, los_param))
 		los_dist = tryparse(Int, los_param)
 	else
