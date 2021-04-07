@@ -40,20 +40,31 @@ function interpolate_timeseries_linear(xs_, ys)
 	return zs
 end
 
-function interpolate_missing(xs::Array{Union{Float64,Missing},2})
+function interpolate_missing(xs::AbstractArray{Float64})
+	return xs
+end
+
+function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},2})
 	output = Array{Float64,2}(undef, size(xs)...)
 	for i in 1:size(xs,1)
-		output[i,:] = interpolate_missing(xs[i,:])
+		interpolate_missing(xs[i,:], @view output[i,:])
 	end
 	return output
 end
 
-function interpolate_missing(xs::Array{Union{Float64,Missing},1})
+function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},1})
+	dest = Array{Float64,1}(undef, length(xs))
+	return interpolate_missing(xs, dest)
+end
+
+function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},1}, dest::AbstractArray{Float64,1})
+	@assert length(xs) == length(dest)
+
 	if all(isbad.(xs))
-		return zeros(Float64, length(xs))
+		fill!(dest, 0.0)
+		return dest
 	end
 
-	xs = deepcopy(xs)
 	for i in 1:length(xs)
 		if isbad(xs[i])
 			a = findprev(isnbad, xs, i)
@@ -63,14 +74,16 @@ function interpolate_missing(xs::Array{Union{Float64,Missing},1})
 			b = isnothing(b) ? a : b
 
 			m = (a==b) ? 0 : ((xs[b]-xs[a]) / (b-a))
-			xs[i] = (m * (i-a)) + xs[a]
+			dest[i] = (m * (i-a)) + xs[a]
+		else
+			dest[i] = xs[i]
 		end
 	end
-	return xs
+
+	return dest
 end
 
-function interpolate_missing(df_::AbstractDataFrame)
-	df = DataFrame(deepcopy(df_))
+function interpolate_missing(df::AbstractDataFrame)
 	for col in valuecols
 		df[!,col] = interpolate_missing(df[!,col])
 	end
