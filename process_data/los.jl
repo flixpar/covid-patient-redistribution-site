@@ -16,22 +16,22 @@ function estimate_los()
 	rawdata = DataFrame(CSV.File("../data/hospitalization_data.csv"))
 
 	function estimate_los_single(data; time_limit=20.0)
-	
+
 		function unpack_params(params)
 			alpha, theta = params
 			dist = Gamma(alpha, theta)
 			return dist
 		end
-	
+
 		function score_func(params)
 			los_dist = unpack_params(params)
 			active = estimate_active(data.initial, data.admitted, los_dist)
 			score = norm(active - data.active, 2)
 			return score
 		end
-	
+
 		param_bounds = [(0.0,40.0), (0.0,40.0)]
-	
+
 		r = bboptimize(
 			score_func,
 			SearchRange = param_bounds,
@@ -41,33 +41,33 @@ function estimate_los()
 			RandomizeRngSeed = false,
 			RngSeed = 0,
 		)
-	
+
 		best_params = best_candidate(r)
 		los_dist = unpack_params(best_params)
-	
+
 		return los_dist
 	end
 
 	function extract_data_total(bedtype)
 		hospital_ids = sort(unique(rawdata.hospital_id))
 		date_range = sort(unique(rawdata.date))
-		
+
 		data_dict = Dict((row.hospital_id, row.date) => (
 				active = row["active_$(bedtype)"],
 				admissions = row["admissions_$(bedtype )"],
 			)
 			for row in eachrow(rawdata)
 		)
-		
+
 		admissions = [haskey(data_dict, (h,d)) ? data_dict[(h,d)].admissions : missing for h in hospital_ids, d in date_range]
 		active = [haskey(data_dict, (h,d)) ? data_dict[(h,d)].active : missing for h in hospital_ids, d in date_range]
-		
+
 		admissions = interpolate_missing(admissions)
 		active = interpolate_missing(active)
-		
+
 		admissions_total = sum(admissions, dims=1)[:]
 		active_total = sum(active, dims=1)[:]
-		
+
 		return (
 			N = 1,
 			T = length(date_range),
