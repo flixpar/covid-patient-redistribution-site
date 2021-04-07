@@ -1,5 +1,6 @@
 using CSV
 using JSON
+using Serialization
 using DataFrames
 
 include("util.jl")
@@ -90,6 +91,49 @@ function extract_dates_metadata()
 	open("../public/json/dates.json", "w") do f
 		JSON.print(f, dates, 4)
 	end
+
+	return
+end
+
+function extract_regions_metadata()
+	metadata = DataFrame(CSV.File("../data/hhs_hospital_meta.csv"))
+
+	function filter_regions(regions)
+		ids = [r.id for r in regions]
+		regions = [r for r in unique(regions) if sum(ids .== r.id) > 1]
+		return regions
+	end
+
+	states = sort(unique(collect(zip(metadata.state, metadata.state_abbrev))))
+
+	systems = collect(zip(metadata.system_name, metadata.system_id))
+	systems = filter(s -> !(ismissing(s[1]) || ismissing(s[2])), systems)
+	systems = map(s -> (name = s[1], id = s[2]), systems)
+	systems = filter_regions(systems)
+	systems = sort(systems)
+
+	hsas = collect(zip(metadata.hsa_name, metadata.hsa_id))
+	hsas = filter(s -> !(ismissing(s[1]) || ismissing(s[2])), hsas)
+	hsas = map(s -> (name = s[1], id = string(s[2])), hsas)
+	hsas = filter_regions(hsas)
+	hsas = sort(hsas)
+
+	hrrs = collect(zip(metadata.hrr_name, metadata.hrr_id))
+	hrrs = filter(s -> !(ismissing(s[1]) || ismissing(s[2])), hrrs)
+	hrrs = map(s -> (name = s[1], id = string(s[2])), hrrs)
+	hrrs = filter_regions(hrrs)
+	hrrs = sort(hrrs)
+
+	state_regions = [(region_type = :state, region_name = s[1], region_id = s[2]) for s in states]
+
+	system_regions = [(region_type = :hospital_system, region_name = s.name, region_id = s.id) for s in systems]
+
+	hsa_regions = [(region_type = :hsa, region_name = s.name, region_id = s.id) for s in hsas]
+	hrr_regions = [(region_type = :hrr, region_name = s.name, region_id = s.id) for s in hrrs]
+
+	regions = vcat(state_regions, system_regions, hsa_regions, hrr_regions)
+
+	serialize("../data/regions_hhs.jlser", regions)
 
 	return
 end
