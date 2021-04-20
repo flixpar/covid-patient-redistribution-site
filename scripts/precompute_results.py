@@ -24,7 +24,7 @@ default_params = {
 	"utilization": "1.0",
 	"dist_threshold": "600",
 	"uncertaintylevel": "default",
-	"los": "default_dist",
+	"los": "regional_dist",
 	"start_date": start_date,
 	"end_date": end_date,
 	"max_hospitals": 150,
