@@ -1,5 +1,5 @@
-name = "COVIDPatientRedistributionSite"
-uuid = "f9db7b1f-bb50-442d-9887-9076667c6141"
+name = "OntarioCOVIDPatientRedistributionSite"
+uuid = "9fd7555f-3caf-44e7-8054-553453f0e4cf"
 author = ["Felix Parker flixpar@gmail.com"]
 version = "0.1.0"
 

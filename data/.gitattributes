@@ -1,2 +1,0 @@
-data_hhs.jlser filter=lfs diff=lfs merge=lfs -text
-hospitalization_data.csv filter=lfs diff=lfs merge=lfs -text

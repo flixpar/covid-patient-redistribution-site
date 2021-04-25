@@ -1,4 +1,4 @@
-# COVID-19 Patient Redistribution Site
+# Ontario COVID-19 Patient Redistribution Site
 Felix Parker, Fardin Ganjkhanloo, Farzin Ahmadi, and Kimia Ghobadi
 
 The COVID-19 pandemic has put a significant strain on healthcare systems around the globe. To mitigate the pressure, healthcare facilities responded by reducing demand – through canceling elective procedures – and by increasing capacity – through adding new beds suitable for COVID-19 patients and increasing staffing. While these measures have proven to be effective, increasing capacity is costly, slow, may decrease the quality of care, and may not be feasible for all healthcare centers. Delays in elective care may also result in adverse effects for patients. We aim to take a step toward a more coherent response from healthcare systems in these times of chronic demand surge.
