@@ -110,10 +110,9 @@ async function getDates() {
 }
 
 async function setDefaultDates() {
-	let start_date = new Date();
 	getDates().then(dates => {
-		document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
-		document.getElementById("form-end-date").value = dates.forecast_end;
+		document.getElementById("form-start-date").value = "2021-03-01";
+		document.getElementById("form-end-date").value = dates.data_end;
 	});
 }
 setDefaultDates();
@@ -136,8 +135,8 @@ fillDataDates();
 
 async function validateForm() {
 	const data_dates = await getDates();
-	const data_start_date = data_dates.hhsdata_start;
-	const data_end_date   = data_dates.forecast_end;
+	const data_start_date = data_dates.data_start;
+	const data_end_date   = data_dates.data_end;
 
 	const start_date = new Date(Date.parse(document.getElementById("form-start-date").value));
 	const end_date   = new Date(Date.parse(document.getElementById("form-end-date").value));
@@ -341,7 +340,7 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions(exclude=[]) {
-	const default_region = {state: "MD", hospital_system: "HSI00000730", hrr: "56", hsa: "33014"};
+	const default_region = {state: "ontario"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
@@ -405,7 +404,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		tagText.className = "tag";
 		tagDelete.className = "tag is-delete is-danger is-light";
 
-		tagText.innerText = h.hospital_name;
+		tagText.innerText = h.location_name;
 		tagDelete.addEventListener("click", e => {
 			document.getElementById(`hospitalselect-${i}`).checked = false;
 			document.getElementById(`hospitalselect-label-${i}`).classList.remove("hospital-select-item-selected");
@@ -452,7 +451,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		let nshow = 0;
 		for (let i = 0; i < data.length; i++) {
 			const h = data[i];
-			if (h.hospital_name.toLowerCase().indexOf(searchText) >= 0) {
+			if (h.location_name.toLowerCase().indexOf(searchText) >= 0) {
 				document.getElementById(`hospitalselect-label-${i}`).style.display = "block";
 				nshow += 1;
 			} else {
@@ -488,7 +487,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		checkbox.type = "checkbox";
 		checkbox.className = "hospitalselect-checkbox";
 		checkbox.id = `hospitalselect-${i}`;
-		checkbox.value = h.hospital_id;
+		checkbox.value = h.location_id;
 		s.appendChild(checkbox);
 
 		if (h.is_default) {
@@ -506,17 +505,17 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 		});
 
 		let label = document.createElement("span");
-		label.textContent = h.hospital_name;
+		label.textContent = h.location_name;
 		s.appendChild(label);
 
 		let loadLabel = document.createElement("span");
 		loadLabel.style.float = "right";
-		loadLabel.textContent = `(Occupancy = ${(h.current_load*100).toFixed(0)}%)`;
+		loadLabel.textContent = `(Occupancy = ${(h.load*100).toFixed(0)}%)`;
 		s.appendChild(loadLabel);
 
-		if (h.current_load < 0.9) {
+		if (h.load < 0.9) {
 			s.style.backgroundColor = "#6cc777";
-		} else if (h.current_load < 1.05) {
+		} else if (h.load < 1.05) {
 			s.style.backgroundColor = "#ffeb3b87";
 		} else {
 			s.style.backgroundColor = "red";
@@ -584,17 +583,17 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
 	const N = hospitals.length;
 
-	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].current_load - hospitals[b].current_load);
+	const byLoadInd = d3.range(N).sort((a,b) => hospitals[a].load - hospitals[b].load);
 	const selectedByLoad = byLoadInd.slice((N > nLoad) ? N-nLoad : 0);
 
-	const bySizeInd = d3.range(N).sort((a,b) => hospitals[a].total_beds - hospitals[b].total_beds);
+	const bySizeInd = d3.range(N).sort((a,b) => hospitals[a].beds - hospitals[b].beds);
 	const selectedBySize = bySizeInd.slice((N > nSize) ? N-nSize : 0);
 
 	const selected = selectedBySize.concat(selectedByLoad);
 	selected.forEach(i => hospitals[i].is_default = true);
 
 	d3.range(N).forEach(i => {
-		if (hospitals[i].total_beds < 1.5) {
+		if (hospitals[i].beds < 1.5) {
 			hospitals[i].is_default = false;
 		} else {
 			if (hospitals[i].is_default == null) {

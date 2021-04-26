@@ -68,7 +68,7 @@ function getHospitals() {
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
 	};
-	let request = $.get("/api/hospital-list", data, d => {
+	let request = $.get("/api/locations-list", data, d => {
 		hospitals_meta_list = d;
 		common.createHospitalsSelect(d, false);
 	});
@@ -98,7 +98,7 @@ function sendUpdateQuery() {
 		alloclevel: $("#form-level")[0].value,
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
-		hospitals: selectedHospitalIds,
+		locations: selectedHospitalIds,
 		scenario: $("#form-scenario")[0].value,
 		patient_type: $("#form-patient-type")[0].value,
 		objective: $("#form-objective")[0].value,
