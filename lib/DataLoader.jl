@@ -8,197 +8,129 @@ using Distributions
 using Dates
 using LinearAlgebra
 
-export load_hhs
+export load_data
 export los_dist_default
-export los_dist_regional
-export hospitals_list
+export locations_list
 export regions_list
-export complete_region
 
 projectbasepath = joinpath(@__DIR__, "../")
 
-DEBUG = false
-NDEDBUG = 6
 
-
-function load_hhs(
+function load_data(
 		region::NamedTuple,
-		hospital_list::Array{String,1},
+		locations_list::Array{String,1},
 		scenario::Symbol,
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
 		covid_capacity_proportion::Real=0.4,
-		dist_threshold::Real=600,
+		dist_threshold::Real=1000,
 	)
 	@assert(start_date < end_date)
-	@assert(patient_type in [:icu, :acute, :all])
+	@assert(patient_type == :icu)
+	@assert(scenario == :moderate)
 
-	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
-
+	data = deserialize(joinpath(projectbasepath, "data/data.jlser"))
 	@assert data.start_date <= start_date < end_date <= data.end_date
 
-	hospital_ind = filter_hospitals(data, region=region, ids=hospital_list)
+	node_inds = filter_nodes(data, region=region, ids=locations_list)
+	node_ids = data.node_ids[node_inds]
+	node_names = data.node_names[node_inds]
 
-	if DEBUG
-		beds_ = data.casesdata[:moderate,:allbeds].capacity[hospital_ind,1]
-		hospital_ind = hospital_ind[sortperm(beds_, rev=true)]
-		hospital_ind = hospital_ind[1:NDEDBUG]
-		hospital_ind = sort(hospital_ind)
-	end
-
-	N = length(hospital_ind)
+	N = length(node_inds)
 	T = (end_date - start_date).value + 1
-
-	hospital_ids = data.location_ids[hospital_ind]
-	hospital_names = data.location_names[hospital_ind]
-	hospital_abbrevs = data.location_names[hospital_ind]
-
-	bedtype = (patient_type == :all) ? :allbeds : patient_type
-	casesdata = data.casesdata[scenario,bedtype]
 
 	start_date_idx = (start_date - data.start_date).value + 1
 	end_date_idx   = (end_date   - data.start_date).value + 1
-	admitted = casesdata.admitted[hospital_ind,start_date_idx:end_date_idx]
+
+	active = data.active[node_inds, start_date_idx:end_date_idx]
+	admitted = data.admitted[node_inds, start_date_idx:end_date_idx]
 
 	day0 = max(data.start_date, start_date - Day(1))
 	day0_idx = (day0 - data.start_date).value + 1
-	initial = casesdata.active[hospital_ind, day0_idx]
+	initial = data.active[node_inds, day0_idx]
 
-	discharged = Array{Float64,2}(undef, N, T)
-	for i in 1:N
-		discharged[i,:] = initial[i] .* (pdf.(casesdata.los_dist, 0:T-1))
-		if isinf(discharged[i,1]) || isnan(discharged[i,1])
-			discharged[i,1] = 0.0
-		end
-	end
+	los_dist = los_dist_default(patient_type)
+	discharged_ratio = pdf.(los_dist, 0:T-1)
+	discharged_ratio[1] = isinf(discharged_ratio[1]) ? 0 : discharged_ratio[1]
+	discharged = initial * discharged_ratio'
 
 	default_capacity_level = 1
-	beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_proportion
-	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
-	capacity_names = ["Baseline Capacity"]
+	beds = data.capacity[node_inds, default_capacity_level] .* covid_capacity_proportion
+	capacity = data.capacity[node_inds,:] .* covid_capacity_proportion
+	capacity_names = data.capacity_names
 
-	node_locations = Dict(name => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for (name,h) in zip(hospital_names, hospital_ids))
+	node_locations = Dict(n => haskey(data.node_locations, i) ? data.node_locations[i] : (lat=0.0, long=0.0) for (n, i) in zip(node_names, node_ids))
 
-	locs = [haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for h in hospital_ids]
+	locs = [node_locations[n] for n in node_names]
 	dist_matrix = haversine_distance_matrix(locs)
 	adj = (0 .< dist_matrix .<= dist_threshold)
 
 	extent = (extent_type = :points, extent_regions = [])
+	region = (region_type = :state, region_id = "ontario", region_name = "Ontario")
 
-	return (
-		initial = initial,
-		discharged = discharged,
-		admitted = admitted,
-		beds = beds,
-		capacity = capacity,
-		adj = adj,
-		node_locations = node_locations,
-		node_names = hospital_names,
-		node_names_abbrev = hospital_abbrevs,
-		node_ids = hospital_ids,
-		extent = extent,
-		capacity_names = capacity_names,
+	return (;
+		initial,
+		discharged,
+		admitted,
+		beds,
+		capacity,
+		adj,
+		node_locations,
+		node_names,
+		node_names_abbrev = node_names,
+		node_ids,
+		extent,
+		region,
+		capacity_names,
 	)
 end
 
 function los_dist_default(bedtype::Symbol)
-	losdata = deserialize(joinpath(projectbasepath, "data/hhs_los_est.jlser"))
-	if haskey(losdata, bedtype)
-		return losdata[bedtype]
-	else
-		return losdata[:allbeds]
-	end
+	return Gamma(1.75, 6.0)
 end
 
-function los_dist_regional(region, bedtype::Symbol)
-	losdata = deserialize(joinpath(projectbasepath, "data/regional_los_est.jlser"))
-	if haskey(losdata, (region.region_type, region.region_id, bedtype))
-		return losdata[region.region_type, region.region_id, bedtype]
-	else
-		return los_dist_default(bedtype)
-	end
-end
+function locations_list(;region=nothing, names=nothing, ids=nothing)
+	nodes = deserialize(joinpath(projectbasepath, "data/current_covid_load.jlser"))
 
-function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
-	if !isnothing(region)
-		col_lookup = Dict(
-			:state => :state_abbrev,
-			:hospital_system => :system_id,
-			:hrr => :hrr_id,
-			:hsa => :hsa_id,
-		)
-		col = col_lookup[region.region_type]
-		hospitals_info = filter(h -> !ismissing(h[col]) && (h[col] == region.region_id), data.location_meta)
-	else
-		hospitals_info = data.location_meta
+	if !isnothing(region) && region.region_id != "ontario"
+		error("Invalid region")
 	end
-
 	if !isnothing(names) && !isempty(names)
-		hospitals_info = filter(h -> h.name in names, hospitals_info)
+		filter!(n -> n.location_name in names, nodes)
 	end
 	if !isnothing(ids) && !isempty(ids)
-		hospitals_info = filter(h -> h.id in ids, hospitals_info)
+		filter!(n -> string(n.location_id) in ids, nodes)
 	end
 
-	unique!(h -> h.id, hospitals_info)
-	hospitals_ind = [h.index for h in hospitals_info]
-	filter!(x -> !isnothing(x), hospitals_ind)
-	sort!(hospitals_ind)
-
-	return hospitals_ind
-end
-
-function hospitals_list(;region=nothing, names=nothing, ids=nothing)
-	hospitals_info = deserialize(joinpath(projectbasepath, "data/hhs_current_load_covid.jlser"))
-
-	if !isnothing(region)
-		col_lookup = Dict(
-			:state => :state_abbrev,
-			:hospital_system => :system_id,
-			:hrr => :hrr_id,
-			:hsa => :hsa_id,
-		)
-		col = col_lookup[region.region_type]
-		filter!(h -> !ismissing(h[col]) && (string(h[col]) == region.region_id), hospitals_info)
-	else
-		hospitals_info = data
-	end
-
-	if !isnothing(names) && !isempty(names)
-		filter!(h -> h.hospital in names, hospitals_info)
-	end
-	if !isnothing(ids) && !isempty(ids)
-		filter!(h -> h.hospital_id in ids, hospitals_info)
-	end
-
-	cols_cvt = Dict(:hospital => :hospital_name, :hospital_id => :hospital_id, :total_load => :current_load, :total_beds => :total_beds)
-	hospitals_info = [Dict(cols_cvt[c] => h[c] for c in keys(cols_cvt)) for h in hospitals_info]
-
-	return hospitals_info
+	return nodes
 end
 
 function regions_list(region_type::Symbol=:all)
-	data = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
+	data = deserialize(joinpath(projectbasepath, "data/regions.jlser"))
 	if region_type != :all
 		filter!(r -> r.region_type == region_type, data)
 	end
 	return data
 end
 
-function complete_region(r)
-	regions = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
-	filter!(region -> region.region_type == r.region_type, regions)
-	if haskey(r, :region_id) && !haskey(r, :region_name)
-		region_idx = findfirst(region -> region.region_id == r.region_id, regions)
-		region = regions[region_idx]
-	elseif haskey(r, :region_name) && !haskey(r, :region_id)
-		region_idx = findfirst(region -> region.region_name == r.region_name, regions)
-		region = regions[region_idx]
-	else
-		region = r
+function filter_nodes(data; region=nothing, names=nothing, ids=nothing)
+	nodes = [(index = i, id = data.node_ids[i], name = data.node_names[i]) for i in 1:length(data.node_ids)]
+
+	if !isnothing(region) && region.region_id != "ontario"
+		error("Invalid region")
 	end
-	return region
+	if !isnothing(names) && !isempty(names)
+		filter!(n -> n.name in names, nodes)
+	end
+	if !isnothing(ids) && !isempty(ids)
+		filter!(n -> string(n.id) in ids, nodes)
+	end
+
+	node_inds = [n.index for n in nodes]
+	sort!(node_inds)
+
+	return node_inds
 end
 
 function haversine_distance(loc1, loc2)

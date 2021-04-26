@@ -13,10 +13,8 @@ using HospitalSelection
 import PatientAllocationResults
 
 export handle_patients_request
-export get_hospital_list
+export get_locations_list
 export get_regions_list
-export handle_hospital_selection
-export complete_region
 
 
 function handle_patients_request(
@@ -44,17 +42,13 @@ function handle_patients_request(
 	@info "Handle Patients Request"
 	@info "Scenario: $(scenario), Patient type: $(patient_type)"
 
-	@assert patient_type in [:acute, :icu, :all]
-
-	data = load_hhs(region, location_ids, scenario, patient_type, start_date, end_date, covid_capacity_proportion, dist_threshold)
+	data = load_data(region, location_ids, scenario, patient_type, start_date, end_date, covid_capacity_proportion, dist_threshold)
 	default_capacity_level = 1
 
 	if los_param == "default_dist"
 		los_dist = los_dist_default(patient_type)
-	elseif los_param == "regional_dist"
-		los_dist = los_dist_regional(region, patient_type)
 	elseif !isnothing(tryparse(Int, los_param))
-		los_dist = tryparse(Int, los_param)
+		los_dist = parse(Int, los_param)
 	else
 		error("Invalid los distribution selection: $(los_param)")
 	end
@@ -98,7 +92,7 @@ function handle_patients_request(
 		use_rounding=false,
 	)
 
-	nodes_meta = hospitals_list(region=region, ids=data.node_ids)
+	nodes_meta = locations_list(region=region, ids=data.node_ids)
 
 	config = Dict(
 		:start_date => start_date,
@@ -109,8 +103,8 @@ function handle_patients_request(
 		:node_locations    => data.node_locations,
 		:nodes_meta => nodes_meta,
 		:capacity_names => data.capacity_names,
-		:node_type => "hospital",
-		:region    => region,
+		:node_type => "health-system",
+		:region    => data.region,
 		:extent    => data.extent,
 		:default_capacity_level => default_capacity_level,
 		:params => (;
@@ -141,19 +135,14 @@ function handle_patients_request(
 	return outcomes
 end
 
-function get_hospital_list(;region=nothing, names=nothing, ids=nothing)
-	hospitals = hospitals_list(region=region, names=names, ids=ids)
+function get_locations_list(;region=nothing, names=nothing, ids=nothing)
+	hospitals = locations_list(region=region, names=names, ids=ids)
 	return hospitals
 end
 
 function get_regions_list(region_type::Symbol=:any)
 	regions = regions_list(region_type)
 	return regions
-end
-
-function handle_hospital_selection(loc)
-	scores = score_hospitals(loc)
-	return scores
 end
 
 end;

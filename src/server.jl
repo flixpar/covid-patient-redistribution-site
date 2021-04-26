@@ -28,10 +28,6 @@ route("/patients-interactive") do
 	serve_static_file("html/patients-interactive.html")
 end
 
-route("/hospital-selection") do
-	serve_static_file("html/hospital-selection.html")
-end
-
 route("/about") do
 	serve_static_file("html/about.html")
 end
@@ -56,23 +52,22 @@ route("/api/patients", method=POST) do
 	end_date   = Date(input["end_date"])
 
 	region = (region_type = region_type, region_id = region_id)
-	region = complete_region(region)
 
-	if isnothing(input["hospitals"])
-		default_locations = get_hospital_list(region=region)
-		hospitals_list = [h.id for h in default_locations if h["default"]]
+	if !haskey(input, "locations") || isnothing(input["locations"])
+		default_locations = get_locations_list(region=region)
+		locations_list = [h.id for h in default_locations if h["default"]]
 	else
-		hospitals_list = Array{String,1}(input["hospitals"])
+		locations_list = Array{String,1}(input["locations"])
 	end
 
 	covid_capacity_proportion = haskey(input, "covid_capacity_proportion") ? parse(Float64, input["covid_capacity_proportion"]) : 0.4
-	dist_threshold = haskey(input, "dist_threshold") ? parse(Float64, input["dist_threshold"]) : 600.0
+	dist_threshold = haskey(input, "dist_threshold") ? parse(Float64, input["dist_threshold"]) : 1000.0
 
 	use_smoothness = haskey(input, "smoothness") ? (input["smoothness"] == "true") : true
 	verbose = haskey(input, "verbose") ? (input["verbose"] == "true") : false
 
 	response = handle_patients_request(
-		region, hospitals_list,
+		region, locations_list,
 		scenario, patient_type,
 		objective, constrain_integer,
 		transfer_budget, capacity_util,
@@ -86,13 +81,13 @@ route("/api/patients", method=POST) do
 	return json(response)
 end
 
-route("/api/hospital-list", method=GET) do
+route("/api/locations-list", method=GET) do
 	if haskey(@params, :region_type) && haskey(@params, :region_id)
 		region = (region_type = Symbol(@params(:region_type)), region_id = @params(:region_id))
 	else
 		region = nothing
 	end
-	response = get_hospital_list(region=region)
+	response = get_locations_list(region=region)
 	return json(response)
 end
 
@@ -103,20 +98,6 @@ route("/api/regions-list", method=GET) do
 		region_type = :any
 	end
 	response = get_regions_list(region_type)
-	return json(response)
-end
-
-route("/api/hospital-selection") do
-	if haskey(@params, :lat) && haskey(@params, :long)
-		loc = (lat = parse(Float64, @params(:lat)), long = parse(Float64, @params(:long)))
-	elseif haskey(@params, :zipcode)
-		@warn "Query by zipcode not yet implemented"
-		loc = (lat = 39.2961773, long = -76.5939447) # JHH (temporary)
-	else
-		@error "No location to use for hospital selection"
-		return
-	end
-	response = handle_hospital_selection(loc)
 	return json(response)
 end
 
