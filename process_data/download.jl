@@ -2,57 +2,31 @@ using Downloads
 using JSON
 using Dates
 
-include("util.jl")
 
+function download_rawdata()
 
-function download_hhs_latest(;DEBUG=false)
-	if DEBUG return true end
+	Downloads.download("https://flattening-the-curve-backend.apps.hmf.q7z3.p1.openshiftapps.com/api/times", "../rawdata/latest_dates.json")
+	dates = JSON.parsefile("../rawdata/latest_dates.json")
+	update_date_str = dates["critical_care_pct"][1] * " 2021"
+	update_date = Date(update_date_str, "U dd yyyy")
 
-	meta_url = "https://healthdata.gov/api/views/anag-cw7u.json"
-	tmp_fn = Downloads.download(meta_url)
-	meta = JSON.parsefile(tmp_fn)
-	modified_ts = meta["viewLastModified"]
-	modified_date = Date(unix2datetime(modified_ts))
-	realdata_fn = "../rawdata/hospitalization_data/COVID-19_Reported_Patient_Impact_and_Hospital_Capacity_by_Facility_$(modified_date).csv"
-
-	prev_fn = latest_hhs_rawdata_fn()
-	if prev_fn == realdata_fn
+	if isdir("../rawdata/$(update_date)/")
 		return false
 	end
 
-	realdata_url = "https://healthdata.gov/api/views/anag-cw7u/rows.csv?accessType=DOWNLOAD"
-	Downloads.download(realdata_url, realdata_fn)
+	base_url = "https://flattening-the-curve-backend.apps.hmf.q7z3.p1.openshiftapps.com/api/summary"
+	query_url(x) = "$(base_url)?HR_UID=$(x)"
 
-	return true
-end
+	Downloads.download(query_url(-1), "../rawdata/latest_summary.json")
 
-function download_forecast_latest(;DEBUG=false)
-	if DEBUG return true end
+	meta = JSON.parsefile("../rawdata/latest_summary.json")
+	location_ids = [m["HR_UID"] for m in meta]
+	location_ids = sort(unique(filter(x -> x > 0, location_ids)))
 
-	forecast_url(d) = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-processed/COVIDhub-ensemble/$(d)-COVIDhub-ensemble.csv"
-	forecast_path(d) = "../rawdata/forecasts/$(d)-COVIDhub-ensemble.csv"
-
-	latest_date = Date(now())
-	tmp_path = ""
-	dl_success = false
-	while !dl_success
-		try
-			tmp_path = Downloads.download(forecast_url(latest_date))
-			dl_success = true
-		catch
-			latest_date -= Day(1)
-		end
+	mkdir("../rawdata/$(update_date)/")
+	for location_id in location_ids
+		Downloads.download(query_url(location_id), "../rawdata/$(update_date)/$(location_id).json")
 	end
-
-	prev_date = latest_forecast_date()
-	if prev_date >= latest_date
-		return false
-	end
-
-	mv(tmp_path, forecast_path(latest_date))
-
-	cases_url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"
-	Downloads.download(cases_url, "../rawdata/time_series_covid19_confirmed_US.csv")
 
 	return true
 end

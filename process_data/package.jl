@@ -3,6 +3,9 @@ using Serialization
 using Dates
 using DataFrames
 
+using Convex
+using Gurobi
+
 include("util.jl")
 
 
@@ -11,336 +14,133 @@ include("util.jl")
 ############################
 
 function package_main_data()
-	SCENARIOS = [:moderate]
-	BEDTYPES  = [:allbeds, :icu, :acute]
+	los_dist = Gamma(1.75, 6.0)
 
-	los_dist = deserialize(joinpath(@__DIR__, "../data/hhs_los_est.jlser"))
-	capacity_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
+	metadata = DataFrame(CSV.File("../data/metadata.csv"))
+	capacity_data = DataFrame(CSV.File("../data/capacity.csv"))
+	rawdata = DataFrame(CSV.File("../data/rawdata.csv"))
 
-	forecast = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hospitalization_forecast.csv")))
+	location_ids = metadata.location_id
+	location_names = metadata.location_name
+	N = length(location_ids)
 
-	hhs_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hospitalization_data.csv")))
-	hhs_data_dict = Dict((row.hospital_id, row.date) => row for row in eachrow(hhs_data))
-
-	hospital_ids = capacity_data.hospital_id
-	N = length(hospital_ids)
-
-	start_date = minimum(hhs_data.date)
-	end_date   = maximum(forecast.date)
+	start_date, end_date = extrema(rawdata.date)
 	date_range = collect(start_date : Day(1) : end_date)
 	T = length(date_range)
 
-	capacity_names_full = ["Base Capacity"]
-	capacity_names_abbrev = ["baselinecap"]
+	capacity_names = ["Base Capacity"]
+	C = length(capacity_names)
 
-	function load_capacity(hospitals, bedtype, capacity_levels=[:baseline])
-		beds_dict = Dict(row.hospital_id => Dict(
-			"icu" => row.capacity_icu,
-			"acute" => row.capacity_acute,
-			"allbeds" => row.capacity_allbeds,
-		) for row in eachrow(capacity_data))
+	capacity_dict = Dict(row.location_id => row.beds_total for row in eachrow(capacity_data))
+	capacity = [capacity_dict[r] for r in location_ids, c in 1:C]
+	beds = capacity[:,1]
 
-		if capacity_levels isa Symbol
-			capacity = [beds_dict[h][string(bedtype)] for h in hospital_ids]
-		elseif capacity_levels isa AbstractArray
-			capacity = hcat([[beds_dict[h][string(bedtype)] for h in hospital_ids] for l in capacity_levels]...)
-		else
-			error("Invalid capacity_levels")
-		end
+	active_dict = Dict((row.location_id, row.date) => row.occupancy_covid for row in eachrow(rawdata))
+	active = [haskey(active_dict, (h,d)) ? active_dict[h,d] : missing for h in location_ids, d in date_range]
+	active = interpolate_missing(active)
 
-		return capacity
-	end
+	admitted = estimate_admitted(active, los_dist)
 
-	firstval(xs) = xs[findfirst(isnbad, xs)]
-	lastval(xs) = xs[findlast(isnbad, xs)]
+	locations_latlong = Dict(row.location_id => (lat = row.lat, long = row.long) for row in eachrow(metadata))
 
-	function load_data_hhs(scenario, bedtype)
-		@assert(bedtype in [:icu, :acute, :allbeds])
-		@assert(scenario in [:optimistic, :moderate, :pessimistic, :catastrophic])
-
-		forecast_bedtype = (bedtype == :allbeds) ? :total : bedtype
-		forecast_dict = Dict((row.hospital_id, row.date) => (
-			admitted = row["admissions_$(forecast_bedtype)"],
-		) for row in eachrow(forecast))
-
-		hist_dict = Dict(k => (active = v["active_$(bedtype)"], admitted = v["admissions_$(bedtype)"]) for (k,v) in pairs(hhs_data_dict))
-
-		hist_date_range = sort(intersect(date_range, hhs_data.date))
-		forecast_date_range = sort(intersect(date_range, forecast.date))
-
-		hist_date_range_t = [findfirst(date_range .== d) for d in hist_date_range]
-		forecast_date_range_t = [findfirst(date_range .== d) for d in forecast_date_range]
-
-		hist_active = [haskey(hist_dict,(h,d)) ? hist_dict[(h,d)].active : missing for h in hospital_ids, d in hist_date_range]
-		hist_admitted = [haskey(hist_dict,(h,d)) ? hist_dict[(h,d)].admitted : missing for h in hospital_ids, d in hist_date_range]
-
-		forecast_initial = hist_active[:,end]
-
-		forecast_admitted = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)].admitted : missing for h in hospital_ids, d in forecast_date_range]
-		forecast_active   = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
-
-		total(xs) = [sum(skipbad(xs[:,t])) for t in 1:size(xs,2)]
-		forecast_admitted_scalefactor = lastval(total(hist_admitted)) / firstval(total(forecast_admitted))
-		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
-
-		forecast_admitted .*= forecast_admitted_scalefactor
-		forecast_active .*= forecast_active_scalefactor
-
-		active = Array{Union{Float64,Missing},2}(undef, N, T)
-		fill!(active, missing)
-
-		active[:,forecast_date_range_t] = forecast_active
-		active[:,hist_date_range_t] = hist_active
-
-		admitted = Array{Union{Float64,Missing},2}(undef, N, T)
-		fill!(admitted, missing)
-
-		admitted[:,forecast_date_range_t] = forecast_admitted
-		admitted[:,hist_date_range_t] = hist_admitted
-
-		active = interpolate_missing(active)
-		admitted = interpolate_missing(admitted)
-
-		admitted_uncertainty = 0.1 .* admitted
-
-		beds = load_capacity(hospital_ids, bedtype, :baseline)
-		capacity = load_capacity(hospital_ids, bedtype, [:baseline,])
-
-		data = (
-			scenario = scenario,
-			bedtype = bedtype,
-
-			los_dist = los_dist[bedtype],
-
-			active = active,
-			admitted = admitted,
-			admitted_uncertainty = admitted_uncertainty,
-
-			beds = beds,
-			capacity = capacity,
-		)
-
-		return data
-	end
-
-	maindata = Dict()
-	for scenario in SCENARIOS, bedtype in BEDTYPES
-		maindata[(scenario,bedtype)] = load_data_hhs(scenario, bedtype)
-	end
-
-	metadata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_meta.csv")))
-	hospital_meta = [(
-		name = row.hospitalname,
-		hhsname = row.hospital,
-		id = row.hospital_id,
-		index = findfirst(==(row.hospital_id), hospital_ids),
-		state = row.state,
-		state_abbrev = row.state_abbrev,
-		zipcode = row.zip,
-		city = row.city,
-		county = row.fips_code,
-		system_name = row.system_name,
-		system_id = row.system_id,
-		hsa_name = row.hsa_name,
-		hsa_id = string(row.hsa_id),
-		hrr_name = row.hrr_name,
-		hrr_id = string(row.hrr_id),
-	) for row in eachrow(metadata)]
-
-	filter!(h -> !isnothing(h.index), hospital_meta)
-	sort!(hospital_meta, by=(h -> h.index))
-
-	hospital_names = [h.name for h in hospital_meta]
-	hospital_identifiers = [h.id for h in hospital_meta]
-
-	hospital_positions_raw = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_locations.csv")))
-	filter!(row -> row.hospital_id in hospital_ids, hospital_positions_raw)
-	hospital_positions = Dict(row.hospital_id => (
-			lat  = row.lat,
-			long = row.long,
-		)
-		for row in eachrow(hospital_positions_raw)
+	completedata = (;
+		node_ids = location_ids,
+		node_names = location_names,
+		node_locations = locations_latlong,
+		capacity_names,
+		start_date,
+		end_date,
+		active,
+		admitted,
+		capacity,
+		beds,
+		los_dist,
 	)
 
-	completedata = (
-		location_ids = hospital_identifiers,
-		location_names = hospital_names,
-		location_meta = hospital_meta,
-		start_date = start_date,
-		end_date = end_date,
-		locations_latlong = hospital_positions,
-		casesdata = maindata,
-	)
-
-	serialize(joinpath(@__DIR__, "../data/data_hhs.jlser"), completedata)
+	serialize(joinpath(@__DIR__, "../data/data.jlser"), completedata)
 
 	return
 end
 
 function package_load_data()
-	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn))
+	data = DataFrame(CSV.File("../data/rawdata.csv"))
+	sort!(data, [:location_id, :date])
+	data = combine(groupby(data, :location_id), :occupancy_total => lastvalue => :occupancy_total)
 
-	bad_ids = begin
-		id_counts = combine(groupby(rawdata, :hospital_pk), :hospital_name => (x -> length(unique(x))) => :n_names)
-		filter!(x -> x.n_names > 1, id_counts)
-		unique(id_counts.hospital_pk)
-	end
-	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
+	metadata = DataFrame(CSV.File("../data/metadata.csv"))
+	capacity_data = DataFrame(CSV.File("../data/capacity.csv"))
+	select!(capacity_data, :location_id, :beds_total)
 
-	findmissing(x) = (ismissing(x) || x == -999999) ? missing : x
+	data = outerjoin(data, metadata, on=:location_id)
+	data = outerjoin(data, capacity_data, on=:location_id)
 
-	data_weekly = select(rawdata,
-		:hospital_name => :hospital,
-		:hospital_pk => :hospital_id,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
-
-		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(findmissing) => :total_beds,
-		:all_adult_hospital_inpatient_bed_occupied_7_day_avg => ByRow(findmissing) => :total_occupancy,
-
-		:total_staffed_adult_icu_beds_7_day_avg => ByRow(findmissing) => :icu_beds,
-		:staffed_adult_icu_bed_occupancy_7_day_avg => ByRow(findmissing) => :icu_occupancy,
-	)
-	sort!(data_weekly, [:hospital, :hospital_id, :date])
-
-	function latest_val(xs)
-		xs = filter(x -> !ismissing(x), xs)
-		z = length(xs) == 0 ? missing : xs[end]
-		z = coalesce(z, 0)
-		return z
-	end
-
-	data_latest = combine(groupby(data_weekly, [:hospital, :hospital_id]), [
-		:total_beds => latest_val => :total_beds,
-		:total_occupancy => latest_val => :total_occupancy,
-		:icu_beds => latest_val => :icu_beds,
-		:icu_occupancy => latest_val => :icu_occupancy,
-	])
-
-	compute_load(a,b) = (a==0) ? 0.0 : (b==0) ? 1.0 : a/b
-
-	insertcols!(data_latest, 5, :total_load => compute_load.(data_latest.total_occupancy, data_latest.total_beds))
-	insertcols!(data_latest, 8, :icu_load => compute_load.(data_latest.icu_occupancy, data_latest.icu_beds))
-
-	metadata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_meta.csv")))
-
-	hospital_locations_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_locations.csv")))
-	select!(hospital_locations_data, :hospital_id, :lat, :long)
-
-	data_combined_all = leftjoin(data_latest, metadata, on=:hospital_id, makeunique=true)
-	data_combined_all = leftjoin(data_combined_all, hospital_locations_data, on=:hospital_id)
-
-	data_combined_all.lat = coalesce.(data_combined_all.lat, 0.0)
-	data_combined_all.long = coalesce.(data_combined_all.long, 0.0)
-
-	data_combined = select(data_combined_all,
-		:hospitalname => :hospital,
-		:hospital => :hhsname,
-		:hospital_id,
-		:lat,
-		:long,
-		:total_beds,
-		:total_occupancy,
-		:total_load,
-		:icu_beds,
-		:icu_occupancy,
-		:icu_load,
+	select!(data,
+		:location_name,
+		:location_id,
+		:lat, :long,
+		:beds_total => :beds,
+		:occupancy_total => :occupancy,
+		[:occupancy_total, :beds_total] => ByRow((o,b) -> (b == 0) ? o : (o/b)) => :load,
 	)
 
-	data_combined |> CSV.write(joinpath(@__DIR__, "../data/hhs_current_load.csv"))
+	data |> CSV.write(joinpath(@__DIR__, "../data/current_load.csv"))
 
-	data_combined_list = collect([NamedTuple(h) for h in eachrow(data_combined)])
-
-	serialize(joinpath(@__DIR__, "../data/hhs_current_load.jlser"), data_combined_list)
+	data_list = collect([NamedTuple(h) for h in eachrow(data)])
+	serialize(joinpath(@__DIR__, "../data/current_load.jlser"), data_list)
 
 	return
 end
 
 function package_covid_load_data()
-	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn))
+	data = DataFrame(CSV.File("../data/rawdata.csv"))
+	sort!(data, [:location_id, :date])
+	data = combine(groupby(data, :location_id), :occupancy_covid => lastvalue => :occupancy_covid)
 
-	bad_ids = begin
-		id_counts = combine(groupby(rawdata, :hospital_pk), :hospital_name => (x -> length(unique(x))) => :n_names)
-		filter!(x -> x.n_names > 1, id_counts)
-		unique(id_counts.hospital_pk)
-	end
-	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
+	metadata = DataFrame(CSV.File("../data/metadata.csv"))
+	capacity_data = DataFrame(CSV.File("../data/capacity.csv"))
+	select!(capacity_data, :location_id, :beds_total)
 
-	findmissing(x) = (ismissing(x) || x == -999999) ? missing : x
+	data = outerjoin(data, metadata, on=:location_id)
+	data = outerjoin(data, capacity_data, on=:location_id)
 
-	data_weekly = select(rawdata,
-		:hospital_name => :hospital,
-		:hospital_pk => :hospital_id,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
+	covid_cap = 0.4
 
-		:total_adult_patients_hospitalized_confirmed_covid_7_day_avg => ByRow(findmissing) => :total_occupancy,
-		:staffed_icu_adult_patients_confirmed_covid_7_day_avg => ByRow(findmissing) => :icu_occupancy,
-	)
-	sort!(data_weekly, [:hospital, :hospital_id, :date])
-
-	function latest_val(xs)
-		xs = filter(x -> !ismissing(x), xs)
-		z = length(xs) == 0 ? missing : xs[end]
-		z = coalesce(z, 0)
-		return z
-	end
-
-	data_latest = combine(groupby(data_weekly, [:hospital, :hospital_id]), [
-		:total_occupancy => latest_val => :total_occupancy,
-		:icu_occupancy => latest_val => :icu_occupancy,
-	])
-
-	capacity_rawdata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
-
-	capacity_data = select(capacity_rawdata,
-		:hospital_id,
-		:capacity_icu => (x -> x .* 0.4) => :icu_beds,
-		:capacity_allbeds => (x -> x .* 0.4) => :total_beds,
-	)
-
-	data_latest = rightjoin(data_latest, capacity_data, on=:hospital_id)
-
-	compute_load(a,b) = (a==0) ? 0.0 : (b==0) ? 1.0 : a/b
-
-	insertcols!(data_latest, 5, :total_load => compute_load.(data_latest.total_occupancy, data_latest.total_beds))
-	insertcols!(data_latest, 8, :icu_load => compute_load.(data_latest.icu_occupancy, data_latest.icu_beds))
-
-	metadata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_meta.csv")))
-
-	hospital_locations_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hhs_hospital_locations.csv")))
-	select!(hospital_locations_data, :hospital_id, :lat, :long)
-
-	data_combined_all = leftjoin(data_latest, metadata, on=:hospital_id, makeunique=true)
-	data_combined_all = leftjoin(data_combined_all, hospital_locations_data, on=:hospital_id)
-
-	data_combined_all.lat = coalesce.(data_combined_all.lat, 0.0)
-	data_combined_all.long = coalesce.(data_combined_all.long, 0.0)
-
-	data_combined = select(data_combined_all,
-		:hospitalname => :hospital,
-		:hospital => :hhsname,
-		:hospital_id,
+	select!(data,
+		:location_name,
+		:location_id,
 		:lat, :long,
-		:state, :state_abbrev, :city,
-		:system_id, :system_name,
-		:hsa_id, :hsa_name,
-		:hrr_id, :hrr_name,
-		:total_beds,
-		:total_occupancy,
-		:total_load,
-		:icu_beds,
-		:icu_occupancy,
-		:icu_load,
+		:beds_total => ByRow(x -> x * covid_cap) => :beds,
+		:occupancy_covid => :occupancy,
+		[:occupancy_covid, :beds_total] => ByRow((o,b) -> (b == 0) ? o : (o/(b*covid_cap))) => :load,
 	)
 
-	sort!(data_combined, [:hospital, :hospital_id])
+	data |> CSV.write(joinpath(@__DIR__, "../data/current_covid_load.csv"))
 
-	data_combined |> CSV.write(joinpath(@__DIR__, "../data/hhs_current_load_covid.csv"))
-
-	data_combined_list = collect([NamedTuple(h) for h in eachrow(data_combined)])
-
-	serialize(joinpath(@__DIR__, "../data/hhs_current_load_covid.jlser"), data_combined_list)
+	data_list = collect([NamedTuple(h) for h in eachrow(data)])
+	serialize(joinpath(@__DIR__, "../data/current_covid_load.jlser"), data_list)
 
 	return
+end
+
+function estimate_admitted(active::Array{<:Real,1}, los_dist::Distribution; l::Int=35)
+	T = length(active)
+	L = 1.0 .- cdf.(los_dist, 0:l)
+
+	admitted = Variable(T+l)
+	est_active = [L' * admitted[(t+l):-1:t] for t in 1:T]
+	cons = [admitted[t] >= 0 for t in 1:(T+l)]
+	problem = minimize(sum(square.(est_active - active)), cons)
+
+	solve!(problem, Gurobi.Optimizer, silent_solver=true)
+	sol_admitted = evaluate(admitted)
+
+	return sol_admitted[(l+1):end]
+end
+
+function estimate_admitted(active::Array{<:Real,2}, los_dist::Distribution)
+	admitted = Array{Float64,2}(undef, size(active)...)
+	for i in 1:size(active,1)
+		admitted[i,:] = estimate_admitted(active[i,:], los_dist)
+	end
+	return admitted
 end

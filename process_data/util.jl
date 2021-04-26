@@ -10,6 +10,12 @@ isbad(x) = isnothing(x) || ismissing(x) || isnan(x) || isinf(x)
 isnbad(x) = !(isbad(x))
 skipbad(xs) = filter(isnbad, xs)
 
+function lastvalue(xs)
+	i = findlast(x -> !ismissing(x), xs)
+	v = isnothing(i) ? 0 : xs[i]
+	return v
+end
+
 function interpolate_timeseries_linear(xs_, ys)
 	x_start = xs_[1]
 	xs = [(x-x_start).value for x in xs_]
@@ -109,24 +115,18 @@ function estimate_active(initial, admitted, los_dist)
 	return active
 end
 
-function latest_hhs_rawdata_date()
-	paths = glob("../rawdata/hospitalization_data/COVID-19_Reported_Patient_Impact_and_Hospital_Capacity_by_Facility_*.csv")
-	dates = [basename(p)[end-13:end-4] for p in paths]
-	dates = [Date(d) for d in dates]
-	date = maximum(dates)
-	return date
-end
-
-function latest_hhs_rawdata_fn()
-	date = latest_hhs_rawdata_date()
-	fn = "../rawdata/hospitalization_data/COVID-19_Reported_Patient_Impact_and_Hospital_Capacity_by_Facility_$(date).csv"
-	return fn
-end
-
-function latest_forecast_date()
-	paths = glob("../rawdata/forecasts/*-COVIDhub-ensemble.csv")
-	date_strs = [basename(p)[1:10] for p in paths]
-	dates = [Date(d) for d in date_strs]
+function latest_update_date()
+	paths = glob("../rawdata/*/")
+	dates = map(paths) do p
+		d = p[end-10:end-1]
+		try
+			d = Date(d)
+		catch
+			d = nothing
+		end
+		d
+	end
+	filter!(d -> !isnothing(d), dates)
 	date = maximum(dates)
 	return date
 end
