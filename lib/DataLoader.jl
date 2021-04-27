@@ -67,7 +67,7 @@ function load_data(
 	adj = (0 .< dist_matrix .<= dist_threshold)
 
 	extent = (extent_type = :points, extent_regions = [])
-	region = (region_type = :state, region_id = "ontario", region_name = "Ontario")
+	region = (region_type = :province, region_id = "ontario", region_name = "Ontario")
 
 	return (;
 		initial,

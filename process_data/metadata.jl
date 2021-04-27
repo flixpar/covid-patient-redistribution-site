@@ -45,7 +45,7 @@ function extract_dates_metadata()
 end
 
 function extract_regions_metadata()
-	regions = [(region_type = :state, region_name = "Ontario", region_id = "ontario")]
+	regions = [(region_type = :province, region_name = "Ontario", region_id = "ontario")]
 	serialize("../data/regions.jlser", regions)
 	return
 end
