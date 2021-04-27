@@ -337,9 +337,13 @@ function filterResponse(response_) {
 	response.active.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active[i][t])));
 	response.active_null.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.active_null[i][t])));
 	response.admitted.push(d3.range(T).map(t => d3.sum(unselectedInd, i => response_.admitted[i][t])));
+
+	const allPositons = response_.config.node_names
+		.map(h => response_.config.node_locations[h])
+		.filter(p => p.lat != 0 && p.long != 0);
 	response.config.node_locations[otherHospitalsName] = {
-		lat: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].lat),
-		long: d3.mean(response_.config.node_names, h => response_.config.node_locations[h].long),
+		lat: d3.mean(allPositons, p => p.lat),
+		long: d3.mean(allPositons, p => p.long),
 	};
 
 	response.sent.push([]);
