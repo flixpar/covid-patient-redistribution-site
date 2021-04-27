@@ -69,23 +69,6 @@
 					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE). To learn more, visit the <a href="/about">About page</a>.
 				</span>
 			</p>
-			<div id="static-params-form">
-				<div class="field">
-					<div class="select is-fullwidth">
-						<select id="form-region" class="select-bold-text">
-							<option value="MD">Maryland</option>
-						</select>
-					</div>
-				</div>
-				<div class="field">
-					<div class="select is-fullwidth">
-						<select id="form-patient-type" class="select-bold-text">
-							<option value="icu">ICU</option>
-							<option value="acute">Acute</option>
-						</select>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<form id="form" autocomplete="off">
@@ -98,7 +81,9 @@
 			<input type="hidden" id="form-start-date" value="2021-02-01">
 			<input type="hidden" id="form-end-date" value="2021-03-01">
 			<input type="hidden" id="form-integer" value="false">
-			<input type="hidden" id="form-regiontype" value="state">
+			<input type="hidden" id="form-regiontype" value="province">
+			<input type="hidden" id="form-region" value="ontario">
+			<input type="hidden" id="form-patient-type" value="icu">
 		</form>
 
 		<div class="container" id="results-container">

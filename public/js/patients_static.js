@@ -363,10 +363,11 @@ function sendUpdateQuery(latest=true) {
 	console.log("Querying server...");
 	const start_date = document.getElementById("form-start-date").value;
 	const start_date_str = latest ? "latest" : start_date.replaceAll("-", "");
+	const region_type = document.getElementById("form-regiontype").value;
 	const region = document.getElementById("form-region").value;
 	const scenario = document.getElementById("form-scenario").value.toLowerCase();
 	const patient_type = document.getElementById("form-patient-type").value.toLowerCase();
-	const fn = `${start_date_str}_${scenario}_${patient_type}_state_${region}.json`;
+	const fn = `${start_date_str}_${scenario}_${patient_type}_${region_type}_${region}.json`;
 	console.log(`Fetching: ${fn}`)
 	let request = $.ajax({
 		url: `/results-static/${fn}`,
