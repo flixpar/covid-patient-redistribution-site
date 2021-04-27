@@ -40,7 +40,7 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 function createLoadPlots(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-load");
 
-	const plotTitle = `COVID Occupancy by Hospital in ${rawdata.config.region.region_name}`;
+	const plotTitle = `COVID Occupancy by Location in ${rawdata.config.region.region_name}`;
 	const loadPlots = makeLoadPlots(rawdata, plotTitle);
 	loadPlots.id = "loadplots";
 	section.appendChild(loadPlots);
@@ -56,7 +56,7 @@ function createLoadPlots(rawdata, add_description=true) {
 	}
 }
 
-function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacityLevel=0) {
+function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Location", capacityLevel=0) {
 	const loadData = extractLoadData(rawdata, capacityLevel);
 
 	const betweenMargin = 100;

@@ -20,7 +20,7 @@
 
 	<nav class="navbar" role="navigation" aria-label="main navigation">
 		<div class="navbar-brand">
-			<a href="/home" class="navbar-item">COVID-19 Capacity Management</a>
+			<a href="/home" class="navbar-item">Ontario COVID-19 Capacity Management</a>
 			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
@@ -54,7 +54,7 @@
 		<div class="container" id="static-text-container">
 			<p style="margin-bottom: 12px;">
 				<span id="static-page-p1" class="description-hidden-text">
-					This interactive dashboard finds the best way to transfer COVID-19 patients between hospitals. You can use it to see which hospitals are over capacity, when and how many additional beds are needed at each hospital (or US state), and the optimal transfer strategy between hospitals.
+					This interactive dashboard finds the best way to transfer COVID-19 patients between public health units (PHU) in Ontario. You can use it to see which PHU are over capacity, when and how many additional beds are needed, and the optimal patient transfer strategy.
 				</span>
 			</p>
 			<p style="margin-bottom: 12px;">
@@ -65,12 +65,9 @@
 					<br>
 				</span>
 				<span id="static-page-p2" class="description-hidden-text is-hidden">
-					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
-					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS)<span class="info-text">Latest data from <span class="fill-value" data-contentid="hhsdata_update_date">2021-03-22</span></span>, and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC)<span class="info-text">Latest forecast from <span class="fill-value" data-contentid="forecast_update_date">2021-03-22</span></span>. To learn more, visit the <a href="/about">About page</a>.
+					With the ongoing COVID-19 pandemic, many hospitals are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE). To learn more, visit the <a href="/about">About page</a>.
 				</span>
-			</p>
-			<p>
-				Select a state and patient type (ICU or acute) to see the results for <b><span class="fill-value" data-contentid="start_date">2021-02-01</span></b> to <b><span class="fill-value" data-contentid="end_date">2021-03-01</span></b>. <span class="info-text">To select hospitals, go to the "Select Displayed Hospitals" section. For more options go to the "Customize Results" page.</span>
 			</p>
 			<div id="static-params-form">
 				<div class="field">

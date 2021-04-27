@@ -80,7 +80,7 @@ function makeTransfersSankey(response, graph) {
 	const _colorScale = d3.scaleOrdinal()
 		.domain(d3.range(nLocs))
 		.range(d3.range(nLocs).map(x => d3.interpolatePlasma(x/nLocs)));
-	const otherHospitalsIdx = locationNames.indexOf("Other Hospitals");
+	const otherHospitalsIdx = locationNames.indexOf("Other Locations");
 	const colorScale = x => {
 		if (x == otherHospitalsIdx) {
 			return "#dbdbdb";

@@ -46,7 +46,7 @@ function createSurgeCapacityMetrics(rawdata) {
 		}
 	}
 
-	addColumn(["Hospital", "Required Surge Capacity With Transfers (Beds)", "Required Surge Capacity Without Transfers (Beds)", "Maximum Required Capacity Level"]);
+	addColumn(["Location", "Required Surge Capacity With Transfers (Beds)", "Required Surge Capacity Without Transfers (Beds)", "Maximum Required Capacity Level"]);
 	for (let i = 0; i < N; i++) {
 		const nodeName = rawdata.config.node_names[i];
 		const maxOverflowValueWithTfr = max_overflows_wtfr[i];

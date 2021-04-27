@@ -28,7 +28,7 @@ function createTransfersBreakdownPlot(response, add_description=true) {
 	section.appendChild(hospColorscaleElem);
 
 	let colorscaleTitleElem = document.createElement("p");
-	colorscaleTitleElem.innerHTML = "Destination Hospital";
+	colorscaleTitleElem.innerHTML = "Destination";
 	colorscaleTitleElem.style.fontFamily = "Helvetica";
 	colorscaleTitleElem.style.fontSize = "14px";
 	colorscaleTitleElem.style.textAlign = "center";
@@ -57,7 +57,7 @@ function makeTransfersBreakdownPlot(response) {
 		.attr("transform", `translate(10,${tfrFigureSize.height/2 + 40}) rotate(-90)`)
 		.attr("font-family", "monospace")
 		.attr("font-size", 10)
-		.text("Origin Hospital");
+		.text("Origin");
 
 	return svg.node();
 }

@@ -53,7 +53,7 @@ function makeSections() {
 		{title: "Capacity Timeline",            identifier: "results-surgetimeline", showDefault: true, subtitle: "When is additional capacity needed?"},
 		{title: "Metrics",                      identifier: "results-metrics",     showDefault: true},
 		{title: "Total COVID Occupancy",        identifier: "results-totalload",   showDefault: true},
-		{title: "Hospital COIVD Occupancy",     identifier: "results-load",        showDefault: true},
+		{title: "COIVD Occupancy by Location",  identifier: "results-load",        showDefault: true},
 		{title: "Active COVID Patients",        identifier: "results-active",      showDefault: true},
 		{title: "Raw Results",                  identifier: "results-raw",         showDefault: false},
 	]
@@ -139,7 +139,7 @@ const tooltip_content = {
 	"form-scenario": "Forecast scenario to use.",
 	"form-objective": "Primary objective for the optimization model.",
 	"form-weights": "Preferences for where to transfer patients to if the system runs out of capacity.",
-	"form-transferbudget": "Maximum number of patients that can be transferred from a hospital in a day.",
+	"form-transferbudget": "Maximum number of patients that can be transferred from a location in a day.",
 	"form-surgepreferences": "Preference for where to create additional capacity if it is necessary.",
 	"form-utilization": "Percentage of the total capacity that can be used in practice.",
 	"form-uncertainty": "Level of uncertainty in the forcast that we should plan for.",

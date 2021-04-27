@@ -42,11 +42,11 @@ function generateContent(response) {
 
 const sectionInfo = [
 	{title: "Occupancy and Optimal Transfers Map", identifier: "results-maps",    reset:true,  showDefault: true, subtitle: "How busy are hospitals? Where are more beds needed?"},
-	{title: "Select Displayed Hospitals",      identifier: "parameters",          reset:false, showDefault: true},
+	{title: "Select Displayed Locations",      identifier: "parameters",          reset:false, showDefault: true},
 	{title: "Patient Transfer Flows",          identifier: "results-transfers",   reset:true,  showDefault: true, subtitle: "Where should patients be transferred?"},
 	{title: "Capacity Timeline",               identifier: "results-surgetimeline", reset:true, showDefault: true, subtitle: "When are additional beds needed?"},
 	{title: "Total COVID Occupancy",           identifier: "results-totalload",   reset:true,  showDefault: true},
-	{title: "COVID-19 Occupancy by Hospital",  identifier: "results-load",        reset:true,  showDefault: true},
+	{title: "COVID-19 Occupancy by Location",  identifier: "results-load",        reset:true,  showDefault: true},
 	{title: "Metrics",                         identifier: "results-metrics",     reset:true,  showDefault: false},
 	{title: "Raw Results",                     identifier: "results-raw",         reset:true,  showDefault: false},
 ];
@@ -153,7 +153,7 @@ function warnManyHospitals(n) {
 				<button class="delete" aria-label="delete" id="warning-close"></button>
 			</div>
 			<div class="message-body">
-				<p>You have selected more hospitals than is recommended. The page may run slow as a result.</p>
+				<p>You have selected more locations than is recommended. The page may run slow as a result.</p>
 				<div style="float: right; margin-top: 10px; margin-bottom: 10px;">
 					<button class="button is-warning is-light" id="warning-cancel">Cancel</button>
 					<button class="button is-warning" id="warning-continue">Continue</button>
@@ -328,7 +328,7 @@ function filterResponse(response_) {
 
 	const n = response.config.node_names.length;
 
-	const otherHospitalsName = "Other Hospitals";
+	const otherHospitalsName = "Other Locations";
 
 	response.config.node_names.push(otherHospitalsName);
 	response.config.node_names_abbrev.push(otherHospitalsName);

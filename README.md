@@ -6,7 +6,7 @@ The COVID-19 pandemic has put a significant strain on healthcare systems around 
 To this end we have built models that can determine optimal patient transfers between hospitals. Patient transfers have potential to redistribute load between hospitals so that all existing capacity can be used effectively before any hospitals need to add surge capacity. This can significantly reduce the burden on hospitals facing a particularly large load, helping both the hospital and its patients, while not pushing any other hospitals over their capacity.
 
 To demonstrate the efficacy of this approach, we have developed this website. Users may try different regions and inputs to the model, and explore the results that optimal patient transfers could have in practice.
-The URL for this website is: https://covid-hospital-operations.com
+The URL for this website is: https://ontario.covid-hospital-operations.com
 
 ---
 

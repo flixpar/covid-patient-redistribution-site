@@ -150,7 +150,7 @@ async function validateForm() {
 	const nHospitalsSelected = document.querySelectorAll(".hospitalselect-checkbox:checked").length;
 	const nHospitalsAllowed = (2 <= nHospitalsSelected) && (nHospitalsSelected <= 200);
 	if (!nHospitalsAllowed) {
-		alert(`You have selected ${nHospitalsSelected} hospitals. The valid range is 2-200 hospitals.`);
+		alert(`You have selected ${nHospitalsSelected} locations. The valid range is 2-200 locations.`);
 	}
 
 	return (dates_valid && nHospitalsAllowed);
@@ -370,7 +370,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 	let selectAreaHeader = document.createElement("label");
 	selectAreaHeader.className = "label";
 	selectAreaHeader.style.marginBottom = "0.2rem";
-	selectAreaHeader.textContent = "Hospitals to Display";
+	selectAreaHeader.textContent = "Locations to Display";
 	selectAreaHeader.htmlFor = "hospitalselect";
 	if (!staticPage) {
 		selectAreaHeader.classList.add("column");
@@ -606,7 +606,7 @@ function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
 }
 
 const tooltip_content = {
-	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
+	"hospitalselect": "Locations to be included in our analysis. Note that all locations are included in our model, but only those selected here are visualized.",
 };
 
 const toTitlecase = s => s.split(" ").map(w => w[0].toUpperCase() + w.substr(1)).join(" ");
