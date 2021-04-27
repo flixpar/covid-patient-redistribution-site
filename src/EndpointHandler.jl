@@ -135,8 +135,8 @@ function handle_patients_request(
 end
 
 function get_locations_list(;region=nothing, names=nothing, ids=nothing)
-	hospitals = locations_list(region=region, names=names, ids=ids)
-	return hospitals
+	locations = locations_list(region=region, names=names, ids=ids)
+	return locations
 end
 
 function get_regions_list(region_type::Symbol=:any)

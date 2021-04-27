@@ -20,6 +20,10 @@ function package_main_data()
 	capacity_data = DataFrame(CSV.File("../data/capacity.csv"))
 	rawdata = DataFrame(CSV.File("../data/rawdata.csv"))
 
+	metadata.location_id = string.(metadata.location_id)
+	capacity_data.location_id = string.(capacity_data.location_id)
+	rawdata.location_id = string.(rawdata.location_id)
+
 	location_ids = metadata.location_id
 	location_names = metadata.location_name
 	N = length(location_ids)
@@ -82,6 +86,7 @@ function package_load_data()
 		:occupancy_total => :occupancy,
 		[:occupancy_total, :beds_total] => ByRow((o,b) -> (b == 0) ? o : (o/b)) => :load,
 	)
+	data.location_id = string.(data.location_id)
 
 	data |> CSV.write(joinpath(@__DIR__, "../data/current_load.csv"))
 
@@ -113,6 +118,7 @@ function package_covid_load_data()
 		:occupancy_covid => :occupancy,
 		[:occupancy_covid, :beds_total] => ByRow((o,b) -> (b == 0) ? o : (o/(b*covid_cap))) => :load,
 	)
+	data.location_id = string.(data.location_id)
 
 	data |> CSV.write(joinpath(@__DIR__, "../data/current_covid_load.csv"))
 
