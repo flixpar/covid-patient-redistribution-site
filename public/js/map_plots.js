@@ -229,7 +229,7 @@ function generateDescription(response) {
 	const endDate = response.config.end_date;
 	const bedtype = (response.config.params.bedtype == "icu") ? "ICU" : response.config.params.bedtype;
 
-	const regionTypeLookup = {state: "state", hospital_system: "hospital system", hrr: "hospital referral region (HRR)", hsa: "hospital service area (HSA)"};
+	const regionTypeLookup = {state: "state", hospital_system: "hospital system", hrr: "hospital referral region (HRR)", hsa: "hospital service area (HSA)", province: "province"};
 	const regiontype = regionTypeLookup[response.config.region.region_type];
 
 	const N = response.config.node_names.length;

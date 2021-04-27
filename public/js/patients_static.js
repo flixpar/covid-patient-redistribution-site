@@ -73,7 +73,7 @@ function getHospitals() {
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
 	};
-	let request = $.get("/api/hospital-list", data, d => {
+	let request = $.get("/api/locations-list", data, d => {
 		common.createHospitalsSelect(d, true, false);
 		addUpdateButton();
 	});
@@ -300,7 +300,7 @@ function filterResponse(response_) {
 	let response = JSON.parse(JSON.stringify(response_));
 
 	const selectedHospitalIds = Array.from(document.querySelectorAll(".hospitalselect-checkbox:checked")).map(elem => elem.value);
-	const selectedInd = selectedHospitalIds.map(i => response.config.nodes_meta.findIndex(h => h.hospital_id == i));
+	const selectedInd = selectedHospitalIds.map(i => response.config.nodes_meta.findIndex(h => h.location_id == i));
 	const selectedHospitalNames = selectedInd.map(i => response.config.node_names[i]);
 
 	const N = response_.config.node_names.length;

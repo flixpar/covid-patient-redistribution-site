@@ -340,7 +340,7 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions(exclude=[]) {
-	const default_region = {state: "ontario"};
+	const default_region = {province: "ontario"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.get("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
