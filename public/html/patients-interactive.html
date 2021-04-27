@@ -59,57 +59,13 @@
 		<div class="container">
 			<form id="form" class="form" autocomplete="off">
 
-				<div class="field is-horizontal hidden">
-					<label class="label column is-one-third" for="form-level">Geographic Level</label>
-					<div class="select is-fullwidth">
-						<select id="form-level">
-							<option>Hospital</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-regiontype">Region Type</label>
-					<div class="select is-fullwidth">
-						<select id="form-regiontype">
-							<option value="state">State</option>
-							<option value="hospital_system">Hospital System</option>
-							<option value="hrr">Hospital Referral Region (HRR)</option>
-							<option value="hsa">Hospital Service Area (HSA)</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-region">Region</label>
-					<div class="select is-fullwidth">
-						<select id="form-region">
-							<option value="ontario">Ontario</option>
-						</select>
-					</div>
-				</div>
+				<input type="hidden" id="form-level" value="phu">
+				<input type="hidden" id="form-regiontype" value="province">
+				<input type="hidden" id="form-region" value="ontario">
+				<input type="hidden" id="form-scenario" value="moderate">
+				<input type="hidden" id="form-patient-type" value="icu">
 
 				<div id="hospital-select-field" class="field is-horizontal">
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-scenario">Scenario</label>
-					<div class="select is-fullwidth">
-						<select id="form-scenario">
-							<option selected>Moderate</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="field is-horizontal">
-					<label class="label column is-one-third" for="form-patient-type">Patient Type</label>
-					<div class="select is-fullwidth">
-						<select id="form-patient-type">
-							<!-- <option value="all">All</option> -->
-							<option value="icu" selected>ICU</option>
-							<!-- <option value="acute">Acute</option> -->
-						</select>
-					</div>
 				</div>
 
 				<div class="field is-horizontal">
@@ -165,7 +121,6 @@
 					<label class="label column is-one-third" for="form-los">Length of Stay</label>
 					<div class="select is-fullwidth">
 						<select id="form-los">
-							<!-- <option value="regional_dist" selected>Regional Distribution</option> -->
 							<option value="default_dist">Default Distribution</option>
 							<option value="8">8 Days</option>
 							<option value="11">11 Days</option>
