@@ -9,7 +9,6 @@ using LinearAlgebra
 
 using DataLoader
 using PatientAllocation
-using HospitalSelection
 import PatientAllocationResults
 
 export handle_patients_request
