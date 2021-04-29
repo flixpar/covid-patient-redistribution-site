@@ -16,10 +16,11 @@ function patient_redistribution(
 		initial_patients::Array{<:Real,1},
 		discharged_patients::Array{<:Real,2},
 		admitted_patients::Array{<:Real,2},
-		adj_matrix::BitArray{2}, los::Union{<:Distribution,Array{<:Real,1},Int};
+		los::Union{<:Distribution,Array{<:Real,1},Int};
 
 		obj::Symbol=:minoverflow,
 
+		adj_matrix::BitArray{2}=nothing,
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
