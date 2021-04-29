@@ -153,7 +153,7 @@ function patient_redistribution(
 
 		@variable(model, load_objective[1:N,1:T,1:C] >= 0)
 
-		@expression(model, load[i=1:N,t=1:T,c=1:C], active_patients[i,t] / capacity[i,c])
+		@expression(model, load[i=1:N,t=1:T,c=1:C], (capacity[i,c]==0) ? 1.0 : active_patients[i,t] / capacity[i,c])
 		@constraint(model, [i=1:N,t=1:T,c=1:C],  (load[i,t,c] - (sum(load[:,t,c])/N)) <= load_objective[i,t,c])
 		@constraint(model, [i=1:N,t=1:T,c=1:C], -(load[i,t,c] - (sum(load[:,t,c])/N)) <= load_objective[i,t,c])
 
