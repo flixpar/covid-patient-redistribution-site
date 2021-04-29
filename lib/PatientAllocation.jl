@@ -159,6 +159,8 @@ function patient_redistribution(
 
 		add_to_expression!(objective, dot(capacity_weights, sum(load_objective, dims=(1,2))))
 
+		overflow = nothing
+
 	else
 		error("Invalid objective")
 	end
@@ -249,6 +251,7 @@ end
 
 # only send patients between connected locations
 function enforce_adj!(model, sent, adj_matrix)
+	if isnothing(adj_matrix) return end
 	N, _, T = size(sent)
 	@assert(size(adj_matrix) == (N,N))
 	for i in 1:N, j in 1:N
@@ -416,7 +419,7 @@ end
 
 # weight objective per-location by max load
 function add_severity_weighting!(model, sent, objective, severity_weighting, overflow, active_null, capacity)
-	if severity_weighting
+	if severity_weighting && !isnothing(overflow)
 		N, _, T = size(sent)
 		max_load_null = [maximum(active_null[i,:] / capacity[i,1]) for i in 1:N]
 		severity_weight = [max_load_null[i] > 1.0 ? 0.0 : 9.0 for i in 1:N]
