@@ -206,8 +206,20 @@ function toGraph(response, excludeSelf=false) {
 }
 
 function checkTransfers(response) {
-	const totalSent = d3.sum(response.sent, x => d3.sum(x, y => d3.sum(y)));
-	return totalSent > 0;
+	const totalSentSum = d3.sum(response.sent, x => d3.sum(x, y => d3.sum(y)));
+	if (totalSentSum < 0.001) {return false;}
+
+	const N = response.config.node_names.length;
+	const locInd = d3.range(N);
+	const totalSent = locInd.map(i => locInd.map(j => d3.sum(response.sent[i][j])));
+
+	const nSrcNames = d3.sum(locInd, i => d3.some(totalSent[i], z => z > 1));
+	if (nSrcNames == 0) {return false;}
+
+	const nDstNames = d3.sum(locInd, i => d3.some(locInd.map(j => totalSent[j][i]), z => z > 1));
+	if (nDstNames == 0) {return false;}
+
+	return true;
 }
 
 class TransfersSankeyTooltip {
