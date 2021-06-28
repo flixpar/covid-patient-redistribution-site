@@ -86,19 +86,19 @@ function load_hhs(
 
 	extent = (extent_type = :points, extent_regions = [])
 
-	return (
-		initial = initial,
-		discharged = discharged,
-		admitted = admitted,
-		beds = beds,
-		capacity = capacity,
-		adj = adj,
-		node_locations = node_locations,
+	return (;
+		initial,
+		discharged,
+		admitted,
+		beds,
+		capacity,
+		adj,
+		node_locations,
 		node_names = hospital_names,
 		node_names_abbrev = hospital_abbrevs,
 		node_ids = hospital_ids,
-		extent = extent,
-		capacity_names = capacity_names,
+		extent,
+		capacity_names,
 	)
 end
 

@@ -28,6 +28,7 @@ rawdata/forecasts/
 rawdata/forecasts_old/
 rawdata/hospitalization_data/
 rawdata/csse_confirmed_cases.csv
+data/forecasts/
 
 # analysis
 analysis/
