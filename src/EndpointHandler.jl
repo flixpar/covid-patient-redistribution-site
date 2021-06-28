@@ -41,8 +41,7 @@ function handle_patients_request(
 		threads::Int=-1,
 		verbose::Bool=false,
 	)
-	@info "Handle Patients Request"
-	@info "Scenario: $(scenario), Patient type: $(patient_type)"
+	@info "Handle redistribution request for region: $(region.region_name), dates: $(start_date) to $(end_date)"
 
 	@assert patient_type in [:acute, :icu, :all]
 
