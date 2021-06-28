@@ -10,6 +10,26 @@ isbad(x) = isnothing(x) || ismissing(x) || isnan(x) || isinf(x)
 isnbad(x) = !(isbad(x))
 skipbad(xs) = filter(isnbad, xs)
 
+function flatten(xs::Array; dims=-1)
+	ds = size(xs)
+	d = length(ds)
+
+	if dims isa Int && dims <= 0
+		ds = filter(!=(1), ds)
+	elseif dims isa Int
+		@assert ds[dims] == 1
+		mask = setdiff(1:d, [dims])
+		ds = ds[mask]
+	else
+		@assert all(ds[dims] .== 1)
+		mask = setdiff(1:d, dims)
+		ds = ds[mask]
+	end
+
+	xs = reshape(xs, ds...)
+	return xs
+end
+
 function interpolate_timeseries_linear(xs_, ys)
 	x_start = xs_[1]
 	xs = [(x-x_start).value for x in xs_]
@@ -42,6 +62,14 @@ end
 
 function interpolate_missing(xs::AbstractArray{Float64})
 	return xs
+end
+
+function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},3})
+	output = Array{Float64,3}(undef, size(xs)...)
+	for i in 1:size(xs,1), j in 1:size(xs,3)
+		interpolate_missing(xs[i,:,j], @view output[i,:,j])
+	end
+	return output
 end
 
 function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},2})
