@@ -9,9 +9,11 @@ export {createTransfersSankey};
 function createTransfersSankey(response, add_description=true) {
 	const section = document.getElementById("section-results-transfers");
 
-	if (!checkTransfers(response)) {
+	const tfrCode = checkTransfers(response);
+	if (tfrCode < 0) {
+		const message = (tfrCode == -1) ? "No transfers." : (tfrCode == -2) ? "Insignificant transfers." : "Error.";
 		let text = document.createElement("p");
-		text.textContent = "No transfers";
+		text.textContent = message;
 		section.appendChild(text);
 		return;
 	}
@@ -207,19 +209,20 @@ function toGraph(response, excludeSelf=false) {
 
 function checkTransfers(response) {
 	const totalSentSum = d3.sum(response.sent, x => d3.sum(x, y => d3.sum(y)));
-	if (totalSentSum < 0.001) {return false;}
+	if (totalSentSum < 0.0001) {return -1;}
+	if (totalSentSum < 0.1) {return -2;}
 
 	const N = response.config.node_names.length;
 	const locInd = d3.range(N);
 	const totalSent = locInd.map(i => locInd.map(j => d3.sum(response.sent[i][j])));
 
 	const nSrcNames = d3.sum(locInd, i => d3.some(totalSent[i], z => z > 1));
-	if (nSrcNames == 0) {return false;}
+	if (nSrcNames == 0) {return -2;}
 
 	const nDstNames = d3.sum(locInd, i => d3.some(locInd.map(j => totalSent[j][i]), z => z > 1));
-	if (nDstNames == 0) {return false;}
+	if (nDstNames == 0) {return -2;}
 
-	return true;
+	return 1;
 }
 
 class TransfersSankeyTooltip {
