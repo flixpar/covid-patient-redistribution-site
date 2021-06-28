@@ -223,6 +223,8 @@ function discretize_los(los, T)
 	else
 		error("Invalid length of stay distribution")
 	end
+	fixnan(x) = (isnan(x) || isinf(x)) ? zero(x) : x
+	L = fixnan.(L)
 	return L
 end
 
