@@ -30,22 +30,23 @@ function package_main_data()
 	date_range = collect(start_date : Day(1) : end_date)
 	T = length(date_range)
 
-	capacity_names_full = ["Base Capacity"]
-	capacity_names_abbrev = ["baselinecap"]
-
-	function load_capacity(hospitals, bedtype, capacity_levels=[:baseline])
+	function load_capacity(hospitals, bedtype, bounds=:est, capacity_levels=[:baseline])
 		beds_dict = Dict(row.hospital_id => Dict(
-			"icu" => row.capacity_icu,
-			"acute" => row.capacity_acute,
-			"allbeds" => row.capacity_allbeds,
+			:est => row["capacity_$(bedtype)"],
+			:lb  => row["capacity_$(bedtype)_lb"],
+			:ub  => row["capacity_$(bedtype)_ub"],
 		) for row in eachrow(capacity_data))
 
+		bounds_ = (bounds isa Symbol) ? [bounds] : bounds
+		capacity_levels_ = (capacity_levels isa Symbol) ? [capacity_levels] : capacity_levels
+
+		capacity = [beds_dict[h][bd] for h in hospital_ids, l in capacity_levels_, bd in bounds_]
+
+		if bounds isa Symbol
+			capacity = flatten(capacity, dims=3)
+		end
 		if capacity_levels isa Symbol
-			capacity = [beds_dict[h][string(bedtype)] for h in hospital_ids]
-		elseif capacity_levels isa AbstractArray
-			capacity = hcat([[beds_dict[h][string(bedtype)] for h in hospital_ids] for l in capacity_levels]...)
-		else
-			error("Invalid capacity_levels")
+			capacity = flatten(capacity, dims=2)
 		end
 
 		return capacity
@@ -61,6 +62,8 @@ function package_main_data()
 		forecast_bedtype = (bedtype == :allbeds) ? :total : bedtype
 		forecast_dict = Dict((row.hospital_id, row.date) => (
 			admitted = row["admissions_$(forecast_bedtype)"],
+			admitted_lb = row["admissions_$(forecast_bedtype)_lb"],
+			admitted_ub = row["admissions_$(forecast_bedtype)_ub"],
 		) for row in eachrow(forecast))
 
 		hist_dict = Dict(k => (active = v["active_$(bedtype)"], admitted = v["admissions_$(bedtype)"]) for (k,v) in pairs(hhs_data_dict))
@@ -77,13 +80,15 @@ function package_main_data()
 		forecast_initial = hist_active[:,end]
 
 		forecast_admitted = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)].admitted : missing for h in hospital_ids, d in forecast_date_range]
-		forecast_active   = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
+		forecast_admitted_bds = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)][a] : missing for h in hospital_ids, d in forecast_date_range, a in [:admitted_lb, :admitted_ub]]
+		forecast_active = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
 
 		total(xs) = [sum(skipbad(xs[:,t])) for t in 1:size(xs,2)]
 		forecast_admitted_scalefactor = lastval(total(hist_admitted)) / firstval(total(forecast_admitted))
 		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
 
 		forecast_admitted .*= forecast_admitted_scalefactor
+		forecast_admitted_bds .*= forecast_admitted_scalefactor
 		forecast_active .*= forecast_active_scalefactor
 
 		active = Array{Union{Float64,Missing},2}(undef, N, T)
@@ -101,23 +106,36 @@ function package_main_data()
 		active = interpolate_missing(active)
 		admitted = interpolate_missing(admitted)
 
-		admitted_uncertainty = 0.1 .* admitted
+		admitted_bds = Array{Union{Float64,Missing},3}(undef, N, T, 2)
+		fill!(admitted_bds, missing)
+		admitted_bds[:,forecast_date_range_t,:] = forecast_admitted_bds
+		admitted_bds[:,hist_date_range_t,1] = hist_admitted
+		admitted_bds[:,hist_date_range_t,2] = hist_admitted
+		admitted_bds = interpolate_missing(admitted_bds)
 
-		beds = load_capacity(hospital_ids, bedtype, :baseline)
-		capacity = load_capacity(hospital_ids, bedtype, [:baseline,])
+		beds = load_capacity(hospital_ids, bedtype, :est, :baseline)
+		capacity = load_capacity(hospital_ids, bedtype, :est, [:baseline])
+		capacity_bds = load_capacity(hospital_ids, bedtype, [:lb,:ub], [:baseline])
 
-		data = (
-			scenario = scenario,
-			bedtype = bedtype,
+		capacity_names_full = ["Base Capacity"]
+		capacity_names_abbrev = ["baselinecap"]
+
+		data = (;
+			scenario,
+			bedtype,
 
 			los_dist = los_dist[bedtype],
 
-			active = active,
-			admitted = admitted,
-			admitted_uncertainty = admitted_uncertainty,
+			active,
+			admitted,
+			admitted_uncertainty = admitted_bds,
 
-			beds = beds,
-			capacity = capacity,
+			beds,
+			capacity,
+			capacity_uncertainty = capacity_bds,
+
+			capacity_names = capacity_names_full,
+			capacity_names_abbrev,
 		)
 
 		return data
@@ -162,12 +180,12 @@ function package_main_data()
 		for row in eachrow(hospital_positions_raw)
 	)
 
-	completedata = (
+	completedata = (;
 		location_ids = hospital_identifiers,
 		location_names = hospital_names,
 		location_meta = hospital_meta,
-		start_date = start_date,
-		end_date = end_date,
+		start_date,
+		end_date,
 		locations_latlong = hospital_positions,
 		casesdata = maindata,
 	)
