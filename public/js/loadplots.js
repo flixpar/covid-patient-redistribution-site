@@ -482,7 +482,7 @@ function makeLoadLabels(svg, yScale, maxY) {
 	return svg;
 }
 
-function extractLoadData(rawdata, capacityLevel=3) {
+function extractLoadData(rawdata, capacityLevel=0) {
 	const N = rawdata.capacity.length;
 	const T = rawdata.config.dates.length;
 
@@ -515,8 +515,7 @@ function extractLoadData(rawdata, capacityLevel=3) {
 	};
 }
 
-function extractOverallLoadData(rawdata, capacityLevel=3) {
-	const N = rawdata.beds.length;
+function extractOverallLoadData(rawdata, capacityLevel=0) {
 	const T = rawdata.config.dates.length;
 
 	let overall_load = [];
