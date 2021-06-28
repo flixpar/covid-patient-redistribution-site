@@ -1,5 +1,6 @@
 using CSV
 using Dates
+using Glob
 using Base.Threads
 using ProgressMeter
 using DataFrames
@@ -7,7 +8,7 @@ using DataFrames
 include("util.jl")
 
 
-function disaggregate_forecast(forecast_date="latest"; VERBOSE=false, DEBUG=false)
+function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:default, write_versioned=false, VERBOSE=false, DEBUG=false)
 
 	hosp_data_all = DataFrame(CSV.File("../data/hospitalization_data.csv"))
 	for col in [:admissions_icu, :admissions_acute, :admissions_allbeds, :active_icu, :active_acute, :active_allbeds]
@@ -26,9 +27,53 @@ function disaggregate_forecast(forecast_date="latest"; VERBOSE=false, DEBUG=fals
 	forecast = DataFrame(CSV.File(fn))
 
 	filter!(row -> contains(row.target, "inc case"), forecast)
-	filter!(row -> row.type == "point", forecast)
 	filter!(row -> row.location != "US", forecast)
 	forecast.location = parse.(Int, forecast.location)
+
+	forecast.weeks_out = map(s -> parse(Int, s[1]), forecast.target)
+	select!(forecast, Not(:target))
+
+	if uncertainty_version == :default
+
+		uncertainty_scale = [1.0, 1.0, 1.0, 1.0]
+
+		pct_lb, pct_ub = 0.25, 0.75
+		forecast.quantile = map(q -> (q == "NA") ? :point : parse(Float64, q), forecast.quantile)
+		filter!(row -> row.quantile == :point || row.quantile == pct_lb || row.quantile == pct_ub, forecast)
+		forecast.bound = map(q -> (q == :point) ? :est : (q == pct_lb) ? :lb : :ub, forecast.quantile)
+		select!(forecast, Not([:quantile, :type]))
+		forecast = unstack(forecast, :bound, :value)
+
+		forecast.lb = map(r -> r.est + ((r.lb - r.est) * uncertainty_scale[r.weeks_out]), eachrow(forecast))
+		forecast.ub = map(r -> r.est + ((r.ub - r.est) * uncertainty_scale[r.weeks_out]), eachrow(forecast))
+
+	elseif uncertainty_version == :alternate
+
+		quantiles = [(0.25, 0.75), (0.25, 0.75), (0.1, 0.9), (0.025, 0.975)]
+		forecast.quantile = map(q -> (q == "NA") ? :point : parse(Float64, q), forecast.quantile)
+		forecast.bound = map(eachrow(forecast)) do r
+			if r.quantile == :point
+				:est
+			elseif r.quantile == quantiles[r.weeks_out][1]
+				:lb
+			elseif r.quantile == quantiles[r.weeks_out][2]
+				:ub
+			else
+				:na
+			end
+		end
+		filter!(r -> r.bound != :na, forecast)
+		select!(forecast, Not([:quantile, :type, :weeks_out]))
+		forecast = unstack(forecast, :bound, :value)
+
+	else
+
+		filter!(row -> row.type == "point", forecast)
+		forecast.est = forecast.value
+		forecast.lb = forecast.value
+		forecast.ub = forecast.value
+
+	end
 
 	hosp_data = filter(row -> row.date <= forecast_date, hosp_data_all)
 	cases_data = filter(row -> row.date <= forecast_date, cases_data_all)
@@ -99,10 +144,18 @@ function disaggregate_forecast(forecast_date="latest"; VERBOSE=false, DEBUG=fals
 
 		dfs = DataFrame[]
 		for (i,hid) in enumerate(county_hosp_ids)
+			w_icu = scale_icu * hosp_weights_icu[i]
+			w_acute = scale_acute * hosp_weights_acute[i]
+
 			h_forecast = select(county_forecast,
 				:target_end_date => :date,
-				:value => ByRow(x -> x * scale_icu * hosp_weights_icu[i]) => :admissions_icu,
-				:value => ByRow(x -> x * scale_acute * hosp_weights_acute[i]) => :admissions_acute,
+				:weeks_out,
+				:est => ByRow(x -> x * w_icu) => :admissions_icu,
+				:est => ByRow(x -> x * w_acute) => :admissions_acute,
+				:lb => ByRow(x -> x * w_icu) => :admissions_icu_lb,
+				:lb => ByRow(x -> x * w_acute) => :admissions_acute_lb,
+				:ub => ByRow(x -> x * w_icu) => :admissions_icu_ub,
+				:ub => ByRow(x -> x * w_acute) => :admissions_acute_ub,
 			)
 			insertcols!(h_forecast, 1, :hospital_id => fill(hid, nrow(h_forecast)))
 
@@ -110,8 +163,13 @@ function disaggregate_forecast(forecast_date="latest"; VERBOSE=false, DEBUG=fals
 				(
 					hospital_id = hid,
 					date = day0,
-					admissions_icu = last_cases * scale_icu * hosp_weights_icu[i],
-					admissions_acute = last_cases * scale_acute * hosp_weights_acute[i],
+					weeks_out = 0,
+					admissions_icu = last_cases * w_icu,
+					admissions_acute = last_cases * w_acute,
+					admissions_icu_lb = last_cases * w_icu,
+					admissions_acute_lb = last_cases * w_acute,
+					admissions_icu_ub = last_cases * w_icu,
+					admissions_acute_ub = last_cases * w_acute,
 				)
 			)
 
@@ -149,8 +207,14 @@ function disaggregate_forecast(forecast_date="latest"; VERBOSE=false, DEBUG=fals
 	sort!(hospitalization_forecast, [:hospital_id, :date])
 
 	hospitalization_forecast.admissions_total = hospitalization_forecast.admissions_icu + hospitalization_forecast.admissions_acute
+	hospitalization_forecast.admissions_total_lb = hospitalization_forecast.admissions_icu_lb + hospitalization_forecast.admissions_acute_lb
+	hospitalization_forecast.admissions_total_ub = hospitalization_forecast.admissions_icu_ub + hospitalization_forecast.admissions_acute_ub
 
-	hospitalization_forecast |> CSV.write("../data/hospitalization_forecast.csv")
+	if write_versioned
+		hospitalization_forecast |> CSV.write("../data/forecasts/forecast-$(forecast_date).csv")
+	else
+		hospitalization_forecast |> CSV.write("../data/hospitalization_forecast.csv")
+	end
 
 	return
 end
@@ -182,5 +246,15 @@ function convert_cases()
 
 	data |> CSV.write("../rawdata/csse_confirmed_cases.csv")
 
+	return
+end
+
+function disaggregate_forecast_all()
+	fns = glob("../rawdata/forecasts/*.csv")
+	dates = [Date(basename(fn)[1:10]) for fn in fns]
+	sort!(dates, rev=true)
+	for d in dates
+		disaggregate_forecast(d, write_versioned=true)
+	end
 	return
 end
