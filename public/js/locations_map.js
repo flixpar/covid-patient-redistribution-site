@@ -34,7 +34,7 @@ export function createLocationsMap(response) {
 
 	geocoder.on("result", e => {
 		const loc = {lat: e.result.center[1], long: e.result.center[0]};
-		$.get("/api/hospital-selection", loc, g => {
+		$.getJSON("/api/hospital-selection", loc, g => {
 			map.getContainer().dispatchEvent(new Event("clearMarkers"));
 			addMarkers(map, g);
 			populateLocationsTable(g);

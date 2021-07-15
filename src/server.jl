@@ -2,8 +2,8 @@ using Genie
 using Genie.Router
 using Genie.Requests
 using Genie.Renderer
-using Genie.Renderer.Json
 
+using JSON
 using Dates
 
 push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
@@ -88,8 +88,9 @@ route("/api/patients", method=POST) do
 end
 
 route("/api/hospital-list", method=GET) do
-	if haskey(@params, :region_type) && haskey(@params, :region_id)
-		region = (region_type = Symbol(@params(:region_type)), region_id = @params(:region_id))
+	paramsdata = getpayload()
+	if haskey(paramsdata, :region_type) && haskey(paramsdata, :region_id)
+		region = (region_type = Symbol(paramsdata[:region_type]), region_id = paramsdata[:region_id])
 	else
 		region = nothing
 	end
@@ -98,19 +99,17 @@ route("/api/hospital-list", method=GET) do
 end
 
 route("/api/regions-list", method=GET) do
-	if haskey(@params, :region_type)
-		region_type = Symbol(@params(:region_type))
-	else
-		region_type = :any
-	end
+	paramsdata = getpayload()
+	region_type = Symbol(get(paramsdata, :region_type, :any))
 	response = get_regions_list(region_type)
 	return json(response)
 end
 
 route("/api/hospital-selection") do
-	if haskey(@params, :lat) && haskey(@params, :long)
-		loc = (lat = parse(Float64, @params(:lat)), long = parse(Float64, @params(:long)))
-	elseif haskey(@params, :zipcode)
+	paramsdata = getpayload()
+	if haskey(paramsdata, :lat) && haskey(paramsdata, :long)
+		loc = (lat = parse(Float64, paramsdata[:lat]), long = parse(Float64, paramsdata[:long]))
+	elseif haskey(paramsdata, :zipcode)
 		@warn "Query by zipcode not yet implemented"
 		loc = (lat = 39.2961773, long = -76.5939447) # JHH (temporary)
 	else

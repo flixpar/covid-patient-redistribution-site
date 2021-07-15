@@ -68,7 +68,7 @@ function getHospitals() {
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
 	};
-	let request = $.get("/api/hospital-list", data, d => {
+	let request = $.getJSON("/api/hospital-list", data, d => {
 		hospitals_meta_list = d;
 		common.createHospitalsSelect(d, false);
 	});
