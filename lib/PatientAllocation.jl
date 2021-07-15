@@ -21,6 +21,7 @@ function patient_redistribution(
 		obj::Symbol=:minoverflow,
 
 		adj_matrix::BitArray{2}=nothing,
+		cost_matrix::Array{<:Real,2}=nothing,
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
@@ -187,6 +188,7 @@ function patient_redistribution(
 	enforce_transferbudget!(model, sent, transfer_budget, total_transfer_budget)
 
 	add_sent_penalty!(model, sent, objective, sent_penalty)
+	add_cost_penalty!(model, sent, objective, cost_matrix)
 	add_smoothness_penalty!(model, sent, objective, smoothness_penalty)
 	add_active_smoothness_penalty!(model, sent, objective, active_smoothness_penalty, active_patients)
 	add_admitted_smoothness_penalty!(model, sent, objective, admitted_smoothness_penalty, admitted_patients)
@@ -344,6 +346,14 @@ end
 function add_sent_penalty!(model, sent, objective, sent_penalty)
 	if sent_penalty > 0
 		add_to_expression!(objective, sent_penalty*sum(sent))
+	end
+	return
+end
+
+# penalize costs between hospitals
+function add_cost_penalty!(model, sent, objective, cost_matrix)
+	if !isnothing(cost_matrix)
+		add_to_expression!(objective, sum(sum(sent, dims=3) .* cost_matrix))
 	end
 	return
 end

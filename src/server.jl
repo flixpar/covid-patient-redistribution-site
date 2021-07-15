@@ -67,6 +67,7 @@ route("/api/patients", method=POST) do
 
 	covid_capacity_proportion = haskey(input, "covid_capacity_proportion") ? parse(Float64, input["covid_capacity_proportion"]) : 0.4
 	dist_threshold = haskey(input, "dist_threshold") ? parse(Float64, input["dist_threshold"]) : 600.0
+	dist_cost = haskey(input, "dist_cost") ? parse(Float64, input["dist_cost"]) : 0.0
 
 	use_smoothness = haskey(input, "smoothness") ? (input["smoothness"] == "true") : true
 	verbose = haskey(input, "verbose") ? (input["verbose"] == "true") : false
@@ -77,7 +78,7 @@ route("/api/patients", method=POST) do
 		objective, constrain_integer,
 		transfer_budget, capacity_util,
 		covid_capacity_proportion,
-		dist_threshold,
+		dist_threshold, dist_cost,
 		uncertainty_level, los,
 		start_date, end_date,
 		smoothness=use_smoothness,

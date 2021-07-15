@@ -107,6 +107,7 @@ function sendUpdateQuery() {
 		utilization: $("#form-utilization")[0].value,
 		covid_capacity_proportion: ($("#form-covidcapacity")[0].value / 100).toString(),
 		dist_threshold: ($("#form-transferdistance")[0].value * 1.61).toString(),
+		dist_cost: $("#form-distancepenalty")[0].value,
 		uncertaintylevel: $("#form-uncertainty")[0].value,
 		los: $("#form-los")[0].value,
 		smoothness: use_smoothness,

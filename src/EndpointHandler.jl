@@ -30,6 +30,7 @@ function handle_patients_request(
 		capacity_util::Float64,
 		covid_capacity_proportion::Float64,
 		dist_threshold::Float64,
+		dist_cost::Float64,
 		uncertainty_level::Symbol,
 		los_param::String,
 
@@ -62,6 +63,11 @@ function handle_patients_request(
 
 	transfer_budget = fill(transfer_budget, N)
 
+	cost_matrix = data.dist_matrix
+	m1, m2 = extrema(cost_matrix)
+	z = dist_cost / (m2 - m1)
+	map!(x -> (x - m1) * z, cost_matrix, cost_matrix)
+
 	s = smoothness ? 1 : 0
 
 	model = patient_redistribution(
@@ -72,6 +78,7 @@ function handle_patients_request(
 		los_dist,
 		obj=objective,
 		adj_matrix=data.adj,
+		cost_matrix=cost_matrix,
 		sent_penalty=0.01,
 		smoothness_penalty=0.001*s,
 		active_smoothness_penalty=0.01*s,

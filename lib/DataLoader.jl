@@ -92,6 +92,7 @@ function load_hhs(
 		admitted,
 		beds,
 		capacity,
+		dist_matrix,
 		adj,
 		node_locations,
 		node_names = hospital_names,
