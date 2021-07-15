@@ -23,7 +23,7 @@ default_params = {
 	"transferbudget": "1000",
 	"utilization": "1.0",
 	"dist_threshold": "600",
-	"dist_cost": "0.03",
+	"dist_cost": "0.05",
 	"uncertaintylevel": "default",
 	"los": "regional_dist",
 	"start_date": start_date,
