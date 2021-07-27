@@ -47,6 +47,7 @@ route("/api/patients", method=POST) do
 	patient_type = str_to_symbol(input["patient_type"])
 	objective = str_to_symbol(input["objective"])
 	transfer_budget = parse(Float64, input["transferbudget"])
+	total_transfer_budget = parse(Float64, input["totaltransferbudget"])
 	capacity_util = parse(Float64, input["utilization"])
 	uncertainty_level = str_to_symbol(input["uncertaintylevel"])
 	los = input["los"]
@@ -76,7 +77,8 @@ route("/api/patients", method=POST) do
 		region, hospitals_list,
 		scenario, patient_type,
 		objective, constrain_integer,
-		transfer_budget, capacity_util,
+		transfer_budget, total_transfer_budget,
+		capacity_util,
 		covid_capacity_proportion,
 		dist_threshold, dist_cost,
 		uncertainty_level, los,

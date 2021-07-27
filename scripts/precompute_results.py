@@ -21,6 +21,7 @@ default_params = {
 	"objective": "minoverflow",
 	"integer": "false",
 	"transferbudget": "1000",
+	"totaltransferbudget": "100000",
 	"utilization": "1.0",
 	"dist_threshold": "600",
 	"dist_cost": "0.05",
