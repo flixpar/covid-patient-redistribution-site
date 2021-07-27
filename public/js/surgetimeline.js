@@ -26,11 +26,8 @@ export function createSurgeTimeline(response, add_description=true) {
 	const figOptions = addSurgeTimelineOptions(response);
 	section.appendChild(figOptions);
 
-	const fig = makeSurgeTimeline(response, true, false);
+	const fig = makeSurgeTimeline(response, true, true);
 	section.appendChild(fig);
-
-	fig.classList.add("figure");
-	fig.setAttribute("figure-name", "surgetimeline");
 }
 
 function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
@@ -82,7 +79,12 @@ function makeSurgeTimeline(response, addLabels=false, withTransfers=true) {
 
 	svg.append(() => tooltip.node);
 
-	return svg.node();
+	let node = svg.node();
+
+	node.classList.add("figure");
+	node.setAttribute("figure-name", "surgetimeline");
+
+	return node;
 }
 
 function makeSurgeTimelineLabels(svg, yScale, response) {
@@ -438,7 +440,7 @@ function addSurgeTimelineOptions(response) {
 		select.appendChild(opt);
 	}
 
-	select.children[1].selected = true;
+	select.children[0].selected = true;
 
 	select.addEventListener("change", e => {
 		e.preventDefault();
