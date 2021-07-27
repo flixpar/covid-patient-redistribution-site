@@ -165,25 +165,27 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	buttonsContainer.style.display = "block";
 	figureNode.parentElement.insertBefore(buttonsContainer, figureNode.nextSibling);
 
+	const figureId = figureNode.id;
+
 	let svgButton = document.createElement("button");
 	svgButton.textContent = "Download SVG";
 	svgButton.type = "button";
 	svgButton.className = "button is-light is-small";
-	svgButton.addEventListener("click", () => downloadFigureAsSVG(figureNode, figureName+".svg"))
+	svgButton.addEventListener("click", () => downloadFigureAsSVG(document.getElementById(figureId), figureName+".svg"))
 	buttonsContainer.appendChild(svgButton);
 
 	let pngButton = document.createElement("button");
 	pngButton.textContent = "Download PNG";
 	pngButton.type = "button";
 	pngButton.className = "button is-light is-small";
-	pngButton.addEventListener("click", () => downloadFigureAsPNG(figureNode, figureName+".png"))
+	pngButton.addEventListener("click", () => downloadFigureAsPNG(document.getElementById(figureId), figureName+".png"))
 	buttonsContainer.appendChild(pngButton);
 
 	let pdfButton = document.createElement("button");
 	pdfButton.textContent = "Download PDF";
 	pdfButton.type = "button";
 	pdfButton.className = "button is-light is-small";
-	pdfButton.addEventListener("click", () => downloadFigureAsPDF(figureNode, figureName+".pdf"))
+	pdfButton.addEventListener("click", () => downloadFigureAsPDF(document.getElementById(figureId), figureName+".pdf"))
 	buttonsContainer.appendChild(pdfButton);
 }
 
