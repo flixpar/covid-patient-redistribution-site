@@ -553,7 +553,7 @@ function getDateIntervals(dates) {
 		xInterval = d3.utcDay.every(3);
 	} else if (T < 21) {
 		xInterval = d3.utcDay.every(5);
-	} else if (T < 31) {
+	} else if (T < 45) {
 		xInterval = d3.utcWeek.every(1);
 	} else if (T < 60) {
 		xInterval = d3.utcWeek.every(2);
