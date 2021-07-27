@@ -126,10 +126,16 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 			.text(t => (t*100) + "%")
 		);
 
-	const dates = load[0].map(d => d.date);
-	const xInterval = getDateIntervals(dates);
 	const N = load.length;
 
+	let dates = [];
+	for (let i = 0; i < N; i++) {
+		dates = dates.concat(load[i].map(l => l.date));
+	}
+	dates = [...new Set(dates)]
+
+	const xInterval = getDateIntervals(dates);
+	
 	const x = d3.scaleUtc()
 		.domain(d3.extent(dates))
 		.range([0, loadPlotsWidth]);
@@ -187,6 +193,10 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("stroke", "red");
 
 	for (let i = 0; i < N; i++) {
+
+		if (load[i].length == 0) {
+			continue;
+		}
 
 		svg.append("path")
 			.datum(load[i])

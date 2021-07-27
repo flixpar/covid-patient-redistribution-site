@@ -163,7 +163,7 @@ function generateFigureDownloadButtons(figureNode, figureName) {
 	buttonsContainer.style.width = "100%";
 	buttonsContainer.style.textAlign = "center";
 	buttonsContainer.style.display = "block";
-	figureNode.parentElement.appendChild(buttonsContainer);
+	figureNode.parentElement.insertBefore(buttonsContainer, figureNode.nextSibling);
 
 	let svgButton = document.createElement("button");
 	svgButton.textContent = "Download SVG";
