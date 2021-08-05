@@ -36,6 +36,10 @@ route("/about") do
 	serve_static_file("html/about.html")
 end
 
+route("/guide") do
+	serve_static_file("html/guide.html")
+end
+
 route("/api/patients", method=POST) do
 	str_to_symbol(s) = Symbol(replace(lowercase(s), " " => "_"))
 
