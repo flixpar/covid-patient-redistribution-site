@@ -343,7 +343,7 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions(exclude=[]) {
-	const default_region = {state: "TN", hospital_system: "HSI00000730", hrr: "56", hsa: "33014"};
+	const default_region = {state: "CA", hospital_system: "HSI00000730", hrr: "279", hsa: "33014"};
 	const regiontype = document.getElementById("form-regiontype").value;
 	let request = $.getJSON("/api/regions-list", {region_type: regiontype}, regions => {
 		let region_select = document.getElementById("form-region");
