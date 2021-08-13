@@ -50,7 +50,7 @@
 
 		<div class="container">
 			<h4 class="title is-4">Dashboard Guide</h4>
-			<h5 class="subtitle is-5">How to use this site</h5>
+			<h5 class="subtitle is-5" style="color: #656565 !important;">How to use this site</h5>
 		</div>
 
 		<div class="container">
@@ -58,7 +58,46 @@
 			<br>
 			<p>This site is organized into a few pages. The <a href="/patients-static">Dashboard</a> page allows you to select a state and patient level-of-care, and see the impact transfers would have on hospitals state-wide. The <a href="/patients-interactive">Customize Results</a> page allows you to go deeper and modify the parameters to our optimal redistribution model, which runs in real-time to update the results. You can set parameters like a limit on the number of transfers that can be done, how far patients can be transferred, and what metric the model should try to optimize. You can also select the specific hospitals and date range you are interested in. The <a href="/hospital-selection">Nearby Hospitals</a> page shows you all of the hospitals near you and how much capacity they have left so you can make informed decisions on where to go to the hospital. Finally, the <a href="/about#about">About</a> page will give you more details about this project.</p>
 			<br>
-			<p>The <a href="/patients-static">Dashboard</a> and <a href="/patients-interactive">Customize Results</a> pages allow you to visualize and explore the toll that COVID is taking on hospitals as well as the potential benefits that patient transfers could have in many ways. Want to visualize the transfers we recommend and the load hospitals would face? Take a look at the map of COVID occupancy and transfers. Want to see how transfers help hospitals that will be over capacity? Check out the hospital-level COVID occupancy figure. Want to look into the empirical effect of COVID and transfers on the shortages at hospitals? Go to the metrics section.</p>				
+			<p>The <a href="/patients-static">Dashboard</a> and <a href="/patients-interactive">Customize Results</a> pages allow you to visualize and explore the toll that COVID is taking on hospitals as well as the potential benefits that patient transfers could have in many ways. Want to visualize the transfers we recommend and the load hospitals would face? Take a look at the map of COVID occupancy and transfers. Want to see how transfers help hospitals that will be over capacity? Check out the hospital-level COVID occupancy figure. Want to look into the empirical effect of COVID and transfers on the shortages at hospitals? Go to the metrics section.</p>
+			<br>
+			<p><b>Example: Las Vegas, NV</b><p>
+			<br>
+			<p>To demonstrate how this site can be used we are going to use the example of the Las Vegas, NV hospital system during the fourth wave of the pandemic. Specifically we are going to look at the 26 hospitals in the Las Vegas Hospital Referral Region that have ICU capacity from July 14, 2021 to August 15, 2021.</p>
+			<br>
+			<p>The figure below shows the overall load of the hospital system over that time period, normalized by its bed capacity, so that when the blue line is in the green region it is under capacity and when it is in the red region it is over capacity. The figure clearly shows that the system as a whole was well under capacity for the entire period.</p>
+			<br>
+			<img src="/guide-example/overallload.svg" class="guide-example-img">
+			<br>
+			<p>However, since patients don’t distribute themselves evenly between hospitals, just because the system as a whole was under capacity does not mean each hospital was under capacity. In fact, in this next figure we can see that some hospitals were well over capacity. Instead of plotting the overall load of the system, the figure below plots the load at each hospital in the system individually.</p>
+			<br>
+			<img src="/guide-example/notransfers-load-single-crop.svg" class="guide-example-img">
+			<img src="/guide-example/legend.png" class="guide-example-img">
+			<br>
+			<p>The large load imbalances that we see where some hospitals had to create lots of extra capacity while others were relatively empty suggests that patient transfers could have been very helpful. Since the system as a whole was under capacity, if transfers were done correctly, every hospital should have been able to be under capacity. The figure below compares the load at individual hospitals with and without optimal transfers. We can see that the load at every hospital could have been brought below capacity in a matter of just a few days.</p>
+			<br>
+			<img src="/guide-example/base-load.svg" class="guide-example-img">
+			<br>
+			<p>In addition to seeing the impact of transfers on hospitals in the system, our dashboard can show the transfers themselves. The figure below shows these transfers on an animated map. These figures, and the others that we display on the dashboard, can help you (or decision-makers in hospital systems) explore the transfers recommended by our optimization model and the potential impacts of those transfers.</p>
+			<br>
+			<video autoplay loop muted playsinline controls class="guide-example-vid">
+				<source src="/guide-example/base-map.mp4" type="video/mp4">
+			</video>
+			<br>
+			<p>Although we are calling the transfers recommended by our model “optimal” that is only with respect to the default constraints that our model tries to satisfy and the default objective that it tries to optimize. Different hospital systems will have different operational capabilities and constraints that they need to follow, and different hospital-system administrators will have different ideas about what the objective of transferring patients should be. Our dashboard therefore allows them, and you, to modify some of the constraints and objectives of our model and re-run it in real time to see how they would effect the recommended transfers and the impacts of those transfers.</p>
+			<br>
+			<p>The default objective of our model is to minimize the total surge capacity required – that is the number of patient-days of capacity that hospitals will need to add to accommodate all COVID-19 patients. This will try to get all hospitals that are over capacity back down to capacity. However, as you can see in the plot of hospital loads over time with transfers, even with transfers there can be a significant difference between loads at different hospitals. In many cases this is ok because at least all hospitals will be at or under capacity, but some systems may want to go further and ensure equality by balancing out the loads completely to ensuring that all hospitals face the same patient load. This can be beneficial to the care that patients receive, but also can require many more patient transfers. Our dashboard enables you to try out load balancing by going to the Objective option, and changing it from “Minimize Surge Capacity (Bed-Days)” to “Load Balance”. The loads at individual hospitals with load balancing are shown below. Note that this solution requires 199 patient transfers rather than just 88 patient transfers to minimize the required surge capacity.</p>
+			<br>
+			<img src="/guide-example/loadbalance-load-single.svg" class="guide-example-img">
+			<br>
+			<p>While patient transfers can be very beneficial for hospitals, most hospital systems are not accustomed to making many transfers and may have a variety of operational constraints around how many patients can be transferred and where they can be transferred. Our model can capture the full range of these constraints, and our dashboard allows you to modify some of them. For example, administrators in the hospital system may decide that they can only transfer 50 patients between hospitals during this time period. In that case, they can change the “Total Transfer Budget” to 50. Making fewer transfers will prevent the model from minimizing the required surge capacity as much as before, but the transfers will still help. The results of transferring just 50 patients can be seen in the figures below.</p>
+			<br>
+			<img src="/guide-example/tfr50-load-single.svg" class="guide-example-img">
+			<video autoplay loop muted playsinline controls class="guide-example-vid">
+				<source src="/guide-example/tfr50-map.mp4" type="video/mp4">
+			</video>
+			<br>
+			<p>We explored a few of the parameter choices and figures here, but the dashboard has 15 different options that can be changed and 6 kinds of figures, so we encourage you to try it out!</p>
+			<br>
 		</div>
 
 	</section>
