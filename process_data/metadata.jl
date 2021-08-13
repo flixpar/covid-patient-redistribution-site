@@ -92,6 +92,13 @@ function extract_dates_metadata()
 		JSON.print(f, dates, 4)
 	end
 
+	meta = JSON.parsefile("../public/json/metadata.json")
+	meta["dates"] = dates
+
+	open("../public/json/metadata.json", "w") do f
+		JSON.print(f, meta, 4)
+	end
+
 	return
 end
 

@@ -62,6 +62,8 @@
 		<div class="container">
 			<form id="form" class="form" autocomplete="off">
 
+				<input type="hidden" id="form-page" value="interactive">
+
 				<div class="field is-horizontal hidden">
 					<label class="label column is-one-third" for="form-level">Geographic Level</label>
 					<div class="select is-fullwidth">
@@ -77,7 +79,7 @@
 						<select id="form-regiontype">
 							<option value="state">State</option>
 							<option value="hospital_system">Hospital System</option>
-							<option value="hrr" selected>Hospital Referral Region (HRR)</option>
+							<option value="hrr">Hospital Referral Region (HRR)</option>
 							<option value="hsa">Hospital Service Area (HSA)</option>
 						</select>
 					</div>
@@ -87,7 +89,6 @@
 					<label class="label column is-one-third" for="form-region">Region</label>
 					<div class="select is-fullwidth">
 						<select id="form-region">
-							<option value="279">Las Vegas, NV</option>
 						</select>
 					</div>
 				</div>

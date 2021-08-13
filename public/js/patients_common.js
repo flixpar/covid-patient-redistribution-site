@@ -109,14 +109,29 @@ async function getDates() {
 	}
 }
 
-async function setDefaultDates() {
+async function getMetadata() {
+	if (getMetadata.meta == null) {
+		const meta = await (await fetch("/json/metadata.json")).json();
+		getMetadata.meta = meta;
+		return meta;
+	} else {
+		return getMetadata.meta;
+	}
+}
+
+async function setDefaults() {
 	let start_date = new Date();
-	getDates().then(dates => {
+	getMetadata().then(meta => {
 		document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
-		document.getElementById("form-end-date").value = dates.forecast_end;
+		document.getElementById("form-end-date").value = meta.dates.forecast_end;
+
+		const pagetype = document.getElementById("form-page").value;
+		const regiontype = (pagetype == "interactive") ? meta.location_defaults.region_type : "state";
+		document.getElementById("form-regiontype").value = regiontype;
+		document.getElementById("form-region").value = meta.location_defaults[regiontype];
 	});
 }
-setDefaultDates();
+setDefaults();
 
 function fillDataDates() {
 	for (let elem of document.querySelectorAll(".fill-value")) {
@@ -343,28 +358,30 @@ function createInfo(parentElement, content) {
 }
 
 function getRegions(exclude=[]) {
-	const default_region = {state: "CA", hospital_system: "HSI00000730", hrr: "279", hsa: "33014"};
-	const regiontype = document.getElementById("form-regiontype").value;
-	let request = $.getJSON("/api/regions-list", {region_type: regiontype}, regions => {
-		let region_select = document.getElementById("form-region");
-		region_select.innerHTML = "";
-		for (const region of regions) {
-			let opt = document.createElement("option");
-			opt.text = region.region_name;
-			opt.value = region.region_id;
-			if (region.region_id == default_region[regiontype]) {
-				opt.selected = true;
+	return getMetadata().then(meta => {
+		const regiontype = document.getElementById("form-regiontype").value;
+		const default_region = meta.location_defaults[regiontype];
+
+		return $.getJSON("/api/regions-list", {region_type: regiontype}, regions => {
+			let region_select = document.getElementById("form-region");
+			region_select.innerHTML = "";
+			for (const region of regions) {
+				let opt = document.createElement("option");
+				opt.text = region.region_name;
+				opt.value = region.region_id;
+				if (region.region_id == default_region) {
+					opt.selected = true;
+				}
+				if (exclude.indexOf(region.region_id) >= 0) {continue;}
+				region_select.appendChild(opt);
 			}
-			if (exclude.indexOf(region.region_id) >= 0) {continue;}
-			region_select.appendChild(opt);
-		}
+		});
 	});
-	return request;
 }
 
 function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 	const nDefaultSize = staticPage ? 50 : 10;
-	const nDefaultLoad = staticPage ?  8 :  2;
+	const nDefaultLoad = staticPage ? 16 :  5;
 	data = selectDefaultHospitals(data, nDefaultSize, nDefaultLoad);
 
 	let selectAreaField = document.getElementById("hospital-select-field");

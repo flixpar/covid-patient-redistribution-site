@@ -75,13 +75,13 @@ function getHospitals() {
 	return request;
 }
 
-common.getRegions();
-let getHospitalsRequest = getHospitals();
+let regionsRequest = common.getRegions();
+let getHospitalsRequest = regionsRequest.then(() => getHospitals());
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
 document.getElementById("form-regiontype").addEventListener("change", () => {
 	let req = common.getRegions();
-	req.done(() => getHospitals());
+	req.then(() => getHospitals());
 });
 
 function sendUpdateQuery() {
@@ -128,7 +128,7 @@ function sendUpdateQuery() {
 	});
 }
 
-getHospitalsRequest.done(() => {
+getHospitalsRequest.then(() => {
 	$("#form-submit").click(sendUpdateQuery);
 	sendUpdateQuery();
 });
