@@ -313,7 +313,6 @@ AVERA CREIGHTON HOSPITAL,Avera Creighton Hospital,281331,Nebraska,NE,Creighton,6
 AVERA DE SMET MEMORIAL HOSPITAL - CAH,Avera De Smet Memorial Hospital – CAH,431332,South Dakota,SD,De Smet,57231,46077,HSI00000068,Avera Health,43039,"Sioux Falls, SD",371,"Sioux Falls, SD"
 AVERA DELLS AREA HOSPITAL  - CAH,Avera Dells Area Hospital  – CAH,431331,South Dakota,SD,Dell Rapids,57022,46099,HSI00000068,Avera Health,43014,"Dell Rapids, SD",371,"Sioux Falls, SD"
 AVERA FLANDREAU HOSPITAL - CAH,Avera Flandreau Hospital – CAH,431310,South Dakota,SD,Flandreau,57028,46101,HSI00000068,Avera Health,43039,"Sioux Falls, SD",371,"Sioux Falls, SD"
-AVERA GETTYSBURG HOSPITAL,Avera Gettysburg Hospital,431302,South Dakota,SD,Gettysburg,57442,46107,HSI00000068,Avera Health,43020,"Gettysburg, SD",371,"Sioux Falls, SD"
 AVERA GRANITE FALLS,Avera Granite Falls,241343,Minnesota,MN,Granite Falls,56241,27173,,,24048,"Granite Falls, MN",251,"Minneapolis, MN"
 AVERA GREGORY HOSPITAL,Avera Gregory Hospital,431338,South Dakota,SD,Gregory,57533,46053,HSI00000068,Avera Health,43021,"Gregory, SD",371,"Sioux Falls, SD"
 AVERA HAND COUNTY MEMORIAL HOSPITAL AND CLINIC,Avera Hand County Memorial Hospital and Clinic,431337,South Dakota,SD,Miller,57362,46059,HSI00000068,Avera Health,43029,"Miller, SD",371,"Sioux Falls, SD"
@@ -322,6 +321,7 @@ AVERA HOLY FAMILY HOSPITAL,Avera Holy Family Hospital,161351,Iowa,IA,Estherville
 AVERA MARSHALL REGIONAL MEDICAL CTR,Avera Marshall Regional Medical Center,241359,Minnesota,MN,Marshall,56258,27083,HSI00000068,Avera Health,24073,"Marshall, MN",371,"Sioux Falls, SD"
 AVERA MCKENNAN HOSPITAL & UNIVERSITY HEALTH CENTER,Avera McKennan Hospital & University Health Center,430016,South Dakota,SD,Sioux Falls,57117,46099,HSI00000068,Avera Health,43039,"Sioux Falls, SD",371,"Sioux Falls, SD"
 AVERA MERRILL PIONEER HOSPITAL,Avera Merrill Pioneer Hospital,161321,Iowa,IA,Rock Rapids,51246,19119,HSI00000958,Sanford Health,43039,"Sioux Falls, SD",371,"Sioux Falls, SD"
+AVERA MISSOURI RIVER HEALTH CENTER,Avera Gettysburg Hospital,431302,South Dakota,SD,Gettysburg,57442,46107,HSI00000068,Avera Health,43020,"Gettysburg, SD",371,"Sioux Falls, SD"
 AVERA QUEEN OF PEACE,Avera Queen of Peace,430013,South Dakota,SD,Mitchell,57301,46035,HSI00000068,Avera Health,43030,"Mitchell, SD",371,"Sioux Falls, SD"
 AVERA SACRED HEART HOSPITAL,Avera Sacred Heart Hospital,430012,South Dakota,SD,Yankton,57078,46135,HSI00000068,Avera Health,43051,"Yankton, SD",371,"Sioux Falls, SD"
 AVERA ST ANTHONY'S HOSPITAL,Avera St. Anthony’s Hospital,281329,Nebraska,NE,O' Neill,68763,31089,HSI00000068,Avera Health,28053,"O'Neill, NE",278,"Omaha, NE"
@@ -1215,7 +1215,6 @@ DOCTORS HOSPITAL OF SARASOTA,Doctors Hospital of Sarasota,100166,Florida,FL,Sara
 DOCTORS MEDICAL CENTER,Doctors Medical Center,050464,California,CA,Modesto,95350,6099,HSI00001066,Tenet Healthcare Corporation,5141,"Modesto, CA",58,"Modesto, CA"
 DOCTORS MEMORIAL HOSPITAL,Doctors Memorial Hospital,101307,Florida,FL,Bonifay,32425,12059,,,1026,"Dothan, AL",2,"Dothan, AL"
 DOCTORS MEMORIAL HOSPITAL INC,Doctors’ Memorial Hospital ,100106,Florida,FL,Perry,32348,12123,HSI00001060,Tallahassee Memorial Healthcare,10119,"Tallahassee, FL",140,"Tallahassee, FL"
-DOCTORS'  COMMUNITY HOSPITAL,Doctors Community Hospital,210051,Maryland,MD,Lanham,20706,24033,,,21020,"Lanham, MD",226,"Takoma Park, MD"
 DOCTORS' CENTER HOSPITAL SAN JUAN,Doctors’ Center Hospital San Juan,400006,Puerto Rico,PR,Fernandez Juncos,909,72127,,,,,,
 "DOCTORS' CENTER HOSPITAL, INC","Doctors’ Center Hospital, Inc.",400118,Puerto Rico,PR,Manati,674,72091,,,,,,
 DODGE COUNTY HOSPITAL,Dodge County Hospital,110092,Georgia,GA,Eastman,31023,13091,,,11050,"Eastman, GA",147,"Macon, GA"
@@ -1697,6 +1696,7 @@ HAYWOOD REGIONAL MEDICAL CENTER,Haywood Regional Medical Center,340184,North Car
 HAZARD ARH REGIONAL MEDICAL CENTER,Hazard A.R.H. Regional Medical Center,180029,Kentucky,KY,Hazard,41701,21193,HSI00000041,Appalachian Regional Healthcare,18034,"Hazard, KY",204,"Lexington, KY"
 HAZEL HAWKINS MEMORIAL HOSPITAL,Hazel Hawkins Memorial Hospital,051337,California,CA,Hollister,95023,6069,,,5098,"Hollister, CA",82,"San Jose, CA"
 HCA FLORIDA KENDALL HOSPITAL,Kendall Regional Medical Center,100209,Florida,FL,Miami,33175,12086,HSI00000492,HCA Healthcare,10074,"Miami, FL",127,"Miami, FL"
+HCA FLORIDA WOODMONT HOSPITAL,University Hospital and Medical Center,100224,Florida,FL,Tamarac,33321,12011,HSI00000492,HCA Healthcare,10120,"Tamarac, FL",118,"Fort Lauderdale, FL"
 HCA HOUSTON HEALTHCARE CLEAR LAKE,HCA Houston Healthcare Clear Lake,450617,Texas,TX,Webster,77598,48201,HSI00000492,HCA Healthcare,45268,"Webster, TX",397,"Houston, TX"
 HCA HOUSTON HEALTHCARE CONROE,HCA Houston Healthcare Conroe,450222,Texas,TX,Conroe,77304,48339,HSI00000492,HCA Healthcare,45060,"Conroe, TX",397,"Houston, TX"
 HCA HOUSTON HEALTHCARE KINGWOOD,HCA Houston Healthcare Kingwood,450775,Texas,TX,Kingwood,77325,48201,HSI00000492,HCA Healthcare,45131,"Houston, TX",397,"Houston, TX"
@@ -1912,7 +1912,6 @@ HURON VALLEY-SINAI HOSPITAL,Huron Valley-Sinai Hospital,230277,Michigan,MI,Comme
 HUTCHINSON HEALTH,Hutchinson Health,240187,Minnesota,MN,Hutchinson,55350,27085,HSI00000464,HealthPartners,24056,"Hutchinson, MN",251,"Minneapolis, MN"
 HUTCHINSON REGIONAL MEDICAL CENTER INC,Hutchinson Regional Medical Center ,170020,Kansas,KS,Hutchinson,67502,20155,,,17052,"Hutchinson, KS",201,"Wichita, KS"
 HealthproMed,Healthpromed,ff9032c172057190bf52f523d253c79af2d5f74d007084e83bb0995c637403d1,Puerto Rico,PR,,775,,,,,,,
-HonorHealth Sonoran Emergency Center,Honorhealth Sonoran Emergency Center,75171dc6164bbf4edc0de7a03d2960f66b925c38d1d5546b60f330ccb0ed838f,Arizona,AZ,,,,,,,,,
 Hospital Industrial C.F.S.E,Hospital Industrial C.F.S.E,976b4ce7c95e1cd394112ce7762ed040f18a141e56a52ef9d3e5775ed9e98e1e,Puerto Rico,PR,San Juan,935,,,,,,,
 Hospital San Antonio,Hospital San Antonio,df2363988746840134806aa7b2accf9c89259601776986d49f0c579f6d84532e,Puerto Rico,PR,Mayagüez,680,,,,,,,
 Hospital for Sick Children Pediatric Center (AKA HSC Pediatric Center),Hospital for Sick Children Pediatric Center,09005E,District of Columbia,DC,Washington,20017,11001,,,9001,"Washington, DC",113,"Washington, DC"
@@ -2406,7 +2405,8 @@ LOYOLA UNIVERSITY MEDICAL CENTER,Loyola University Medical Center,140276,Illinoi
 LUBBOCK HEART HOSPITAL LP,Lubbock Heart Hospital LP,450876,Texas,TX,Lubbock,79416,48303,HSI00000081,Baptist Memorial Health Care Corporation,45168,"Lubbock, TX",400,"Lubbock, TX"
 LUCAS COUNTY HEALTH CENTER,Lucas County Health Center,161341,Iowa,IA,Chariton,50049,19117,HSI00001146,Unitypoint Health,16031,"Des Moines, IA",192,"Des Moines, IA"
 LUCILE SALTER PACKARD CHILDREN'S HSP AT STANFORD,Lucile Salter Packard Children’s Hospital Stanford,053305,California,CA,Palo Alto,94304,6085,HSI00001033,Stanford Health Care,5237,"Stanford, CA",85,"San Mateo County, CA"
-LUMINIS HEALTH ANNE ARUNDEL MEDICAL CENTER,Anne Arundel Medical Center,210023,Maryland,MD,Annapolis,21401,24003,HSI00000038,Anne Arundel Health System,21001,"Annapolis, MD",113,"Washington, DC"
+"LUMINIS HEALTH ANNE ARUNDEL MEDICAL CENTER, INC",Anne Arundel Medical Center,210023,Maryland,MD,Annapolis,21401,24003,HSI00000038,Anne Arundel Health System,21001,"Annapolis, MD",113,"Washington, DC"
+"LUMINIS HEALTH DOCTORS COMMUNITY MEDICAL CTR, INC",Doctors Community Hospital,210051,Maryland,MD,Lanham,20706,24033,,,21020,"Lanham, MD",226,"Takoma Park, MD"
 LUTHERAN HOSPITAL,Lutheran Hospital,360087,Ohio,OH,Cleveland,44113,39035,HSI00001078,The Cleveland Clinic Health System,36025,"Cleveland, OH",328,"Cleveland, OH"
 LUTHERAN HOSPITAL OF INDIANA,Lutheran Hospital of Indiana,150017,Indiana,IN,Fort Wayne,46804,18003,HSI00000249,Community Health Systems,15027,"Fort Wayne, IN",180,"Fort Wayne, IN"
 LUTHERAN MEDICAL CENTER,Lutheran Medical Center,060009,Colorado,CO,Wheat Ridge,80033,8059,HSI00000991,SCL Health,6053,"Wheat Ridge, CO",103,"Denver, CO"
@@ -2433,6 +2433,7 @@ MADISON ST JOSEPH HEALTH CENTER,Madison St. Joseph Health Center,451316,Texas,TX
 MADISON VALLEY MEDICAL CENTER,Madison Valley Medical Center,271329,Montana,MT,Ennis,59729,30057,,,27017,"Ennis, MT",274,"Billings, MT"
 MADONNA REHABILITATION SPECIALTY HOSPITAL LINCOLN,Madonna Rehabilitation Specialty Hospital Lincoln,282000,Nebraska,NE,Lincoln,68506,31109,,,28045,"Lincoln, NE",277,"Lincoln, NE"
 MADONNA REHABILITATION SPECIALTY HOSPITAL OMAHA,Madonna Rehabilitation Specialty Hospital Omaha,282003,Nebraska,NE,Omaha,68118,31055,,,28056,"Omaha, NE",278,"Omaha, NE"
+MADONNA REHABILITATION SPECIALTY HOSPITAL OMAHA,Madonna Rehabilitation Specialty Hospital Omaha,28TA03,Nebraska,NE,Omaha,68118,31055,,,28056,"Omaha, NE",278,"Omaha, NE"
 MAGEE GENERAL HOSPITAL,Magee General Hospital,250124,Mississippi,MS,Magee,39111,28127,,,25050,"Magee, MS",259,"Jackson, MS"
 MAGEE WOMENS HOSPITAL OF UPMC HEALTH SYSTEM,MaGee Womens Hospital - U.P.M.C. Health System,390114,Pennsylvania,PA,Pittsburgh,15213,42003,HSI00001126,UPMC,39098,"Pittsburgh, PA",357,"Pittsburgh, PA"
 MAGNOLIA REGIONAL HEALTH CENTER,Magnolia Regional Health Center,250009,Mississippi,MS,Corinth,38834,28003,,,25022,"Corinth, MS",379,"Memphis, TN"
@@ -3875,7 +3876,6 @@ SCRIPPS GREEN HOSPITAL,Scripps Green Hospital,050424,California,CA,La Jolla,9203
 SCRIPPS MEMORIAL HOSPITAL - ENCINITAS,Scripps Memorial Hospital Encinitas,050503,California,CA,Encinitas,92024,6073,HSI00000968,Scripps Health,5063,"Encinitas, CA",80,"San Diego, CA"
 SCRIPPS MEMORIAL HOSPITAL LA JOLLA,Scripps Memorial Hospital La Jolla,050324,California,CA,La Jolla,92037,6073,HSI00000968,Scripps Health,5108,"La Jolla, CA",80,"San Diego, CA"
 SCRIPPS MERCY HOSPITAL,Scripps Mercy Hospital,050077,California,CA,San Diego,92103,6073,HSI00000968,Scripps Health,5205,"San Diego, CA",80,"San Diego, CA"
-SE TEXAS ER & HOSPITAL,S.E. Texas E.R. & Hospital,452112,Texas,TX,Humble,77338,48201,,,45133,"Humble, TX",397,"Houston, TX"
 SEATTLE CANCER CARE ALLIANCE,Seattle Cancer Care Alliance,500138,Washington,WA,Seattle,98109,53033,,,50054,"Seattle, WA",439,"Seattle, WA"
 SEATTLE CHILDREN'S HOSPITAL,Seattle Children’s Hospital,503300,Washington,WA,Seattle,98105,53033,HSI00000969,Seattle Childrens Hospital Research and Foundation,50054,"Seattle, WA",439,"Seattle, WA"
 SEBASTIAN RIVER MEDICAL CENTER,Steward Sebastian River Medical Center,100217,Florida,FL,Sebastian,32978,12061,HSI00001037,Steward Health Care System,10108,"Sebastian, FL",130,"Orlando, FL"
@@ -4707,7 +4707,6 @@ UNIVERSITY COLO HEALTH MEMORIAL HOSPITAL CENTRAL,UCHealth Memorial Hospital Cent
 UNIVERSITY HEALTH SYSTEM,University Health System,450213,Texas,TX,San Antonio,78229,48029,HSI00000113,University Health System,45229,"San Antonio, TX",412,"San Antonio, TX"
 UNIVERSITY HOSPITAL,University Hospital,110028,Georgia,GA,Augusta,30901,13245,HSI00001151,University Health Care System,11008,"Augusta, GA",145,"Augusta, GA"
 UNIVERSITY HOSPITAL,University Hospital,310119,New Jersey,NJ,Newark,7103,34013,HSI00001154,University Hospital,31035,"Newark, NJ",289,"Newark, NJ"
-UNIVERSITY HOSPITAL AND MEDICAL CENTER,University Hospital and Medical Center,100224,Florida,FL,Tamarac,33321,12011,HSI00000492,HCA Healthcare,10120,"Tamarac, FL",118,"Fort Lauderdale, FL"
 UNIVERSITY HOSPITAL MCDUFFIE,University Hospital McDuffie,110111,Georgia,GA,Thomson,30824,13189,HSI00001151,University Health Care System,11116,"Thomson, GA",145,"Augusta, GA"
 UNIVERSITY HOSPITAL S U N Y HEALTH SCIENCE CENTER,University Hospital SUNY Health Science Center,330241,New York,NY,Syracuse,13210,36067,HSI00000904,SUNY Upstate Medical University,33125,"Syracuse, NY",307,"Syracuse, NY"
 UNIVERSITY HOSPITALS - ELYRIA MEDICAL CENTER,University Hospitals – Elyria Medical Center,360145,Ohio,OH,Elyria,44035,39093,HSI00001156,University Hospitals,36038,"Elyria, OH",331,"Elyria, OH"
@@ -5010,7 +5009,6 @@ WILLIAM W BACKUS HOSPITAL,William W. Backus Hospital,070024,Connecticut,CT,Norwi
 WILLIAMSBURG REGIONAL HOSPITAL,Williamsburg Regional Hospital,421303,South Carolina,SC,Kingstree,29556,45089,,,42029,"Kingstree, SC",367,"Florence, SC"
 WILLIAMSON MEDICAL CENTER,Williamson Medical Center,440029,Tennessee,TN,Franklin,37067,47187,,,44063,"Nashville, TN",380,"Nashville, TN"
 "WILLIS KNIGHTON MEDICAL CENTER, INC",Willis Knighton Medical Center,190111,Louisiana,LA,Shreveport,71103,22017,HSI00001263,Willis-Knighton Health System,19080,"Shreveport, LA",219,"Shreveport, LA"
-WILLIS-KNIGHTON MEDICAL CENTER,Willis-Knighton Medical Center,19T111,Louisiana,LA,Shreveport,71103,22017,,,19080,"Shreveport, LA",219,"Shreveport, LA"
 WILLS EYE HOSPITAL,Wills Eye Hospital,390331,Pennsylvania,PA,Philadelphia,19107,42101,,,39095,"Philadelphia, PA",356,"Philadelphia, PA"
 WILLS MEMORIAL HOSPITAL,Wills Memorial Hospital,111325,Georgia,GA,Washington,30673,13317,HSI00000064,Augusta University Medical Center,11125,"Washington, GA",145,"Augusta, GA"
 WILMINGTON TREATMENT CENTER,Wilmington Treatment Center,340168,North Carolina,NC,Wilmington,28401,37129,,,34097,"Wilmington, NC",319,"Wilmington, NC"
