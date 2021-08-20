@@ -80,7 +80,7 @@ function estimate_los()
 		)
 	end
 
-	bedtypes = [:icu, :acute, :allbeds]
+	bedtypes = [:icu, :acute, :combined]
 
 	data_total = Dict()
 	for bedtype in bedtypes

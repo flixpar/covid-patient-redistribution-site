@@ -11,7 +11,7 @@ include("util.jl")
 function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:default, write_versioned=false, VERBOSE=false, DEBUG=false)
 
 	hosp_data_all = DataFrame(CSV.File("../data/hospitalization_data.csv"))
-	for col in [:admissions_icu, :admissions_acute, :admissions_allbeds, :active_icu, :active_acute, :active_allbeds]
+	for col in [:admissions_icu, :admissions_acute, :admissions_combined, :active_icu, :active_acute, :active_combined]
 		hosp_data_all[:,col] = coalesce.(hosp_data_all[:,col], 0)
 	end
 

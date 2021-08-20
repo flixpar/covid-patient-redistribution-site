@@ -12,7 +12,7 @@ include("util.jl")
 
 function package_main_data()
 	SCENARIOS = [:moderate]
-	BEDTYPES  = [:allbeds, :icu, :acute]
+	BEDTYPES  = [:combined, :icu, :acute]
 
 	los_dist = deserialize(joinpath(@__DIR__, "../data/hhs_los_est.jlser"))
 	capacity_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
@@ -56,10 +56,10 @@ function package_main_data()
 	lastval(xs) = xs[findlast(isnbad, xs)]
 
 	function load_data_hhs(scenario, bedtype)
-		@assert(bedtype in [:icu, :acute, :allbeds])
+		@assert(bedtype in [:icu, :acute, :combined])
 		@assert(scenario in [:optimistic, :moderate, :pessimistic, :catastrophic])
 
-		forecast_bedtype = (bedtype == :allbeds) ? :total : bedtype
+		forecast_bedtype = (bedtype == :combined) ? :total : bedtype
 		forecast_dict = Dict((row.hospital_id, row.date) => (
 			admitted = row["admissions_$(forecast_bedtype)"],
 			admitted_lb = row["admissions_$(forecast_bedtype)_lb"],
@@ -314,7 +314,7 @@ function package_covid_load_data()
 	capacity_data = select(capacity_rawdata,
 		:hospital_id,
 		:capacity_icu => (x -> x .* 0.4) => :icu_beds,
-		:capacity_allbeds => (x -> x .* 0.4) => :total_beds,
+		:capacity_combined => (x -> x .* 0.4) => :total_beds,
 	)
 
 	data_latest = rightjoin(data_latest, capacity_data, on=:hospital_id)

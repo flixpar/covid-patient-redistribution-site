@@ -41,7 +41,7 @@ function load_hhs(
 	hospital_ind = filter_hospitals(data, region=region, ids=hospital_list)
 
 	if DEBUG
-		beds_ = data.casesdata[:moderate,:allbeds].capacity[hospital_ind,1]
+		beds_ = data.casesdata[:moderate,:combined].capacity[hospital_ind,1]
 		hospital_ind = hospital_ind[sortperm(beds_, rev=true)]
 		hospital_ind = hospital_ind[1:NDEDBUG]
 		hospital_ind = sort(hospital_ind)
@@ -54,7 +54,7 @@ function load_hhs(
 	hospital_names = data.location_names[hospital_ind]
 	hospital_abbrevs = data.location_names[hospital_ind]
 
-	bedtype = (patient_type == :all) ? :allbeds : patient_type
+	bedtype = (patient_type == :all) ? :combined : patient_type
 	casesdata = data.casesdata[scenario,bedtype]
 
 	start_date_idx = (start_date - data.start_date).value + 1
@@ -108,7 +108,7 @@ function los_dist_default(bedtype::Symbol)
 	if haskey(losdata, bedtype)
 		return losdata[bedtype]
 	else
-		return losdata[:allbeds]
+		return losdata[:combined]
 	end
 end
 
