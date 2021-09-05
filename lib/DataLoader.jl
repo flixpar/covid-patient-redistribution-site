@@ -32,7 +32,7 @@ function load_hhs(
 		dist_threshold::Real=600,
 	)
 	@assert(start_date < end_date)
-	@assert(patient_type in [:icu, :acute, :all])
+	@assert(patient_type in [:icu, :acute, :all, :combined_ped])
 
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 

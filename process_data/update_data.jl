@@ -15,7 +15,6 @@ forecast_updated = download_forecast_latest()
 
 if !hhs_updated && !forecast_updated
 	println("No new data.")
-	exit()
 end
 
 println("Converting HHS Data")

@@ -45,7 +45,7 @@ function handle_patients_request(
 	)
 	@info "Handle redistribution request for region: $(region.region_name), dates: $(start_date) to $(end_date)"
 
-	@assert patient_type in [:acute, :icu, :all]
+	@assert patient_type in [:acute, :icu, :combined, :combined_ped]
 
 	data = load_hhs(region, location_ids, scenario, patient_type, start_date, end_date, covid_capacity_proportion, dist_threshold)
 	default_capacity_level = 1

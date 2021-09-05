@@ -54,7 +54,7 @@ function estimate_los()
 
 		data_dict = Dict((row.hospital_id, row.date) => (
 				active = row["active_$(bedtype)"],
-				admissions = row["admissions_$(bedtype )"],
+				admissions = row["admissions_$(bedtype)"],
 			)
 			for row in eachrow(rawdata)
 		)
@@ -80,7 +80,7 @@ function estimate_los()
 		)
 	end
 
-	bedtypes = [:icu, :acute, :combined]
+	bedtypes = [:icu, :acute, :combined, :combined_ped]
 
 	data_total = Dict()
 	for bedtype in bedtypes

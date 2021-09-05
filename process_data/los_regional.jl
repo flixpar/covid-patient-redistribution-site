@@ -110,7 +110,7 @@ function estimate_los_regional()
 		return los_dist
 	end
 
-	bedtypes = [:icu, :acute, :combined]
+	bedtypes = [:icu, :acute, :combined, :combined_ped]
 	params = collect(Iterators.product(bedtypes, regions))[:]
 
 	p = Progress(length(params))

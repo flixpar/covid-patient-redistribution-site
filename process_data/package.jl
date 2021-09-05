@@ -12,7 +12,7 @@ include("util.jl")
 
 function package_main_data()
 	SCENARIOS = [:moderate]
-	BEDTYPES  = [:combined, :icu, :acute]
+	BEDTYPES  = [:combined, :icu, :acute, :combined_ped]
 
 	los_dist = deserialize(joinpath(@__DIR__, "../data/hhs_los_est.jlser"))
 	capacity_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
@@ -56,14 +56,12 @@ function package_main_data()
 	lastval(xs) = xs[findlast(isnbad, xs)]
 
 	function load_data_hhs(scenario, bedtype)
-		@assert(bedtype in [:icu, :acute, :combined])
 		@assert(scenario in [:optimistic, :moderate, :pessimistic, :catastrophic])
 
-		forecast_bedtype = (bedtype == :combined) ? :total : bedtype
 		forecast_dict = Dict((row.hospital_id, row.date) => (
-			admitted = row["admissions_$(forecast_bedtype)"],
-			admitted_lb = row["admissions_$(forecast_bedtype)_lb"],
-			admitted_ub = row["admissions_$(forecast_bedtype)_ub"],
+			admitted = row["admissions_$(bedtype)"],
+			admitted_lb = row["admissions_$(bedtype)_lb"],
+			admitted_ub = row["admissions_$(bedtype)_ub"],
 		) for row in eachrow(forecast))
 
 		hist_dict = Dict(k => (active = v["active_$(bedtype)"], admitted = v["admissions_$(bedtype)"]) for (k,v) in pairs(hhs_data_dict))
@@ -206,18 +204,18 @@ function package_load_data()
 	end
 	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
 
-	findmissing(x) = (ismissing(x) || x == -999999) ? missing : x
+	find_censored(x) = (ismissing(x) || x == -999999) ? missing : x
 
 	data_weekly = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
 		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
 
-		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(findmissing) => :total_beds,
-		:all_adult_hospital_inpatient_bed_occupied_7_day_avg => ByRow(findmissing) => :total_occupancy,
+		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(find_censored) => :total_beds,
+		:all_adult_hospital_inpatient_bed_occupied_7_day_avg => ByRow(find_censored) => :total_occupancy,
 
-		:total_staffed_adult_icu_beds_7_day_avg => ByRow(findmissing) => :icu_beds,
-		:staffed_adult_icu_bed_occupancy_7_day_avg => ByRow(findmissing) => :icu_occupancy,
+		:total_staffed_adult_icu_beds_7_day_avg => ByRow(find_censored) => :icu_beds,
+		:staffed_adult_icu_bed_occupancy_7_day_avg => ByRow(find_censored) => :icu_occupancy,
 	)
 	sort!(data_weekly, [:hospital, :hospital_id, :date])
 
@@ -285,15 +283,15 @@ function package_covid_load_data()
 	end
 	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
 
-	findmissing(x) = (ismissing(x) || x == -999999) ? missing : x
+	find_censored(x) = (ismissing(x) || x == -999999) ? missing : x
 
 	data_weekly = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
 		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
 
-		:total_adult_patients_hospitalized_confirmed_covid_7_day_avg => ByRow(findmissing) => :total_occupancy,
-		:staffed_icu_adult_patients_confirmed_covid_7_day_avg => ByRow(findmissing) => :icu_occupancy,
+		:total_adult_patients_hospitalized_confirmed_covid_7_day_avg => ByRow(find_censored) => :total_occupancy,
+		:staffed_icu_adult_patients_confirmed_covid_7_day_avg => ByRow(find_censored) => :icu_occupancy,
 	)
 	sort!(data_weekly, [:hospital, :hospital_id, :date])
 
@@ -314,7 +312,9 @@ function package_covid_load_data()
 	capacity_data = select(capacity_rawdata,
 		:hospital_id,
 		:capacity_icu => (x -> x .* 0.4) => :icu_beds,
+		:capacity_acute => (x -> x .* 0.4) => :acute_beds,
 		:capacity_combined => (x -> x .* 0.4) => :total_beds,
+		:capacity_combined_ped => (x -> x .* 0.4) => :ped_beds,
 	)
 
 	data_latest = rightjoin(data_latest, capacity_data, on=:hospital_id)
@@ -350,6 +350,8 @@ function package_covid_load_data()
 		:icu_beds,
 		:icu_occupancy,
 		:icu_load,
+		:acute_beds,
+		:ped_beds,
 	)
 
 	sort!(data_combined, [:hospital, :hospital_id])

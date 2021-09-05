@@ -10,8 +10,10 @@ include("util.jl")
 
 function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:default, write_versioned=false, VERBOSE=false, DEBUG=false)
 
+	forecast_cols = [:admissions_icu, :admissions_acute, :admissions_combined_ped]
+
 	hosp_data_all = DataFrame(CSV.File("../data/hospitalization_data.csv"))
-	for col in [:admissions_icu, :admissions_acute, :admissions_combined, :active_icu, :active_acute, :active_combined]
+	for col in forecast_cols
 		hosp_data_all[:,col] = coalesce.(hosp_data_all[:,col], 0)
 	end
 
@@ -82,8 +84,7 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 
 	total_hosp_recent = filter(row -> row.date in recent_dates, hosp_data)
 	total_hosp_recent = combine(groupby(total_hosp_recent, :hospital_id),
-		:admissions_icu => sum => :admissions_icu,
-		:admissions_acute => sum => :admissions_acute,
+		[col => sum => col for col in forecast_cols]...,
 	)
 	total_hosp_recent_dict = Dict(row.hospital_id => row for row in eachrow(total_hosp_recent))
 
@@ -116,25 +117,17 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 
 		county_hosp_ids = unique(hosp_metadata[county_hosp_ind, :hospital_id])
 
-		admissions_icu = [haskey(total_hosp_recent_dict,h) ? total_hosp_recent_dict[h].admissions_icu : 0 for h in county_hosp_ids]
-		admissions_acute = [haskey(total_hosp_recent_dict,h) ? total_hosp_recent_dict[h].admissions_acute : 0 for h in county_hosp_ids]
-
-		total_admissions_icu = sum(admissions_icu)
-		total_admissions_acute = sum(admissions_acute)
-
 		total_cases = max(1, total_cases_recent_dict[county])
 
-		scale_icu = total_admissions_icu / total_cases
-		scale_acute = total_admissions_acute / total_cases
+		hist = Dict(col => [haskey(total_hosp_recent_dict,h) ? total_hosp_recent_dict[h][col] : 0 for h in county_hosp_ids] for col in forecast_cols)
+		hist_total = Dict(col => sum(hist[col]) for col in forecast_cols)
+		scale = Dict(col => hist_total[col] / total_cases for col in forecast_cols)
 
-		hosp_weights_icu = admissions_icu ./ total_admissions_icu
-		hosp_weights_acute = admissions_acute ./ total_admissions_acute
-
-		z = sum(hosp_weights_icu)
-		map!(x -> (z==0.0 || isnan(x)) ? 0.0 : x/z, hosp_weights_icu, hosp_weights_icu)
-
-		z = sum(hosp_weights_acute)
-		map!(x -> (z==0.0 || isnan(x)) ? 0.0 : x/z, hosp_weights_acute, hosp_weights_acute)
+		hosp_weights = Dict(col => hist[col] .* (scale[col] / hist_total[col]) for col in forecast_cols)
+		for col in forecast_cols
+			z = sum(hosp_weights[col])
+			map!(x -> (z==0.0 || isnan(x)) ? 0.0 : x/z, hosp_weights[col], hosp_weights[col])
+		end
 
 		county_forecast = filter(row -> row.location == county, forecast)
 
@@ -144,34 +137,25 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 
 		dfs = DataFrame[]
 		for (i,hid) in enumerate(county_hosp_ids)
-			w_icu = scale_icu * hosp_weights_icu[i]
-			w_acute = scale_acute * hosp_weights_acute[i]
+			w = Dict(col => hosp_weights[col][i] for col in forecast_cols)
 
 			h_forecast = select(county_forecast,
 				:target_end_date => :date,
 				:weeks_out,
-				:est => ByRow(x -> x * w_icu) => :admissions_icu,
-				:est => ByRow(x -> x * w_acute) => :admissions_acute,
-				:lb => ByRow(x -> x * w_icu) => :admissions_icu_lb,
-				:lb => ByRow(x -> x * w_acute) => :admissions_acute_lb,
-				:ub => ByRow(x -> x * w_icu) => :admissions_icu_ub,
-				:ub => ByRow(x -> x * w_acute) => :admissions_acute_ub,
+				[:est => ByRow(x -> x * w[col]) => col for col in forecast_cols]...,
+				[:lb => ByRow(x -> x * w[col]) => "$(col)_lb" for col in forecast_cols]...,
+				[:ub => ByRow(x -> x * w[col]) => "$(col)_ub" for col in forecast_cols]...,
 			)
 			insertcols!(h_forecast, 1, :hospital_id => fill(hid, nrow(h_forecast)))
 
-			push!(h_forecast,
-				(
-					hospital_id = hid,
-					date = day0,
-					weeks_out = 0,
-					admissions_icu = last_cases * w_icu,
-					admissions_acute = last_cases * w_acute,
-					admissions_icu_lb = last_cases * w_icu,
-					admissions_acute_lb = last_cases * w_acute,
-					admissions_icu_ub = last_cases * w_icu,
-					admissions_acute_ub = last_cases * w_acute,
-				)
-			)
+			push!(h_forecast, Dict(
+				"hospital_id" => hid,
+				"date" => day0,
+				"weeks_out" => 0,
+				["$(col)" => last_cases * w[col] for col in forecast_cols]...,
+				["$(col)_lb" => last_cases * w[col] for col in forecast_cols]...,
+				["$(col)_ub" => last_cases * w[col] for col in forecast_cols]...,
+			))
 
 			push!(dfs, h_forecast)
 		end
@@ -206,9 +190,9 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 	hospitalization_forecast = vcat(h_forecasts...)
 	sort!(hospitalization_forecast, [:hospital_id, :date])
 
-	hospitalization_forecast.admissions_total = hospitalization_forecast.admissions_icu + hospitalization_forecast.admissions_acute
-	hospitalization_forecast.admissions_total_lb = hospitalization_forecast.admissions_icu_lb + hospitalization_forecast.admissions_acute_lb
-	hospitalization_forecast.admissions_total_ub = hospitalization_forecast.admissions_icu_ub + hospitalization_forecast.admissions_acute_ub
+	hospitalization_forecast.admissions_combined = hospitalization_forecast.admissions_icu + hospitalization_forecast.admissions_acute
+	hospitalization_forecast.admissions_combined_lb = hospitalization_forecast.admissions_icu_lb + hospitalization_forecast.admissions_acute_lb
+	hospitalization_forecast.admissions_combined_ub = hospitalization_forecast.admissions_icu_ub + hospitalization_forecast.admissions_acute_ub
 
 	if write_versioned
 		hospitalization_forecast |> CSV.write("../data/forecasts/forecast-$(forecast_date).csv")
