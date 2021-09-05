@@ -32,6 +32,10 @@ route("/hospital-selection") do
 	serve_static_file("html/hospital-selection.html")
 end
 
+route("/region-selection") do
+	serve_static_file("html/region-selection.html")
+end
+
 route("/about") do
 	serve_static_file("html/about.html")
 end
@@ -123,6 +127,24 @@ route("/api/hospital-selection") do
 		return
 	end
 	response = handle_hospital_selection(loc)
+	return json(response)
+end
+
+route("/api/region-selection") do
+	paramsdata = getpayload()
+	region_type = Symbol(get(paramsdata, :region_type, :state))
+	patient_type = Symbol(get(paramsdata, :patient_type, :combined))
+	if haskey(paramsdata, :date)
+		date = Date(paramsdata[:date])
+		response = handle_region_selection(region_type, patient_type, date)
+	elseif haskey(paramsdata, :start_date) && haskey(paramsdata, :end_date)
+		start_date = Date(paramsdata[:start_date])
+		end_date = Date(paramsdata[:end_date])
+		response = handle_region_selection(region_type, patient_type, start_date, end_date)
+	else
+		@error "Invalid params for region selection api"
+		return
+	end
 	return json(response)
 end
 

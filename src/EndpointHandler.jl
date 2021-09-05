@@ -10,6 +10,7 @@ using LinearAlgebra
 using DataLoader
 using PatientAllocation
 using HospitalSelection
+using RegionSelection
 import PatientAllocationResults
 
 export handle_patients_request
@@ -17,6 +18,7 @@ export get_hospital_list
 export get_regions_list
 export handle_hospital_selection
 export complete_region
+export handle_region_selection
 
 
 function handle_patients_request(
@@ -162,6 +164,14 @@ end
 function handle_hospital_selection(loc)
 	scores = score_hospitals(loc)
 	return scores
+end
+
+function handle_region_selection(region_type, patient_type, start_date, end_date)
+	regions_selection(region_type, patient_type, start_date, end_date)
+end
+
+function handle_region_selection(region_type, patient_type, date)
+	regions_selection(region_type, patient_type, date)
 end
 
 end;
