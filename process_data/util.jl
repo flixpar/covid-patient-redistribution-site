@@ -139,6 +139,7 @@ end
 
 function latest_hhs_rawdata_date()
 	paths = glob("../rawdata/hospitalization_data/COVID-19_Reported_Patient_Impact_and_Hospital_Capacity_by_Facility_*.csv")
+	if isempty(paths) return nothing end
 	dates = [basename(p)[end-13:end-4] for p in paths]
 	dates = [Date(d) for d in dates]
 	date = maximum(dates)
@@ -147,12 +148,14 @@ end
 
 function latest_hhs_rawdata_fn()
 	date = latest_hhs_rawdata_date()
+	if isnothing(date) return nothing end
 	fn = "../rawdata/hospitalization_data/COVID-19_Reported_Patient_Impact_and_Hospital_Capacity_by_Facility_$(date).csv"
 	return fn
 end
 
 function latest_forecast_date()
 	paths = glob("../rawdata/forecasts/*-COVIDhub-ensemble.csv")
+	if isempty(paths) return nothing end
 	date_strs = [basename(p)[1:10] for p in paths]
 	dates = [Date(d) for d in date_strs]
 	date = maximum(dates)

@@ -45,7 +45,7 @@ function download_forecast_latest(;DEBUG=false)
 	end
 
 	prev_date = latest_forecast_date()
-	if prev_date >= latest_date
+	if !isnothing(prev_date) && prev_date >= latest_date
 		return false
 	end
 
