@@ -46,7 +46,7 @@ function extract_metadata()
 	hospitalsystem_dict = Dict(row.ccn => (
 		hospital_name = row.hospital_name,
 		health_system_id = row.health_sys_id,
-		health_system_name = row.health_sys_name,
+		health_system_name = "$(row.health_sys_name) ($(row.health_sys_state))",
 	) for row in eachrow(hospitalsystem_rawdata))
 
 	data.system_id = [haskey(hospitalsystem_dict, h) ? hospitalsystem_dict[h].health_system_id : missing for h in data.hospital_id]
