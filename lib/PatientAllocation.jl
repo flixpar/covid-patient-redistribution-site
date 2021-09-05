@@ -21,7 +21,7 @@ function patient_redistribution(
 		obj::Symbol=:minoverflow,
 
 		adj_matrix::BitArray{2}=nothing,
-		cost_matrix::Array{<:Real,2}=nothing,
+		cost_matrix::Union{Array{<:Real,2},Nothing}=nothing,
 		capacity_cushion::Union{Real,Array{<:Real,1}}=0.0,
 		no_artificial_overflow::Bool=false, no_worse_overflow::Bool=false,
 		sent_penalty::Real=0, smoothness_penalty::Real=0,
