@@ -5,7 +5,8 @@ import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
 import {createTransfersSankey} from "./transfers_sankey.js";
 import {createActivePlot} from "./activeplot.js";
 import {createStatsSummary} from "./metrics.js";
-import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
+import {setupTable, setupTableFilter} from "./tables.js";
+import {setupDownloads, downloadObjectAsJSON} from "./downloads.js";
 
 export {getParams};
 
