@@ -8,8 +8,6 @@ import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter} from "./tables.js";
 import {setupDownloads, downloadObjectAsJSON} from "./downloads.js";
 
-export {getParams};
-
 let hospitals_meta_list = null;
 let recentResponse = null;
 
@@ -87,43 +85,8 @@ document.getElementById("form-regiontype").addEventListener("change", () => {
 	req.then(() => getHospitals());
 });
 
-function getParams() {
-	if (!common.validateForm()) {
-		return;
-	}
-
-	const selectedHospitalIds = Array.from(document.querySelectorAll(".hospitalselect-checkbox"))
-		.map(c => c.checked ? c.value : null)
-		.filter(x => x != null);
-	const use_smoothness = selectedHospitalIds < 32;
-
-	const params = {
-		alloclevel: $("#form-level")[0].value,
-		region_type: $("#form-regiontype")[0].value,
-		region_id: $("#form-region")[0].value,
-		hospitals: selectedHospitalIds,
-		scenario: $("#form-scenario")[0].value,
-		patient_type: $("#form-patient-type")[0].value,
-		objective: $("#form-objective")[0].value,
-		integer: $("#form-integer")[0].value,
-		transferbudget: $("#form-transferbudget")[0].value,
-		totaltransferbudget: $("#form-totaltransferbudget")[0].value,
-		utilization: $("#form-utilization")[0].value,
-		covid_capacity_proportion: ($("#form-covidcapacity")[0].value / 100).toString(),
-		dist_threshold: ($("#form-transferdistance")[0].value * 1.61).toString(),
-		dist_cost: $("#form-distancepenalty")[0].value,
-		uncertaintylevel: $("#form-uncertainty")[0].value,
-		los: $("#form-los")[0].value,
-		smoothness: use_smoothness,
-		start_date: $("#form-start-date")[0].value,
-		end_date: $("#form-end-date")[0].value,
-	};
-
-	return params;
-}
-
 function sendUpdateQuery() {
-	const data = getParams();
+	const data = common.getParams();
 	console.log("Querying server...");
 	$.ajax({
 		url: "/api/patients",
@@ -167,7 +130,7 @@ $("label").each((i, el) => {
 });
 
 document.getElementById("params-download-button").addEventListener("click", () => {
-	const params = getParams();
+	const params = common.getParams();
 	const data = {params: params};
 	downloadObjectAsJSON(data, "patient-redistribution-params.json");
 });
