@@ -7,6 +7,8 @@ import {createActivePlot} from "./activeplot.js";
 import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
 
+export {getParams};
+
 let hospitals_meta_list = null;
 let recentResponse = null;
 
@@ -84,7 +86,7 @@ document.getElementById("form-regiontype").addEventListener("change", () => {
 	req.then(() => getHospitals());
 });
 
-function sendUpdateQuery() {
+function getParams() {
 	if (!common.validateForm()) {
 		return;
 	}
@@ -94,7 +96,7 @@ function sendUpdateQuery() {
 		.filter(x => x != null);
 	const use_smoothness = selectedHospitalIds < 32;
 
-	const data = {
+	const params = {
 		alloclevel: $("#form-level")[0].value,
 		region_type: $("#form-regiontype")[0].value,
 		region_id: $("#form-region")[0].value,
@@ -114,7 +116,13 @@ function sendUpdateQuery() {
 		smoothness: use_smoothness,
 		start_date: $("#form-start-date")[0].value,
 		end_date: $("#form-end-date")[0].value,
-	}
+	};
+
+	return params;
+}
+
+function sendUpdateQuery() {
+	const data = getParams();
 	console.log("Querying server...");
 	$.ajax({
 		url: "/api/patients",
