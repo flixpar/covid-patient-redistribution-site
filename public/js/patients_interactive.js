@@ -165,3 +165,64 @@ $("label").each((i, el) => {
 		common.createInfo(el, tooltip_content[k]);
 	}
 });
+
+document.getElementById("params-download-button").addEventListener("click", () => {
+	const params = getParams();
+	const data = {params: params};
+	downloadObjectAsJSON(data, "patient-redistribution-params.json");
+});
+
+function setParams(params) {
+	document.getElementById("form-region").addEventListener("regionSelectUpdate", () => {
+		$("#form-region")[0].value = params.region_id;
+		$("#form-region")[0].dispatchEvent(new Event("change"));
+	}, {once: true});
+	let count = 0;
+	document.getElementById("hospital-select-field").addEventListener("hospitalListUpdate", () => {
+		if (count >= 2) {return;}
+		count += 1;
+		document.querySelectorAll(".hospitalselect-checkbox").forEach(c => {
+			if (params.hospitals.indexOf(c.value) >= 0) {
+				c.checked = true;
+			} else {
+				c.checked = false;
+			}
+			c.dispatchEvent(new Event("change"));
+		});
+	}, {once: false});
+
+	$("#form-level")[0].value = params.alloclevel;
+	$("#form-regiontype")[0].value = params.region_type;
+	$("#form-scenario")[0].value = params.scenario;
+	$("#form-patient-type")[0].value = params.patient_type;
+	$("#form-objective")[0].value = params.objective;
+	$("#form-integer")[0].value = params.integer;
+	$("#form-transferbudget")[0].value = params.transferbudget;
+	$("#form-totaltransferbudget")[0].value = params.totaltransferbudget;
+	$("#form-utilization")[0].value = params.utilization;
+	$("#form-covidcapacity")[0].value = params.covid_capacity_proportion * 100;
+	$("#form-transferdistance")[0].value = params.dist_threshold / 1.61;
+	$("#form-distancepenalty")[0].value = params.dist_cost;
+	$("#form-uncertainty")[0].value = params.uncertaintylevel;
+	$("#form-los")[0].value = params.los;
+	$("#form-start-date")[0].value = params.start_date;
+	$("#form-end-date")[0].value = params.end_date;
+
+	$("#form-regiontype")[0].dispatchEvent(new Event("change"));
+}
+
+document.getElementById("uploadElem").addEventListener("change", () => {
+	let fileInput = document.getElementById("uploadElem");
+	let file = fileInput.files[0];
+
+	file.text().then(text => {
+		const data = JSON.parse(text);
+
+		if (data.params != null) {
+			setParams(data.params);
+		}
+		if (data.response != null) {
+			handleResponse(data.response);
+		}
+	});
+});

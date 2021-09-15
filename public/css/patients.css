@@ -313,3 +313,34 @@ table.is-hoverable-custom > tr:hover {
 .pct-input:focus {
 	outline: none;
 }
+
+#params-download-button {
+	font-size: 1.5em;
+	height: 40px;
+	margin-left: 10px;
+	cursor: pointer;
+	color: gray;
+}
+
+#params-upload-button {
+	font-size: 1.5em;
+	height: 40px;
+	margin-left: 10px;
+	cursor: pointer;
+	color: gray;
+}
+
+.visually-hidden {
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+input.visually-hidden:focus + label {
+	outline: thin dotted;
+}
+input.visually-hidden:focus-within + label {
+	outline: thin dotted;
+}

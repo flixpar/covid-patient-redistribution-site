@@ -375,6 +375,7 @@ function getRegions(exclude=[]) {
 				if (exclude.indexOf(region.region_id) >= 0) {continue;}
 				region_select.appendChild(opt);
 			}
+			region_select.dispatchEvent(new Event("regionSelectUpdate"));
 		});
 	});
 }
@@ -598,6 +599,8 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 
 	footerAreaContainer.appendChild(buttonsContainer);
 	selectAreaContainer.appendChild(footerAreaContainer);
+
+	selectAreaField.dispatchEvent(new Event("hospitalListUpdate"));
 }
 
 function selectDefaultHospitals(hospitals, nSize=20, nLoad=4) {
