@@ -4,7 +4,8 @@ import {createSurgeTimeline} from "./surgetimeline.js";
 import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
 import {createTransfersSankey} from "./transfers_sankey.js";
 import {createStatsSummary} from "./metrics.js";
-import {setupTable, setupTableFilter, setupDownloads} from "./tables.js";
+import {setupTable, setupTableFilter} from "./tables.js";
+import {setupDownloads} from "./downloads.js";
 
 let recentResponse = null;
 
