@@ -166,12 +166,12 @@ function handle_hospital_selection(loc)
 	return scores
 end
 
-function handle_region_selection(region_type, patient_type, start_date, end_date)
-	regions_selection(region_type, patient_type, start_date, end_date)
+function handle_region_selection(region_type, patient_type, metric_type, start_date, end_date)
+	regions_selection(region_type, patient_type, metric_type, start_date, end_date)
 end
 
-function handle_region_selection(region_type, patient_type, date)
-	regions_selection(region_type, patient_type, date)
+function handle_region_selection(region_type, patient_type, metric_type, date)
+	regions_selection(region_type, patient_type, metric_type, date)
 end
 
 end;

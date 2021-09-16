@@ -2,7 +2,7 @@ let mainSection = document.getElementById("main-content-area");
 
 function createTable(table_data, cols) {
 
-	let currentSort = {sortBy: "overflow_total", sortDir: true};
+	let currentSort = {sortBy: "benefits", sortDir: true};
 
 	function rowCompare(a,b) {
 		if (currentSort.sortDir) {
@@ -156,10 +156,11 @@ function generateRegionTable(regionType) {
 		start_date: document.getElementById("form-start-date").value,
 		end_date: document.getElementById("form-end-date").value,
 		patient_type: document.getElementById("form-patienttype").value,
+		metric_type: document.getElementById("form-metrictype").value,
 	};
 
 	$.getJSON("/api/region-selection", requestData, response => {
-		let table = createTable(response, {region_name: "Region", overflow_total: "Total Shortage", overflow_ideal_total: "Optimal Shortage"});
+		let table = createTable(response, {region_name: "Region", overflow_total: "Total Shortage", overflow_ideal_total: "Optimal Shortage", benefits: "Reduction"});
 
 		const tableId = `table-${regionType}`;
 		if (document.getElementById(tableId) == null) {
@@ -195,4 +196,5 @@ $.getJSON("/json/metadata.json", metadata => {
 	document.getElementById("form-start-date").addEventListener("change", updateTables);
 	document.getElementById("form-end-date").addEventListener("change", updateTables);
 	document.getElementById("form-patienttype").addEventListener("change", updateTables);
+	document.getElementById("form-metrictype").addEventListener("change", updateTables);
 });
