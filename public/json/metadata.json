@@ -1,17 +1,17 @@
 {
     "location_defaults": {
-        "hrr": "127",
+        "state": "FL",
         "hospital_system": "HSI00000077",
         "region_type": "state",
         "hsa": "10074",
-        "state": "FL"
+        "hrr": "127"
     },
     "dates": {
-        "forecast_update": "2021-09-13",
-        "forecast_start": "2021-09-11",
-        "forecast_end": "2021-09-25",
-        "hhsdata_update": "2021-09-13",
-        "hhsdata_start": "2020-07-31",
-        "hhsdata_end": "2021-09-03"
+        "forecast_update": "2021-09-20",
+        "forecast_start": "2021-09-18",
+        "forecast_end": "2021-10-02",
+        "hhsdata_update": "2021-09-20",
+        "hhsdata_start": "2019-12-27",
+        "hhsdata_end": "2021-09-17"
     }
 }
