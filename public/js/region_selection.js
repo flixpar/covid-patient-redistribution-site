@@ -36,7 +36,11 @@ function createTable(table_data, cols) {
 				} else if (val == null) {
 					el.innerHTML = "NaN";
 				} else {
-					el.innerHTML = val.toFixed(0);
+					if (colId.indexOf("pct") > 0) {
+						el.innerHTML = (val * 100).toFixed(1) + "%";
+					} else {
+						el.innerHTML = val.toFixed(0);
+					}
 				}
 				row.appendChild(el);
 			}
@@ -160,7 +164,7 @@ function generateRegionTable(regionType) {
 	};
 
 	$.getJSON("/api/region-selection", requestData, response => {
-		let table = createTable(response, {region_name: "Region", overflow_total: "Total Shortage", overflow_ideal_total: "Optimal Shortage", benefits: "Reduction"});
+		let table = createTable(response, {region_name: "Region", overflow_total: "Total Shortage", overflow_ideal_total: "Optimal Shortage", benefits: "Reduction", benefits_pct: "Reduction %"});
 
 		const tableId = `table-${regionType}`;
 		if (document.getElementById(tableId) == null) {

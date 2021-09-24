@@ -55,7 +55,7 @@ function region_selection_metrics_beddays(cap, occ)
 	overflow_ideal_total = sum(max.(0, total_occ .- cap_total))
 
 	benefits = overflow_total - overflow_ideal_total
-	benefits_pct = benefits / sum(occ)
+	benefits_pct = (overflow_total == 0) ? 0 : benefits / sum(overflow_total)
 
 	return (;overflow_total, overflow_ideal_total, benefits, benefits_pct)
 end
@@ -68,7 +68,7 @@ function region_selection_metrics_beds(cap, occ)
 	overflow_ideal_total = maximum(max.(0, total_occ .- cap_total))
 
 	benefits = overflow_total - overflow_ideal_total
-	benefits_pct = benefits / cap_total
+	benefits_pct = (overflow_total == 0) ? 0 : benefits / overflow_total
 
 	return (;overflow_total, overflow_ideal_total, benefits, benefits_pct)
 end
