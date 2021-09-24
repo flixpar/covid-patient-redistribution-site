@@ -11,7 +11,7 @@ export regions_selection
 projectbasepath = joinpath(@__DIR__, "../")
 
 
-function regions_selection(region_type::Symbol, patient_type::Symbol, start_date::Date, end_date::Date)
+function regions_selection(region_type::Symbol, patient_type::Symbol, metrictype::Symbol, start_date::Date, end_date::Date)
 	regions_all = deserialize(joinpath(projectbasepath, "data/regions_hhs.jlser"))
 	regions = filter(r -> r.region_type == region_type, regions_all)
 
@@ -29,13 +29,15 @@ function regions_selection(region_type::Symbol, patient_type::Symbol, start_date
 		cap = data.casesdata[:moderate, patient_type].beds[hospital_inds] .* covid_capacity_prop
 		occ = data.casesdata[:moderate, patient_type].active[hospital_inds, start_date_idx:end_date_idx]
 
-		cap_total = sum(cap)
-		total_occ = sum(occ, dims=1)
+		if metrictype == :beddays
+			r = region_selection_metrics_beddays(cap, occ)
+		elseif metrictype == :beds
+			r = region_selection_metrics_beds(cap, occ)
+		else
+			error("Invalid metric type")
+		end
 
-		overflow_total = sum(max.(0, occ .- cap))
-		overflow_ideal_total = sum(max.(0, total_occ .- cap_total))
-
-		merge(region, (;overflow_total, overflow_ideal_total))
+		merge(region, r)
 	end
 
 	return results
@@ -43,6 +45,32 @@ end
 
 function regions_selection(region_type::Symbol, patient_type::Symbol, date::Date)
 	return regions_selection(region_type, patient_type, date, date)
+end
+
+function region_selection_metrics_beddays(cap, occ)
+	cap_total = sum(cap)
+	total_occ = sum(occ, dims=1)
+
+	overflow_total = sum(max.(0, occ .- cap))
+	overflow_ideal_total = sum(max.(0, total_occ .- cap_total))
+
+	benefits = overflow_total - overflow_ideal_total
+	benefits_pct = benefits / sum(occ)
+
+	return (;overflow_total, overflow_ideal_total, benefits, benefits_pct)
+end
+
+function region_selection_metrics_beds(cap, occ)
+	cap_total = sum(cap)
+	total_occ = sum(occ, dims=1)
+
+	overflow_total = sum(maximum(max.(0, occ .- cap), dims=2))
+	overflow_ideal_total = maximum(max.(0, total_occ .- cap_total))
+
+	benefits = overflow_total - overflow_ideal_total
+	benefits_pct = benefits / cap_total
+
+	return (;overflow_total, overflow_ideal_total, benefits, benefits_pct)
 end
 
 end
