@@ -187,13 +187,30 @@ function dateStr(d) {
 	return d.toISOString().slice(0, 10);
 }
 
+function addDays(d, t) {
+	let date = new Date(d);
+	date.setDate(d.getDate() + t);
+	return date;
+}
+
 $.getJSON("/json/metadata.json", metadata => {
-	const endDate = new Date(metadata.dates.hhsdata_end);
-	let startDate = new Date(endDate);
-	startDate.setDate(startDate.getDate() - 7);
+	const maxDate = new Date(metadata.dates.forecast_end);
+
+	let startDate = new Date();
+	let endDate = addDays(startDate, 7);
+
+	if (endDate > maxDate) {
+		endDate = maxDate;
+		startDate = addDays(maxDate, -7);
+	}
 
 	document.getElementById("form-start-date").value = dateStr(startDate);
 	document.getElementById("form-end-date").value = dateStr(endDate);
+
+	document.getElementById("form-start-date").min = metadata.dates.hhsdata_start;
+	document.getElementById("form-start-date").max = metadata.dates.forecast_end;
+	document.getElementById("form-end-date").min = metadata.dates.hhsdata_start;
+	document.getElementById("form-end-date").max = metadata.dates.forecast_end;
 
 	updateTables();
 
