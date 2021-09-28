@@ -154,7 +154,7 @@ function latest_hhs_rawdata_fn()
 end
 
 function latest_forecast_date()
-	paths = glob("../rawdata/forecasts/*-COVIDhub-ensemble.csv")
+	paths = glob("../rawdata/forecasts/*-COVIDhub-4_week_ensemble.csv")
 	if isempty(paths) return nothing end
 	date_strs = [basename(p)[1:10] for p in paths]
 	dates = [Date(d) for d in date_strs]

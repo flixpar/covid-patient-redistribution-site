@@ -29,8 +29,8 @@ end
 function download_forecast_latest(;DEBUG=false)
 	if DEBUG return true end
 
-	forecast_url(d) = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-processed/COVIDhub-ensemble/$(d)-COVIDhub-ensemble.csv"
-	forecast_path(d) = "../rawdata/forecasts/$(d)-COVIDhub-ensemble.csv"
+	forecast_url(d) = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-processed/COVIDhub-4_week_ensemble/$(d)-COVIDhub-4_week_ensemble.csv"
+	forecast_path(d) = "../rawdata/forecasts/$(d)-COVIDhub-4_week_ensemble.csv"
 
 	latest_date = Date(now())
 	tmp_path = ""
