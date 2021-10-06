@@ -4,6 +4,11 @@
 	margin-bottom: 50px;
 }
 
+.maparea {
+	max-width: 1000px;
+	margin: auto;
+}
+
 .section {
 	width: 94%;
 	margin: auto;

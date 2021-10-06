@@ -1,3 +1,6 @@
+import {createRegionChoropleth} from "./region_choropleths.js";
+
+
 let mainSection = document.getElementById("main-content-area");
 
 function createTable(table_data, cols) {
@@ -144,6 +147,11 @@ function createRegionTypeSection(regionType) {
 	titleElem.textContent = title;
 	section.appendChild(titleElem);
 
+	let mapArea = document.createElement("div");
+	mapArea.id = `maparea-${regionType}`;
+	mapArea.className = "maparea";
+	section.appendChild(mapArea);
+
 	let tableArea = document.createElement("div");
 	tableArea.id = `tablearea-${regionType}`;
 	tableArea.className = "table-area";
@@ -173,6 +181,10 @@ function generateRegionTable(regionType) {
 			document.getElementById(tableId).replaceWith(table);
 		}
 		table.id = tableId;
+
+		if (regionType == "hrr" || regionType == "hsa" || regionType == "state") {
+			createRegionChoropleth(regionType, response);
+		}
 	});
 }
 
