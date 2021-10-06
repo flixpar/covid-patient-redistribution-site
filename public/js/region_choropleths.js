@@ -209,3 +209,42 @@ function createRegionChoroplethOptions(fig, genFigure, defaultOption=1) {
 
 	return options;
 }
+
+function createSelect(optionNames, optionValues, defaultIdx, labelText, selectId) {
+	let selectContainer = document.createElement("div");
+	selectContainer.className = "field";
+
+	let selectLabel = document.createElement("label");
+	selectLabel.className = "label";
+	selectLabel.htmlFor = selectId;
+	selectLabel.textContent = labelText;
+	selectLabel.style.marginBottom = "0.2rem";
+	selectContainer.appendChild(selectLabel);
+
+	let selectControl = document.createElement("div");
+	selectControl.className = "control";
+	selectContainer.appendChild(selectControl);
+
+	let selectWrapper = document.createElement("div");
+	selectWrapper.className = "select is-fullwidth";
+	selectControl.appendChild(selectWrapper);
+
+	let select = document.createElement("select");
+	select.id = selectId;
+
+	let options = optionNames.map((txt,i) => {
+		let s = document.createElement("option");
+		s.value = optionValues[i];
+		s.text = txt;
+		select.appendChild(s);
+		return s;
+	});
+
+	if (defaultIdx != null) {
+		options[defaultIdx].selected = true;
+	}
+
+	selectWrapper.appendChild(select);
+
+	return selectContainer;
+}
