@@ -1,4 +1,3 @@
-import {createSelect} from "./patients_common.js";
 export {createRegionChoropleth};
 
 
