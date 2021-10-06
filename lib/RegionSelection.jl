@@ -54,6 +54,7 @@ function region_selection_metrics_beddays(cap, occ)
 	overflow_total = sum(max.(0, occ .- cap))
 	overflow_ideal_total = sum(max.(0, total_occ .- cap_total))
 
+	N, T = size(occ)
 	overflow_total_pct = overflow_total / (cap_total * T)
 	overflow_ideal_total_pct = overflow_ideal_total / (cap_total * T)
 
