@@ -53,22 +53,7 @@ function createTable(table_data, cols) {
 	}
 
 	let arrows = {};
-	function updateArrows() {
-		for (const c in arrows) {
-			if (c == currentSort.sortBy) {
-				if (currentSort.sortDir) {
-					arrows[c].up.classList.remove("arrow-light");
-					arrows[c].down.classList.add("arrow-light");
-				} else {
-					arrows[c].up.classList.add("arrow-light");
-					arrows[c].down.classList.remove("arrow-light");
-				}
-			} else {
-				arrows[c].up.classList.add("arrow-light");
-				arrows[c].down.classList.add("arrow-light");
-			}
-		}
-	}
+	let colheaders = {};
 
 	function updateSort(colId) {
 		if (currentSort.sortBy == colId) {
@@ -84,6 +69,25 @@ function createTable(table_data, cols) {
 		updateArrows();
 	}
 
+	function updateArrows() {
+		for (const c in arrows) {
+			if (c == currentSort.sortBy) {
+				if (currentSort.sortDir) {
+					arrows[c].up.classList.remove("arrow-light");
+					arrows[c].down.classList.add("arrow-light");
+				} else {
+					arrows[c].up.classList.add("arrow-light");
+					arrows[c].down.classList.remove("arrow-light");
+				}
+				colheaders[c].style.textDecoration = "underline";
+			} else {
+				arrows[c].up.classList.add("arrow-light");
+				arrows[c].down.classList.add("arrow-light");
+				colheaders[c].style.textDecoration = "none";
+			}
+		}
+	}
+
 	let header = document.createElement("tr");
 	for (const [colid, colname] of Object.entries(cols)) {
 		let el = document.createElement("th");
@@ -93,6 +97,7 @@ function createTable(table_data, cols) {
 		let elText = document.createElement("span");
 		elText.innerHTML = colname;
 		el.appendChild(elText);
+		colheaders[colid] = elText;
 
 		let arrowsContainer = document.createElement("span");
 		let upArrow = document.createElement("ion-icon");

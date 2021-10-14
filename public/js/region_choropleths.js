@@ -129,7 +129,7 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 	const path = d3.geoPath(d3.geoAlbersUsa());
 
 	const svg = d3.create("svg")
-		.attr("viewBox", [0, 0, 975, 540]);
+		.attr("viewBox", [0, 0, 975, 510]);
 
 	svg.append("g")
 		.selectAll("path")
@@ -161,7 +161,7 @@ function generateLegend(svg, colorscale, vals, metricName) {
 	const legend = svg.append("g")
 		.style("font-size", "0.8rem")
 		.style("font-family", "sans-serif")
-		.attr("transform", "translate(550,40)");
+		.attr("transform", "translate(540,30)");
 
 	legend.selectAll("rect")
 		.data(d3.range(legendMin, legendMax, (legendMax-legendMin)/200))
