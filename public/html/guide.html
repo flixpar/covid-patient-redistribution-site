@@ -100,5 +100,22 @@
 			<br>
 		</div>
 
+		<div class="container">
+			<h4 class="title is-4">Region Selection Guide</h4>
+			<p>Throughout the COVID-19 pandemic local surges have caused many hospitals across the US to reach or exceed their capacity, and with the ongoing spread of the virus we expect this to continue. Hospitals can cope with surges through a variety of methods, which typically involve opening up capacity, but these are often costly and can hurt the level of care that patients receive. A promising alternative method for reducing the burden on hospitals is to transfer patients from over-capacity hospitals to nearby hospitals that have available space. Patient transfers have been used throughout the pandemic, but generally they have been used reactively after hospitals had already run out of space and simply could not accept arriving patients. However, with proper planning using data and optimization we could use patient transfers proactively to relieve burden on hospitals. With this aim, we have developed models for optimizing patient transfers between hospitals and applied it to data and forecasts of the COVID-19 pandemic.</p>
+			<br>
+			<p>One crucial step in implementing optimal patient transfers in practice is determining where they are needed. In regions that are well under capacity patient transfers are not necessary (although they can still be useful to balance loads). Patient transfers are most helpful in regions where the difference between the predicted bed shortage with and without transfers is large. The effectiveness of transfers is determined by the overall load level of the system as well as how unevenly the load was distributed between individual hospitals.</p>
+			<br>
+			<p>In order to determine which regions could benefit most, we have developed a region selection dashboard which displays regions in the US along with their estimated total bed shortage with and without transfers. The table below shows an example of the tables on this dashboard.</p>
+			<br>
+			<img src="/guide-example/region-selection-table.png" class="guide-example-img">
+			<br><br>
+			<p>There are four different geographic scales that we consider: states, hospital referral regions (HRRs), hospital service areas (HSAs), and individual hospital systems. Hospital systems are groups of hospitals that are all run by the same company, which makes transfers between them easier as the financial considerations are less significant. Hospital systems may be spread out geographically though, so transferring between hospitals in a HSA, HRR, or state may make more sense in some cases.</p>
+			<br>
+			<p>There are a few other options on the dashboard. You can select the starting and ending dates of the analysis, the patient type, and the metric used. Patient type refers to the level of care that the patients included require. The metric option controls the unit for the shortage calculations, which can be bed shortage or bed-day shortage. The bed shortage is the number of beds that hospitals needed to add to care for all patients. The bed-day shortage is the number of bed-days of capacity that hospitals needed to add, which is relevant when also considering nurse and resource availability.</p>
+			<br>
+			<img src="/guide-example/region-selection-form.png" class="guide-example-img">
+		</div>
+
 	</section>
 </body>
