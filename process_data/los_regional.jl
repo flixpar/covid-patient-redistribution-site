@@ -19,6 +19,10 @@ function estimate_los_regional()
 	regions = deserialize("../data/regions_hhs.jlser")
 	push!(regions, (region_type = :country, region_name = "United States", region_id = "US"))
 
+	end_date = maximum(rawdata.date)
+	start_date = end_date - Month(6)
+	filter!(r -> start_date <= r.date <= end_date, rawdata)
+
 	function filter_hospitals(region)
 		if region.region_type == :country
 			return sort(filter(x -> !ismissing(x), unique(metadata.hospital_id)))

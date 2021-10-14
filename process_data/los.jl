@@ -15,6 +15,10 @@ include("util.jl")
 function estimate_los()
 	rawdata = DataFrame(CSV.File("../data/hospitalization_data.csv"))
 
+	end_date = maximum(rawdata.date)
+	start_date = end_date - Month(6)
+	filter!(r -> start_date <= r.date <= end_date, rawdata)
+
 	function estimate_los_single(data; time_limit=20.0)
 
 		function unpack_params(params)
