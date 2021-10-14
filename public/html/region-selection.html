@@ -89,11 +89,18 @@
 			</div>
 		</div>
 
-		<div class="container" id="content-area">
+		<div class="container" id="results-container">
+			<div id="progressbar-area" class="column is-10 is-offset-1">
+				<div class="notification">Updating...</div>
+				<progress class="progress is-small is-info" max="100"></progress>
+			</div>
+			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
+				<div class="notification is-danger">Error</div>
+			</div>
 			<div id="main-content-area"></div>
 		</div>
 
-		<div class="container" id="content-area">
+		<div class="container">
 			<p>Note: These results assume 30% of ICU beds and 50% of acute-care beds can be made available for COVID-19 patients, and that all transfers can be made regardless of distance or cost. For further details about our work, see the <a href="/about#about">About page</a>.</p>
 		</div>
 

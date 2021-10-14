@@ -172,20 +172,29 @@ function generateRegionTable(regionType) {
 		metric_type: document.getElementById("form-metrictype").value,
 	};
 
-	$.getJSON("/api/region-selection", requestData, response => {
-		let table = createTable(response, {region_name: "Region", overflow_total: "Total Shortage", overflow_ideal_total: "Optimal Shortage", benefits: "Reduction", benefits_pct: "Reduction %"});
+	$.ajax({
+		url: "/api/region-selection",
+		dataType: "json",
+		data: requestData,
+		beforeSend: common.showProgressbar,
+		error: common.showError,
+		success: response => {
+			common.hideProgressbar();
 
-		const tableId = `table-${regionType}`;
-		if (document.getElementById(tableId) == null) {
-			document.getElementById(`tablearea-${regionType}`).appendChild(table);
-		} else {
-			document.getElementById(tableId).replaceWith(table);
-		}
-		table.id = tableId;
-
-		if (regionType == "hrr" || regionType == "hsa" || regionType == "state") {
-			createRegionChoropleth(regionType, response);
-		}
+			let table = createTable(response, {region_name: "Region", overflow_total_pct: "Shortage %", overflow_total: "Shortage", overflow_ideal_total: "Optimal Shortage", benefits: "Reduction", benefits_pct: "Reduction %"});
+	
+			const tableId = `table-${regionType}`;
+			if (document.getElementById(tableId) == null) {
+				document.getElementById(`tablearea-${regionType}`).appendChild(table);
+			} else {
+				document.getElementById(tableId).replaceWith(table);
+			}
+			table.id = tableId;
+	
+			if (regionType == "hrr" || regionType == "hsa" || regionType == "state") {
+				createRegionChoropleth(regionType, response);
+			}
+		},
 	});
 }
 
