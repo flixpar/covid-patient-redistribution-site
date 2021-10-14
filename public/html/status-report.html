@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>COVID-19 Patient Redistribution</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/bulma@0.9.1/css/bulma.min.css">
+
+	<link rel="stylesheet" href="/css/nav.css">
+	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="/css/about.css">
+
+	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="/js/menu.js"></script>
+</head>
+
+<body>
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a href="/home" class="navbar-item">COVID-19 Capacity Management</a>
+			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbar-menu" class="navbar-menu">
+			<div id="navbar-main" class="navbar-start">
+				<a href="/patients-static" class="navbar-item is-tab">Dashboard</a>
+				<a href="/patients-interactive" class="navbar-item is-tab">Customize Results</a>
+				<a href="/hospital-selection" class="navbar-item is-tab">Nearby Hospitals</a>
+				<a href="/region-selection" class="navbar-item is-tab">Explore Regions</a>
+				<a href="/guide" class="navbar-item is-tab">Guide</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a href="/about#about" class="navbar-link">About</a>
+					<div class="navbar-dropdown">
+						<a href="/about#home" class="navbar-item">Overview</a>
+						<a href="/about#about" class="navbar-item">Read More</a>
+						<a href="/about#aboutus" class="navbar-item">About Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<section class="section">
+
+		<div class="container">
+			<h4 class="title is-4">Status Report</h4>
+			<h5 class="subtitle is-5" style="color: #656565 !important;">Which areas are facing surges?</h5>
+		</div>
+
+		<div class="container">
+			<div style="max-width: 1000px; margin: auto; margin-bottom: 20px;">
+				<img src="img/regionchoropleth-hrr.png">
+				<p style="text-align: center; color: #656565;">Estimated COVID-19 ICU capacity shortage by Hospital Referral Region over the next week as of 2021-10-14.</p>
+			</div>
+			<p>As of October 14th, 2021 the US is coming down from the previous wave. We estimate 19% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and 20% will exceed this capacity over the coming week. Some of the regions that are expected to have large shortages of ICU capacity for COVID-19 patients over the next two weeks are: Georgia, California, and Houston TX. Using optimal patient transfers we can reduce the COVID-19 ICU capacity shortages in Georgia by 76%, in California by 100%, and in Houston by 77%.</p>
+		</div>
+
+	</section>
+</body>

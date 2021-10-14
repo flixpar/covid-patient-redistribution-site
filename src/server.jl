@@ -36,6 +36,10 @@ route("/region-selection") do
 	serve_static_file("html/region-selection.html")
 end
 
+route("/status-report") do
+	serve_static_file("html/status-report.html")
+end
+
 route("/about") do
 	serve_static_file("html/about.html")
 end
