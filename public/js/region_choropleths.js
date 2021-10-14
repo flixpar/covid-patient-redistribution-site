@@ -1,4 +1,5 @@
 import {createSelect} from "./common.js";
+import {generateFigureDownloadButtons} from "./figure_downloads.js";
 export {createRegionChoropleth};
 
 
@@ -14,13 +15,17 @@ function createRegionChoropleth(regionType, response) {
 		choropleth = stateChoropleth(response);
 	}
 
-	choropleth.then(fig => {
+	choropleth.then(figContainer => {
 		if (document.getElementById(mapId) == null) {
-			document.getElementById(`maparea-${regionType}`).appendChild(fig);
+			document.getElementById(`maparea-${regionType}`).appendChild(figContainer);
 		} else {
-			document.getElementById(mapId).replaceWith(fig);
+			document.getElementById(mapId).replaceWith(figContainer);
 		}
-		fig.id = mapId;
+		figContainer.id = mapId;
+
+		let fig = figContainer.firstChild;
+		let buttonsContainer = generateFigureDownloadButtons(fig, `regionchoropleth-${regionType}`);
+		buttonsContainer.style.marginBottom = "0";
 	});
 }
 
@@ -49,6 +54,8 @@ function stateChoropleth(response) {
 		figWrapper.appendChild(fig);
 		figWrapper.appendChild(figOptions);
 
+		fig.id = "state-choropleth";
+
 		return figWrapper;
 	});
 }
@@ -71,6 +78,8 @@ function hrrChoropleth(response) {
 		let figWrapper = document.createElement("div");
 		figWrapper.appendChild(fig);
 		figWrapper.appendChild(figOptions);
+
+		fig.id = "hrr-choropleth";
 
 		return figWrapper;
 	});
@@ -101,6 +110,8 @@ function hsaChoropleth(response) {
 		let figWrapper = document.createElement("div");
 		figWrapper.appendChild(fig);
 		figWrapper.appendChild(figOptions);
+
+		fig.id = "hsa-choropleth";
 
 		return figWrapper;
 	});
@@ -203,6 +214,7 @@ function createRegionChoroplethOptions(fig, genFigure, defaultOption=1) {
 	sel.addEventListener("change", () => {
 		let newMetric = sel.value;
 		let newFig = genFigure(newMetric);
+		newFig.id = fig.id;
 		fig.replaceWith(newFig);
 		fig = newFig;
 	});
