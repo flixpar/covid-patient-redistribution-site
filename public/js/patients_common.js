@@ -1,18 +1,11 @@
+import * as common from "./common.js";
 export {
 	makeSection,
-	getSection,
-	createInfo,
 	getParams,
-	showProgressbar,
-	hideProgressbar,
-	ajaxErrorHandler,
 	validateForm,
-	generateFigureDownloadButtons,
-	generateAllFigureDownloadButtons,
 	getRegions,
 	createHospitalsSelect,
 	updateText,
-	toTitlecase,
 };
 
 import {enableHiddenTextButtons} from "./figure_text.js";
@@ -81,25 +74,6 @@ function makeSection(sectionInfo) {
 	document.getElementById("result-area").appendChild(sectionContainer);
 }
 
-function getSection(sectionID) {
-	sectionID = "section-" + sectionID;
-	return document.getElementById(sectionID);
-}
-
-function showProgressbar() {
-	$("#progressbar-area").show();
-}
-
-function hideProgressbar() {
-	$("#progressbar-area").hide();
-}
-
-function ajaxErrorHandler() {
-	$("#error-area").removeClass("is-hidden");
-	$("#progressbar-area").hide();
-	document.getElementById("result-area").innerHTML = "";
-}
-
 function getParams() {
 	if (!validateForm()) {
 		return;
@@ -135,29 +109,9 @@ function getParams() {
 	return params;
 }
 
-async function getDates() {
-	if (getDates.dates == null) {
-		const dates = await (await fetch("/json/dates.json")).json();
-		getDates.dates = dates;
-		return dates;
-	} else {
-		return getDates.dates;
-	}
-}
-
-async function getMetadata() {
-	if (getMetadata.meta == null) {
-		const meta = await (await fetch("/json/metadata.json")).json();
-		getMetadata.meta = meta;
-		return meta;
-	} else {
-		return getMetadata.meta;
-	}
-}
-
 async function setDefaults() {
 	let start_date = new Date();
-	getMetadata().then(meta => {
+	common.getMetadata().then(meta => {
 		document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
 		document.getElementById("form-end-date").value = meta.dates.forecast_end;
 
@@ -173,11 +127,11 @@ function fillDataDates() {
 	for (let elem of document.querySelectorAll(".fill-value")) {
 		const contentid = elem.dataset.contentid;
 		if (contentid == "hhsdata_update_date") {
-			getDates().then(d => {
+			common.getDates().then(d => {
 				elem.textContent = d.hhsdata_update;
 			});
 		} else if (contentid == "forecast_update_date") {
-			getDates().then(d => {
+			common.getDates().then(d => {
 				elem.textContent = d.forecast_update;
 			});
 		}
@@ -186,7 +140,7 @@ function fillDataDates() {
 fillDataDates();
 
 async function validateForm() {
-	const data_dates = await getDates();
+	const data_dates = await common.getDates();
 	const data_start_date = data_dates.hhsdata_start;
 	const data_end_date   = data_dates.forecast_end;
 
@@ -208,193 +162,8 @@ async function validateForm() {
 	return (dates_valid && nHospitalsAllowed);
 }
 
-function generateFigureDownloadButtons(figureNode, figureName) {
-	let buttonsContainer = document.createElement("div");
-	buttonsContainer.className = "buttons";
-	buttonsContainer.style.width = "100%";
-	buttonsContainer.style.textAlign = "center";
-	buttonsContainer.style.display = "block";
-	figureNode.parentElement.insertBefore(buttonsContainer, figureNode.nextSibling);
-
-	const figureId = figureNode.id;
-
-	let svgButton = document.createElement("button");
-	svgButton.textContent = "Download SVG";
-	svgButton.type = "button";
-	svgButton.className = "button is-light is-small";
-	svgButton.addEventListener("click", () => downloadFigureAsSVG(document.getElementById(figureId), figureName+".svg"))
-	buttonsContainer.appendChild(svgButton);
-
-	let pngButton = document.createElement("button");
-	pngButton.textContent = "Download PNG";
-	pngButton.type = "button";
-	pngButton.className = "button is-light is-small";
-	pngButton.addEventListener("click", () => downloadFigureAsPNG(document.getElementById(figureId), figureName+".png"))
-	buttonsContainer.appendChild(pngButton);
-
-	let pdfButton = document.createElement("button");
-	pdfButton.textContent = "Download PDF";
-	pdfButton.type = "button";
-	pdfButton.className = "button is-light is-small";
-	pdfButton.addEventListener("click", () => downloadFigureAsPDF(document.getElementById(figureId), figureName+".pdf"))
-	buttonsContainer.appendChild(pdfButton);
-}
-
-function generateAllFigureDownloadButtons() {
-	for (const fig of document.querySelectorAll(".figure")) {
-		const figName = fig.getAttribute("figure-name");
-		generateFigureDownloadButtons(fig, figName);
-	}
-}
-
-async function getSVGData(svg) {
-	let imgCvt = {};
-	for (const imgNode of svg.querySelectorAll("image")) {
-		const u = imgNode.href.baseVal;
-		if (imgCvt[u] == null) {
-			imgCvt[u] = await encodeImage(u);
-		}
-	}
-
-	let serializer = new XMLSerializer();
-	let source = serializer.serializeToString(svg);
-
-	for (const k in imgCvt) {
-		const v = imgCvt[k];
-		source = source.replaceAll(k, v);
-	}
-
-	if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-		source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-	}
-	if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
-		source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-	}
-	source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
-	const dataStr = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
-	return dataStr;
-}
-
-function encodeImage(imgURL) {
-	let canvas = document.createElement("canvas");
-	canvas.style.display = "none";
-	canvas.width = 1024;
-	canvas.height = 1024;
-	document.getElementById("results-container").appendChild(canvas);
-
-	let ctx = canvas.getContext("2d");
-
-	let img = new Image();
-	img.setAttribute('crossOrigin', 'anonymous');
-	img.src = imgURL;
-
-	let p = new Promise((resolve, reject) => {
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0);
-			const dataURL = canvas.toDataURL("image/png");
-			canvas.remove();
-			resolve(dataURL);
-		}
-	});
-	return p;
-}
-
-async function downloadFigureAsSVG(svg, fn) {
-	const dataStr = await getSVGData(svg);
-
-	let downloadAnchorNode = document.createElement("a");
-	downloadAnchorNode.setAttribute("href", dataStr);
-	downloadAnchorNode.setAttribute("download", fn);
-	document.body.appendChild(downloadAnchorNode);
-	downloadAnchorNode.click();
-	downloadAnchorNode.remove();
-}
-
-async function downloadFigureAsPNG(svg, fn) {
-	const scaleFactor = 3.0;
-	const width = svg.clientWidth;
-	const height = svg.clientHeight;
-	const canvas = new OffscreenCanvas(width*scaleFactor, height*scaleFactor);
-
-	let ctx = canvas.getContext("2d");
-
-	ctx.fillStyle = "white";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-	const dataStr = await getSVGData(svg);
-
-	let img = new Image();
-	img.src = dataStr;
-	img.onload = function() {
-		ctx.drawImage(img, 0, 0);
-
-		canvas.convertToBlob().then(blob => {
-			const pngUrl = URL.createObjectURL(blob);
-
-			let downloadAnchorNode = document.createElement("a");
-			downloadAnchorNode.setAttribute("href", pngUrl);
-			downloadAnchorNode.setAttribute("download", fn);
-			document.body.appendChild(downloadAnchorNode);
-			downloadAnchorNode.click();
-			downloadAnchorNode.remove();
-		});
-	}
-}
-
-async function downloadFigureAsPDF(figureNode, fn) {
-	let svg = figureNode.cloneNode(true);
-
-	let imgCvt = {};
-	for (const imgNode of svg.querySelectorAll("image")) {
-		const u = imgNode.href.baseVal;
-		if (imgCvt[u] == null) {
-			imgCvt[u] = await encodeImage(u);
-		}
-		imgNode.href.baseVal = imgCvt[u];
-		imgNode.href.animVal = imgCvt[u];
-	}
-
-	let doc = new PDFDocument({size: [figureNode.clientWidth, figureNode.clientHeight]});
-	SVGtoPDF(doc, svg, 0, 0, {});
-	doc.end();
-
-	const chunks = [];
-	const stream = doc.pipe({
-		write: (chunk) => chunks.push(chunk),
-		end: () => {
-			const pdfBlob = new Blob(chunks, {
-				type: 'application/octet-stream'
-			});
-			const blobUrl = URL.createObjectURL(pdfBlob);
-
-			let downloadAnchorNode = document.createElement("a");
-			downloadAnchorNode.setAttribute("href", blobUrl);
-			downloadAnchorNode.setAttribute("download", fn);
-			document.body.appendChild(downloadAnchorNode);
-			downloadAnchorNode.click();
-			downloadAnchorNode.remove();
-		},
-		on: (event, action) => {},
-		once: (...args) => {},
-		emit: (...args) => {},
-	});
-}
-
-function createInfo(parentElement, content) {
-	let el = document.createElement("img");
-	el.src = "img/info.svg";
-	el.className = "info-icon";
-	el.setAttribute("data-tippy-content", content);
-	if (parentElement != null) {
-		parentElement.appendChild(el);
-	}
-	tippy(el, {delay: [null, 250]});
-	return el;
-}
-
 function getRegions(exclude=[]) {
-	return getMetadata().then(meta => {
+	return common.getMetadata().then(meta => {
 		const regiontype = document.getElementById("form-regiontype").value;
 		const default_region = meta.location_defaults[regiontype];
 
@@ -436,7 +205,7 @@ function createHospitalsSelect(data, staticPage=true, includeLabel=true) {
 
 	if (includeLabel) {
 		selectAreaField.appendChild(selectAreaHeader);
-		createInfo(selectAreaHeader, tooltip_content["hospitalselect"]);
+		common.createInfo(selectAreaHeader, tooltip_content["hospitalselect"]);
 	}
 
 	let selectAreaContainer = document.createElement("div");
@@ -668,14 +437,12 @@ const tooltip_content = {
 	"hospitalselect": "Hospitals to be included in our analysis. Note that all hospitals are included in our model, but only those selected here are visualized.",
 };
 
-const toTitlecase = s => s.split(" ").map(w => w[0].toUpperCase() + w.substr(1)).join(" ");
-
 function updateText(response) {
 	enableHiddenTextButtons();
 
 	const isMobile = (window.innerWidth < 600);
 
-	const region = toTitlecase(response.config.region.region_name);
+	const region = common.toTitlecase(response.config.region.region_name);
 
 	document.querySelector(".results-section-header[data-target=section-results-totalload] .results-section-header-title").textContent = `COVID-19 Occupancy in ${region}`;
 	document.querySelector(".results-section-header[data-target=section-results-maps] .results-section-header-title").textContent = `Occupancy and Optimal Transfers in ${region}`;
@@ -712,7 +479,7 @@ function updateText(response) {
 
 	for (let elem of document.querySelectorAll(".info-text")) {
 		const text = elem.textContent;
-		const info = createInfo(null, text);
+		const info = common.createInfo(null, text);
 		elem.replaceWith(info);
 	}
 

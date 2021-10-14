@@ -32,7 +32,7 @@ let storedGeometry = null;
 
 import {generateHiddenText} from "./figure_text.js";
 import {getDateIntervals} from "./loadplots.js";
-import {toTitlecase} from "./patients_common.js";
+import {toTitlecase} from "./common.js";
 
 
 export function createMap(rawdata, metric, transfers="both", add_description=true) {

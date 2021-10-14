@@ -1,4 +1,4 @@
-import {getSection} from "./patients_common.js";
+import {getSection} from "./common.js";
 import {metricsDescription} from "./figure_text.js";
 
 export {createSurgeCapacityMetrics, createStatsSummary};

@@ -1,4 +1,5 @@
-import {getSection, getParams} from "./patients_common.js";
+import {getParams} from "./patients_common.js";
+import {getSection} from "./common.js";
 export {setupDownloads, downloadObjectAsJSON};
 
 

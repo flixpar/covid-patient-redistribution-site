@@ -1,3 +1,4 @@
+import * as common from "./common.js";
 import {createRegionChoropleth} from "./region_choropleths.js";
 
 
@@ -195,29 +196,19 @@ function updateTables() {
 	generateRegionTable("hospital_system");
 }
 
-function dateStr(d) {
-	return d.toISOString().slice(0, 10);
-}
-
-function addDays(d, t) {
-	let date = new Date(d);
-	date.setDate(d.getDate() + t);
-	return date;
-}
-
 $.getJSON("/json/metadata.json", metadata => {
 	const maxDate = new Date(metadata.dates.forecast_end);
 
 	let startDate = new Date();
-	let endDate = addDays(startDate, 7);
+	let endDate = common.addDays(startDate, 7);
 
 	if (endDate > maxDate) {
 		endDate = maxDate;
-		startDate = addDays(maxDate, -7);
+		startDate = common.addDays(maxDate, -7);
 	}
 
-	document.getElementById("form-start-date").value = dateStr(startDate);
-	document.getElementById("form-end-date").value = dateStr(endDate);
+	document.getElementById("form-start-date").value = common.dateStr(startDate);
+	document.getElementById("form-end-date").value = common.dateStr(endDate);
 
 	document.getElementById("form-start-date").min = metadata.dates.hhsdata_start;
 	document.getElementById("form-start-date").max = metadata.dates.forecast_end;

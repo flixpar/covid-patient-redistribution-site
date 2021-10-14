@@ -1,8 +1,6 @@
-import {getSection, createInfo} from "./patients_common.js";
+import {getSection, createInfo, toTitlecase} from "./common.js";
 export {setupTable, setupTableFilter};
 
-
-const toTitlecase = s => s.split(' ').map(w => w[0].toUpperCase() + w.substr(1)).join(' ');
 
 function setupTable(table_data, is_wide=false, table_id=null, title=null, replace=false) {
 

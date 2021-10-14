@@ -1,4 +1,5 @@
-import * as common from "./patients_common.js";
+import * as patientsCommon from "./patients_common.js";
+import * as common from "./common.js";
 import {createMap} from "./map_plots.js";
 import {createSurgeTimeline} from "./surgetimeline.js";
 import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
@@ -36,7 +37,7 @@ function generateContent(response) {
 
 	setupDownloads(response);
 
-	common.updateText(response);
+	patientsCommon.updateText(response);
 
 	console.log("Done.");
 }
@@ -54,7 +55,7 @@ const sectionInfo = [
 
 function makeSections() {
 	for (const s of sectionInfo) {
-		common.makeSection(s);
+		patientsCommon.makeSection(s);
 		let e = common.getSection(s.identifier);
 	}
 }
@@ -75,7 +76,7 @@ function getHospitals() {
 		region_id: $("#form-region")[0].value,
 	};
 	let request = $.getJSON("/api/hospital-list", data, d => {
-		common.createHospitalsSelect(d, true, false);
+		patientsCommon.createHospitalsSelect(d, true, false);
 		addUpdateButton();
 	});
 	return request;
@@ -85,7 +86,7 @@ function createParametersForm() {
 	let regionSelect = document.getElementById("form-region");
 	let patienttypeSelect = document.getElementById("form-patient-type");
 
-	let getRegionsRequest = common.getRegions();
+	let getRegionsRequest = patientsCommon.getRegions();
 	let getHospitalsRequest = getRegionsRequest.then(() => getHospitals());
 	getHospitalsRequest.then(() => sendUpdateQuery());
 
@@ -322,7 +323,7 @@ function filterResponse(response_) {
 }
 
 function filterHospitalSelect(response) {
-	common.createHospitalsSelect(response.config.nodes_meta, true, false);
+	patientsCommon.createHospitalsSelect(response.config.nodes_meta, true, false);
 	addUpdateButton();
 }
 
@@ -341,7 +342,7 @@ function sendUpdateQuery(latest=true) {
 		contentType: "application/json; charset=utf-8",
 		success: (r, ...x) => handleResponse(r, true),
 		beforeSend: common.showProgressbar,
-		error: common.ajaxErrorHandler,
+		error: common.showError,
 	});
 	return request;
 }

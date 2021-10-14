@@ -1,4 +1,5 @@
-import * as common from "./patients_common.js";
+import * as patientsCommon from "./patients_common.js";
+import * as common from "./common.js";
 import {createMap} from "./map_plots.js";
 import {createSurgeTimeline} from "./surgetimeline.js";
 import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
@@ -7,6 +8,7 @@ import {createActivePlot} from "./activeplot.js";
 import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter} from "./tables.js";
 import {setupDownloads, downloadObjectAsJSON} from "./downloads.js";
+import {generateAllFigureDownloadButtons} from "./figure_downloads.js";
 
 let hospitals_meta_list = null;
 let recentResponse = null;
@@ -40,8 +42,8 @@ function handleResponse(response, status, xhr) {
 
 	setupDownloads(response);
 
-	common.generateAllFigureDownloadButtons();
-	common.updateText(response);
+	generateAllFigureDownloadButtons();
+	patientsCommon.updateText(response);
 
 	console.log("Done.");
 }
@@ -60,7 +62,7 @@ function makeSections() {
 	]
 
 	for (const s of sectionInfo) {
-		common.makeSection(s)
+		patientsCommon.makeSection(s)
 	}
 }
 
@@ -71,22 +73,22 @@ function getHospitals() {
 	};
 	let request = $.getJSON("/api/hospital-list", data, d => {
 		hospitals_meta_list = d;
-		common.createHospitalsSelect(d, false);
+		patientsCommon.createHospitalsSelect(d, false);
 	});
 	return request;
 }
 
-let regionsRequest = common.getRegions();
+let regionsRequest = patientsCommon.getRegions();
 let getHospitalsRequest = regionsRequest.then(() => getHospitals());
 
 document.getElementById("form-region").addEventListener("change", () => getHospitals());
 document.getElementById("form-regiontype").addEventListener("change", () => {
-	let req = common.getRegions();
+	let req = patientsCommon.getRegions();
 	req.then(() => getHospitals());
 });
 
 function sendUpdateQuery() {
-	const data = common.getParams();
+	const data = patientsCommon.getParams();
 	console.log("Querying server...");
 	$.ajax({
 		url: "/api/patients",
@@ -96,7 +98,7 @@ function sendUpdateQuery() {
 		data: JSON.stringify(data),
 		success: handleResponse,
 		beforeSend: common.showProgressbar,
-		error: common.ajaxErrorHandler,
+		error: common.showError,
 	});
 }
 
@@ -130,7 +132,7 @@ $("label").each((i, el) => {
 });
 
 document.getElementById("params-download-button").addEventListener("click", () => {
-	const params = common.getParams();
+	const params = patientsCommon.getParams();
 	const data = {params: params};
 	downloadObjectAsJSON(data, "patient-redistribution-params.json");
 });
