@@ -1,10 +1,10 @@
 {
     "location_defaults": {
-        "state": "FL",
-        "hospital_system": "HSI00000077",
+        "state": "MT",
+        "hospital_system": "HSI00000531",
         "region_type": "state",
-        "hsa": "10074",
-        "hrr": "127"
+        "hsa": "27005",
+        "hrr": "274"
     },
     "dates": {
         "forecast_update": "2021-11-08",
