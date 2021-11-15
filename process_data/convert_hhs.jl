@@ -19,6 +19,10 @@ function convert_hhs_data(;icu_pct=0.3)
 	end
 	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
 
+	# manual corrections
+	rawdata[(rawdata.hospital_pk .== "140064") .& (rawdata.collection_week .> "2021/10/01"), :staffed_icu_adult_patients_confirmed_covid_7_day_sum] .= missing
+	rawdata[(rawdata.hospital_pk .== "140113") .& (rawdata.collection_week .> "2021/10/01"), :staffed_icu_adult_patients_confirmed_covid_7_day_sum] .= missing
+
 	fix_censored(x) = (ismissing(x) || x == -999999) ? missing : x
 	data_weekly = select(rawdata,
 		:hospital_name => :hospital,
