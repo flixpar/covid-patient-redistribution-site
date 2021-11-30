@@ -1,17 +1,17 @@
 {
     "location_defaults": {
-        "hrr": "274",
+        "state": "MT",
         "hospital_system": "HSI00000531",
         "region_type": "state",
         "hsa": "27005",
-        "state": "MT"
+        "hrr": "274"
     },
     "dates": {
-        "forecast_update": "2021-11-22",
-        "forecast_start": "2021-11-20",
-        "forecast_end": "2021-12-18",
-        "hhsdata_update": "2021-11-22",
+        "forecast_update": "2021-11-29",
+        "forecast_start": "2021-11-27",
+        "forecast_end": "2021-12-25",
+        "hhsdata_update": "2021-11-29",
         "hhsdata_start": "2020-07-31",
-        "hhsdata_end": "2021-11-12"
+        "hhsdata_end": "2021-11-19"
     }
 }
