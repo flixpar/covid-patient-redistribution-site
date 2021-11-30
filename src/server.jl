@@ -5,6 +5,7 @@ using Genie.Renderer
 
 using JSON
 using Dates
+using InlineStrings
 
 push!(LOAD_PATH, normpath(@__DIR__, "..", "src"));
 push!(LOAD_PATH, normpath(@__DIR__, "..", "lib"));

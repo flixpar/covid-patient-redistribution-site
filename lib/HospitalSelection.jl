@@ -2,6 +2,7 @@ module HospitalSelection
 
 using Serialization
 using DataFrames
+using CSV
 using Dates
 
 using DataLoader: haversine_distance

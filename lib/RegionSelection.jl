@@ -2,6 +2,7 @@ module RegionSelection
 
 using Serialization
 using DataFrames
+using CSV
 using Dates
 
 using DataLoader: filter_hospitals
