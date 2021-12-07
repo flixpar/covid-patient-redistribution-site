@@ -7,11 +7,11 @@
         "hrr": "274"
     },
     "dates": {
-        "forecast_update": "2021-11-29",
-        "forecast_start": "2021-11-27",
-        "forecast_end": "2021-12-25",
-        "hhsdata_update": "2021-11-29",
+        "forecast_update": "2021-12-06",
+        "forecast_start": "2021-12-04",
+        "forecast_end": "2022-01-01",
+        "hhsdata_update": "2021-12-06",
         "hhsdata_start": "2020-07-31",
-        "hhsdata_end": "2021-11-19"
+        "hhsdata_end": "2021-11-26"
     }
 }
