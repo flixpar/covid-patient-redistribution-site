@@ -1,8 +1,8 @@
 {
-    "forecast_update": "2021-12-06",
-    "forecast_start": "2021-12-04",
-    "forecast_end": "2022-01-01",
-    "hhsdata_update": "2021-12-06",
+    "forecast_update": "2021-12-13",
+    "forecast_start": "2021-12-11",
+    "forecast_end": "2022-01-08",
+    "hhsdata_update": "2021-12-13",
     "hhsdata_start": "2020-07-31",
-    "hhsdata_end": "2021-11-26"
+    "hhsdata_end": "2021-12-03"
 }
