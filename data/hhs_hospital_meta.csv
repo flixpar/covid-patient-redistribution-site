@@ -494,7 +494,7 @@ BELL HOSPITAL,Bell Hospital,231321,critical_access,MI,Michigan,Ishpeming,49849,2
 BELLA VISTA HOSPITAL,Bella Vista Hospital,400014,shortterm,PR,Puerto Rico,Mayaguez,681,72097,,,,,,
 BELLEVUE HOSPITAL,Bellevue Hospital,360107,shortterm,OH,Ohio,Bellevue,44811,39143,,missing (missing),36013,"Bellevue, OH",328,"Cleveland, OH"
 BELLEVUE HOSPITAL CENTER,Bellevue Hospital Center,330204,shortterm,NY,New York,New York,10016,36061,HSI00000730,New York City Health and Hospitals Corporation (NY),33080,"Manhattan, NY",303,"Manhattan, NY"
-BELLEVUE MEDICAL CENTER,Bellevue Medical Center,280132,shortterm,NE,Nebraska,Bellevue,68123,31153,HSI00001085,The Nebraska Medical Center (NE),28056,"Omaha, NE",278,"Omaha, NE"
+"BELLEVUE MEDICAL CENTER, LLC",Bellevue Medical Center,280132,shortterm,NE,Nebraska,Bellevue,68123,31153,HSI00001085,The Nebraska Medical Center (NE),28056,"Omaha, NE",278,"Omaha, NE"
 BELLIN HEALTH OCONTO HOSPITAL,Bellin Health Oconto Hospital,521356,critical_access,WI,Wisconsin,Oconto,54153,55083,HSI00000105,Bellin Health Systems (WI),52035,"Green Bay, WI",447,"Green Bay, WI"
 BELLIN MEMORIAL HOSPITAL,Bellin Memorial Hospital,520049,shortterm,WI,Wisconsin,Green Bay,54305,55009,HSI00000105,Bellin Health Systems (WI),52035,"Green Bay, WI",447,"Green Bay, WI"
 BELLVILLE ST JOSEPH HEALTH CENTER,Bellville St. Joseph Health Center,450253,shortterm,TX,Texas,Bellville,77418,48015,HSI00000183,Catholic Health Initiatives (CO),45024,"Bellville, TX",397,"Houston, TX"
@@ -2202,7 +2202,6 @@ KPC PROMISE HOSPITAL OF VICKSBURG,K.P.C. Promise Hospital of Vicksburg,252008,lo
 KPC PROMISE HOSPITAL OF WICHITA FALLS LLC,KPC Promise Hospital of Wichita Falls L.L.C.,452068,longterm,TX,Texas,Wichita Falls,76301,48485,,missing (missing),45276,"Wichita Falls, TX",420,"Wichita Falls, TX"
 KUAKINI MEDICAL CENTER,Kuakini Medical Center,120007,shortterm,HI,Hawaii,Honolulu,96817,15003,HSI00000554,Kuakini Health System (HI),12003,"Honolulu, HI",150,"Honolulu, HI"
 KULA HOSPITAL,Kula Hospital,121308,critical_access,HI,Hawaii,Kula,96790,15009,HSI00000536,Kaiser Permanente (CA),12013,"Wailuku, HI",150,"Honolulu, HI"
-Kaiser Permanente - San Diego Medical Center,Kaiser Permanente - San Diego Medical Center,02d4a73785e74f88490f05c473b39d9054e5cb4e2ddbcb2b85b64d2502d69e01,shortterm,CA,California,San Diego,92123,6073,,,5205,"San Diego, CA",80,"San Diego, CA"
 "L A DOWNTOWN MEDICAL CENTER, LLC",L.A. Downtown Medical Center,050763,shortterm,CA,California,Los Angeles,90026,6037,HSI00001042,Success Healthcare (FL),5126,"Los Angeles, CA",56,"Los Angeles, CA"
 LA PALMA INTERCOMMUNITY HOSPITAL,La Palma Intercommunity Hospital,050580,shortterm,CA,California,La Palma,90623,6059,HSI00000845,Prime Healthcare Services (CA),5004,"Anaheim, CA",23,"Orange County, CA"
 LA PAZ REGIONAL HOSPITAL,La Paz Regional Hospital,031317,critical_access,AZ,Arizona,Parker,85344,4012,,missing (missing),3020,"Parker, AZ",12,"Phoenix, AZ"
@@ -2285,7 +2284,6 @@ LAWRENCE COUNTY MEMORIAL HOSPITAL,Lawrence County Memorial Hospital,141344,criti
 LAWRENCE GENERAL HOSPITAL,Lawrence General Hospital,220010,shortterm,MA,Massachusetts,Lawrence,1842,25009,,missing (missing),22025,"Lawrence, MA",227,"Boston, MA"
 LAWRENCE MEDICAL CENTER,Lawrence Medical Center,010059,shortterm,AL,Alabama,Moulton,35650,1079,HSI00000467,Huntsville Hospital Health System (AL),1060,"Moulton, AL",1,"Birmingham, AL"
 LAWRENCE MEMORIAL HOSPITAL,Lawrence Memorial Hospital,041309,critical_access,AR,Arkansas,Walnut Ridge,72476,5075,,missing (missing),4039,"Jonesboro, AR",18,"Jonesboro, AR"
-LAWRENCE MEMORIAL HOSPITAL,Lawrence Memorial Hospital,170137,shortterm,KS,Kansas,Lawrence,66044,20045,,missing (missing),17064,"Lawrence, KS",268,"Kansas City, MO"
 LAYTON HOSPITAL,Layton Hospital,460061,shortterm,UT,Utah,Layton,84041,49011,,,46011,"Layton, UT",421,"Ogden, UT"
 LBJ TROPICAL MEDICAL CENTER,Lbj Tropical Medical Center,640001,shortterm,AS,AS,Pago Pago,96799,,,,,,,
 LDS HOSPITAL,L.D.S. Hospital,460006,shortterm,UT,Utah,Salt Lake City,84143,49035,HSI00000516,Intermountain Healthcare (UT),46028,"Salt Lake City, UT",423,"Salt Lake City, UT"
@@ -2352,6 +2350,7 @@ LITTLETON REGIONAL HEALTHCARE,Littleton Regional Healthcare,301302,critical_acce
 LIVINGSTON HEALTHCARE,Livingston Healthcare,271317,critical_access,MT,Montana,Livingston,59047,30067,HSI00000114,Billings Clinic (MT),27031,"Livingston, MT",274,"Billings, MT"
 "LIVINGSTON HOSPITAL AND HEALTHCARE SERVICES, INC",Livingston Hospital and Healthcare Services,181320,critical_access,KY,Kentucky,Salem,42078,21139,HSI00000771,Norton Healthcare (KY),18052,"Marion, KY",208,"Paducah, KY"
 LIVINGSTON REGIONAL HOSPITAL,Livingston Regional Hospital,440187,shortterm,TN,Tennessee,Livingston,38570,47133,HSI00000584,Lifepoint Health (TN),44051,"Livingston, TN",380,"Nashville, TN"
+LMH,Lawrence Memorial Hospital,170137,shortterm,KS,Kansas,Lawrence,66044,20045,,missing (missing),17064,"Lawrence, KS",268,"Kansas City, MO"
 LODI COMMUNITY HOSPITAL,Lodi Community Hospital,361303,critical_access,OH,Ohio,Lodi,44254,39103,HSI00001078,The Cleveland Clinic Health System (OH),36059,"Lodi, OH",328,"Cleveland, OH"
 LOGAN COUNTY HOSPITAL,Logan County Hospital,171326,critical_access,KS,Kansas,Oakley,67748,20109,,missing (missing),17085,"Oakley, KS",201,"Wichita, KS"
 LOGAN MEMORIAL HOSPITAL,Logan Memorial Hospital,180066,shortterm,KY,Kentucky,Russellville,42276,21141,HSI00000584,Lifepoint Health (TN),18075,"Russellville, KY",380,"Nashville, TN"
