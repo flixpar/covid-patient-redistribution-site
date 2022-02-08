@@ -1,10 +1,10 @@
 {
     "location_defaults": {
-        "hrr": "274",
+        "hrr": "391",
         "hospital_system": "HSI00000531",
         "region_type": "state",
         "hsa": "27005",
-        "state": "MD"
+        "state": "TX"
     },
     "dates": {
         "forecast_update": "2022-02-07",
