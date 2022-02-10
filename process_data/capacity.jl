@@ -80,6 +80,39 @@ function estimate_capacity()
 	return
 end
 
+function extract_capacity_timeseries()
+	rawdata_fn = latest_hhs_rawdata_fn()
+	rawdata = DataFrame(CSV.File(rawdata_fn))
+
+	fix_censored(x) = (ismissing(x) || x == -999999) ? missing : x
+
+	data_weekly = select(rawdata,
+		:hospital_name => :hospital,
+		:hospital_pk => :hospital_id,
+		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
+		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined,
+		:total_staffed_adult_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu,
+		:inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined_adultped,
+		:total_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu_adultped,
+	)
+	sort!(data_weekly, [:hospital, :hospital_id, :date])
+
+	capacity_cols = [:beds_combined, :beds_icu, :beds_combined_adultped, :beds_icu_adultped]
+	data_weekly = interpolate_missing(data_weekly, capacity_cols)
+
+	col_tfms = [([col, :date] => ((b,d) -> interpolate_timeseries_linear(d, b)) => col) for col in capacity_cols]
+	data_daily = combine(
+		groupby(data_weekly, :hospital_id),
+		:hospital => (x -> x[1]) => :hospital,
+		:date => (ds -> ds[1]:Day(1):ds[end]) => :date,
+		col_tfms...,
+	)
+
+	data_daily |> CSV.write("../data/capacity_timeseries.csv")
+	return
+end
+
 if abspath(PROGRAM_FILE) == @__FILE__
 	estimate_capacity()
+	extract_capacity_timeseries()
 end

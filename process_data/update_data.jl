@@ -22,6 +22,7 @@ convert_hhs_data()
 
 println("Estimating capacity")
 estimate_capacity()
+extract_capacity_timeseries()
 println("Estimating LOS")
 estimate_los()
 println("Extracting metadata")
