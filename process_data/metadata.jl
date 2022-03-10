@@ -29,7 +29,7 @@ function extract_metadata()
 		:state,
 		:city => ByRow(x -> ismissing(x) ? x : titlecase(x)) => :city,
 		:zip,
-		:fips_code,
+		:fips_code => :county_fips,
 	)
 	sort!(data, [:hospital, :hospital_id])
 
@@ -41,6 +41,10 @@ function extract_metadata()
 
 	insertcols!(data, 4, :state_abbrev => deepcopy(data.state))
 	data.state = [haskey(state_data_dict, s) ? state_data_dict[s] : s for s in data.state]
+
+	county_data = DataFrame(CSV.File("../rawdata/county_fips.csv"))
+	county_names = Dict(r.fips => "$(r.county_name), $(r.state)" for r in eachrow(county_data))
+	insertcols!(data, 9, :county_name => [get(county_names, f, "Unknown") for f in data.county_fips])
 
 	hospitalsystem_rawdata = DataFrame(CSV.File("../rawdata/chsp-hospital-linkage-2018.csv"))
 	hospitalsystem_dict = Dict(row.ccn => (
@@ -131,14 +135,21 @@ function extract_regions_metadata()
 	hrrs = filter_regions(hrrs)
 	hrrs = sort(hrrs)
 
+	counties = collect(zip(metadata.county_name, metadata.county_fips))
+	counties = filter(s -> !(ismissing(s[1]) || ismissing(s[2])), counties)
+	counties = map(s -> (name = s[1], id = string(s[2])), counties)
+	counties = filter_regions(counties)
+	counties = sort(counties)
+
 	state_regions = [(region_type = :state, region_name = s[1], region_id = s[2]) for s in states]
+	county_regions = [(region_type = :county, region_name = s.name, region_id = s.id) for s in counties]
 
 	system_regions = [(region_type = :hospital_system, region_name = s.name, region_id = s.id) for s in systems]
 
 	hsa_regions = [(region_type = :hsa, region_name = s.name, region_id = s.id) for s in hsas]
 	hrr_regions = [(region_type = :hrr, region_name = s.name, region_id = s.id) for s in hrrs]
 
-	regions = vcat(state_regions, system_regions, hsa_regions, hrr_regions)
+	regions = vcat(state_regions, county_regions, system_regions, hsa_regions, hrr_regions)
 
 	serialize("../data/regions_hhs.jlser", regions)
 

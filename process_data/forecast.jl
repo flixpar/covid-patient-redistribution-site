@@ -108,7 +108,7 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 	p = Progress(length(counties))
 
 	@threads for county in counties
-		county_hosp_ind = findall(f -> !ismissing(f) && f == county, hosp_metadata.fips_code)
+		county_hosp_ind = findall(f -> !ismissing(f) && f == county, hosp_metadata.county_fips)
 
 		if isempty(county_hosp_ind)
 			next!(p)

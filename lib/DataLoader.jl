@@ -125,6 +125,7 @@ function filter_hospitals(data; region=nothing, names=nothing, ids=nothing)
 	if !isnothing(region)
 		col_lookup = Dict(
 			:state => :state_abbrev,
+			:county => :county_fips,
 			:hospital_system => :system_id,
 			:hrr => :hrr_id,
 			:hsa => :hsa_id,
@@ -156,6 +157,7 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing)
 	if !isnothing(region)
 		col_lookup = Dict(
 			:state => :state_abbrev,
+			:county => :county_fips,
 			:hospital_system => :system_id,
 			:hrr => :hrr_id,
 			:hsa => :hsa_id,
