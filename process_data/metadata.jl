@@ -26,6 +26,7 @@ function extract_metadata()
 	data = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
+		:hospital_subtype => :hospital_type,
 		:state,
 		:city => ByRow(x -> ismissing(x) ? x : titlecase(x)) => :city,
 		:zip,
@@ -33,8 +34,23 @@ function extract_metadata()
 	)
 	sort!(data, [:hospital, :hospital_id])
 
+	data.hospital_type = map(data.hospital_type) do t
+		if t == "Critical Access Hospitals"
+			:critical_access
+		elseif t == "Short Term"
+			:shortterm
+		elseif t == "Long Term"
+			:longterm
+		elseif t == "Childrens Hospitals"
+			:pediatric
+		else
+			:other
+		end
+	end
+
 	states_data = DataFrame(CSV.File("../rawdata/states.csv"))
 	state_data_dict = Dict(row.abbrev => row.state for row in eachrow(states_data))
+	state_data_dict["AS"] = "American Samoa"
 	state_data_dict["GU"] = "Guam"
 	state_data_dict["MP"] = "Northern Mariana Islands"
 	state_data_dict["VI"] = "US Virgin Islands"
@@ -62,8 +78,8 @@ function extract_metadata()
 	nyt_names = [haskey(nyt_metadata_dict, row.hospital_id) ? nyt_metadata_dict[row.hospital_id]["nyt_hospital_name"] : titlecase(row.hospital) for row in eachrow(data)]
 	insertcols!(data, 2, :hospitalname =>  nyt_names)
 
-	hsahrr_data = DataFrame(CSV.File("../rawdata/ZipHsaHrr18.csv"))
-	hsahrr_dict = Dict(row.zipcode18 => row for row in eachrow(hsahrr_data))
+	hsahrr_data = DataFrame(CSV.File("../rawdata/ZipHsaHrr19.csv"))
+	hsahrr_dict = Dict(row.zipcode19 => row for row in eachrow(hsahrr_data))
 
 	missing_row = (hsanum=missing, hsacity=missing, hsastate=missing, hrrnum=missing, hrrcity=missing, hrrstate=missing)
 	hsahrrs = [haskey(hsahrr_dict,z) ? hsahrr_dict[z] : missing_row for z in data.zip]

@@ -25,7 +25,8 @@ function disaggregate_forecast(forecast_date="latest"; uncertainty_version=:defa
 		forecast_date = latest_forecast_date()
 	end
 
-	fn = "../rawdata/forecasts/$(forecast_date)-COVIDhub-4_week_ensemble.csv"
+	fn_ext = (forecast_date >= Date(2021, 9, 27)) ? "COVIDhub-4_week_ensemble" : "COVIDhub-ensemble"
+	fn = "../rawdata/forecasts/$(forecast_date)-$(fn_ext).csv"
 	forecast = DataFrame(CSV.File(fn))
 
 	filter!(row -> contains(row.target, "inc case"), forecast)

@@ -366,3 +366,7 @@ function package_covid_load_data()
 
 	return
 end
+
+if abspath(PROGRAM_FILE) == @__FILE__
+	package_main_data()
+end

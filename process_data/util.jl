@@ -111,8 +111,8 @@ function interpolate_missing(xs::AbstractArray{Union{Float64,Missing},1}, dest::
 	return dest
 end
 
-function interpolate_missing(df::AbstractDataFrame)
-	for col in valuecols
+function interpolate_missing(df::AbstractDataFrame, value_cols::Array{Symbol, 1})
+	for col in value_cols
 		df[!,col] = interpolate_missing(df[!,col])
 	end
 	return df
