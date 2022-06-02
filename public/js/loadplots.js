@@ -7,7 +7,7 @@ const loadPlotsShowPoints = false;
 
 import {loadplotsDescription, overallloadplotDescription} from "./figure_text.js";
 
-export {createOverallLoadPlot, createLoadPlots};
+export {createOverallLoadPlot, createLoadComparePlots, createLoadPlot};
 export {getDateIntervals};
 
 
@@ -37,11 +37,11 @@ function createOverallLoadPlot(rawdata, add_description=true) {
 	}
 }
 
-function createLoadPlots(rawdata, add_description=true) {
+function createLoadComparePlots(rawdata, add_description=true) {
 	const section = document.getElementById("section-results-load");
 
 	const plotTitle = `COVID Occupancy by Hospital in ${rawdata.config.region.region_name}`;
-	const loadPlots = makeLoadPlots(rawdata, plotTitle);
+	const loadPlots = makeLoadComparePlots(rawdata, plotTitle, 0, false);
 	loadPlots.id = "loadplots";
 	section.appendChild(loadPlots);
 
@@ -56,7 +56,19 @@ function createLoadPlots(rawdata, add_description=true) {
 	}
 }
 
-function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacityLevel=0) {
+function createLoadPlot(response) {
+	const section = document.getElementById("section-results-load");
+
+	const plotTitle = `COVID Occupancy by Hospital in ${response.config.region.region_name}`;
+	const plot = makeSingleLoadPlot(response, plotTitle, 0, false);
+	plot.id = "loadplots-single";
+	section.appendChild(plot);
+
+	plot.classList.add("figure");
+	plot.setAttribute("figure-name", "load-hospitals-single");
+}
+
+function makeLoadComparePlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacityLevel=0, includeLegend=true) {
 	const loadData = extractLoadData(rawdata, capacityLevel);
 
 	const betweenMargin = 100;
@@ -69,6 +81,7 @@ function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacit
 
 	let svg = d3.create("svg").attr("viewBox", [0, 0, totalWidth, totalHeight]);
 
+	let g0 = svg.append("g");
 	let g1 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left}, ${loadPlotsMargin.top + titleHeight})`);
 	let g2 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + betweenMargin + loadPlotsWidth}, ${loadPlotsMargin.top + titleHeight})`);
 	let g3 = svg.append("g").attr("transform", `translate(0, ${loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom + titleHeight})`);
@@ -83,8 +96,13 @@ function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacit
 
 	g1 = makeLoadPlot(g1, loadData.load_null, yScale, maxY, "Without Optimal Transfers");
 	g2 = makeLoadPlot(g2, loadData.load, yScale, maxY, "With Optimal Transfers");
-	g3, legendHeight = makeLoadPlotsLegend(g3, rawdata.config.node_names, totalWidth);
 	g4 = makeLoadLabels(g4, yScale, maxY);
+
+	if (includeLegend) {
+		g3, legendHeight = makeLoadPlotsLegend(g3, rawdata.config.node_names, totalWidth);
+	} else {
+		legendHeight = 0;
+	}
 
 	svg.append("text")
 		.attr("x", totalWidth / 2)
@@ -100,6 +118,55 @@ function makeLoadPlots(rawdata, plotTitle="COVID Occupancy by Hospital", capacit
 	viewBox[3] += legendHeight;
 	svg.attr("viewBox", viewBox);
 
+	g0 = fillBackground(svg, g0);
+
+	return svg.node();
+}
+
+function makeSingleLoadPlot(rawdata, plotTitle="COVID Load by Hospital", capacityLevel=0, includeLegend=true) {
+	const loadData = extractLoadData(rawdata, capacityLevel);
+
+	const labelsWidth = 50;
+	const titleHeight = 0;
+	const legendScale = 0.6;
+
+	const totalWidth = loadPlotsWidth + loadPlotsMargin.left + loadPlotsMargin.right + labelsWidth;
+	const totalHeight = loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom + titleHeight;
+	let legendHeight;
+
+	let svg = d3.create("svg").attr("viewBox", [0, 0, totalWidth, totalHeight]);
+
+	let g0 = svg.append("g");
+	let g1 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left}, ${loadPlotsMargin.top + titleHeight})`);
+	let g2 = svg.append("g").attr("transform", `translate(0, ${loadPlotsHeight + loadPlotsMargin.top + loadPlotsMargin.bottom + titleHeight}) scale(${legendScale}, ${legendScale})`);
+	let g3 = svg.append("g").attr("transform", `translate(${loadPlotsMargin.left + loadPlotsWidth}, ${loadPlotsMargin.top + titleHeight})`);
+
+	const maxLoadVal = d3.max(loadData.load, x => d3.max(x, y => y.value))
+	const maxY = Math.min(5.0, Math.max(2.0, Math.ceil(maxLoadVal)));
+
+	const yScale = d3.scaleLinear()
+		.domain([0, maxY]).nice()
+		.range([loadPlotsHeight, 0]);
+
+	g1 = makeLoadPlot(g1, loadData.load, yScale, maxY, plotTitle);
+	g3 = makeLoadLabels(g3, yScale, maxY);
+
+	if (includeLegend) {
+		g2, legendHeight = makeLoadPlotsLegend(g2, rawdata.config.node_names, (1/legendScale)*totalWidth);
+	} else {
+		legendHeight = 0;
+	}
+
+	legendHeight = legendScale * legendHeight;
+
+	makeYLabel(svg, "Occupancy");
+
+	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+	viewBox[3] += legendHeight;
+	svg.attr("viewBox", viewBox);
+
+	g0 = fillBackground(svg, g0);
+
 	return svg.node();
 }
 
@@ -108,16 +175,16 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 	const yAxis = svg => svg
 		.attr("transform", `translate(0,0)`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "20px")
+		.style("font-size", "22px")
 		.call(d3.axisRight(yScale)
 			.ticks(5)
 			.tickSize(loadPlotsWidth)
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
-			.attr("stroke-opacity", 0.5)
 			.attr("stroke-dasharray", "4,4")
-			.attr("stroke", "#4a4a4a"))
+			.attr("stroke-opacity", 1.0)
+			.attr("stroke", "#999999"))
 		.call(g => g.selectAll(".tick text")
 			.attr("x", "-10px")
 			.attr("dy", "4px")
@@ -143,7 +210,7 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 	const xAxis = g => g
 		.attr("transform", `translate(0,${loadPlotsHeight})`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "20px")
+		.style("font-size", "22px")
 		.call(d3.axisBottom(x)
 			.ticks(xInterval)
 			.tickSize(-loadPlotsHeight)
@@ -151,9 +218,9 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
-			.attr("stroke-opacity", 0.5)
 			.attr("stroke-dasharray", "4,4")
-			.attr("stroke", "#4a4a4a"))
+			.attr("stroke-opacity", 1.0)
+			.attr("stroke", "#999999"))
 		.call(g => g.selectAll(".tick text").attr("dy", "20px").attr("fill", "#4a4a4a"));
 
 	const colorscale = d3.scaleSequential(d3.interpolateRainbow).domain([0,N]);
@@ -163,17 +230,13 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.x(d => x(d.date))
 		.y(d => yScale(d.value))
 
-	svg.append("g").call(xAxis);
-	svg.append("g").call(yAxis);
-
 	svg.append("rect")
 		.attr("x", 0)
 		.attr("y", yScale(1.0))
 		.attr("width", loadPlotsWidth)
 		.attr("height", yScale(0.0)-yScale(1.0))
 		.attr("stroke", "none")
-		.attr("fill", "green")
-		.attr("opacity", 0.2);
+		.attr("fill", "#c1e1c1");
 
 	svg.append("rect")
 		.attr("x", 0)
@@ -181,8 +244,10 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 		.attr("width", loadPlotsWidth)
 		.attr("height", yScale(1.0)-yScale(maxY))
 		.attr("stroke", "none")
-		.attr("fill", "red")
-		.attr("opacity", 0.2);
+		.attr("fill", "#fbc0c1");
+
+	svg.append("g").call(xAxis);
+	svg.append("g").call(yAxis);
 
 	svg.append("line")
 		.attr("x1", 0)
@@ -219,21 +284,23 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 
 	svg.append("rect")
 		.attr("x", 0)
-		.attr("y", -loadPlotsMargin.top)
+		.attr("y", -loadPlotsMargin.top - 100)
 		.attr("width", loadPlotsWidth)
-		.attr("height", loadPlotsMargin.top)
+		.attr("height", loadPlotsMargin.top + 100)
 		.attr("stroke", "none")
 		.attr("fill", "white")
 		.attr("opacity", 1.0);
 
-	svg.append("text")
-		.attr("x", loadPlotsWidth/2)
-		.attr("y", -10)
-		.attr("text-anchor", "middle")
-		.style("font-family", loadPlotsFont)
-		.style("font-size", "26px")
-		.attr("fill", "black")
-		.text(title);
+	if (title) {
+		svg.append("text")
+			.attr("x", loadPlotsWidth/2)
+			.attr("y", -10)
+			.attr("text-anchor", "middle")
+			.style("font-family", loadPlotsFont)
+			.style("font-size", "26px")
+			.attr("fill", "black")
+			.text(title);
+	}
 
 	return svg;
 }
@@ -241,6 +308,8 @@ function makeLoadPlot(svg, load, yScale, maxY, title="COVID Patient Load by Loca
 function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 	const labelsWidth = 45;
 	const svg = d3.create("svg").attr("viewBox", [0, 0, loadPlotsWidth+labelsWidth, loadPlotsHeight]);
+
+	let g0 = svg.append("g");
 
 	svg.append("text")
 		.attr("x", loadPlotsWidth/2)
@@ -268,9 +337,9 @@ function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
-			.attr("stroke-opacity", 0.5)
 			.attr("stroke-dasharray", "4,4")
-			.attr("stroke", "#4a4a4a"))
+			.attr("stroke-opacity", 1.0)
+			.attr("stroke", "#999999"))
 		.call(g => g.selectAll(".tick text")
 			.attr("x", "-10px")
 			.attr("dy", "4px")
@@ -297,9 +366,9 @@ function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 		)
 		.call(g => g.select(".domain").remove())
 		.call(g => g.selectAll(".tick line")
-			.attr("stroke-opacity", 0.5)
 			.attr("stroke-dasharray", "4,4")
-			.attr("stroke", "#4a4a4a"))
+			.attr("stroke-opacity",1.0)
+			.attr("stroke", "#999999"))
 		.call(g => g.selectAll(".tick text").attr("dy", "20px").attr("fill", "#4a4a4a"));
 
 	const line = d3.line()
@@ -307,20 +376,13 @@ function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 		.x(d => x(d.date))
 		.y(d => y(d.value));
 
-	svg.append("g")
-		.call(xAxis);
-
-	svg.append("g")
-		.call(yAxis);
-
 	svg.append("rect")
 		.attr("x", loadPlotsMargin.left)
 		.attr("y", y(1.0))
 		.attr("width", loadPlotsWidth-loadPlotsMargin.right-loadPlotsMargin.left)
 		.attr("height", y(0.0)-y(1.0))
 		.attr("stroke", "none")
-		.attr("fill", "green")
-		.attr("opacity", 0.2);
+		.attr("fill", "#c1e1c1");
 
 	svg.append("rect")
 		.attr("x", loadPlotsMargin.left)
@@ -328,8 +390,10 @@ function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 		.attr("width", loadPlotsWidth-loadPlotsMargin.right-loadPlotsMargin.left)
 		.attr("height", y(1.0)-y(maxY))
 		.attr("stroke", "none")
-		.attr("fill", "red")
-		.attr("opacity", 0.2);
+		.attr("fill", "#fbc0c1");
+
+	svg.append("g").call(xAxis);
+	svg.append("g").call(yAxis);
 
 	svg.append("line")
 		.attr("x1", loadPlotsMargin.left)
@@ -365,20 +429,23 @@ function makeOverallLoadPlot(overall_load, plotTitle="Total COVID Occupancy") {
 
 	makeYLabel(svg, "Occupancy");
 
+	g0 = fillBackground(svg, g0);
+
 	return svg.node();
 }
 
 function makeYLabel(svg, text) {
 	let viewBox = svg.attr("viewBox").split(",").map(z => parseFloat(z));
 	const svgHeight = viewBox[3];
+	const s = 24;
 	svg.append("text")
 		.attr("text-anchor", "middle")
-		.attr("transform", `translate(${viewBox[0]-16},${svgHeight/2}) rotate(-90)`)
+		.attr("transform", `translate(${viewBox[0]-s},${svgHeight/2}) rotate(-90)`)
 		.style("font-family", loadPlotsFont)
-		.style("font-size", "18px")
+		.style("font-size", `${s}px`)
 		.text(text);
-	viewBox[0] = viewBox[0] - 36;
-	viewBox[2] = viewBox[2] + 36;
+	viewBox[0] = viewBox[0] - 2*s;
+	viewBox[2] = viewBox[2] + 2*s;
 	svg.attr("viewBox", viewBox);
 	return svg;
 }
@@ -455,7 +522,8 @@ function makeLoadPlotsLegend(svg, location_names, totalWidth) {
 
 function makeLoadLabels(svg, yScale, maxY) {
 
-	const gap = 0.15;
+	const gap = 0.1;
+	const s = 20;
 
 	svg.append("line")
 		.attr("x1", 20)
@@ -473,23 +541,37 @@ function makeLoadLabels(svg, yScale, maxY) {
 		.attr("stroke", "red")
 		.attr("stroke-width", 2);
 
-	const q1 = yScale(0.5) - 50;
+	const q1 = yScale(0.5) - 3.25*s;
 	svg.append("text")
 		.style("text-anchor", "center")
 		.attr("transform", `translate(40,${q1}) rotate(90)`)
 		.style("fill", "green")
+		.style("font-size", `${s}px`)
 		.style("font-family", loadPlotsFont)
 		.text("Within Capacity");
 
-	const q2 = yScale((1 + maxY)/2) - 50;
+	const q2 = yScale((1 + maxY)/2) - 3.25*s;
 	svg.append("text")
 		.style("text-anchor", "center")
 		.attr("transform", `translate(40,${q2}) rotate(90)`)
 		.style("fill", "red")
+		.style("font-size", `${s}px`)
 		.style("font-family", loadPlotsFont)
 		.text("Over Capacity");
 
 	return svg;
+}
+
+function fillBackground(svg, g) {
+	let vb = svg.attr("viewBox").split(",").map(z => parseFloat(z));
+	g.append("rect")
+		.attr("x", vb[0])
+		.attr("y", vb[1])
+		.attr("width", vb[2])
+		.attr("height", vb[3])
+		.attr("stroke", "none")
+		.attr("fill", "#ffffff");
+	return g;
 }
 
 function extractLoadData(rawdata, capacityLevel=0) {

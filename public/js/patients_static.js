@@ -2,7 +2,7 @@ import * as patientsCommon from "./patients_common.js";
 import * as common from "./common.js";
 import {createMap} from "./map_plots.js";
 import {createSurgeTimeline} from "./surgetimeline.js";
-import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
+import {createOverallLoadPlot, createLoadComparePlots, createLoadPlot} from "./loadplots.js";
 import {createTransfersSankey} from "./transfers_sankey.js";
 import {createStatsSummary} from "./metrics.js";
 import {setupTable, setupTableFilter} from "./tables.js";
@@ -25,7 +25,7 @@ function generateContent(response) {
 
 	createMap(response, "load", "transfers");
 	createOverallLoadPlot(response);
-	createLoadPlots(response);
+	createLoadComparePlots(response);
 	createTransfersSankey(response);
 	createSurgeTimeline(response);
 

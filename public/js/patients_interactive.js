@@ -2,7 +2,7 @@ import * as patientsCommon from "./patients_common.js";
 import * as common from "./common.js";
 import {createMap} from "./map_plots.js";
 import {createSurgeTimeline} from "./surgetimeline.js";
-import {createOverallLoadPlot, createLoadPlots} from "./loadplots.js";
+import {createOverallLoadPlot, createLoadComparePlots, createLoadPlot} from "./loadplots.js";
 import {createTransfersSankey} from "./transfers_sankey.js";
 import {createActivePlot} from "./activeplot.js";
 import {createStatsSummary} from "./metrics.js";
@@ -32,7 +32,7 @@ function handleResponse(response, status, xhr) {
 
 	createActivePlot(response.active, response.active_null, response.capacity, response.config);
 	createOverallLoadPlot(response);
-	createLoadPlots(response);
+	createLoadComparePlots(response);
 	createTransfersSankey(response);
 	createSurgeTimeline(response);
 
