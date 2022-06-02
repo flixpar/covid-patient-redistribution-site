@@ -94,9 +94,9 @@ function hsaChoropleth(response) {
 			const valueLookup = (d) => {
 				if (overflowLookup.has(d.properties.HSA93)) {
 					const x = overflowLookup.get(d.properties.HSA93);
-					return (x) ? x : 0;
+					return (x) ? x : -1;
 				} else {
-					return 0;
+					return -1;
 				}
 			};
 			const nameLookup = (d) => d.properties.HSA_label;
@@ -124,7 +124,8 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 	// const scaleMax = percentile(vals, 0.97);
 	// const scaleMax = percentile(vals.filter(x => x > 10), 0.97);
 	const scaleMax = d3.max(vals);
-	const colorscale = d3.scaleSequential(d3.interpolateReds).domain([scaleMin, scaleMax]);
+	const colorscaleRaw = d3.scaleSequential(d3.interpolateReds).domain([scaleMin, scaleMax]);
+	const colorscale = x => (x >= 0) ? colorscaleRaw(x) : "#efefef";
 
 	const path = d3.geoPath(d3.geoAlbersUsa());
 
