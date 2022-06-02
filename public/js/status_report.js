@@ -182,6 +182,7 @@ Promise.all(ps).then(resultsRaw => {
 });
 
 $.getJSON("/api/status-report").then(statusReport => {
+	const dateStr = new Date(statusReport.date_current).toLocaleDateString('en-us', {month: "long", day: "numeric", year: "numeric", timeZone: "UTC"});
 	const risingFalling = (statusReport.arrivals_next > statusReport.arrivals_prev) ? "rising" : "falling";
 	const overCapPctPrev = (statusReport.n_shortage_prev / statusReport.n_hospitals * 100).toFixed(1);
 	const overCapPctNext = (statusReport.n_shortage_next / statusReport.n_hospitals * 100).toFixed(1);
@@ -193,7 +194,7 @@ $.getJSON("/api/status-report").then(statusReport => {
 			topRegions[i].benefits_pct_str = (topRegions[i].benefits_pct * 100).toFixed(1);
 		}
 
-		let text = `As of ${statusReport.date_current} COVID-19 hospitalizations are ${risingFalling} in the US. We estimate ${overCapPctPrev}% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and ${overCapPctNext}% will exceed this capacity over the coming week. Some of the regions that are expected to have large shortages of ICU capacity for COVID-19 patients over the next two weeks are: ${topRegions[0].region_name}, ${topRegions[1].region_name}, and ${topRegions[2].region_name}. Using optimal patient transfers we can reduce the COVID-19 ICU capacity shortages in ${topRegions[0].region_name} by ${topRegions[0].benefits_pct_str}%, in ${topRegions[1].region_name} by ${topRegions[1].benefits_pct_str}%, and in ${topRegions[2].region_name} by ${topRegions[2].benefits_pct_str}%.`;
+		let text = `As of ${dateStr} COVID-19 hospitalizations are ${risingFalling} in the US. We estimate ${overCapPctPrev}% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and ${overCapPctNext}% will exceed this capacity over the coming week. Some of the regions that are expected to have large shortages of ICU capacity for COVID-19 patients over the next two weeks are: ${topRegions[0].region_name}, ${topRegions[1].region_name}, and ${topRegions[2].region_name}. Using optimal patient transfers we can reduce the COVID-19 ICU capacity shortages in ${topRegions[0].region_name} by ${topRegions[0].benefits_pct_str}%, in ${topRegions[1].region_name} by ${topRegions[1].benefits_pct_str}%, and in ${topRegions[2].region_name} by ${topRegions[2].benefits_pct_str}%.`;
 
 		let textEl = document.getElementById("status-report-text");
 		textEl.innerHTML = text;
