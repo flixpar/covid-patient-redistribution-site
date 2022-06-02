@@ -154,6 +154,10 @@ route("/api/region-selection") do
 	return json(response)
 end
 
+route("/api/status-report") do
+	return json(handle_status_report())
+end
+
 
 haskey(ENV, "GENIE_ENV") || (ENV["GENIE_ENV"] = "dev")
 if !haskey(ENV, "HOST")

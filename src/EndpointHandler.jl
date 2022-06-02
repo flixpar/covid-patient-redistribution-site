@@ -11,6 +11,7 @@ using DataLoader
 using PatientAllocation
 using HospitalSelection
 using RegionSelection
+using StatusReport
 import PatientAllocationResults
 
 export handle_patients_request
@@ -19,6 +20,7 @@ export get_regions_list
 export handle_hospital_selection
 export complete_region
 export handle_region_selection
+export handle_status_report
 
 
 function handle_patients_request(
@@ -172,6 +174,10 @@ end
 
 function handle_region_selection(region_type, patient_type, metric_type, date)
 	regions_selection(region_type, patient_type, metric_type, date)
+end
+
+function handle_status_report()
+	status_report_metrics()
 end
 
 end;

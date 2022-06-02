@@ -14,6 +14,7 @@ export los_dist_regional
 export hospitals_list
 export regions_list
 export complete_region
+export haversine_distance_matrix
 
 projectbasepath = joinpath(@__DIR__, "../")
 
