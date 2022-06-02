@@ -41,6 +41,10 @@ route("/status-report") do
 	serve_static_file("html/status-report.html")
 end
 
+route("/data-explore") do
+	serve_static_file("html/data-explore.html")
+end
+
 route("/about") do
 	serve_static_file("html/about.html")
 end
@@ -151,6 +155,14 @@ route("/api/region-selection") do
 		@error "Invalid params for region selection api"
 		return
 	end
+	return json(response)
+end
+
+route("/api/hospital-data") do
+	paramsdata = getpayload()
+	@info paramsdata
+	patient_type = Symbol(get(paramsdata, :patient_type, :combined))
+	response = get_hospital_data(paramsdata[:hospital_id], patient_type)
 	return json(response)
 end
 

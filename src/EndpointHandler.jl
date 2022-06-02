@@ -17,6 +17,7 @@ import PatientAllocationResults
 export handle_patients_request
 export get_hospital_list
 export get_regions_list
+export get_hospital_data
 export handle_hospital_selection
 export complete_region
 export handle_region_selection
@@ -161,6 +162,15 @@ end
 function get_regions_list(region_type::Symbol=:any)
 	regions = regions_list(region_type)
 	return regions
+end
+
+function get_hospital_data(hospital_id, patient_type)
+	data = load_hhs_raw(
+		hospital_id,
+		:moderate,
+		patient_type,
+	)
+	return data
 end
 
 function handle_hospital_selection(loc)

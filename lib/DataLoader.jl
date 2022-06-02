@@ -9,6 +9,7 @@ using Dates
 using LinearAlgebra
 
 export load_hhs
+export load_hhs_raw
 export los_dist_default
 export los_dist_regional
 export hospitals_list
@@ -104,6 +105,47 @@ function load_hhs(
 	)
 end
 
+function load_hhs_raw(
+		hospital_id::String,
+		scenario::Symbol,
+		patient_type::Symbol,
+		covid_capacity_proportion::Real=0.4,
+	)
+	@assert(patient_type in [:icu, :acute, :all, :combined_ped])
+
+	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
+
+	hospital_ind = filter_hospitals(data, ids=[hospital_id])[1]
+	hospital_name = data.location_names[hospital_ind]
+
+	bedtype = (patient_type == :all) ? :combined : patient_type
+	casesdata = data.casesdata[scenario, bedtype]
+
+	admissions = casesdata.admitted[hospital_ind,:]
+	occupancy = casesdata.active[hospital_ind,:]
+
+	default_capacity_level = 1
+	beds = casesdata.capacity[hospital_ind, default_capacity_level] .* covid_capacity_proportion
+	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
+	capacity_names = ["Baseline Capacity"]
+
+	location = get(data.locations_latlong, hospital_id, (lat=0.0, long=0.0))
+
+	dates = collect(data.start_date:Day(1):data.end_date)
+
+	return (;
+		hospital_id,
+		hospital_name,
+		dates,
+		admissions,
+		occupancy,
+		beds,
+		capacity,
+		capacity_names,
+		location,
+	)
+end
+
 function los_dist_default(bedtype::Symbol)
 	losdata = deserialize(joinpath(projectbasepath, "data/hhs_los_est.jlser"))
 	if haskey(losdata, bedtype)
@@ -165,8 +207,6 @@ function hospitals_list(;region=nothing, names=nothing, ids=nothing)
 		)
 		col = col_lookup[region.region_type]
 		filter!(h -> !ismissing(h[col]) && (string(h[col]) == region.region_id), hospitals_info)
-	else
-		hospitals_info = data
 	end
 
 	if !isnothing(names) && !isempty(names)
