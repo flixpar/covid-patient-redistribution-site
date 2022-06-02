@@ -72,7 +72,7 @@ function downloadTableAsCSV(table, fn) {
 	const nrows = table[cols[0]].length;
 	const data = d3.range(nrows).map(i => {
 		let row = {};
-		for (col of cols) {
+		for (const col of cols) {
 			row[col] = table[col][i];
 		}
 		return row;
