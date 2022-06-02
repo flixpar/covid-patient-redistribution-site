@@ -53,13 +53,37 @@
 			<h5 class="subtitle is-5" style="color: #656565 !important;">Which areas are facing surges?</h5>
 		</div>
 
-		<div class="container">
-			<div style="max-width: 1000px; margin: auto; margin-bottom: 20px;">
-				<img src="img/regionchoropleth-hrr.png">
-				<p style="text-align: center; color: #656565;">Estimated COVID-19 ICU capacity shortage by Hospital Referral Region over the next week as of 2021-10-14.</p>
+		<div class="container" id="results-container">
+			<div id="progressbar-area" class="column is-10 is-offset-1">
+				<div class="notification">Updating...</div>
+				<progress class="progress is-small is-info" max="100"></progress>
 			</div>
-			<p>As of October 14th, 2021 the US is coming down from the previous wave. We estimate 19% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and 20% will exceed this capacity over the coming week. Some of the regions that are expected to have large shortages of ICU capacity for COVID-19 patients over the next two weeks are: Georgia, California, and Houston TX. Using optimal patient transfers we can reduce the COVID-19 ICU capacity shortages in Georgia by 76%, in California by 100%, and in Houston by 77%.</p>
+			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
+				<div class="notification is-danger">Error</div>
+			</div>
+			<div id="main-content-area">
+				<div id="maparea-hrr"></div>
+				<br><br>
+				<p id="report-text">Status Report Text</p>
+				<br><br>
+			</div>
 		</div>
 
 	</section>
+
+	<script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tippy.js@6.2.7/dist/tippy-bundle.umd.min.js"></script>
+	<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js" type="module"></script>
+
+	<script src="https://unpkg.com/d3@6.3.1/dist/d3.min.js"></script>
+
+	<script src="https://unpkg.com/d3-geo@1.12.1/dist/d3-geo.min.js"></script>
+	<script src="https://unpkg.com/topojson@3"></script>
+
+	<script type="module" src="/js/common.js"></script>
+	<script type="module" src="/js/figure_downloads.js"></script>
+	<script type="module" src="/js/region_choropleths.js"></script>
+	<script type="module" src="/js/status_report.js"></script>
+
 </body>
