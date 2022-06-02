@@ -9,6 +9,8 @@ using RegionSelection: regions_selection
 
 export status_report_metrics
 
+projectbasepath = joinpath(@__DIR__, "../")
+
 
 function status_report()
 	region_types = [:state, :hrr, :hsa, :hospital_system]
