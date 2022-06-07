@@ -1,18 +1,18 @@
 {
     "location_defaults": {
-        "state": "TX",
+        "hrr": "391",
         "county": "6037",
         "hospital_system": "HSI00000531",
         "region_type": "state",
         "hsa": "27005",
-        "hrr": "391"
+        "state": "TX"
     },
     "dates": {
-        "forecast_update": "2022-05-30",
-        "forecast_start": "2022-05-28",
-        "forecast_end": "2022-06-25",
-        "hhsdata_update": "2022-05-31",
+        "forecast_update": "2022-06-06",
+        "forecast_start": "2022-06-04",
+        "forecast_end": "2022-07-02",
+        "hhsdata_update": "2022-06-06",
         "hhsdata_start": "2020-07-31",
-        "hhsdata_end": "2022-05-20"
+        "hhsdata_end": "2022-05-27"
     }
 }
