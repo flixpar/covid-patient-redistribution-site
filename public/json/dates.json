@@ -1,8 +1,8 @@
 {
-    "forecast_update": "2022-06-06",
-    "forecast_start": "2022-06-04",
-    "forecast_end": "2022-07-02",
-    "hhsdata_update": "2022-06-06",
+    "forecast_update": "2022-06-20",
+    "forecast_start": "2022-06-18",
+    "forecast_end": "2022-07-16",
+    "hhsdata_update": "2022-06-20",
     "hhsdata_start": "2020-07-31",
-    "hhsdata_end": "2022-05-27"
+    "hhsdata_end": "2022-06-10"
 }

@@ -40,6 +40,7 @@ ADVENTHEALTH FISH MEMORIAL,AdventHealth Fish Memorial,100072,shortterm,FL,Florid
 ADVENTHEALTH GLENOAKS,Adventist Glenoaks,140292,shortterm,IL,Illinois,Glendale Heights,60139,17043,"Du Page, IL",HSI00000010,Adventist Health System (FL),14050,"Glendale Heights, IL",166,"Melrose Park, IL"
 ADVENTHEALTH GORDON,AdventHealth Gordon,110023,shortterm,GA,Georgia,Calhoun,30701,13129,"Gordon, GA",HSI00000010,Adventist Health System (FL),11021,"Calhoun, GA",148,"Rome, GA"
 ADVENTHEALTH HEART OF FLORIDA,AdventHealth Heart of Florida,100137,shortterm,FL,Florida,Davenport,33837,12105,"Polk, FL",HSI00000249,Community Health Systems (TN),10131,"Winter Haven, FL",130,"Orlando, FL"
+ADVENTHEALTH HENDERSONVILLE,Park Ridge Health,340023,shortterm,NC,North Carolina,Hendersonville,28792,37089,"Henderson, NC",HSI00000010,Adventist Health System (FL),34040,"Hendersonville, NC",309,"Asheville, NC"
 ADVENTHEALTH HINSDALE,Adventist Hinsdale Hospital,140122,shortterm,IL,Illinois,Hinsdale,60521,17043,"Du Page, IL",HSI00000010,Adventist Health System (FL),14062,"Hinsdale, IL",163,"Hinsdale, IL"
 ADVENTHEALTH LA GRANGE,Adventist La Grange Memorial Hospital,140065,shortterm,IL,Illinois,La Grange,60525,17031,"Cook, IL",HSI00000010,Adventist Health System (FL),14071,"La Grange, IL",166,"Melrose Park, IL"
 ADVENTHEALTH LAKE WALES,AdventHealth Lake Wales,100099,shortterm,FL,Florida,Lake Wales,33853,12105,"Polk, FL",HSI00000249,Community Health Systems (TN),10059,"Lake Wales, FL",130,"Orlando, FL"
@@ -1597,6 +1598,7 @@ GULF COAST MEDICAL CENTER LEE MEM HEALTH SYSTEM,Gulf Coast Medical Center,100220
 GUNDERSEN BOSCOBEL AREA HOSPITAL AND CLINICS,Gundersen Boscobel Area Hospital and Clinics,521344,critical_access,WI,Wisconsin,Boscobel,53805,55043,"Grant, WI",HSI00000428,Gundersen Health System (WI),52014,"Boscobel, WI",449,"Madison, WI"
 GUNDERSEN LUTHERAN MEDICAL CENTER,Gundersen Lutheran Medical Center,520087,shortterm,WI,Wisconsin,La Crosse,54601,55063,"La Crosse, WI",HSI00000428,Gundersen Health System (WI),52045,"La Crosse, WI",448,"La Crosse, WI"
 GUNDERSEN PALMER LUTHERAN HOSPITAL AND CLINICS,Gundersen Palmer Lutheran Hospital and Clinics,161316,critical_access,IA,Iowa,West Union,52175,19065,"Fayette, IA",HSI00000428,Gundersen Health System (WI),16110,"West Union, IA",448,"La Crosse, WI"
+GUNDERSEN ST ELIZABETH'S HOSPITAL AND CLINICS,St. Elizabeth Medical Center,241335,critical_access,MN,Minnesota,Wabasha,55981,27157,"Wabasha, MN",HSI00000055,Ascension Health (MO),24127,"Wabasha, MN",253,"Rochester, MN"
 GUNDERSEN ST JOSEPHS HOSPITAL AND CLINICS,Gundersen St. Joseph’s Hospital and Clinics,521304,critical_access,WI,Wisconsin,Hillsboro,54634,55123,"Vernon, WI",HSI00000428,Gundersen Health System (WI),52038,"Hillsboro, WI",449,"Madison, WI"
 GUNDERSEN TRI-COUNTY HOSPITAL AND CLINICS,Gundersen Tri-County Hospital and Clinics,521316,critical_access,WI,Wisconsin,Whitehall,54773,55121,"Trempealeau, WI",HSI00000428,Gundersen Health System (WI),52105,"Whitehall, WI",448,"La Crosse, WI"
 GUNNISON VALLEY HOSPITAL,Gunnison Valley Hospital,061320,critical_access,CO,Colorado,Gunnison,81230,8051,"Gunnison, CO",,missing (missing),6028,"Gunnison, CO",105,"Grand Junction, CO"
@@ -1866,7 +1868,7 @@ HOSPITAL OF THE FOX CHASE CANCER CENTER,Hospital of The Fox Chase Cancer Center,
 HOSPITAL OF UNIV OF PENNSYLVANIA,Hospital of the University of Pennsylvania,390111,shortterm,PA,Pennsylvania,Philadelphia,19104,42101,"Philadelphia, PA",HSI00000820,University of Pennsylvania Health System (PA),39095,"Philadelphia, PA",356,"Philadelphia, PA"
 HOSPITAL ONCOLOGICO DR ISAAC GONZALEZ MARTINEZ,Hospital Oncológico Dr Isaac González Martínez,400012,shortterm,PR,Puerto Rico,San Juan,935,72127,"San Juan, PR",,,,,,
 "HOSPITAL PAVIA HATO REY, INC","Hospital Pavia Hato Rey, Inc.",400128,shortterm,PR,Puerto Rico,Hato Rey,919,72127,"San Juan, PR",,,,,,
-HOSPITAL PAVIA SANTURCE,Hospital Pavia Santurce,400019,shortterm,PR,Puerto Rico,Fernandez Juncos,910,72127,"San Juan, PR",,,,,,
+HOSPITAL PAVIA SANTURCE,Hospital Pavia Santurce,400019,shortterm,PR,Puerto Rico,San Juan,910,72127,"San Juan, PR",,,,,,
 HOSPITAL PAVIA YAUCO,Hospital Metropolitano Dr. Tito Mattei,400110,shortterm,PR,Puerto Rico,Yauco,698,72153,"Yauco, PR",,,,,,
 HOSPITAL PEREA,Hospital Perea,400123,shortterm,PR,Puerto Rico,Mayaguez,681,72097,"Mayaguez, PR",,,,,,
 HOSPITAL SAN CARLOS BORROMEO,Hospital San Carlos Borromeo,400111,shortterm,PR,Puerto Rico,Moca,676,72099,"Moca, PR",,,,,,
@@ -2223,6 +2225,7 @@ KPC PROMISE HOSPITAL OF VICKSBURG,K.P.C. Promise Hospital of Vicksburg,252008,lo
 KPC PROMISE HOSPITAL OF WICHITA FALLS LLC,KPC Promise Hospital of Wichita Falls L.L.C.,452068,longterm,TX,Texas,Wichita Falls,76301,48485,"Wichita, TX",,missing (missing),45276,"Wichita Falls, TX",420,"Wichita Falls, TX"
 KUAKINI MEDICAL CENTER,Kuakini Medical Center,120007,shortterm,HI,Hawaii,Honolulu,96817,15003,"Honolulu, HI",HSI00000554,Kuakini Health System (HI),12003,"Honolulu, HI",150,"Honolulu, HI"
 KULA HOSPITAL,Kula Hospital,121308,critical_access,HI,Hawaii,Kula,96790,15009,"Maui, HI",HSI00000536,Kaiser Permanente (CA),12013,"Wailuku, HI",150,"Honolulu, HI"
+Kaiser Permanente - San Diego Medical Center,Kaiser Permanente - San Diego Medical Center,02d4a73785e74f88490f05c473b39d9054e5cb4e2ddbcb2b85b64d2502d69e01,shortterm,CA,California,San Diego,92123,6073,"San Diego, CA",,,5205,"San Diego, CA",80,"San Diego, CA"
 "L A DOWNTOWN MEDICAL CENTER, LLC",L.A. Downtown Medical Center,050763,shortterm,CA,California,Los Angeles,90026,6037,"Los Angeles, CA",HSI00001042,Success Healthcare (FL),5126,"Los Angeles, CA",56,"Los Angeles, CA"
 LA PALMA INTERCOMMUNITY HOSPITAL,La Palma Intercommunity Hospital,050580,shortterm,CA,California,La Palma,90623,6059,"Orange, CA",HSI00000845,Prime Healthcare Services (CA),5004,"Anaheim, CA",23,"Orange County, CA"
 LA PAZ REGIONAL HOSPITAL,La Paz Regional Hospital,031317,critical_access,AZ,Arizona,Parker,85344,4012,"La Paz, AZ",,missing (missing),3020,"Parker, AZ",12,"Phoenix, AZ"
@@ -2382,7 +2385,6 @@ LOMA LINDA UNIVERSITY MEDICAL CENTER-MURRIETA,Loma Linda University Medical Cent
 LOMPOC VALLEY MEDICAL CENTER,Lompoc Valley Medical Center,050110,shortterm,CA,California,Lompoc,93436,6083,"Santa Barbara, CA",,missing (missing),5122,"Lompoc, CA",86,"Santa Barbara, CA"
 LONE PEAK HOSPITAL,Lone Peak Hospital,460060,shortterm,UT,Utah,Draper,84020,49035,"Salt Lake, UT",HSI00000492,HCA Healthcare (TN),46028,"Salt Lake City, UT",423,"Salt Lake City, UT"
 LONESOME PINE HOSPITAL,Lonesome Pine Hospital,490114,shortterm,VA,Virginia,Big Stone Gap,24219,51195,"Wise, VA",HSI00001284,Ballad Health (TN),49005,"Big Stone Gap, VA",376,"Kingsport, TN"
-LONG BEACH MEMORIAL MEDICAL CENTER,Long Beach Memorial Medical Center,050485,shortterm,CA,California,Long Beach,90806,6037,"Los Angeles, CA",HSI00000658,MemorialCare Health System (CA),5124,"Long Beach, CA",56,"Los Angeles, CA"
 LONG ISLAND COMMUNITY HOSPITAL,Long Island Community Hospital,330141,shortterm,NY,New York,Patchogue,11772,36103,"Suffolk, NY",HSI00000186,Catholic Health Services of Long Island (NY),33095,"Patchogue, NY",301,"East Long Island, NY"
 LONG ISLAND JEWISH MEDICAL CENTER,Long Island Jewish Medical Center,330195,shortterm,NY,New York,New Hyde Park,11040,36081,"Queens, NY",HSI00000767,Northwell Health (NY),33075,"Mineola, NY",301,"East Long Island, NY"
 LONGS PEAK HOSPITAL,Longs Peak Hospital,060128,shortterm,CO,Colorado,Longmont,80504,8123,"Weld, CO",HSI00001169,University of Colorado Health (CO),6038,"Longmont, CO",101,"Boulder, CO"
@@ -2420,7 +2422,6 @@ LUTHERAN HOSPITAL,Lutheran Hospital,360087,shortterm,OH,Ohio,Cleveland,44113,390
 LUTHERAN HOSPITAL OF INDIANA,Lutheran Hospital of Indiana,150017,shortterm,IN,Indiana,Fort Wayne,46804,18003,"Allen, IN",HSI00000249,Community Health Systems (TN),15027,"Fort Wayne, IN",180,"Fort Wayne, IN"
 LUTHERAN MEDICAL CENTER,Lutheran Medical Center,060009,shortterm,CO,Colorado,Wheat Ridge,80033,8059,"Jefferson, CO",HSI00000991,SCL Health (CO),6053,"Wheat Ridge, CO",103,"Denver, CO"
 LVH- COORDINATED ALLENTOWN,Lvh- Coordinated Allentown,390321,shortterm,PA,Pennsylvania,Allentown,18104,42077,"Lehigh, PA",,missing (missing),39003,"Allentown, PA",346,"Allentown, PA"
-LVH- COORDINATED BETHLEHEM,L.V.H. Coordinated Bethlehem,390314,shortterm,PA,Pennsylvania,Bethlehem,18017,42077,"Lehigh, PA",,missing (missing),39008,"Bethlehem, PA",346,"Allentown, PA"
 LYNN COUNTY HOSPITAL DISTRICT,Lynn County Hospital District,451351,critical_access,TX,Texas,Tahoka,79373,48305,"Lynn, TX",,missing (missing),45168,"Lubbock, TX",400,"Lubbock, TX"
 Legent Hospital for Special Surgery (FKA Star Medical Center),Legent Hospital For Special Surgery (Fka Star Medical Center),f59a354d-92b9-409e-81d3-bef8716d9a79,shortterm,TX,Texas,Plano,75075,48085,"Collin, TX",,,45211,"Plano, TX",391,"Dallas, TX"
 M HEALTH FAIRVIEW BETHESDA HOSPITAL,M Health Fairview Bethesda Hospital,242004,longterm,MN,Minnesota,Saint Paul,55103,27123,"Ramsey, MN",HSI00000357,Fairview Health Services (MN),24116,"St. Paul, MN",256,"St. Paul, MN"
@@ -2683,6 +2684,7 @@ MEMORIAL MEDICAL CENTER,Memorial Medical Center,521359,critical_access,WI,Wiscon
 MEMORIAL MISSION HOSPITAL AND ASHEVILLE SURGERY CE,Memorial Mission Hospital and Asheville Surgery Center,340002,shortterm,NC,North Carolina,Asheville,28801,37021,"Buncombe, NC",HSI00000691,Mission Health System (NC),34005,"Asheville, NC",309,"Asheville, NC"
 MEMORIAL REGIONAL HOSPITAL,Memorial Regional Hospital,100038,shortterm,FL,Florida,Hollywood,33021,12011,"Broward, FL",HSI00000653,Memorial Healthcare System (FL),10046,"Hollywood, FL",127,"Miami, FL"
 MEMORIAL SATILLA HEALTH,Memorial Satilla Health,110003,shortterm,GA,Georgia,Waycross,31501,13299,"Ware, GA",HSI00000492,HCA Healthcare (TN),11126,"Waycross, GA",123,"Jacksonville, FL"
+MEMORIALCARE LONG BEACH MEDICAL CENTER,Long Beach Memorial Medical Center,050485,shortterm,CA,California,Long Beach,90806,6037,"Los Angeles, CA",HSI00000658,MemorialCare Health System (CA),5124,"Long Beach, CA",56,"Los Angeles, CA"
 MEMORIALCARE ORANGE COAST MEDICAL CENTER,MemorialCare Orange Coast Medical Center,050678,shortterm,CA,California,Fountain Valley,92708,6059,"Orange, CA",HSI00000658,MemorialCare Health System (CA),5075,"Fountain Valley, CA",23,"Orange County, CA"
 MEMORIALCARE SADDLEBACK MEDICAL CENTER,Saddleback Medical Center,050603,shortterm,CA,California,Laguna Hills,92653,6059,"Orange, CA",HSI00000658,MemorialCare Health System (CA),5112,"Laguna Hills, CA",23,"Orange County, CA"
 MENA REGIONAL HEALTH SYSTEM,Mena Regional Health System,040015,shortterm,AR,Arkansas,Mena,71953,5113,"Polk, AR",,missing (missing),4046,"Mena, AR",16,"Fort Smith, AR"
@@ -3327,7 +3329,6 @@ PARIS REGIONAL MEDICAL CENTER,Paris Regional Medical Center,450196,shortterm,TX,
 PARK CITY HOSPITAL,Park City Hospital,460057,shortterm,UT,Utah,Park City,84060,49043,"Summit, UT",HSI00000516,Intermountain Healthcare (UT),46028,"Salt Lake City, UT",423,"Salt Lake City, UT"
 PARK NICOLLET METHODIST HOSPITAL,Park Nicollet Methodist Hospital,240053,shortterm,MN,Minnesota,Saint Louis Park,55426,27053,"Hennepin, MN",HSI00000464,HealthPartners (MN),24115,"St. Louis Park, MN",251,"Minneapolis, MN"
 PARK PLACE SURGICAL HOSPITAL,Park Place Surgical Hospital,190255,shortterm,LA,Louisiana,Lafayette,70508,22055,"Lafayette, LA",HSI00000376,Franciscan Missionaries of Our Lady Health System (LA),19046,"Lafayette, LA",213,"Lafayette, LA"
-PARK RIDGE HEALTH,Park Ridge Health,340023,shortterm,NC,North Carolina,Hendersonville,28792,37089,"Henderson, NC",HSI00000010,Adventist Health System (FL),34040,"Hendersonville, NC",309,"Asheville, NC"
 PARKLAND HEALTH AND HOSPITAL SYSTEM,Parkland Health and Hospital System,450015,shortterm,TX,Texas,Dallas,75235,48113,"Dallas, TX",HSI00000298,Parkland Health and Hospital System (TX),45068,"Dallas, TX",391,"Dallas, TX"
 PARKLAND HEALTH CENTER,Parkland Health Center,260163,shortterm,MO,Missouri,Farmington,63640,29187,"St Francois, MO",HSI00000070,BJC Healthcare (MO),26029,"Farmington, MO",273,"St. Louis, MO"
 PARKLAND HEALTH CENTER - BONNE TERRE,Parkland Health Center – Bonne Terre,261315,critical_access,MO,Missouri,Bonne Terre,63628,29187,"St Francois, MO",HSI00000070,BJC Healthcare (MO),26029,"Farmington, MO",273,"St. Louis, MO"
@@ -4207,7 +4208,7 @@ ST CHARLES HOSPITAL,St. Charles Hospital,330246,shortterm,NY,New York,Port Jeffe
 ST CHARLES MADRAS,St. Charles Madras,381324,critical_access,OR,Oregon,Madras,97741,41031,"Jefferson, OR",HSI00000912,Saint Charles Health System (OR),38032,"Madras, OR",341,"Bend, OR"
 ST CHARLES PARISH HOSPITAL,St. Charles Parish Hospital,190079,shortterm,LA,Louisiana,Luling,70070,22089,"St Charles, LA",HSI00000780,Ochsner Health System (LA),19051,"Luling, LA",218,"New Orleans, LA"
 ST CHARLES PRINEVILLE,St. Charles Prineville,381313,critical_access,OR,Oregon,Prineville,97754,41013,"Crook, OR",HSI00000912,Saint Charles Health System (OR),38044,"Prineville, OR",341,"Bend, OR"
-ST CHARLES SURGICAL HOSPITAL LLC,St. Charles Surgical Hospital,190300,shortterm,LA,Louisiana,New Orleans,70130,22071,"Orleans, LA",,missing (missing),19066,"New Orleans, LA",218,"New Orleans, LA"
+"ST CHARLES SURGICAL HOSPITAL, LLC",St. Charles Surgical Hospital,190300,shortterm,LA,Louisiana,New Orleans,70130,22071,"Orleans, LA",,missing (missing),19066,"New Orleans, LA",218,"New Orleans, LA"
 ST CHRISTOPHER'S HOSPITAL FOR CHILDREN,St. Christopher’s Hospital for Children,393307,pediatric,PA,Pennsylvania,Philadelphia,19134,42101,"Philadelphia, PA",HSI00001278,American Academic Health System (CA),39095,"Philadelphia, PA",356,"Philadelphia, PA"
 ST CLAIR HOSPITAL,St. Clair Hospital,390228,shortterm,PA,Pennsylvania,Pittsburgh,15243,42003,"Allegheny, PA",HSI00000913,Saint Clair Memorial Hospital (PA),39098,"Pittsburgh, PA",357,"Pittsburgh, PA"
 ST CLAIRE REGIONAL MEDICAL CENTER,St. Claire Regional Medical Center,180018,shortterm,KY,Kentucky,Morehead,40351,21205,"Rowan, KY",HSI00000914,Saint Claire Regional Medical Center (KY),18059,"Morehead, KY",204,"Lexington, KY"
@@ -4224,7 +4225,6 @@ ST ELIZABETH FLORENCE,St. Elizabeth Florence,180045,shortterm,KY,Kentucky,Floren
 ST ELIZABETH FT THOMAS,St. Elizabeth Ft. Thomas,180001,shortterm,KY,Kentucky,Fort Thomas,41075,21037,"Campbell, KY",HSI00000917,Saint Elizabeth Healthcare (KY),18022,"Fort Thomas, KY",203,"Covington, KY"
 ST ELIZABETH GRANT,St. Elizabeth Grant,181311,critical_access,KY,Kentucky,Williamstown,41097,21081,"Grant, KY",HSI00000917,Saint Elizabeth Healthcare (KY),18086,"Williamstown, KY",203,"Covington, KY"
 ST ELIZABETH HOSPITAL,St. Elizabeth Hospital,501335,critical_access,WA,Washington,Enumclaw,98022,53033,"King, WA",HSI00000183,Catholic Health Initiatives (CO),50020,"Enumclaw, WA",439,"Seattle, WA"
-ST ELIZABETH MEDICAL CENTER,St. Elizabeth Medical Center,241335,critical_access,MN,Minnesota,Wabasha,55981,27157,"Wabasha, MN",HSI00000055,Ascension Health (MO),24127,"Wabasha, MN",253,"Rochester, MN"
 ST ELIZABETH MEDICAL CENTER,St. Elizabeth Medical Center,330245,shortterm,NY,New York,Utica,13501,36065,"Oneida, NY",HSI00000697,Mohawk Valley Health System (NY),33128,"Utica, NY",300,"Elmira, NY"
 ST ELIZABETH MEDICAL CENTER NORTH,St. Elizabeth Medical Center North,180035,shortterm,KY,Kentucky,Edgewood,41017,21117,"Kenton, KY",HSI00000917,Saint Elizabeth Healthcare (KY),18016,"Covington, KY",203,"Covington, KY"
 ST ELIZABETH'S MEDICAL CENTER,St. Elizabeth’s Medical Center,220036,shortterm,MA,Massachusetts,Brighton,2135,25025,"Suffolk, MA",HSI00001037,Steward Health Care System (TX),22006,"Boston, MA",227,"Boston, MA"
@@ -4660,7 +4660,7 @@ UCF LAKE NONA HOSPITAL,Ucf Lake Nona Hospital,100350,shortterm,FL,Florida,Orland
 UCHEALTH BROOMFIELD HOSPITAL,UCHealth Broomfield Hospital,060129,shortterm,CO,Colorado,Broomfield,80021,8059,"Jefferson, CO",HSI00001169,University of Colorado Health (CO),6016,"Denver, CO",103,"Denver, CO"
 UCHEALTH GRANDVIEW HOSPITAL,UCHealth Grandview Hospital,060130,shortterm,CO,Colorado,Colorado Springs,80918,8041,"El Paso, CO",HSI00001169,University of Colorado Health (CO),6011,"Colorado Springs, CO",102,"Colorado Springs, CO"
 UCHEALTH GREELEY HOSPITAL,UCHealth Greeley Hospital,060131,shortterm,CO,Colorado,Greeley,80634,8123,"Weld, CO",,,6027,"Greeley, CO",106,"Greeley, CO"
-UCHEALTH HIGHLANDS RANCH HOSPITAL,UCHealth Highlands Ranch Hospital,060132,shortterm,CO,Colorado,Highlands Ranch,80129,8001,"Adams, CO",,,6016,"Denver, CO",103,"Denver, CO"
+UCHEALTH HIGHLANDS RANCH HOSPITAL,UCHealth Highlands Ranch Hospital,060132,shortterm,CO,Colorado,Highlands Ranch,80129,8035,"Douglas, CO",,,6016,"Denver, CO",103,"Denver, CO"
 UCHEALTH PIKES PEAK REGIONAL HOSPITAL,UCHealth Pikes Peak Regional Hospital,061326,critical_access,CO,Colorado,Woodland Park,80863,8119,"Teller, CO",HSI00001169,University of Colorado Health (CO),6011,"Colorado Springs, CO",102,"Colorado Springs, CO"
 UCHEALTH YAMPA VALLEY MEDICAL CENTER,UCHealth Yampa Valley Medical Center,060049,shortterm,CO,Colorado,Steamboat Springs,80487,8107,"Routt, CO",HSI00001169,University of Colorado Health (CO),6047,"Steamboat Springs, CO",103,"Denver, CO"
 UCSF BENIOFF CHILDREN'S HOSPITAL OAKLAND,U.C.S.F. Benioff Children’s Hospital Oakland,053301,pediatric,CA,California,Oakland,94609,6001,"Alameda, CA",HSI00001168,UC Health (CA),5161,"Oakland, CA",65,"Alameda County, CA"
