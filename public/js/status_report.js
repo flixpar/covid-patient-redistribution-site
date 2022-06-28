@@ -92,6 +92,7 @@ function createTable(table_data, cols) {
 	for (const [colid, colname] of Object.entries(cols)) {
 		let el = document.createElement("th");
 		el.style.cursor = "pointer";
+		el.style.whiteSpace = "nowrap";
 		header.appendChild(el);
 
 		let elText = document.createElement("span");
@@ -121,7 +122,6 @@ function createTable(table_data, cols) {
 
 	generateRows();
 	updateArrows();
-
 
 	table.appendChild(tablehead);
 	table.appendChild(tablebody);

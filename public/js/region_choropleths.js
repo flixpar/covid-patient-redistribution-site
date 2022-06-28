@@ -183,7 +183,7 @@ function generateLegend(svg, colorscale, vals, metricName) {
 
 	if (metricName.indexOf("pct") > 0) {
 		legend.append("g")
-			.call(d3.axisBottom(x).ticks(6).tickFormat(d => d*100 + "%").tickSize(15))
+			.call(d3.axisBottom(x).ticks(6).tickFormat(d => Math.round(d*100) + "%").tickSize(15))
 			.select(".domain").remove();
 	} else {
 		legend.append("g")

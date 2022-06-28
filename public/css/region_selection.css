@@ -22,21 +22,6 @@
 	border-bottom: 1px solid lightgray;
 }
 
-.arrow {
-	height: 0.75rem;
-}
-
-.arrow-light {
-	opacity: 0.5;
-}
-
-.arrow-container {
-	display: inline-flex;
-	flex-direction: column;
-	vertical-align: bottom;
-	margin-left: 5px;
-}
-
 @media (max-width: 750px) {
 	.section {
 		padding: 0;
