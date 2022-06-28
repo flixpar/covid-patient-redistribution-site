@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="/css/nav.css">
 	<link rel="stylesheet" href="/css/common.css">
 	<link rel="stylesheet" href="/css/about.css">
+	<link rel="stylesheet" href="/css/data.css">
+
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
 	<script src="/js/menu.js"></script>
@@ -62,13 +65,77 @@
 				<div class="notification is-danger">Error</div>
 			</div>
 			<div id="main-content-area">
-				<div class="field is-horizontal" style="margin-bottom: 20px;">
-					<label class="label column" for="hospital-select" style="margin-right: 20px;">Hospital:</label>
-					<div class="select is-fullwidth">
-						<select id="hospital-select">
-						</select>
+				<form id="form" class="form" autocomplete="off">
+
+					<div class="field is-horizontal">
+						<label class="label column is-2" for="datatype-select">Data Type:</label>
+						<div class="select is-fullwidth"><select v-model="datatype" id="datatype-select">
+							<option value="occupancy">Occupancy</option>
+							<option value="admissions">Admissions</option>
+						</select></div>
 					</div>
+	
+					<div class="field is-horizontal">
+						<label class="label column is-2" for="patienttype-select">Patient Type:</label>
+						<div class="select is-fullwidth"><select v-model="patienttype" id="patienttype-select">
+							<option value="all" disabled>All</option>
+							<option value="covid" selected>COVID-19 Positive</option>
+							<option value="noncovid" disabled>COVID-19 Negative</option>
+						</select></div>
+					</div>
+
+					<div class="field is-horizontal">
+						<label class="label column is-2" for="bedtype-select">Bed Type:</label>
+						<div class="select is-fullwidth"><select v-model="bedtype" id="bedtype-select">
+							<option value="all">All</option>
+							<option value="icu" selected>ICU</option>
+							<option value="acute">Acute</option>
+						</select></div>
+					</div>
+
+					<div class="field is-horizontal" style="margin-bottom: 20px;">
+						<label class="label column is-2" for="hospital-select">Hospitals:</label>
+
+						<div class="hospital-select-container" id="hospital-select-container">
+							<div class="hospital-select-list field is-grouped is-grouped-multiline">
+								<div v-for="h in selected_hospitals" class="hospitalselect-tag control">
+									<div class="tags has-addons">
+										<a class="tag is-delete is-danger is-light" @click="addOrRemove(selected_hospitals, h)"></a>
+										<span class="tag">{{ hospital_names[h] }}</span>
+									</div>
+								</div>
+							</div>
+							<div class="control has-icons-left has-icons-right" style="margin-top: 5px; margin-bottom: 5px;">
+								<input v-model="search_term" type="text" class="input" placeholder="Search">
+								<span class="icon is-left"><ion-icon name="search-outline"></ion-icon></span>
+								<span class="icon is-right"><ion-icon name="close-outline"></ion-icon></span>
+							</div>
+							<div class="hospital-select-area">
+								<ul>
+									<template v-for="h in hospitals_filtered">
+										<li class="hospital-select-item" @click="addOrRemove(selected_hospitals, h.hospital_id)" :class="{'hospital-select-item-selected': selected_hospitals.includes(h.hospital_id)}">
+											{{ h.hospital_name }}
+										</li>
+									</template>
+								</ul>
+							</div>
+							<div id="hospitalselect-footer">
+								<div id="hospitalselect-buttons-container" class="buttons" style="margin-top: 8px; display: flex; justify-content: space-between;">
+									<button type="button" class="button is-light is-small" style="width: 32%;">Select All</button>
+									<button type="button" class="button is-light is-small" style="width: 32%;">Select None</button>
+									<button type="button" class="button is-light is-small" style="width: 32%;">Reset</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</form>
+
+				<div v-for="h in selected_hospitals" :key="h">
+					<data-figure :hospital-id="h" :datatype="this.datatype" :patienttype="this.patienttype" :bedtype="this.bedtype"></data-figure>
 				</div>
+
 			</div>
 		</div>
 

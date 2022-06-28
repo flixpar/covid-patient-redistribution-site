@@ -1,0 +1,65 @@
+.hospital-select-container {
+	display: flex;
+	flex-direction: column;
+
+	width: 100%;
+	margin: auto;
+
+	border: 1px solid lightgray;
+	border-radius: 4px;
+
+	padding: 5px;
+	margin-bottom: 1rem;
+
+	box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
+}
+
+.hospital-select-header {
+	font-weight: bold;
+}
+
+.hospital-select-area {
+	display: flex;
+	flex-direction: column;
+	max-height: 200px;
+	overflow-y: scroll;
+}
+
+.hospital-select-item {
+	border: 1px solid rgb(234, 234, 234);
+	border-radius: 4px;
+
+	background-color: white;
+	color: black;
+
+	padding: 1px 5px 1px 5px;
+
+	white-space: normal;
+
+	cursor: pointer;
+}
+
+.hospital-select-item:hover {
+	opacity: 0.8;
+}
+
+.hospital-select-item input {
+	margin-right: 5px;
+}
+
+.hospital-select-item-selected {
+	background-color: blue;
+	color: white;
+}
+
+.hospital-select-list {
+	max-height: 100px;
+	overflow-y: scroll;
+
+	border-bottom: 1px solid lightgray;
+	margin-bottom: 4px !important;
+}
+
+.hospitalselect-tag {
+	margin-bottom: 0.25rem !important;
+}

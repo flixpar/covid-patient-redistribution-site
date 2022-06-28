@@ -1,57 +1,91 @@
 import * as common from "./common.js";
 
 
-function createHospitalSelect(hospitals) {
-	let select = document.getElementById("hospital-select");
-	for (let i = 0; i < hospitals.length; i++) {
-		const option = document.createElement("option");
-		option.value = hospitals[i].hospital_id;
-		option.innerText = hospitals[i].hospital_name;
-		if (hospitals[i].hospital_name == "The Johns Hopkins Hospital") {
-			option.selected = true;
+const RootComponent = {
+	data() {
+		return {
+			status: "loading",
+			patienttype: "covid",
+			bedtype: "icu",
+			datatype: "occupancy",
+			hospitals: [],
+			selected_hospitals: ["210009", "210029", "210048", "090005", "210022"],
+			hospital_names: {},
+			search_term: "",
 		}
-		select.appendChild(option);
-	}
-}
-
-function generateFigure(hospitalId, datatype="occupancy") {
-	let patientType = "icu";
-	let hospitalRequest = $.getJSON("/api/hospital-data", {"hospital_id": hospitalId, "patient_type": patientType});
-	hospitalRequest.then(data => {
-		let fig = makeDataCompareFigure(data, datatype);
-		fig.id = "main-figure";
-
-		if (document.getElementById("main-figure") != null) {
-			document.getElementById("main-figure").replaceWith(fig);
-		} else {
-			document.getElementById("main-content-area").appendChild(fig);
+	},
+	computed: {
+		hospitals_filtered() {
+			const s = this.search_term.toLowerCase();
+			return this.hospitals.filter(h => h.hospital_name.toLowerCase().includes(s));
 		}
+	},
+	methods: {
+		generateFigure,
+		addOrRemove(array, value) {
+			const index = array.indexOf(value);
+			if (index === -1) {
+				array.push(value);
+			} else {
+				array.splice(index, 1);
+			}
+		},
+		searchMatch(a, b) {
+			return a.toLowerCase().includes(b.toLowerCase());
+		},
+	},
+	mounted() {
+		$.getJSON("/api/hospital-list", d => {
+			this.hospitals = d;
+			for (const h of d) {
+				this.hospital_names[h.hospital_id] = h.hospital_name;
+			}
+			this.status = "ready";
+			common.hideProgressbar();
+		});
+	},
+	watch: {},
+	components: {},
+};
+
+const app = Vue.createApp(RootComponent);
+app.config.isCustomElement = tag => tag.startsWith("ion-");
+
+function generateFigure(hospitalId, datatype, patienttype, bedtype) {
+	console.log(`generateFigure for hospitalId: ${hospitalId}, datatype: ${datatype}, patienttype: ${patienttype}, bedtype: ${bedtype}`);
+	let hospitalRequest = $.getJSON("/api/hospital-data", {hospital_id: hospitalId, patient_type: patienttype, bed_type: bedtype});
+	let figRequest = hospitalRequest.then(data => {
+		return makeDataCompareFigure(data, datatype);
 	});
+	return figRequest;
 }
 
-let hospitalListRequest = $.getJSON("/api/hospital-list");
-hospitalListRequest.then(hospitals => {
-	common.hideProgressbar();
-	createHospitalSelect(hospitals);
-	generateFigure("210009");
+app.component("data-figure", {
+	props: ["hospitalId", "patienttype", "bedtype", "datatype"],
+	render() {
+		generateFigure(this.hospitalId, this.datatype, this.patienttype, this.bedtype).then(fig => {
+			if (this.$el.firstChild) {
+				this.$el.replaceChild(fig, this.$el.firstChild);
+			} else {
+				this.$el.appendChild(fig);
+			}
+		});
+		let node = Vue.h("div", {class: "fig-wrapper", id: "fig-wrapper-" + this.hospitalId}, []);
+		return node;
+	},
 });
 
-document.getElementById("hospital-select").addEventListener("change", _ => {
-	const select = document.getElementById("hospital-select")
-	const selectedHospitalInd = select.selectedIndex;
-	const hospitalId = select.options[selectedHospitalInd].value;
-	generateFigure(hospitalId);
-});
+const vm = app.mount("#results-container");
 
 /////////////////////////////////////////////////////
 
 const lineColors = {
-	"realdata": "gray",
+	"realdata": "#193c75",
 	"shortterm":  "#006C67",
 	"longterm":  "#454E9E",
 	"default": "black",
 };
-const capacityColors = ["gold", "darkorange", "red", "purple", "black", "magenta"];
+const capacityColors = ["#e64949", "darkorange", "red", "purple", "black", "magenta"];
 const axisColor = "#4a4a4a";
 
 const font = "Helvetica, sans-serif";
