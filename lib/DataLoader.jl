@@ -109,16 +109,18 @@ function load_hhs_raw(
 		hospital_id::String,
 		scenario::Symbol,
 		patient_type::Symbol,
+		bed_type::Symbol,
 		covid_capacity_proportion::Real=0.4,
 	)
-	@assert(patient_type in [:icu, :acute, :all, :combined_ped])
+	@assert patient_type == :covid
+	@assert(bed_type in [:icu, :acute, :all])
 
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
 	hospital_ind = filter_hospitals(data, ids=[hospital_id])[1]
 	hospital_name = data.location_names[hospital_ind]
 
-	bedtype = (patient_type == :all) ? :combined : patient_type
+	bedtype = (bed_type == :all) ? :combined : bed_type
 	casesdata = data.casesdata[scenario, bedtype]
 
 	admissions = casesdata.admitted[hospital_ind,:]

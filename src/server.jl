@@ -160,9 +160,9 @@ end
 
 route("/api/hospital-data") do
 	paramsdata = getpayload()
-	@info paramsdata
-	patient_type = Symbol(get(paramsdata, :patient_type, :combined))
-	response = get_hospital_data(paramsdata[:hospital_id], patient_type)
+	patient_type = Symbol(get(paramsdata, :patient_type, :covid))
+	bed_type = Symbol(get(paramsdata, :bed_type, :icu))
+	response = get_hospital_data(paramsdata[:hospital_id], patient_type, bed_type)
 	return json(response)
 end
 

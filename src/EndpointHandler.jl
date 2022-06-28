@@ -164,11 +164,12 @@ function get_regions_list(region_type::Symbol=:any)
 	return regions
 end
 
-function get_hospital_data(hospital_id, patient_type)
+function get_hospital_data(hospital_id, patient_type, bed_type)
 	data = load_hhs_raw(
 		hospital_id,
 		:moderate,
 		patient_type,
+		bed_type,
 	)
 	return data
 end
