@@ -243,6 +243,7 @@ ASCENSION VIA CHRISTI HOSPITAL PITTSBURG INC,Ascension Via Christi Hospital Pitt
 "ASCENSION VIA CHRISTI HOSPITAL ST. TERESA, INC.",Ascension Via Christi Hospital St. Teresa,170200,shortterm,KS,Kansas,Wichita,67235,20173,"Sedgwick, KS",HSI00000055,Ascension Health (MO),17123,"Wichita, KS",201,"Wichita, KS"
 "ASCENSION VIA CHRISTI HOSPITALS WICHITA, INC.",Ascension Via Christi Hospitals Wichita,170122,shortterm,KS,Kansas,Wichita,67214,20173,"Sedgwick, KS",HSI00000055,Ascension Health (MO),17123,"Wichita, KS",201,"Wichita, KS"
 ASCENSION WISCONSIN HOSP MENOMONEE FALLS CAMPUS,Ascension Wisconsin Hosp Menomonee Falls Campus,520214,shortterm,WI,Wisconsin,Menomonee Falls,53051,55133,"Waukesha, WI",,,52054,"Menomonee Falls, WI",451,"Milwaukee, WI"
+ASCENTIST HOSPITAL,Ascentist Hospital,170194,shortterm,KS,Kansas,Leawood,66211,20091,"Johnson, KS",,missing (missing),26041,"Kansas City, MO",268,"Kansas City, MO"
 ASHE MEMORIAL HOSPITAL,Ashe Memorial Hospital,341325,critical_access,NC,North Carolina,Jefferson,28640,37009,"Ashe, NC",HSI00000773,Novant Health (NC),34045,"Jefferson, NC",320,"Winston-Salem, NC"
 ASHEVILLE SPECIALTY HOSPITAL,Asheville Specialty Hospital,342017,longterm,NC,North Carolina,Asheville,28802,37021,"Buncombe, NC",HSI00000691,Mission Health System (NC),34005,"Asheville, NC",309,"Asheville, NC"
 ASHLAND HEALTH CENTER,Ashland Health Center,171304,critical_access,KS,Kansas,Ashland,67831,20025,"Clark, KS",,missing (missing),17004,"Ashland, KS",201,"Wichita, KS"
@@ -303,12 +304,12 @@ AURORA LAKELAND MEDICAL CENTER,Aurora Lakeland Medical Center,520102,shortterm,W
 AURORA MEDICAL CENTER,Aurora Medical Center,520207,shortterm,WI,Wisconsin,Grafton,53024,55089,"Ozaukee, WI",HSI00001277,Advocate Aurora Health (IL),52073,"Port Washington, WI",451,"Milwaukee, WI"
 AURORA MEDICAL CENTER BAY AREA,Aurora Medical Center Bay Area,520113,shortterm,WI,Wisconsin,Marinette,54143,55075,"Marinette, WI",,missing (missing),52050,"Marinette, WI",447,"Green Bay, WI"
 AURORA MEDICAL CENTER BURLINGTON,Aurora Medical Center Burlington,520059,shortterm,WI,Wisconsin,Burlington,53105,55101,"Racine, WI",HSI00001277,Advocate Aurora Health (IL),52016,"Burlington, WI",451,"Milwaukee, WI"
+AURORA MEDICAL CENTER SHEBOYGAN COUNTY,Aurora Sheboygan Memorial Medical Center,520035,shortterm,WI,Wisconsin,Sheboygan,53081,55117,"Sheboygan, WI",HSI00001277,Advocate Aurora Health (IL),52085,"Sheboygan, WI",451,"Milwaukee, WI"
 AURORA MEDICAL CENTER SUMMIT,Aurora Medical Center Summit,520206,shortterm,WI,Wisconsin,Summit,53066,55133,"Waukesha, WI",HSI00001277,Advocate Aurora Health (IL),52063,"Oconomowoc, WI",451,"Milwaukee, WI"
 AURORA MEDICAL CTR KENOSHA,Aurora Medical Center Kenosha,520189,shortterm,WI,Wisconsin,Kenosha,53142,55059,"Kenosha, WI",HSI00001277,Advocate Aurora Health (IL),52043,"Kenosha, WI",451,"Milwaukee, WI"
 AURORA MEDICAL CTR MANITOWOC COUNTY,Aurora Medical Center Manitowoc County,520034,shortterm,WI,Wisconsin,Two Rivers,54241,55071,"Manitowoc, WI",HSI00001277,Advocate Aurora Health (IL),52096,"Two Rivers, WI",447,"Green Bay, WI"
 AURORA MEDICAL CTR OSHKOSH,Aurora Medical Center Oshkosh,520198,shortterm,WI,Wisconsin,Oshkosh,54904,55139,"Winnebago, WI",HSI00001277,Advocate Aurora Health (IL),52067,"Oshkosh, WI",452,"Neenah, WI"
 AURORA MEDICAL CTR WASHINGTON COUNTY,Aurora Medical Center Washington County,520038,shortterm,WI,Wisconsin,Hartford,53027,55131,"Washington, WI",HSI00001277,Advocate Aurora Health (IL),52036,"Hartford, WI",451,"Milwaukee, WI"
-AURORA SHEBOYGAN MEMORIAL MEDICAL CTR,Aurora Sheboygan Memorial Medical Center,520035,shortterm,WI,Wisconsin,Sheboygan,53083,55117,"Sheboygan, WI",HSI00001277,Advocate Aurora Health (IL),52085,"Sheboygan, WI",451,"Milwaukee, WI"
 AURORA ST LUKES MEDICAL CENTER,Aurora St. Luke’s Medical Center,520138,shortterm,WI,Wisconsin,Milwaukee,53215,55079,"Milwaukee, WI",HSI00001277,Advocate Aurora Health (IL),52057,"Milwaukee, WI",451,"Milwaukee, WI"
 AURORA WEST ALLIS MEDICAL CENTER,Aurora West Allis Medical Center,520139,shortterm,WI,Wisconsin,West Allis,53227,55079,"Milwaukee, WI",HSI00001277,Advocate Aurora Health (IL),52103,"West Allis, WI",451,"Milwaukee, WI"
 AUXILIO MUTUO HOSPITAL,Auxilio Mutuo Hospital,400016,shortterm,PR,Puerto Rico,San Juan,918,72127,"San Juan, PR",,,,,,
@@ -539,6 +540,7 @@ BLACK HILLS SURGICAL HOSPITAL LLP,Black Hills Surgical Hospital Llp,430091,short
 BLACK RIVER MEMORIAL HOSPITAL,Black River Memorial Hospital,521333,critical_access,WI,Wisconsin,Black River Falls,54615,55053,"Jackson, WI",,missing (missing),52012,"Black River Falls, WI",450,"Marshfield, WI"
 BLANCHARD VALLEY HOSPITAL,Blanchard Valley Hospital,360095,shortterm,OH,Ohio,Findlay,45840,39063,"Hancock, OH",,missing (missing),36040,"Findlay, OH",334,"Toledo, OH"
 BLECKLEY MEMORIAL HOSPITAL,Bleckley Memorial Hospital,111302,critical_access,GA,Georgia,Cochran,31014,13023,"Bleckley, GA",,missing (missing),11030,"Cochran, GA",147,"Macon, GA"
+BLESSING HEALTH KEOKUK,UnityPoint Health – Keokuk,160008,shortterm,IA,Iowa,Keokuk,52632,19111,"Lee, IA",HSI00001146,Unitypoint Health (IA),16057,"Keokuk, IA",194,"Iowa City, IA"
 BLESSING HOSPITAL,Blessing Hospital,140015,shortterm,IL,Illinois,Quincy,62301,17001,"Adams, IL",HSI00000117,Blessing Health System (IL),14112,"Quincy, IL",172,"Springfield, IL"
 "BLIANT SPECIALTY HOSPITAL, LLC",Bliant Specialty Hospital,192030,longterm,LA,Louisiana,New Orleans,70128,22071,"Orleans, LA",,missing (missing),19066,"New Orleans, LA",218,"New Orleans, LA"
 BLOUNT MEMORIAL HOSPITAL,Blount Memorial Hospital,440011,shortterm,TN,Tennessee,Maryville,37804,47009,"Blount, TN",HSI00000118,Blount Memorial Hospital (TN),44056,"Maryville, TN",377,"Knoxville, TN"
@@ -769,6 +771,7 @@ CENTURA PORTER ADVENTIST HOSPITAL,Centura Health-Porter Adventist Hospital,06006
 CENTURA ST ANTHONY HOSPITAL,Centura Health-St. Anthony Hospital,060015,shortterm,CO,Colorado,Lakewood,80228,8059,"Jefferson, CO",HSI00000183,Catholic Health Initiatives (CO),6016,"Denver, CO",103,"Denver, CO"
 CENTURA ST ANTHONY NORTH HOSPITAL,St. Anthony North Health Campus,060104,shortterm,CO,Colorado,Westminster,80023,8014,Unknown,HSI00000183,Catholic Health Initiatives (CO),6016,"Denver, CO",103,"Denver, CO"
 CENTURA ST ANTHONY SUMMIT HOSPITAL,St. Anthony Summit Medical Center,060118,shortterm,CO,Colorado,Frisco,80443,8117,"Summit, CO",HSI00000183,Catholic Health Initiatives (CO),6016,"Denver, CO",103,"Denver, CO"
+CENTURA ST CATEHRINE HOSPITAL - DODGE CITY,Centura St Catehrine Hospital - Dodge City,170175,shortterm,KS,Kansas,Dodge City,67801,20057,"Ford, KS",HSI00000584,Lifepoint Health (TN),17024,"Dodge City, KS",201,"Wichita, KS"
 CENTURA ST ELIZABETH HOSPITAL,Colorado Plains Medical Center,060044,shortterm,CO,Colorado,Fort Morgan,80701,8087,"Morgan, CO",HSI00000584,Lifepoint Health (TN),6023,"Fort Morgan, CO",106,"Greeley, CO"
 CENTURA ST MARY-CORWIN HOSPITAL,Centura Health-St. Mary Corwin Medical Center,060012,shortterm,CO,Colorado,Pueblo,81004,8101,"Pueblo, CO",HSI00000183,Catholic Health Initiatives (CO),6042,"Pueblo, CO",107,"Pueblo, CO"
 CENTURA ST THOMAS MORE HOSPITAL,Centura Health-St. Thomas More Hospital,061344,critical_access,CO,Colorado,Canon City,81212,8043,"Fremont, CO",,,6009,"Canon City, CO",102,"Colorado Springs, CO"
@@ -1197,7 +1200,6 @@ DOCTORS HOSPITAL,Doctors Hospital,100296,shortterm,FL,Florida,Coral Gables,33146
 DOCTORS HOSPITAL,Doctors Hospital,110177,shortterm,GA,Georgia,Augusta,30909,13245,"Richmond, GA",HSI00000492,HCA Healthcare (TN),11008,"Augusta, GA",145,"Augusta, GA"
 DOCTORS HOSPITAL,Doctors Hospital,360152,shortterm,OH,Ohio,Columbus,43228,39049,"Franklin, OH",HSI00000784,Ohiohealth (OH),36027,"Columbus, OH",329,"Columbus, OH"
 DOCTORS HOSPITAL AT RENAISSANCE,Doctors Hospital At Renaissance,450869,shortterm,TX,Texas,Edinburg,78539,48215,"Hidalgo, TX",HSI00000318,Doctors Hospital at Renaissance (TX),45083,"Edinburg, TX",402,"McAllen, TX"
-DOCTORS HOSPITAL LLC,Doctors Hospital Llc,170194,shortterm,KS,Kansas,Leawood,66211,20091,"Johnson, KS",,missing (missing),26041,"Kansas City, MO",268,"Kansas City, MO"
 DOCTORS HOSPITAL OF LAREDO,Doctors Hospital of Laredo,450643,shortterm,TX,Texas,Laredo,78041,48479,"Webb, TX",HSI00001148,Universal Health Services (PA),45156,"Laredo, TX",412,"San Antonio, TX"
 DOCTORS HOSPITAL OF MANTECA,Doctors Hospital of Manteca,050118,shortterm,CA,California,Manteca,95336,6077,"San Joaquin, CA",HSI00001066,Tenet Healthcare Corporation (TX),5133,"Manteca, CA",91,"Stockton, CA"
 "DOCTORS HOSPITAL OF RIVERSIDE, LLC",Doctors Hospital of Riverside L.L.C.,050102,shortterm,CA,California,Riverside,92503,6065,"Riverside, CA",,missing (missing),5198,"Riverside, CA",79,"San Bernardino, CA"
@@ -1851,7 +1853,6 @@ HOSPITAL DE LA CONCEPCION,Hospital De La Concepción,400021,shortterm,PR,Puerto 
 HOSPITAL DEL CENTRO COMPRENSIVO DE CANCER,Hospital Del Centro Comprensivo De Cáncer,400135,shortterm,PR,Puerto Rico,San Juan,927,72127,"San Juan, PR",,,,,,
 HOSPITAL DISTRICT #1 OF RICE COUNTY,Hospital District No. 1 of Rice County,171330,critical_access,KS,Kansas,Lyons,67554,20159,"Rice, KS",,missing (missing),17070,"Lyons, KS",201,"Wichita, KS"
 HOSPITAL DR CAYETANO COLL Y TOSTE,Hospital Dr. Cayetano Coll y Toste,400087,shortterm,PR,Puerto Rico,Arecibo,613,72013,"Arecibo, PR",,,,,,
-HOSPITAL DR SUSONI INC,Hospital Dr. Susoni Inc.,400117,shortterm,PR,Puerto Rico,Arecibo,614,72013,"Arecibo, PR",,,,,,
 HOSPITAL FOR EXTENDED RECOVERY,Hospital For Extended Recovery,492007,longterm,VA,Virginia,Norfolk,23507,51710,"Norfolk City, VA",HSI00000972,Sentara Healthcare (VA),49038,"Norfolk, VA",430,"Norfolk, VA"
 HOSPITAL FOR SPECIAL CARE,Hospital for Special Care,072004,longterm,CT,Connecticut,New Britain,6050,9003,"Hartford, CT",,missing (missing),7012,"New Britain, CT",110,"Hartford, CT"
 HOSPITAL FOR SPECIAL SURGERY,Hospital for Special Surgery,330270,shortterm,NY,New York,New York,10021,36061,"New York, NY",,missing (missing),33080,"Manhattan, NY",303,"Manhattan, NY"
@@ -1860,9 +1861,10 @@ HOSPITAL MENONITA CAGUAS INC,Hospital Menonita Caguas Inc.,400104,shortterm,PR,P
 HOSPITAL MENONITA DE CAYEY,Hospital Menonita De Cayey,400013,shortterm,PR,Puerto Rico,Cayey,737,72035,"Cayey, PR",,,,,,
 HOSPITAL MENONITA GUAYAMA,Hospital Menonita Guayama,400048,shortterm,PR,Puerto Rico,Guayama,785,72059,"Guayanilla, PR",,,,,,
 "HOSPITAL MENONITA HUMACAO, INC",Hospital Oriente,400011,shortterm,PR,Puerto Rico,Humacao,792,72069,Unknown,,,,,,
+HOSPITAL METROPOLITANO  DR SUSONI,Hospital Dr. Susoni Inc.,400117,shortterm,PR,Puerto Rico,Arecibo,614,72013,"Arecibo, PR",,,,,,
 HOSPITAL METROPOLITANO DE LA MONTANA,Hospital Metropolitano De La Montaña,400130,shortterm,PR,Puerto Rico,Bda Nueva,641,72141,"Utuado, PR",,,,,,
-HOSPITAL METROPOLITANO DR PILA,Hospital Metropolitano Dr. Pila,400003,shortterm,PR,Puerto Rico,Ponce,733,72113,"Ponce, PR",,,,,,
-HOSPITAL METROPOLITANO SAN GERMAN,Hospital Metropolitano San Germán,400126,shortterm,PR,Puerto Rico,San German,683,72125,"San German, PR",,,,,,
+HOSPITAL METROPOLITANO DE SAN GERMAN,Hospital Metropolitano San Germán,400126,shortterm,PR,Puerto Rico,San German,683,72125,"San German, PR",,,,,,
+HOSPITAL METROPOLITANO DR PILA,Hospital Metropolitano Dr. Pila,400003,shortterm,PR,Puerto Rico,Ponce,717,72113,"Ponce, PR",,,,,,
 "HOSPITAL OF CENTRAL CONNECTICUT, THE",The Hospital of Central Connecticut,070035,shortterm,CT,Connecticut,New Britain,6050,9003,"Hartford, CT",HSI00000452,Hartford Healthcare Corporation (CT),7012,"New Britain, CT",110,"Hartford, CT"
 HOSPITAL OF THE FOX CHASE CANCER CENTER,Hospital of The Fox Chase Cancer Center,390196,shortterm,PA,Pennsylvania,Philadelphia,19111,42101,"Philadelphia, PA",HSI00001065,Temple University Health System (PA),39095,"Philadelphia, PA",356,"Philadelphia, PA"
 HOSPITAL OF UNIV OF PENNSYLVANIA,Hospital of the University of Pennsylvania,390111,shortterm,PA,Pennsylvania,Philadelphia,19104,42101,"Philadelphia, PA",HSI00000820,University of Pennsylvania Health System (PA),39095,"Philadelphia, PA",356,"Philadelphia, PA"
@@ -2029,7 +2031,6 @@ JENKINS COUNTY MEDICAL CENTER,Jenkins County Medical Center,111311,critical_acce
 JENNERSVILLE HOSPITAL,Jennersville Hospital,390220,shortterm,PA,Pennsylvania,West Grove,19390,42029,"Chester, PA",HSI00000866,Tower Health (PA),39136,"West Grove, PA",355,"Lancaster, PA"
 JENNIE M MELHAM MEMORIAL MEDICAL CENTER,Jennie M. Melham Memorial Medical Center,281365,critical_access,NE,Nebraska,Broken Bow,68822,31041,"Custer, NE",,missing (missing),28013,"Broken Bow, NE",277,"Lincoln, NE"
 JENNIE STUART MEDICAL CENTER,Jennie Stuart Medical Center,180051,shortterm,KY,Kentucky,Hopkinsville,42240,21047,"Christian, KY",,missing (missing),18036,"Hopkinsville, KY",380,"Nashville, TN"
-JENNINGS AMERICAN LEGION HOSPITAL,Jennings American Legion Hospital,190053,shortterm,LA,Louisiana,Jennings,70546,22053,"Jefferson Davis, LA",,missing (missing),19040,"Jennings, LA",213,"Lafayette, LA"
 JEROLD PHELPS COMMUNITY HOSPITAL,Jerold Phelps Community Hospital,051309,critical_access,CA,California,Garberville,95542,6023,"Humboldt, CA",,missing (missing),5080,"Garberville, CA",62,"Napa, CA"
 JERSEY CITY MEDICAL CENTER,Jersey City Medical Center,310074,shortterm,NJ,New Jersey,Jersey City,7302,34017,"Hudson, NJ",HSI00000863,RWJBarnabas Health (NJ),31023,"Jersey City, NJ",289,"Newark, NJ"
 JERSEY COMMUNITY HOSPITAL,Jersey Community Hospital,140059,shortterm,IL,Illinois,Jerseyville,62052,17083,"Jersey, IL",,missing (missing),14067,"Jerseyville, IL",273,"St. Louis, MO"
@@ -2128,7 +2129,6 @@ KENSINGTON HOSPITAL,Kensington Hospital,390025,shortterm,PA,Pennsylvania,Philade
 KENT COUNTY MEMORIAL HOSPITAL,Kent County Memorial Hospital,410009,shortterm,RI,Rhode Island,Warwick,2886,44003,"Kent, RI",HSI00000166,Care New England Health System (RI),41007,"Warwick, RI",364,"Providence, RI"
 KENTFIELD HOSPITAL,Kentfield Hospital,052043,longterm,CA,California,Kentfield,94904,6041,"Marin, CA",,missing (missing),5088,"Greenbrae, CA",81,"San Francisco, CA"
 KENTUCKY RIVER MEDICAL CENTER,Kentucky River Medical Center,180139,shortterm,KY,Kentucky,Jackson,41339,21025,"Breathitt, KY",,missing (missing),18089,"Jackson, KY",204,"Lexington, KY"
-KEOKUK AREA HOSPITAL,UnityPoint Health – Keokuk,160008,shortterm,IA,Iowa,Keokuk,52632,19111,"Lee, IA",HSI00001146,Unitypoint Health (IA),16057,"Keokuk, IA",194,"Iowa City, IA"
 KEOKUK COUNTY HEALTH CENTER,Keokuk County Health Center,161315,critical_access,IA,Iowa,Sigourney,52591,19107,"Keokuk, IA",HSI00001172,University of Iowa Hospitals and Clinics (IA),16054,"Iowa City, IA",194,"Iowa City, IA"
 KERALTY HOSPITAL,Westchester General Hospital,100284,shortterm,FL,Florida,Miami,33155,12086,"Miami-Dade, FL",,missing (missing),10074,"Miami, FL",127,"Miami, FL"
 KERN MEDICAL CENTER,Kern Medical Center,050315,shortterm,CA,California,Bakersfield,93306,6029,"Kern, CA",,missing (missing),5015,"Bakersfield, CA",25,"Bakersfield, CA"
@@ -3179,6 +3179,7 @@ OCH REGIONAL MEDICAL CENTER,O.C.H. Regional Medical Center,250050,shortterm,MS,M
 OCHILTREE GENERAL HOSPITAL,Ochiltree General Hospital,451359,critical_access,TX,Texas,Perryton,79070,48357,"Ochiltree, TX",,missing (missing),45208,"Perryton, TX",383,"Amarillo, TX"
 OCHSNER ABROM KAPLAN MEMORIAL HOSPITAL,Abrom Kaplan Memorial Hospital,191322,critical_access,LA,Louisiana,Kaplan,70548,22113,"Vermilion, LA",HSI00000562,Lafayette General Health (LA),19042,"Kaplan, LA",213,"Lafayette, LA"
 OCHSNER ACADIA GENERAL HOSPITAL,Acadia General Hospital,190044,shortterm,LA,Louisiana,Crowley,70526,22001,"Acadia, LA",HSI00000562,Lafayette General Health (LA),19019,"Crowley, LA",213,"Lafayette, LA"
+OCHSNER AMERICAN LEGION HOSPITAL,Jennings American Legion Hospital,190053,shortterm,LA,Louisiana,Jennings,70546,22053,"Jefferson Davis, LA",,missing (missing),19040,"Jennings, LA",213,"Lafayette, LA"
 OCHSNER EXTENDED CARE HOSPITAL,Ochsner Extended Care Hospital,192015,longterm,LA,Louisiana,Jefferson,70121,22051,"Jefferson, LA",HSI00000780,Ochsner Health System (LA),19066,"New Orleans, LA",218,"New Orleans, LA"
 OCHSNER LAFAYETTE GENERAL MEDICAL CENTER,Lafayette General Medical Center,190002,shortterm,LA,Louisiana,Lafayette,70503,22055,"Lafayette, LA",HSI00000562,Lafayette General Health (LA),19046,"Lafayette, LA",213,"Lafayette, LA"
 OCHSNER LSU HEALTH MONROE,Ochsner L.S.U. Health Monroe,190011,shortterm,LA,Louisiana,Monroe,71202,22073,"Ouachita, LA",,missing (missing),19061,"Monroe, LA",217,"Monroe, LA"
@@ -3252,6 +3253,7 @@ OSF LITTLE COMPANY OF MARY MEDICAL CENTER,O.S.F. Little Company of Mary Medical 
 OSF SACRED HEART MEDICAL CENTER,O.S.F. Sacred Heart Medical Center,140093,shortterm,IL,Illinois,Danville,61832,17183,"Vermilion, IL",HSI00000776,OSF Healthcare System (IL),14027,"Danville, IL",173,"Urbana, IL"
 OSF SAINT ANTHONY'S HEALTH CENTER,O.S.F. Saint Anthony’s Health Center,140052,shortterm,IL,Illinois,Alton,62002,17119,"Madison, IL",HSI00000776,OSF Healthcare System (IL),14002,"Alton, IL",273,"St. Louis, MO"
 OSF SAINT CLARE MEDICAL CENTER,Perry Memorial Hospital,141337,critical_access,IL,Illinois,Princeton,61356,17011,"Bureau, IL",HSI00000776,OSF Healthcare System (IL),14111,"Princeton, IL",171,"Rockford, IL"
+OSF SAINT ELIZABETH MEDICAL CENTER,Ottawa Regional Hospital & Healthcare Center,140110,shortterm,IL,Illinois,Ottawa,61350,17099,"La Salle, IL",HSI00000776,OSF Healthcare System (IL),14100,"Ottawa, IL",170,"Peoria, IL"
 OSF SAINT LUKE MEDICAL CENTER,O.S.F. Saint Luke Medical Center,141325,critical_access,IL,Illinois,Kewanee,61443,17073,"Henry, IL",HSI00000776,OSF Healthcare System (IL),14070,"Kewanee, IL",170,"Peoria, IL"
 OSF SAINT PAUL MEDICAL CENTER,O.S.F. Saint Paul Medical Center,141310,critical_access,IL,Illinois,Mendota,61342,17099,"La Salle, IL",HSI00000776,OSF Healthcare System (IL),14085,"Mendota, IL",171,"Rockford, IL"
 OSMOND GENERAL HOSPITAL,Osmond General Hospital,281347,critical_access,NE,Nebraska,Osmond,68765,31139,"Pierce, NE",,missing (missing),28060,"Osmond, NE",278,"Omaha, NE"
@@ -3259,7 +3261,6 @@ OSS ORTHOPAEDIC HOSPITAL,O.S.S. Orthopaedic Hospital,390325,shortterm,PA,Pennsyl
 OSWEGO HOSPITAL,Oswego Hospital,330218,shortterm,NY,New York,Oswego,13126,36075,"Oswego, NY",HSI00000798,Oswego Health (NY),33094,"Oswego, NY",307,"Syracuse, NY"
 OTHELLO COMMUNITY HOSPITAL,Othello Community Hospital,501318,critical_access,WA,Washington,Othello,99344,53001,"Adams, WA",,missing (missing),50041,"Othello, WA",440,"Spokane, WA"
 OTTAWA COUNTY HEALTH CENTER,Ottawa County Health Center,171328,critical_access,KS,Kansas,Minneapolis,67467,20143,"Ottawa, KS",,missing (missing),17078,"Minneapolis, KS",201,"Wichita, KS"
-OTTAWA REGIONAL HOSPITAL & HEALTHCARE CENTER,Ottawa Regional Hospital & Healthcare Center,140110,shortterm,IL,Illinois,Ottawa,61350,17099,"La Salle, IL",HSI00000776,OSF Healthcare System (IL),14100,"Ottawa, IL",170,"Peoria, IL"
 OTTO KAISER MEMORIAL HOSPITAL,Otto Kaiser Memorial Hospital,451364,critical_access,TX,Texas,Kenedy,78119,48255,"Karnes, TX",,missing (missing),45144,"Kenedy, TX",412,"San Antonio, TX"
 OTTUMWA REGIONAL HEALTH CENTER,Ottumwa Regional Health Center,160089,shortterm,IA,Iowa,Ottumwa,52501,19179,"Wapello, IA",HSI00000584,Lifepoint Health (TN),16083,"Ottumwa, IA",194,"Iowa City, IA"
 OUACHITA COUNTY MEDICAL CENTER,Ouachita County Medical Center,040050,shortterm,AR,Arkansas,Camden,71701,5103,"Ouachita, AR",,missing (missing),4011,"Camden, AR",19,"Little Rock, AR"
@@ -4527,6 +4528,7 @@ TEXOMA MEDICAL CENTER,Texoma Medical Center,450324,shortterm,TX,Texas,Denison,75
 THAYER COUNTY HEALTH SERVICES,Thayer County Health Services,281304,critical_access,NE,Nebraska,Hebron,68370,31169,"Thayer, NE",,missing (missing),28037,"Hebron, NE",277,"Lincoln, NE"
 THE BURDETT CARE CENTER,The Burdett Care Center,330409,shortterm,NY,New York,Troy,12180,36083,"Rensselaer, NY",,,33127,"Troy, NY",295,"Albany, NY"
 THE CARLE FOUNDATION HOSPITAL,The Carle Foundation Hospital,140091,shortterm,IL,Illinois,Urbana,61801,17019,"Champaign, IL",HSI00001074,The Carle Foundation (IL),14136,"Urbana, IL",173,"Urbana, IL"
+"THE CHILDREN'S CENTER, INC","The Children'S Center, Inc",373303,pediatric,OK,Oklahoma,Bethany,73008,40109,"Oklahoma, OK",,,37063,"Oklahoma City, OK",339,"Oklahoma City, OK"
 THE GENERAL,The General,190316,shortterm,LA,Louisiana,Baton Rouge,70806,22033,"East Baton Rouge, LA",,,19007,"Baton Rouge, LA",210,"Baton Rouge, LA"
 THE HEALTHCENTER,The HealthCenter,270087,shortterm,MT,Montana,Kalispell,59901,30029,"Flathead, MT",HSI00000538,Kalispell Regional Healthcare (MT),27028,"Kalispell, MT",276,"Missoula, MT"
 THE HEART HOSPITAL BAYLOR DENTON,The Heart Hospital Baylor Denton,450893,shortterm,TX,Texas,Denton,76208,48121,"Denton, TX",HSI00000096,Baylor Scott and White Health (TX),45073,"Denton, TX",391,"Dallas, TX"
@@ -4990,7 +4992,6 @@ WESTERN MARYLAND CENTER,Western Maryland Center,212002,longterm,MD,Maryland,Hage
 WESTERN MASSACHUSETTS HOSPITAL,Western Massachusetts Hospital,222023,longterm,MA,Massachusetts,Westfield,1085,25013,"Hampden, MA",,missing (missing),22066,"Westfield, MA",230,"Springfield, MA"
 WESTERN MISSOURI MEDICAL CENTER,Western Missouri Medical Center,260097,shortterm,MO,Missouri,Warrensburg,64093,29101,"Johnson, MO",,missing (missing),26091,"Warrensburg, MO",268,"Kansas City, MO"
 WESTERN PEAKS SPECIALTY HOSPITAL,Western Peaks Specialty Hospital,462003,longterm,UT,Utah,Bountiful,84010,49011,"Davis, UT",,missing (missing),46003,"Bountiful, UT",423,"Salt Lake City, UT"
-WESTERN PLAINS MEDICAL COMPLEX,Western Plains Medical Complex,170175,shortterm,KS,Kansas,Dodge City,67801,20057,"Ford, KS",HSI00000584,Lifepoint Health (TN),17024,"Dodge City, KS",201,"Wichita, KS"
 WESTERN REGIONAL MEDICAL CENTER,Western Regional Medical Center,030138,shortterm,AZ,Arizona,Goodyear,85338,4013,"Maricopa, AZ",,,3022,"Phoenix, AZ",12,"Phoenix, AZ"
 WESTERN WISCONSIN HEALTH,Western Wisconsin Health,521347,critical_access,WI,Wisconsin,Baldwin,54002,55109,"St Croix, WI",,missing (missing),52006,"Baldwin, WI",256,"St. Paul, MN"
 "WESTFIELD MEMORIAL HOSPITAL, INC","Westfield Memorial Hospital, Inc.",330166,shortterm,NY,New York,Westfield,14787,36013,"Chautauqua, NY",HSI00000025,Allegheny Health Network (PA),33138,"Westfield, NY",351,"Erie, PA"
