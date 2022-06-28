@@ -59,13 +59,6 @@
 		</div>
 
 		<div class="container" id="results-container">
-			<div id="progressbar-area" class="column is-10 is-offset-1">
-				<div class="notification">Updating...</div>
-				<progress class="progress is-small is-info" max="100"></progress>
-			</div>
-			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
-				<div class="notification is-danger">Error</div>
-			</div>
 			<div id="main-content-area">
 				<form id="form" class="form" autocomplete="off">
 
@@ -138,6 +131,13 @@
 					<data-figure :hospital-id="h" :datatype="this.datatype" :patienttype="this.patienttype" :bedtype="this.bedtype"></data-figure>
 				</div>
 
+			</div>
+			<div id="progressbar-area" class="column is-10 is-offset-1">
+				<div class="notification">Updating...</div>
+				<progress class="progress is-small is-info" max="100"></progress>
+			</div>
+			<div id="error-area" class="column is-10 is-offset-1 is-hidden">
+				<div class="notification is-danger">Error</div>
 			</div>
 		</div>
 
