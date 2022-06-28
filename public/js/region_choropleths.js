@@ -123,9 +123,14 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 	// const scaleMin = percentile(vals, 0.05);
 	// const scaleMax = percentile(vals, 0.97);
 	// const scaleMax = percentile(vals.filter(x => x > 10), 0.97);
-	const scaleMax = d3.max(vals);
+	// const scaleMax = d3.max(vals);
+	const scaleMax = Math.max(d3.max(vals), 0.05);
 	const colorscaleRaw = d3.scaleSequential(d3.interpolateReds).domain([scaleMin, scaleMax]);
 	const colorscale = x => (x >= 0) ? colorscaleRaw(x) : "#efefef";
+
+	const isPct = metricName.indexOf("pct") > 0;
+	const legendFmt = (x) => (isPct) ? `${(x*100).toFixed(1)}%` : `${x.toFixed(0)}`;
+	const legendMetricName = metricNames[metricName].split(" (%)")[0];
 
 	const path = d3.geoPath(d3.geoAlbersUsa());
 
@@ -141,7 +146,7 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 			.attr("stroke-linejoin", "round")
 			.attr("d", path)
 		.append("title")
-			.text(d => `${nameLookup(d)}\n${valueLookup(d).toFixed(0)}`);
+			.text(d => `${nameLookup(d)}\n${legendMetricName}: ${legendFmt(valueLookup(d))}`);
 
 	generateLegend(svg, colorscale, vals, metricName);
 
@@ -149,11 +154,9 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 }
 
 function generateLegend(svg, colorscale, vals, metricName) {
-	// const legendMin = Math.round(colorscale.domain()[0]);
-	// const legendMax = Math.round(colorscale.domain()[1]);
 
 	const legendMin = 0;
-	const legendMax = d3.max(vals);
+	const legendMax = Math.max(d3.max(vals), 0.05);
 
 	const x = d3.scaleLinear()
 		.domain([legendMin, legendMax])
@@ -183,7 +186,7 @@ function generateLegend(svg, colorscale, vals, metricName) {
 
 	if (metricName.indexOf("pct") > 0) {
 		legend.append("g")
-			.call(d3.axisBottom(x).ticks(6).tickFormat(d => Math.round(d*100) + "%").tickSize(15))
+			.call(d3.axisBottom(x).ticks(6).tickFormat(d => (d*100).toFixed(0) + "%").tickSize(15))
 			.select(".domain").remove();
 	} else {
 		legend.append("g")
