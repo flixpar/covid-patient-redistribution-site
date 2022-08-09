@@ -282,6 +282,7 @@ ATOKA COUNTY MEDICAL CENTER,Atoka County Medical Center,371300,critical_access,O
 ATRIUM HEALTH ANSON,Atrium Health Anson,340084,shortterm,NC,North Carolina,Wadesboro,28170,37007,"Anson, NC",HSI00000173,Atrium Health (NC),34093,"Wadesboro, NC",311,"Charlotte, NC"
 ATRIUM HEALTH CABARRUS,Carolinas Healthcare System Northeast,340001,shortterm,NC,North Carolina,Concord,28025,37025,"Cabarrus, NC",HSI00000173,Atrium Health (NC),34020,"Concord, NC",311,"Charlotte, NC"
 ATRIUM HEALTH CLEVELAND,Atrium Health Cleveland,340021,shortterm,NC,North Carolina,Shelby,28150,37045,"Cleveland, NC",HSI00000173,Atrium Health (NC),34079,"Shelby, NC",311,"Charlotte, NC"
+ATRIUM HEALTH FLOYD POLK MEDICAL CENTER,Polk Medical Center,111330,critical_access,GA,Georgia,Cedartown,30125,13233,"Polk, GA",HSI00000369,Floyd Medical Center (GA),11098,"Rome, GA",148,"Rome, GA"
 ATRIUM HEALTH LINCOLN,Atrium Health Lincoln,340145,shortterm,NC,North Carolina,Lincolnton,28092,37109,"Lincoln, NC",HSI00000173,Atrium Health (NC),34052,"Lincolnton, NC",311,"Charlotte, NC"
 ATRIUM HEALTH NAVICENT PEACH,"Medical Center of Peach County, Navicent Health",111310,critical_access,GA,Georgia,Byron,31008,13225,"Peach, GA",HSI00000724,Navicent Health (GA),11078,"Macon, GA",147,"Macon, GA"
 ATRIUM HEALTH NAVICENT THE MEDICAL CENTER,"The Medical Center, Navicent Health",110107,shortterm,GA,Georgia,Macon,31201,13021,"Bibb, GA",HSI00000724,Navicent Health (GA),11078,"Macon, GA",147,"Macon, GA"
@@ -1845,7 +1846,7 @@ HOPEDALE HOSPITAL,Hopedale Hospital,141330,critical_access,IL,Illinois,Hopedale,
 HORIZON MEDICAL CENTER OF DENTON,Horizon Medical Center of Denton,452111,longterm,TX,Texas,Denton,76208,48121,"Denton, TX",,missing (missing),45073,"Denton, TX",391,"Dallas, TX"
 HORIZON SPECIALTY HOSPITAL,Horizon Specialty Hospital,292003,longterm,NV,Nevada,Las Vegas,89106,32003,"Clark, NV",,missing (missing),29010,"Las Vegas, NV",279,"Las Vegas, NV"
 HORN MEMORIAL HOSPITAL,Horn Memorial Hospital,161354,critical_access,IA,Iowa,Ida Grove,51445,19093,"Ida, IA",,missing (missing),16052,"Ida Grove, IA",196,"Sioux City, IA"
-HOSP COMUNITARIO BUEN SAMARITANO,Hosp Comunitario Buen Samaritano,400079,shortterm,PR,Puerto Rico,Aguadilla,603,72005,"Aguadilla, PR",,,,,,
+HOSPITAL  BUEN SAMARITANO,Hosp Comunitario Buen Samaritano,400079,shortterm,PR,Puerto Rico,Aguadilla,603,72005,"Aguadilla, PR",,,,,,
 HOSPITAL DAMAS INC,Hospital Damas Inc.,400022,shortterm,PR,Puerto Rico,Ponce,717,72113,"Ponce, PR",,,,,,
 HOSPITAL DE LA CONCEPCION,Hospital De La Concepción,400021,shortterm,PR,Puerto Rico,San German,683,72125,"San German, PR",,,,,,
 HOSPITAL DEL CENTRO COMPRENSIVO DE CANCER,Hospital Del Centro Comprensivo De Cáncer,400135,shortterm,PR,Puerto Rico,San Juan,927,72127,"San Juan, PR",,,,,,
@@ -2224,6 +2225,7 @@ KPC PROMISE HOSPITAL OF VICKSBURG,K.P.C. Promise Hospital of Vicksburg,252008,lo
 KPC PROMISE HOSPITAL OF WICHITA FALLS LLC,KPC Promise Hospital of Wichita Falls L.L.C.,452068,longterm,TX,Texas,Wichita Falls,76301,48485,"Wichita, TX",,missing (missing),45276,"Wichita Falls, TX",420,"Wichita Falls, TX"
 KUAKINI MEDICAL CENTER,Kuakini Medical Center,120007,shortterm,HI,Hawaii,Honolulu,96817,15003,"Honolulu, HI",HSI00000554,Kuakini Health System (HI),12003,"Honolulu, HI",150,"Honolulu, HI"
 KULA HOSPITAL,Kula Hospital,121308,critical_access,HI,Hawaii,Kula,96790,15009,"Maui, HI",HSI00000536,Kaiser Permanente (CA),12013,"Wailuku, HI",150,"Honolulu, HI"
+Kaiser Permanente - San Diego Medical Center,Kaiser Permanente - San Diego Medical Center,02d4a73785e74f88490f05c473b39d9054e5cb4e2ddbcb2b85b64d2502d69e01,shortterm,CA,California,San Diego,92123,6073,"San Diego, CA",,,5205,"San Diego, CA",80,"San Diego, CA"
 "L A DOWNTOWN MEDICAL CENTER, LLC",L.A. Downtown Medical Center,050763,shortterm,CA,California,Los Angeles,90026,6037,"Los Angeles, CA",HSI00001042,Success Healthcare (FL),5126,"Los Angeles, CA",56,"Los Angeles, CA"
 LA PALMA INTERCOMMUNITY HOSPITAL,La Palma Intercommunity Hospital,050580,shortterm,CA,California,La Palma,90623,6059,"Orange, CA",HSI00000845,Prime Healthcare Services (CA),5004,"Anaheim, CA",23,"Orange County, CA"
 LA PAZ REGIONAL HOSPITAL,La Paz Regional Hospital,031317,critical_access,AZ,Arizona,Parker,85344,4012,"La Paz, AZ",,missing (missing),3020,"Parker, AZ",12,"Phoenix, AZ"
@@ -3465,7 +3467,6 @@ PLUMAS DISTRICT HOSPITAL,Plumas District Hospital,051326,critical_access,CA,Cali
 POCAHONTAS COMMUNITY HOSPITAL,Pocahontas Community Hospital,161305,critical_access,IA,Iowa,Pocahontas,50574,19151,"Pocahontas, IA",HSI00001146,Unitypoint Health (IA),16086,"Pocahontas, IA",192,"Des Moines, IA"
 POCAHONTAS MEMORIAL HOSPITAL,Pocahontas Memorial Hospital,511314,critical_access,WV,West Virginia,Buckeye,24924,54075,"Pocahontas, WV",,missing (missing),51021,"Marlinton, WV",427,"Charlottesville, VA"
 POINTE COUPEE GENERAL HOSPITAL,Pointe Coupee General Hospital,191316,critical_access,LA,Louisiana,New Roads,70760,22077,"Pointe Coupee, LA",,missing (missing),19067,"New Roads, LA",210,"Baton Rouge, LA"
-POLK MEDICAL CENTER,Polk Medical Center,111330,critical_access,GA,Georgia,Cedartown,30125,13233,"Polk, GA",HSI00000369,Floyd Medical Center (GA),11098,"Rome, GA",148,"Rome, GA"
 POMERENE HOSPITAL,Pomerene Hospital,360148,shortterm,OH,Ohio,Millersburg,44654,39075,"Holmes, OH",,missing (missing),36075,"Millersburg, OH",326,"Canton, OH"
 POMONA VALLEY HOSPITAL MEDICAL CENTER,Pomona Valley Hospital Medical Center,050231,shortterm,CA,California,Pomona,91767,6037,"Los Angeles, CA",HSI00000833,Pomona Valley Hospital Medical Center (CA),5183,"Pomona, CA",56,"Los Angeles, CA"
 PONDERA MEDICAL CENTER,Pondera Medical Center,271324,critical_access,MT,Montana,Conrad,59425,30073,"Pondera, MT",,missing (missing),27012,"Conrad, MT",275,"Great Falls, MT"
@@ -3757,6 +3758,7 @@ SAINT CAMILLUS MEDICAL CENTER,Saint Camillus Medical Center,670121,shortterm,TX,
 SAINT CLARE'S HOSPITAL/ DENVILLE CAMPUS,Saint Clare’s Hospital/ Denville Campus,310050,shortterm,NJ,New Jersey,Denville,7834,34027,"Morris, NJ",HSI00000845,Prime Healthcare Services (CA),31007,"Denville, NJ",285,"Morristown, NJ"
 SAINT FRANCIS BARTLETT MEDICAL CENTER,Saint Francis Bartlett Medical Center,440228,shortterm,TN,Tennessee,Bartlett,38133,47157,"Shelby, TN",HSI00001066,Tenet Healthcare Corporation (TX),44059,"Memphis, TN",379,"Memphis, TN"
 SAINT FRANCIS HOSPITAL,St. Francis Hospital,510031,shortterm,WV,West Virginia,Charleston,25301,54039,"Kanawha, WV",HSI00001093,Thomas Health System (WV),51005,"Charleston, WV",443,"Charleston, WV"
+SAINT FRANCIS HOSPITAL & MEDICAL CENTER,Saint Francis Hospital and Medical Center,070002,shortterm,CT,Connecticut,Hartford,6105,9003,"Hartford, CT",HSI00001106,Trinity Health (MI),7007,"Hartford, CT",110,"Hartford, CT"
 SAINT FRANCIS HOSPITAL MUSKOGEE,Saint Francis Hospital Muskogee,370025,shortterm,OK,Oklahoma,Muskogee,74401,40101,"Muskogee, OK",HSI00000919,Saint Francis Health System (OK),37058,"Muskogee, OK",340,"Tulsa, OK"
 "SAINT FRANCIS HOSPITAL SOUTH, LLC",Saint Francis Hospital South,370218,shortterm,OK,Oklahoma,Tulsa,74133,40143,"Tulsa, OK",HSI00000919,Saint Francis Health System (OK),37088,"Tulsa, OK",340,"Tulsa, OK"
 "SAINT FRANCIS HOSPITAL VINITA, INC",Saint Francis Hospital Vinita,370237,shortterm,OK,Oklahoma,Vinita,74301,40035,"Craig, OK",HSI00000919,Saint Francis Health System (OK),37089,"Vinita, OK",340,"Tulsa, OK"
@@ -4234,7 +4236,6 @@ ST FRANCIS HOSPITAL,St. Francis Hospital,080003,shortterm,DE,Delaware,Wilmington
 ST FRANCIS HOSPITAL,St. Francis Hospital,141350,critical_access,IL,Illinois,Litchfield,62056,17135,"Montgomery, IL",HSI00000496,Hospital Sisters Health System (IL),14076,"Litchfield, IL",172,"Springfield, IL"
 ST FRANCIS HOSPITAL,St. Francis Hospital,231337,critical_access,MI,Michigan,Escanaba,49829,26041,"Delta, MI",HSI00000776,OSF Healthcare System (IL),23029,"Escanaba, MI",240,"Marquette, MI"
 ST FRANCIS HOSPITAL,St. Francis Hospital,440183,shortterm,TN,Tennessee,Memphis,38119,47157,"Shelby, TN",HSI00001066,Tenet Healthcare Corporation (TX),44059,"Memphis, TN",379,"Memphis, TN"
-ST FRANCIS HOSPITAL & MEDICAL CENTER,Saint Francis Hospital and Medical Center,070002,shortterm,CT,Connecticut,Hartford,6105,9003,"Hartford, CT",HSI00001106,Trinity Health (MI),7007,"Hartford, CT",110,"Hartford, CT"
 "ST FRANCIS HOSPITAL, ROSLYN","St. Francis Hospital, Roslyn",330182,shortterm,NY,New York,Roslyn,11576,36059,"Nassau, NY",HSI00000186,Catholic Health Services of Long Island (NY),33070,"Manhasset, NY",301,"East Long Island, NY"
 ST FRANCIS HOSPITAL- EMORY HEALTHCARE,St. Francis Hospital- Emory Healthcare,110129,shortterm,GA,Georgia,Columbus,31995,13215,"Muscogee, GA",HSI00000584,Lifepoint Health (TN),11032,"Columbus, GA",146,"Columbus, GA"
 ST FRANCIS MEDICAL CENTER,St. Francis Medical Center,190125,shortterm,LA,Louisiana,Monroe,71201,22073,"Ouachita, LA",HSI00000376,Franciscan Missionaries of Our Lady Health System (LA),19061,"Monroe, LA",217,"Monroe, LA"
