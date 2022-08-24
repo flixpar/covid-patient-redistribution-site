@@ -1,3 +1,7 @@
+# data
+data/
+rawdata/
+
 # logs
 log/*
 logs/*
@@ -22,13 +26,6 @@ backup/
 
 # static results
 public/results-static/
-
-# large data
-rawdata/forecasts/
-rawdata/forecasts_old/
-rawdata/hospitalization_data/
-rawdata/csse_confirmed_cases.csv
-data/forecasts/
 
 # analysis
 analysis/
