@@ -56,3 +56,9 @@ function download_forecast_latest(;DEBUG=false)
 
 	return true
 end
+
+if abspath(PROGRAM_FILE) == @__FILE__
+	download_hhs_latest()
+	download_forecast_latest()
+end
+

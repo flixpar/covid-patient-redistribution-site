@@ -41,6 +41,3 @@ println("Packaging load data")
 package_load_data()
 println("Packaging COVID load data")
 package_covid_load_data()
-
-println("Generating figures")
-generate_figures_all()
