@@ -171,13 +171,5 @@ route("/api/status-report") do
 end
 
 
-haskey(ENV, "GENIE_ENV") || (ENV["GENIE_ENV"] = "dev")
-if !haskey(ENV, "HOST")
-	ENV["HOST"] = (ENV["GENIE_ENV"] == "dev") ? "127.0.0.1" : "0.0.0.0"
-	host = (ENV["GENIE_ENV"] == "dev") ? "127.0.0.1" : "0.0.0.0"
-end
-
 port = (haskey(ENV, "PORT") ? parse(Int, ENV["PORT"]) : 8000)
-
-Genie.config.run_as_server = true
-Genie.startup(port, host)
+up(port, async = false)
