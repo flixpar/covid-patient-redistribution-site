@@ -34,7 +34,7 @@ function handle_patients_request(
 		transfer_budget::Float64,
 		total_transfer_budget::Float64,
 		capacity_util::Float64,
-		covid_capacity_proportion::Float64,
+		covid_capacity_estimate::Union{String,Float64},
 		dist_threshold::Float64,
 		dist_cost::Float64,
 		uncertainty_level::Symbol,
@@ -52,7 +52,7 @@ function handle_patients_request(
 
 	@assert patient_type in [:acute, :icu, :combined, :combined_ped]
 
-	data = load_hhs(region, location_ids, scenario, patient_type, start_date, end_date, covid_capacity_proportion, dist_threshold)
+	data = load_hhs(region, location_ids, scenario, patient_type, start_date, end_date, covid_capacity_estimate, dist_threshold)
 	default_capacity_level = 1
 
 	if los_param == "default_dist"
@@ -132,7 +132,7 @@ function handle_patients_request(
 			objective,
 			constrain_integer,
 			capacity_util,
-			covid_capacity_proportion,
+			covid_capacity_estimate,
 			dist_threshold,
 			uncertainty_level,
 			los_param,

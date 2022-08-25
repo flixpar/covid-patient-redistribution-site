@@ -38,11 +38,9 @@ function status_report_metrics()
 	date_ind = d -> (d - rawdata.start_date).value + 1
 
 	patient_type = :icu
-	covid_capacity_prop = (patient_type == :icu) ? 0.3 : (patient_type == :acute) ? 0.5 : 0.4
-
 	data = rawdata.casesdata[:moderate, patient_type]
 
-	cap = data.capacity[:,1] .* covid_capacity_prop
+	cap = data.covid_capacity
 
 	occ_prev = data.active[:, date_ind(date_prev):date_ind(date_current)]
 	occ_next = data.active[:, date_ind(date_current):date_ind(date_next)]

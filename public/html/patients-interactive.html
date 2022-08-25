@@ -135,10 +135,16 @@
 
 				<div class="field is-horizontal">
 					<label class="label column is-one-third" for="form-covidcapacity">Percent of Capacity used for COVID</label>
-					<span class="pct-input-span input column is-two-thirds">
-						<input type="number" id="form-covidcapacity" value="40" max="100" min="5" class="pct-input">
-						%
-					</span>
+					<div class="select is-fullwidth">
+						<select id="form-covidcapacity">
+							<option value="default">Estimate</option>
+							<option value="0.1">10%</option>
+							<option value="0.2">20%</option>
+							<option value="0.3">30%</option>
+							<option value="0.4">40%</option>
+							<option value="0.5">50%</option>
+						</select>
+					</div>
 				</div>
 
 				<div class="field is-horizontal">

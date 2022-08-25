@@ -96,7 +96,7 @@ function getParams() {
 		transferbudget: $("#form-transferbudget")[0].value,
 		totaltransferbudget: $("#form-totaltransferbudget")[0].value,
 		utilization: $("#form-utilization")[0].value,
-		covid_capacity_proportion: ($("#form-covidcapacity")[0].value / 100).toString(),
+		covid_capacity_estimate: $("#form-covidcapacity")[0].value,
 		dist_threshold: ($("#form-transferdistance")[0].value * 1.61).toString(),
 		dist_cost: $("#form-distancepenalty")[0].value,
 		uncertaintylevel: $("#form-uncertainty")[0].value,

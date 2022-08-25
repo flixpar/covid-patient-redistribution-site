@@ -83,7 +83,8 @@ route("/api/patients", method=POST) do
 		hospitals_list = Array{String,1}(input["hospitals"])
 	end
 
-	covid_capacity_proportion = haskey(input, "covid_capacity_proportion") ? parse(Float64, input["covid_capacity_proportion"]) : 0.4
+	covid_capacity_estimate = get(input, "covid_capacity_estimate", "default") |> x -> tryparse(Float64, x) |> y -> something(y, "default")
+
 	dist_threshold = haskey(input, "dist_threshold") ? parse(Float64, input["dist_threshold"]) : 600.0
 	dist_cost = haskey(input, "dist_cost") ? parse(Float64, input["dist_cost"]) : 0.0
 
@@ -96,7 +97,7 @@ route("/api/patients", method=POST) do
 		objective, constrain_integer,
 		transfer_budget, total_transfer_budget,
 		capacity_util,
-		covid_capacity_proportion,
+		covid_capacity_estimate,
 		dist_threshold, dist_cost,
 		uncertainty_level, los,
 		start_date, end_date,

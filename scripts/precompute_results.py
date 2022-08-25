@@ -6,7 +6,6 @@ regions = requests.get(f"{URL}/api/regions-list", params={"region_type": "state"
 regions = [r["region_id"] for r in regions]
 
 patient_types = ["icu", "acute", "all"]
-covid_capacity_proportions = {"icu": "0.5", "acute": "0.3", "all": "0.4"}
 
 dates = requests.get(f"{URL}/json/dates.json").json()
 start_date = dates["forecast_start"]
@@ -26,6 +25,7 @@ default_params = {
 	"dist_threshold": "600",
 	"dist_cost": "0.05",
 	"uncertaintylevel": "default",
+	"covid_capacity_estimate": "default",
 	"los": "regional_dist",
 	"start_date": start_date,
 	"end_date": end_date,
@@ -36,7 +36,6 @@ default_params = {
 
 for patient_type in patient_types:
 	print("Patient type:", patient_type)
-	covid_capacity_proportion = covid_capacity_proportions[patient_type]
 	for region_id in regions:
 		print("Region:", region_id)
 
@@ -51,7 +50,6 @@ for patient_type in patient_types:
 		params = {**default_params, **hospitals_list,
 			"region_id": region_id,
 			"patient_type": patient_type,
-			"covid_capacity_proportion": covid_capacity_proportion,
 		}
 
 		fn = f"../public/results-static/latest_{scenario}_{patient_type}_state_{region_id}.json"

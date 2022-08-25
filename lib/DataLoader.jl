@@ -30,7 +30,7 @@ function load_hhs(
 		patient_type::Symbol,
 		start_date::Date,
 		end_date::Date,
-		covid_capacity_proportion::Real=0.4,
+		covid_capacity_estimate::Union{Float64, String}="default",
 		dist_threshold::Real=600,
 	)
 	@assert(start_date < end_date)
@@ -76,9 +76,14 @@ function load_hhs(
 	end
 
 	default_capacity_level = 1
-	beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_proportion
-	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
+	if isa(covid_capacity_estimate, Number)
+		beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_estimate
+		capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_estimate
+	else
+		beds = casesdata.covid_capacity[hospital_ind]
+		capacity = reshape(beds, :, 1)
+	end
 
 	node_locations = Dict(name => haskey(data.locations_latlong, h) ? data.locations_latlong[h] : (lat=0.0, long=0.0) for (name,h) in zip(hospital_names, hospital_ids))
 
@@ -110,7 +115,7 @@ function load_hhs_raw(
 		scenario::Symbol,
 		patient_type::Symbol,
 		bed_type::Symbol,
-		covid_capacity_proportion::Real=0.4,
+		covid_capacity_estimate::Union{Float64, String}="default",
 	)
 	@assert patient_type == :covid
 	@assert(bed_type in [:icu, :acute, :all])
@@ -127,9 +132,14 @@ function load_hhs_raw(
 	occupancy = casesdata.active[hospital_ind,:]
 
 	default_capacity_level = 1
-	beds = casesdata.capacity[hospital_ind, default_capacity_level] .* covid_capacity_proportion
-	capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_proportion
 	capacity_names = ["Baseline Capacity"]
+	if isa(covid_capacity_estimate, Number)
+		beds = casesdata.capacity[hospital_ind,default_capacity_level] .* covid_capacity_estimate
+		capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_estimate
+	else
+		beds = casesdata.covid_capacity[hospital_ind]
+		capacity = reshape(beds, :, 1)
+	end
 
 	location = get(data.locations_latlong, hospital_id, (lat=0.0, long=0.0))
 

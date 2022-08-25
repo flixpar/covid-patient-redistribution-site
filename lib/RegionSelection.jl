@@ -19,7 +19,6 @@ function regions_selection(region_type::Symbol, patient_type::Symbol, metrictype
 	data = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
 	@assert patient_type in [:icu, :acute, :combined]
-	covid_capacity_prop = (patient_type == :icu) ? 0.3 : (patient_type == :acute) ? 0.5 : 0.4
 
 	start_date_idx = (start_date - data.start_date).value + 1
 	end_date_idx   = (end_date   - data.start_date).value + 1
@@ -27,7 +26,7 @@ function regions_selection(region_type::Symbol, patient_type::Symbol, metrictype
 	results = map(regions) do region
 		hospital_inds = filter_hospitals(data, region=region)
 
-		cap = data.casesdata[:moderate, patient_type].beds[hospital_inds] .* covid_capacity_prop
+		cap = data.casesdata[:moderate, patient_type].covid_capacity[hospital_inds]
 		occ = data.casesdata[:moderate, patient_type].active[hospital_inds, start_date_idx:end_date_idx]
 
 		if metrictype == :beddays

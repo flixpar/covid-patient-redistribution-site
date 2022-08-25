@@ -23,7 +23,7 @@ default_params = (
 	transfer_budget = Inf,
 	totaltransferbudget = Inf,
 	capacity_util = 1.0,
-	covid_capacity_proportion = (b -> b == :icu ? 0.5 : 0.4),
+	covid_capacity_estimate = "default",
 	dist_threshold = 600.0,
 	uncertainty_level = :default,
 	los_param = "default_dist",
