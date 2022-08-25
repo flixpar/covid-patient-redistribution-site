@@ -80,6 +80,52 @@ function estimate_capacity()
 	return
 end
 
+function estimate_covid_capacity(α=0.5)
+	rawdata_fn = latest_hhs_rawdata_fn()
+	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"]))
+
+	data = select(
+		rawdata,
+		:hospital_pk => :hospital_id,
+		:hospital_name,
+		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
+
+		[:all_adult_hospital_inpatient_beds_7_day_sum, :all_adult_hospital_inpatient_beds_7_day_coverage] => ByRow((a,b) -> a/b) => :capacity,
+		[:total_adult_patients_hospitalized_confirmed_and_suspected_covid_7_day_sum, :total_adult_patients_hospitalized_confirmed_and_suspected_covid_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_covid,
+		[:all_adult_hospital_inpatient_bed_occupied_7_day_sum, :all_adult_hospital_inpatient_bed_occupied_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_total,
+
+		[:total_staffed_adult_icu_beds_7_day_sum, :total_staffed_adult_icu_beds_7_day_coverage] => ByRow((a,b) -> a/b) => :capacity_icu,
+		[:staffed_adult_icu_bed_occupancy_7_day_sum, :staffed_adult_icu_bed_occupancy_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_total_icu,
+		[:staffed_icu_adult_patients_confirmed_and_suspected_covid_7_day_sum, :staffed_icu_adult_patients_confirmed_and_suspected_covid_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_covid_icu,
+	)
+
+	filter!(r -> r.date >= Date(2021, 1, 1), data)
+
+	function est_capacity(cap, occ, occ_covid, dates)
+		if all(ismissing.(occ_covid)) return 0 end
+		m = median(skipmissing(occ_covid))
+		mask = occ_covid .<= 2m
+		mask = coalesce.(mask, false)
+
+		ests = occ_covid + (α .* (cap - occ))
+		if all(ismissing.(ests)) return 0 end
+
+		est = median(skipmissing(ests[mask]))
+		return est
+	end
+
+	capacity = combine(
+		groupby(data, :hospital_id),
+		[:capacity, :occupancy_total, :occupancy_covid, :date] => est_capacity => :capacity_covid,
+		[:capacity_icu, :occupancy_total_icu, :occupancy_covid_icu, :date] => est_capacity => :capacity_covid_icu,
+	)
+
+	sort!(capacity, :hospital_id)
+	capacity |> CSV.write("../data/capacity_covid.csv")
+
+	return
+end
+
 function extract_capacity_timeseries()
 	rawdata_fn = latest_hhs_rawdata_fn()
 	rawdata = DataFrame(CSV.File(rawdata_fn))
@@ -115,4 +161,5 @@ end
 if abspath(PROGRAM_FILE) == @__FILE__
 	estimate_capacity()
 	extract_capacity_timeseries()
+	estimate_covid_capacity()
 end

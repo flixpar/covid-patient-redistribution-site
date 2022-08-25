@@ -16,6 +16,7 @@ function package_main_data()
 
 	los_dist = deserialize(joinpath(@__DIR__, "../data/hhs_los_est.jlser"))
 	capacity_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
+	covid_capacity_data = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_covid.csv")))
 
 	forecast = DataFrame(CSV.File(joinpath(@__DIR__, "../data/hospitalization_forecast.csv")))
 
@@ -49,6 +50,22 @@ function package_main_data()
 			capacity = flatten(capacity, dims=2)
 		end
 
+		return capacity
+	end
+
+	covid_capacity_dict = Dict(r.hospital_id => (combined = r.capacity_covid, icu = r.capacity_covid_icu) for r in eachrow(covid_capacity_data))
+	function load_covid_capacity(hospitals, bedtype)
+		if bedtype == :combined
+			capacity = [haskey(covid_capacity_dict, h) ? covid_capacity_dict[h].combined : 0 for h in hospital_ids]
+		elseif bedtype == :icu
+			capacity = [haskey(covid_capacity_dict, h) ? covid_capacity_dict[h].icu : 0 for h in hospital_ids]
+
+		elseif bedtype == :acute
+			capacity = [haskey(covid_capacity_dict, h) ? covid_capacity_dict[h].combined - covid_capacity_dict[h].icu : 0 for h in hospital_ids]
+
+		else
+			capacity = [0 for h in hospital_ids]
+		end
 		return capacity
 	end
 
@@ -115,6 +132,8 @@ function package_main_data()
 		capacity = load_capacity(hospital_ids, bedtype, :est, [:baseline])
 		capacity_bds = load_capacity(hospital_ids, bedtype, [:lb,:ub], [:baseline])
 
+		covid_capacity = load_covid_capacity(hospital_ids, bedtype)
+
 		capacity_names_full = ["Base Capacity"]
 		capacity_names_abbrev = ["baselinecap"]
 
@@ -131,6 +150,7 @@ function package_main_data()
 			beds,
 			capacity,
 			capacity_uncertainty = capacity_bds,
+			covid_capacity,
 
 			capacity_names = capacity_names_full,
 			capacity_names_abbrev,
