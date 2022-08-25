@@ -66,7 +66,7 @@ function package_main_data()
 		else
 			capacity = [0 for h in hospital_ids]
 		end
-		return capacity
+		return Float64.(capacity)
 	end
 
 	firstval(xs) = xs[findfirst(isnbad, xs)]

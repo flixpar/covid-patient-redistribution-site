@@ -138,7 +138,7 @@ function load_hhs_raw(
 		capacity = casesdata.capacity[hospital_ind,:] .* covid_capacity_estimate
 	else
 		beds = casesdata.covid_capacity[hospital_ind]
-		capacity = reshape(beds, :, 1)
+		capacity = [beds]
 	end
 
 	location = get(data.locations_latlong, hospital_id, (lat=0.0, long=0.0))
