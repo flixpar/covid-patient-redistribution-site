@@ -117,16 +117,9 @@ function hsaChoropleth(response) {
 	});
 }
 
-function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="") {
+function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName) {
 	const vals = geoFeatures.map(d => valueLookup(d));
-	const scaleMin = 0;
-	// const scaleMin = percentile(vals, 0.05);
-	// const scaleMax = percentile(vals, 0.97);
-	// const scaleMax = percentile(vals.filter(x => x > 10), 0.97);
-	// const scaleMax = d3.max(vals);
-	const scaleMax = Math.max(d3.max(vals), 0.05);
-	const colorscaleRaw = d3.scaleSequential(d3.interpolateReds).domain([scaleMin, scaleMax]);
-	const colorscale = x => (x >= 0) ? colorscaleRaw(x) : "#efefef";
+	const colorscale = computeColorscale(vals, metricName);
 
 	const isPct = metricName.indexOf("pct") > 0;
 	const legendFmt = (x) => (isPct) ? `${(x*100).toFixed(1)}%` : `${x.toFixed(0)}`;
@@ -151,6 +144,35 @@ function generateChoropleth(geoFeatures, nameLookup, valueLookup, metricName="")
 	generateLegend(svg, colorscale, vals, metricName);
 
 	return svg.node();
+}
+
+function computeColorscale(vals, metricName) {
+
+	let colorscale = null;
+	if (metricName.indexOf("load") >= 0) {
+		// const colorscaleGreens = d3.scaleSequential(d3.interpolateGreens).domain([0.0, 0.95]);
+		// const colorscaleReds = d3.scaleSequential(d3.interpolateReds).domain([0.9, scaleMax]);
+		// colorscale = x => (x >= 0 && x <= 0.95) ? colorscaleGreens(x) : (x <= 1.05) ? "gold" : colorscaleReds(x);
+
+		const colorscaleRaw = d3.scaleSequential(d3.interpolateRdYlGn).domain([0.0, 1.0]);
+		colorscale = x => (x <= 1) ? colorscaleRaw(1 - ((x**1)/2)) : colorscaleRaw(1 - ((x**3)/2));
+	} else if (metricName.indexOf("occupancy") >= 0 || metricName.indexOf("capacity") >= 0) {
+		const scaleMax = Math.max(d3.max(vals), 1);
+		colorscale = d3.scaleSequential(d3.interpolateBlues).domain([0, scaleMax]);
+	} else {
+		const scaleMin = 0;
+		const scaleMax = Math.max(d3.max(vals), 0.05);
+
+		// const scaleMin = percentile(vals, 0.05);
+		// const scaleMax = percentile(vals, 0.97);
+		// const scaleMax = percentile(vals.filter(x => x > 10), 0.97);
+		// const scaleMax = d3.max(vals);
+
+		const colorscaleRaw = d3.scaleSequential(d3.interpolateReds).domain([scaleMin, scaleMax]);
+		colorscale = x => (x >= 0) ? colorscaleRaw(x) : "#efefef";
+	}
+
+	return colorscale;
 }
 
 function generateLegend(svg, colorscale, vals, metricName) {
@@ -208,10 +230,15 @@ const metricNames = {
 	"overflow_ideal_total_pct": "Optimal Shortage (%)",
 	"benefits": "Reduction",
 	"benefits_pct": "Reduction (%)",
+	"load_peak_pct": "Peak Load (%)",
+	"load_avg_pct": "Average Load (%)",
+	"occupancy_peak": "Occupancy (Peak)",
+	"occupancy_total": "Occupancy (Total)",
+	"capacity": "Capacity",
 };
 
 function createRegionChoroplethOptions(fig, genFigure, defaultOption=1) {
-	const metrics = ["overflow_total", "overflow_total_pct", "overflow_ideal_total", "overflow_ideal_total_pct", "benefits", "benefits_pct"];
+	const metrics = ["overflow_total", "overflow_total_pct", "overflow_ideal_total", "overflow_ideal_total_pct", "benefits", "benefits_pct", "load_peak_pct", "load_avg_pct", "occupancy_peak", "occupancy_total", "capacity"];
 	let options = createSelect(metrics.map(m => metricNames[m]), metrics, defaultOption, "Metric");
 	let sel = options.querySelector("select");
 

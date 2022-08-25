@@ -62,7 +62,15 @@ function region_selection_metrics_beddays(cap, occ)
 	benefits = max(0, overflow_total - overflow_ideal_total)
 	benefits_pct = (overflow_total == 0) ? 0 : benefits / sum(overflow_total)
 
-	return (;overflow_total, overflow_total_pct, overflow_ideal_total, overflow_ideal_total_pct, benefits, benefits_pct)
+	occupancy_peak = maximum(total_occ)
+	occupancy_total = sum(occ)
+
+	capacity = sum(cap)
+
+	load_peak_pct = occupancy_peak / capacity
+	load_avg_pct = occupancy_total / (capacity * T)
+
+	return (;overflow_total, overflow_total_pct, overflow_ideal_total, overflow_ideal_total_pct, benefits, benefits_pct, load_peak_pct, load_avg_pct, occupancy_peak, occupancy_total, capacity)
 end
 
 function region_selection_metrics_beds(cap, occ)
@@ -78,7 +86,15 @@ function region_selection_metrics_beds(cap, occ)
 	benefits = max(0, overflow_total - overflow_ideal_total)
 	benefits_pct = (overflow_total == 0) ? 0 : benefits / overflow_total
 
-	return (;overflow_total, overflow_total_pct, overflow_ideal_total, overflow_ideal_total_pct, benefits, benefits_pct)
+	occupancy_peak = maximum(total_occ)
+	occupancy_total = sum(occ)
+
+	capacity = sum(cap)
+
+	load_peak_pct = occupancy_peak / capacity
+	load_avg_pct = occupancy_total / (capacity * size(occ, 2))
+
+	return (;overflow_total, overflow_total_pct, overflow_ideal_total, overflow_ideal_total_pct, benefits, benefits_pct, load_peak_pct, load_avg_pct, occupancy_peak, occupancy_total, capacity)
 end
 
 end
