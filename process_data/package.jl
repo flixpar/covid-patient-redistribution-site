@@ -328,14 +328,12 @@ function package_covid_load_data()
 		:icu_occupancy => latest_val => :icu_occupancy,
 	])
 
-	capacity_rawdata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_hhs.csv")))
-
+	capacity_rawdata = DataFrame(CSV.File(joinpath(@__DIR__, "../data/capacity_covid.csv")))
 	capacity_data = select(capacity_rawdata,
 		:hospital_id,
-		:capacity_icu => (x -> x .* 0.4) => :icu_beds,
-		:capacity_acute => (x -> x .* 0.4) => :acute_beds,
-		:capacity_combined => (x -> x .* 0.4) => :total_beds,
-		:capacity_combined_ped => (x -> x .* 0.4) => :ped_beds,
+		:capacity_covid => :total_beds,
+		:capacity_covid_icu => :icu_beds,
+		[:capacity_covid, :capacity_covid_icu] => ((a,b) -> a - b) => :acute_beds,
 	)
 
 	data_latest = rightjoin(data_latest, capacity_data, on=:hospital_id)
@@ -373,15 +371,11 @@ function package_covid_load_data()
 		:icu_occupancy,
 		:icu_load,
 		:acute_beds,
-		:ped_beds,
 	)
-
 	sort!(data_combined, [:hospital, :hospital_id])
-
 	data_combined |> CSV.write(joinpath(@__DIR__, "../data/hhs_current_load_covid.csv"))
 
 	data_combined_list = collect([NamedTuple(h) for h in eachrow(data_combined)])
-
 	serialize(joinpath(@__DIR__, "../data/hhs_current_load_covid.jlser"), data_combined_list)
 
 	return
@@ -389,4 +383,6 @@ end
 
 if abspath(PROGRAM_FILE) == @__FILE__
 	package_main_data()
+	package_load_data()
+	package_covid_load_data()
 end
