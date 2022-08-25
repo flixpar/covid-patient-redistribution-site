@@ -23,6 +23,8 @@ function regions_selection(region_type::Symbol, patient_type::Symbol, metrictype
 	start_date_idx = (start_date - data.start_date).value + 1
 	end_date_idx   = (end_date   - data.start_date).value + 1
 
+	@info "Region selection with rt: $(region_type), pt: $(patient_type), sd: $(start_date), ed: $(end_date)"
+
 	results = map(regions) do region
 		hospital_inds = filter_hospitals(data, region=region)
 
