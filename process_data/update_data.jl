@@ -5,7 +5,6 @@ include("capacity.jl")
 include("los.jl")
 include("metadata.jl")
 include("package.jl")
-include("figures.jl")
 
 
 println("Downloading HHS data")
