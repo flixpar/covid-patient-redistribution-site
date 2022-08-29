@@ -1,3 +1,3 @@
 #!/bin/sh
-sudo rm -rf '/home/flixpar/cache/*'
+mv '/home/flixpar/cache/' '/home/flixpar/cache-backup/'
 sudo nginx -s reload
