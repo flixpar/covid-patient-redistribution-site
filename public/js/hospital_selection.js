@@ -1,6 +1,7 @@
 let recentResponse = null;
 const apiKey = "d8c1e45132c880c51bd4310f76b12ad9cf21d04c5ae1f1a2ccbb8c4c";
 
+import {getDates} from "./common.js";
 import {createLocationsMap, addMarkers} from "./locations_map.js";
 
 
@@ -70,7 +71,7 @@ function fillMissingText() {
 	for (let elem of document.querySelectorAll(".fill-value")) {
 		const contentid = elem.dataset.contentid;
 		if (contentid == "hhsdata_update_date") {
-			fetch("/json/dates.json").then(r => r.json()).then(dates => {
+			getDates().then(dates => {
 				elem.textContent = dates.hhsdata_update;
 			});
 		}

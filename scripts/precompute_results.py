@@ -7,7 +7,7 @@ regions = [r["region_id"] for r in regions]
 
 patient_types = ["icu", "acute", "all"]
 
-dates = requests.get(f"{URL}/json/dates.json").json()
+dates = requests.get(f"{URL}/api/dates").json()
 start_date = dates["forecast_start"]
 end_date = dates["forecast_end"]
 

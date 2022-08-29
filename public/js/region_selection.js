@@ -211,7 +211,7 @@ function updateTables() {
 	generateRegionTable("hospital_system");
 }
 
-$.getJSON("/json/metadata.json", metadata => {
+common.getMetadata().then(metadata => {
 	const maxDate = new Date(metadata.dates.forecast_end);
 
 	let startDate = new Date();

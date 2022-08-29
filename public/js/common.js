@@ -44,7 +44,7 @@ function addDays(d, t) {
 
 async function getDates() {
 	if (getDates.dates == null) {
-		const dates = await (await fetch("/json/dates.json")).json();
+		const dates = await (await fetch("/api/dates")).json();
 		getDates.dates = dates;
 		return dates;
 	} else {
@@ -54,7 +54,7 @@ async function getDates() {
 
 async function getMetadata() {
 	if (getMetadata.meta == null) {
-		const meta = await (await fetch("/json/metadata.json")).json();
+		const meta = await (await fetch("/api/metadata")).json();
 		getMetadata.meta = meta;
 		return meta;
 	} else {

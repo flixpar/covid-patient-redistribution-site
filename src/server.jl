@@ -53,6 +53,14 @@ route("/guide") do
 	serve_static_file("html/guide.html")
 end
 
+route("/api/metadata") do
+	serve_static_file("js/metadata.json")
+end
+
+route("/api/dates") do
+	serve_static_file("js/dates.json")
+end
+
 route("/api/patients", method=POST) do
 	str_to_symbol(s) = Symbol(replace(lowercase(s), " " => "_"))
 
