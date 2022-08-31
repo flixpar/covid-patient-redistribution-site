@@ -54,11 +54,11 @@ route("/guide") do
 end
 
 route("/api/metadata") do
-	serve_static_file("js/metadata.json")
+	serve_static_file("json/metadata.json")
 end
 
 route("/api/dates") do
-	serve_static_file("js/dates.json")
+	serve_static_file("json/dates.json")
 end
 
 route("/api/patients", method=POST) do
