@@ -22,7 +22,7 @@
 <body>
 	<nav class="navbar" role="navigation" aria-label="main navigation">
 		<div class="navbar-brand">
-			<a href="/home" class="navbar-item">COVID-19 Capacity Management</a>
+			<a href="/home" class="navbar-item">COVID-19 Hospital Capacity Management</a>
 			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
@@ -32,18 +32,31 @@
 
 		<div id="navbar-menu" class="navbar-menu">
 			<div id="navbar-main" class="navbar-start">
-				<a href="/patients-static" class="navbar-item is-tab">Dashboard</a>
-				<a href="/patients-interactive" class="navbar-item is-tab">Customize Results</a>
-				<a href="/data-explore" class="navbar-item is-tab">Explore Data</a>
-				<a href="/hospital-selection" class="navbar-item is-tab">Nearby Hospitals</a>
-				<a href="/region-selection" class="navbar-item is-tab">Explore Regions</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a href="/patients-static" class="navbar-link">Dashboard</a>
+					<div class="navbar-dropdown">
+						<a href="/patients-static" class="navbar-item">Patient Redistribution</a>
+						<a href="/patients-interactive" class="navbar-item">Customize Results</a>
+					</div>
+				</div>
+
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a href="/data-explore" class="navbar-link">Explore Data</a>
+					<div class="navbar-dropdown">
+						<a href="/data-explore" class="navbar-item">Hosptialization Data</a>
+						<a href="/hospital-selection" class="navbar-item">Hospitals Near You</a>
+						<a href="/region-selection" class="navbar-item">Regional Status</a>
+					</div>
+				</div>
+
 				<a href="/status-report" class="navbar-item is-tab">Status Report</a>
-				<a href="/guide" class="navbar-item is-tab">Guide</a>
+
 				<div class="navbar-item has-dropdown is-hoverable">
 					<a href="/about" class="navbar-link">About</a>
 					<div class="navbar-dropdown">
 						<a href="/home" class="navbar-item">Overview</a>
 						<a href="/about" class="navbar-item">Read More</a>
+						<a href="/guide" class="navbar-item">Guide</a>
 						<a href="/about-us" class="navbar-item">About Us</a>
 					</div>
 				</div>
