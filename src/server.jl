@@ -17,40 +17,14 @@ route("/") do
 	redirect("/home")
 end
 
-route("/home") do
-	serve_static_file("html/about.html")
-end
-
-route("/patients-static") do
-	serve_static_file("html/patients-static.html")
-end
-
-route("/patients-interactive") do
-	serve_static_file("html/patients-interactive.html")
-end
-
-route("/hospital-selection") do
-	serve_static_file("html/hospital-selection.html")
-end
-
-route("/region-selection") do
-	serve_static_file("html/region-selection.html")
-end
-
-route("/status-report") do
-	serve_static_file("html/status-report.html")
-end
-
-route("/data-explore") do
-	serve_static_file("html/data-explore.html")
-end
-
-route("/about") do
-	serve_static_file("html/about.html")
-end
-
-route("/guide") do
-	serve_static_file("html/guide.html")
+pages = [
+	"home", "about", "about-us", "guide",
+	"patients-static", "patients-interactive",
+	"hospital-selection", "region-selection",
+	"status-report", "data-explore",
+]
+for page_name in pages
+	route("/$(page_name)", () -> serve_static_file("html/$(page_name).html"))
 end
 
 route("/api/metadata") do
