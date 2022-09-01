@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>COVID-19 Patient Redistribution</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/bulma@0.9.1/css/bulma.min.css">
+
+	<link rel="stylesheet" href="/css/nav.css">
+	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="/css/about.css">
+
+	<script async defer data-domain="covid-hospital-operations.com" src="https://plausible.io/js/plausible.js"></script>
+	<script src="/js/menu.js"></script>
+</head>
+
+<body>
+
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a href="/home" class="navbar-item">COVID-19 Capacity Management</a>
+			<a role="button" class="navbar-burger" data-target="navbar-menu" aria-label="menu" aria-expanded="false">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbar-menu" class="navbar-menu">
+			<div id="navbar-main" class="navbar-start">
+				<a href="/patients-static" class="navbar-item is-tab">Dashboard</a>
+				<a href="/patients-interactive" class="navbar-item is-tab">Customize Results</a>
+				<a href="/data-explore" class="navbar-item is-tab">Explore Data</a>
+				<a href="/hospital-selection" class="navbar-item is-tab">Nearby Hospitals</a>
+				<a href="/region-selection" class="navbar-item is-tab">Explore Regions</a>
+				<a href="/status-report" class="navbar-item is-tab">Status Report</a>
+				<a href="/guide" class="navbar-item is-tab">Guide</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a href="/about" class="navbar-link">About</a>
+					<div class="navbar-dropdown">
+						<a href="/home" class="navbar-item">Overview</a>
+						<a href="/about" class="navbar-item">Read More</a>
+						<a href="/about-us" class="navbar-item">About Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<section class="section">
+
+		<div id="home" data-anchor="home">
+
+			<div class="container">
+				<h4 class="title is-4" style="margin-bottom: 12px;">COVID-19 Hospital Capacity Management using Mathematical Models</h4>
+				<p>This website shows how to transfer patients to optimally use the available capacity of hospitals in the US. You can find out how many additional beds are needed per hospital or region.</p>
+			</div>
+
+			<div class="container" id="home-main">
+
+				<div class="homepage-section-preview box" id="dashboard-preview" data-link="/patients-static">
+					<video class="preview-img" autoplay loop muted playsinline>
+						<source src="/img/hospitals-map-preview-anim.mp4" type="video/mp4">
+					</video>
+					<div class="preview-content">
+						<a href="/patients-static" class="title-link">
+							<h6 class="title is-6">State-level Hospital Occupancy and Optimal Transfers</h6>
+							<h6 class="subtitle is-6">Dashboard Page</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-a">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-a" class="description-hidden-text">
+								You can choose 1) state, 2) patient type, and 3) displayed hospitals to see:
+								<div class="content">
+									<ul style="margin-top: 0px;">
+										<li>The current and future occupancy of the hospitals in the state you selected.</li>
+										<li>If more beds are needed and how many.</li>
+										<li>The best strategy for transferring patients between hospitals.</li>
+									</ul>
+								</div>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="homepage-section-preview box" id="nearby-preview" data-link="/hospital-selection">
+					<img src="/img/nearbymap-preview.png" class="preview-img">
+					<div class="preview-content">
+						<a href="/hospital-selection" class="title-link">
+							<h6 class="title is-6">Hospital Occupancy Near You</h6>
+							<h6 class="subtitle is-6">Nearby Hospitals Page</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-b">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-b" class="description-hidden-text">
+								<p>Enter an place to see how hospitals in that area are ranked based on their potential to accept new patients. The more stressed or further away the hospital, the lower its rank will be.</p>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="homepage-section-preview box" id="details-preview" data-link="/patients-interactive">
+					<img src="/img/transferflows-preview.svg" class="preview-img">
+					<div class="preview-content">
+						<a href="/patients-interactive" class="title-link">
+							<h6 class="title is-6">Customizable Hospital Occupancy and Optimal Transfers</h6>
+							<h6 class="subtitle is-6">Customize Results Page</h6>
+						</a>
+						<div>
+							<span class="description-hidden-label" data-for="content-c">
+								<i>Info</i>
+								<ion-icon class="icon-expand-text is-hidden" name="caret-forward-outline"></ion-icon>
+								<ion-icon class="icon-expand-text" name="caret-down-outline"></ion-icon>
+								<br>
+							</span>
+							<span id="content-c" class="description-hidden-text content">
+								<p>
+									This page is almost fully customizable. You can choose any US hospital system, Hospital Service Area (HSA), Hospital Referral Region (HRR), or state. For instance, select Johns Hopkins Health System, NYC Health and Hospitals, or Houston, TX HRR from the dropdown menus and run the models in real time to see the results.
+									<br>
+									Other customizable parameters include:
+								</p>
+								<ul>
+									<li>The maximum number of allowed daily patient transfers per hospital</li>
+									<li>The time period (start and end date)</li>
+									<li>Strategic decision preferences, e.g., whether to evenly balance load or just minimize the required additional capacity</li>
+								</ul>
+							</span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="container">
+				<p>
+					With the ongoing COVID-19 pandemic, many hospitals across the US are at capacity or are quickly approaching it. Hospitals are coping with the COVID surge through a variety of methods, including opening up new beds, but these are often costly and can hurt the level of care that patients receive. This burden on hospitals can be reduced if we optimally transfer patients from over-capacity hospitals to nearby hospitals that have available space.
+					<br><br>
+					To find the optimal number of patients to transfer and where to transfer them to, we use <a href="https://arxiv.org/abs/2011.03528">mathematical optimization models</a> developed by the <a href="https://systems.jhu.edu/">Johns Hopkins Center for Systems Science and Engineering</a> (JHU CSSE), hospitalization <a href="https://healthdata.gov/dataset/covid-19-reported-patient-impact-and-hospital-capacity-facility">data</a> from the US Department of Health and Human Services (HHS), and COVID <a href="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/forecasts-cases.html">forecasts</a> from the US Centers for Disease Control (CDC). To learn more, visit the <a href="/about#about">About tab</a>.
+				</p>
+			</div>
+
+		</div>
+
+	</section>
+
+	<footer class="footer">
+		<div class="content has-text-centered">
+		  	<img src="/img/university.logo.vertical.blue.svg" style="height: 200px;">
+			<img src="/img/whiting.logo.vertical.blue.svg" style="height: 200px;">
+		</div>
+	</footer>
+
+	<script>
+		document.querySelectorAll(".homepage-section-preview").forEach(elem => {
+			const imgElem = elem.querySelector(".preview-img");
+			imgElem.addEventListener("click", () => {
+				window.location.href = elem.dataset.link;
+			});
+		});
+		document.querySelectorAll(".description-hidden-label").forEach(elem => {
+			elem.addEventListener("click", e => {
+				document.getElementById(elem.dataset.for).classList.toggle("is-hidden");
+				elem.querySelectorAll(".icon-expand-text").forEach(i => i.classList.toggle("is-hidden"));
+			});
+		});
+	</script>
+
+	<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+
+</body>
+
+</html>
