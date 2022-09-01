@@ -96,14 +96,15 @@ function package_main_data()
 
 		forecast_admitted = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)].admitted : missing for h in hospital_ids, d in forecast_date_range]
 		forecast_admitted_bds = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)][a] : missing for h in hospital_ids, d in forecast_date_range, a in [:admitted_lb, :admitted_ub]]
-		forecast_active = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
 
 		total(xs) = [sum(skipbad(xs[:,t])) for t in 1:size(xs,2)]
 		forecast_admitted_scalefactor = lastval(total(hist_admitted)) / firstval(total(forecast_admitted))
-		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
 
 		forecast_admitted .*= forecast_admitted_scalefactor
 		forecast_admitted_bds .*= forecast_admitted_scalefactor
+
+		forecast_active = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
+		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
 		forecast_active .*= forecast_active_scalefactor
 
 		active = Array{Union{Float64,Missing},2}(undef, N, T)
