@@ -28,16 +28,12 @@ function estimate_capacity()
 		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
 		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined,
 		:total_staffed_adult_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu,
-		:inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined_adultped,
-		:total_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu_adultped,
+		:all_pediatric_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined_ped,
+		:total_staffed_pediatric_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu_ped
 	)
 
 	data.beds_acute = max.(0, data.beds_combined - data.beds_icu)
-
-	data.beds_combined_ped = max.(0, data.beds_combined_adultped - data.beds_combined)
-	data.beds_icu_ped = max.(0, data.beds_icu_adultped - data.beds_icu)
 	data.beds_acute_ped = max.(0, data.beds_combined_ped - data.beds_icu_ped)
-	select!(data, Not([:beds_combined_adultped, :beds_icu_adultped]))
 
 	cols = [:beds_combined, :beds_icu, :beds_acute, :beds_combined_ped, :beds_icu_ped, :beds_acute_ped]
 
@@ -97,6 +93,10 @@ function estimate_covid_capacity(α=0.5)
 		[:total_staffed_adult_icu_beds_7_day_sum, :total_staffed_adult_icu_beds_7_day_coverage] => ByRow((a,b) -> a/b) => :capacity_icu,
 		[:staffed_adult_icu_bed_occupancy_7_day_sum, :staffed_adult_icu_bed_occupancy_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_total_icu,
 		[:staffed_icu_adult_patients_confirmed_and_suspected_covid_7_day_sum, :staffed_icu_adult_patients_confirmed_and_suspected_covid_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_covid_icu,
+
+		[:all_pediatric_inpatient_beds_7_day_sum, :all_pediatric_inpatient_beds_7_day_coverage] => ByRow((a,b) -> a/b) => :capacity_ped,
+		[:all_pediatric_inpatient_bed_occupied_7_day_sum, :all_pediatric_inpatient_bed_occupied_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_total_ped,
+		[:total_pediatric_patients_hospitalized_confirmed_and_suspected_covid_7_day_sum, :total_pediatric_patients_hospitalized_confirmed_and_suspected_covid_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_covid_ped,
 	)
 
 	filter!(r -> r.date >= Date(2021, 1, 1), data)
@@ -118,6 +118,7 @@ function estimate_covid_capacity(α=0.5)
 		groupby(data, :hospital_id),
 		[:capacity, :occupancy_total, :occupancy_covid, :date] => est_capacity => :capacity_covid,
 		[:capacity_icu, :occupancy_total_icu, :occupancy_covid_icu, :date] => est_capacity => :capacity_covid_icu,
+		[:capacity_ped, :occupancy_total_ped, :occupancy_covid_ped, :date] => est_capacity => :capacity_covid_ped,
 	)
 
 	sort!(capacity, :hospital_id)
