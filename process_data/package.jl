@@ -339,7 +339,7 @@ function package_covid_load_data()
 
 	data_latest = rightjoin(data_latest, capacity_data, on=:hospital_id)
 
-	compute_load(a,b) = (a==0) ? 0.0 : (b==0) ? 1.0 : a/b
+	compute_load(a,b) = (ismissing(a) || a==0) ? 0.0 : (ismissing(b) || b==0) ? 1.0 : a/b
 
 	insertcols!(data_latest, 5, :total_load => compute_load.(data_latest.total_occupancy, data_latest.total_beds))
 	insertcols!(data_latest, 8, :icu_load => compute_load.(data_latest.icu_occupancy, data_latest.icu_beds))
