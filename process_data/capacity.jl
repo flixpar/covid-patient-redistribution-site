@@ -102,12 +102,14 @@ function estimate_covid_capacity(α=0.5)
 
 	function est_capacity(cap, occ, occ_covid, dates)
 		if all(ismissing.(occ_covid)) return 0 end
+
 		m = median(skipmissing(occ_covid))
 		mask = occ_covid .<= 2m
 		mask = coalesce.(mask, false)
 
 		ests = occ_covid + (α .* (cap - occ))
-		if all(ismissing.(ests)) return 0 end
+
+		if all(ismissing.(ests[mask])) return 0 end
 
 		est = median(skipmissing(ests[mask]))
 		return est
