@@ -12,7 +12,7 @@ include("util.jl")
 
 function estimate_capacity()
 	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn))
+	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"], dateformat="yyyy/mm/dd"))
 
 	bad_ids = begin
 		id_counts = combine(groupby(rawdata, :hospital_pk), :hospital_name => (x -> length(unique(x))) => :n_names)
@@ -21,15 +21,14 @@ function estimate_capacity()
 	end
 	filter!(row -> !(row.hospital_pk in bad_ids), rawdata)
 
-	fix_censored(x) = (ismissing(x) || x == -999999) ? missing : x
 	data = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
-		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined,
-		:total_staffed_adult_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu,
-		:all_pediatric_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined_ped,
-		:total_staffed_pediatric_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu_ped
+		:collection_week => :date,
+		:all_adult_hospital_inpatient_beds_7_day_avg => :beds_combined,
+		:total_staffed_adult_icu_beds_7_day_avg => :beds_icu,
+		:all_pediatric_inpatient_beds_7_day_avg => :beds_combined_ped,
+		:total_staffed_pediatric_icu_beds_7_day_avg => :beds_icu_ped
 	)
 
 	data.beds_acute = max.(0, data.beds_combined - data.beds_icu)
@@ -78,13 +77,13 @@ end
 
 function estimate_covid_capacity(α=0.5)
 	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"]))
+	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"], dateformat="yyyy/mm/dd"))
 
 	data = select(
 		rawdata,
 		:hospital_pk => :hospital_id,
 		:hospital_name,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
+		:collection_week => :date,
 
 		[:all_adult_hospital_inpatient_beds_7_day_sum, :all_adult_hospital_inpatient_beds_7_day_coverage] => ByRow((a,b) -> a/b) => :capacity,
 		[:total_adult_patients_hospitalized_confirmed_and_suspected_covid_7_day_sum, :total_adult_patients_hospitalized_confirmed_and_suspected_covid_7_day_coverage] => ByRow((a,b) -> a/b) => :occupancy_covid,
@@ -129,18 +128,16 @@ end
 
 function extract_capacity_timeseries()
 	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn))
-
-	fix_censored(x) = (ismissing(x) || x == -999999) ? missing : x
+	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"], dateformat="yyyy/mm/dd"))
 
 	data_weekly = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
-		:all_adult_hospital_inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined,
-		:total_staffed_adult_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu,
-		:inpatient_beds_7_day_avg => ByRow(fix_censored) => :beds_combined_adultped,
-		:total_icu_beds_7_day_avg => ByRow(fix_censored) => :beds_icu_adultped,
+		:collection_week => :date,
+		:all_adult_hospital_inpatient_beds_7_day_avg => :beds_combined,
+		:total_staffed_adult_icu_beds_7_day_avg => :beds_icu,
+		:inpatient_beds_7_day_avg => :beds_combined_adultped,
+		:total_icu_beds_7_day_avg => :beds_icu_adultped,
 	)
 	sort!(data_weekly, [:hospital, :hospital_id, :date])
 

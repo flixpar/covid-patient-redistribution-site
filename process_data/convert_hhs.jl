@@ -10,7 +10,7 @@ include("util.jl")
 
 function convert_hhs_data(;icu_pct=0.3)
 	rawdata_fn = latest_hhs_rawdata_fn()
-	rawdata = DataFrame(CSV.File(rawdata_fn))
+	rawdata = DataFrame(CSV.File(rawdata_fn, missingstring=["", "-999999"], dateformat="yyyy/mm/dd"))
 
 	bad_ids = begin
 		id_counts = combine(groupby(rawdata, :hospital_pk), :hospital_name => (x -> length(unique(x))) => :n_names)
@@ -23,17 +23,16 @@ function convert_hhs_data(;icu_pct=0.3)
 	rawdata[(rawdata.hospital_pk .== "140064") .& (rawdata.collection_week .> "2021/10/01"), :staffed_icu_adult_patients_confirmed_covid_7_day_sum] .= missing
 	rawdata[(rawdata.hospital_pk .== "140113") .& (rawdata.collection_week .> "2021/10/01"), :staffed_icu_adult_patients_confirmed_covid_7_day_sum] .= missing
 
-	fix_censored(x) = (ismissing(x) || x == -999999) ? missing : x
 	data_weekly = select(rawdata,
 		:hospital_name => :hospital,
 		:hospital_pk => :hospital_id,
-		:collection_week => ByRow(d -> Date(d, "yyyy/mm/dd")) => :date,
+		:collection_week => :date,
 
-		:previous_day_admission_adult_covid_confirmed_7_day_sum => ByRow(fix_censored) => :admissions_combined_weekly,
-		:total_adult_patients_hospitalized_confirmed_covid_7_day_sum => ByRow(fix_censored) => :active_combined_weekly,
-		:staffed_icu_adult_patients_confirmed_covid_7_day_sum => ByRow(fix_censored) => :active_icu_weekly,
-		:previous_day_admission_pediatric_covid_confirmed_7_day_sum => ByRow(fix_censored) => :admissions_combined_ped_weekly,
-		:total_pediatric_patients_hospitalized_confirmed_and_suspected_covid_7_day_sum => ByRow(fix_censored) => :active_combined_ped_weekly,
+		:previous_day_admission_adult_covid_confirmed_7_day_sum => :admissions_combined_weekly,
+		:total_adult_patients_hospitalized_confirmed_covid_7_day_sum => :active_combined_weekly,
+		:staffed_icu_adult_patients_confirmed_covid_7_day_sum => :active_icu_weekly,
+		:previous_day_admission_pediatric_covid_confirmed_7_day_sum => :admissions_combined_ped_weekly,
+		:total_pediatric_patients_hospitalized_confirmed_and_suspected_covid_7_day_sum => :active_combined_ped_weekly,
 	)
 
 	data_weekly.active_acute_weekly = max.(0, data_weekly.active_combined_weekly - data_weekly.active_icu_weekly)
