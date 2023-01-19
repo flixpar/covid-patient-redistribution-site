@@ -103,7 +103,9 @@ function package_main_data()
 		forecast_admitted .*= forecast_admitted_scalefactor
 		forecast_admitted_bds .*= forecast_admitted_scalefactor
 
-		forecast_active = permutedims(hcat([estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N]...), (2,1))
+		forecast_active_gen = (estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N)
+		forecast_active = reduce(hcat, forecast_active_gen)
+		forecast_active = permutedims(forecast_active, (2,1))
 		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
 		forecast_active .*= forecast_active_scalefactor
 
