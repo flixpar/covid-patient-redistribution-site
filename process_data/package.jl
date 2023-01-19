@@ -74,56 +74,70 @@ function package_main_data()
 
 	function load_data_hhs(scenario, bedtype)
 		@assert(scenario in [:optimistic, :moderate, :pessimistic, :catastrophic])
+		@info "Loading HHS data for $(scenario) scenario and $(bedtype) bedtype"
 
+		@debug "Creating forecast dict"
 		forecast_dict = Dict((row.hospital_id, row.date) => (
 			admitted = row["admissions_$(bedtype)"],
 			admitted_lb = row["admissions_$(bedtype)_lb"],
 			admitted_ub = row["admissions_$(bedtype)_ub"],
 		) for row in eachrow(forecast))
 
+		@debug "Creating history dict"
 		hist_dict = Dict(k => (active = v["active_$(bedtype)"], admitted = v["admissions_$(bedtype)"]) for (k,v) in pairs(hhs_data_dict))
 
+		@debug "Computing date ranges"
 		hist_date_range = sort(intersect(date_range, hhs_data.date))
 		forecast_date_range = sort(intersect(date_range, forecast.date))
 
+		@debug "Computing date range indices"
 		hist_date_range_t = [findfirst(date_range .== d) for d in hist_date_range]
 		forecast_date_range_t = [findfirst(date_range .== d) for d in forecast_date_range]
 
+		@debug "Creating history arrays"
 		hist_active = [haskey(hist_dict,(h,d)) ? hist_dict[(h,d)].active : missing for h in hospital_ids, d in hist_date_range]
 		hist_admitted = [haskey(hist_dict,(h,d)) ? hist_dict[(h,d)].admitted : missing for h in hospital_ids, d in hist_date_range]
 
+		@debug "Computing forecast start"
 		forecast_initial = hist_active[:,end]
 
+		@debug "Creating forecast arrays"
 		forecast_admitted = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)].admitted : missing for h in hospital_ids, d in forecast_date_range]
 		forecast_admitted_bds = [haskey(forecast_dict,(h,d)) ? forecast_dict[(h,d)][a] : missing for h in hospital_ids, d in forecast_date_range, a in [:admitted_lb, :admitted_ub]]
 
+		@debug "Scaling forecast"
 		total(xs) = [sum(skipbad(xs[:,t])) for t in 1:size(xs,2)]
 		forecast_admitted_scalefactor = lastval(total(hist_admitted)) / firstval(total(forecast_admitted))
 
 		forecast_admitted .*= forecast_admitted_scalefactor
 		forecast_admitted_bds .*= forecast_admitted_scalefactor
 
+		@debug "Estimating forecast occupancy"
 		forecast_active_gen = (estimate_active(forecast_initial[i], forecast_admitted[i,:], los_dist[bedtype]) for i in 1:N)
 		forecast_active = reduce(hcat, forecast_active_gen)
 		forecast_active = permutedims(forecast_active, (2,1))
 		forecast_active_scalefactor = lastval(total(hist_active)) / firstval(total(forecast_active))
 		forecast_active .*= forecast_active_scalefactor
 
+		@debug "Constructing full occupancy array"
 		active = Array{Union{Float64,Missing},2}(undef, N, T)
 		fill!(active, missing)
 
 		active[:,forecast_date_range_t] = forecast_active
 		active[:,hist_date_range_t] = hist_active
 
+		@debug "Constructing full admissions array"
 		admitted = Array{Union{Float64,Missing},2}(undef, N, T)
 		fill!(admitted, missing)
 
 		admitted[:,forecast_date_range_t] = forecast_admitted
 		admitted[:,hist_date_range_t] = hist_admitted
 
+		@debug "Interpolating missing values"
 		active = interpolate_missing(active)
 		admitted = interpolate_missing(admitted)
 
+		@debug "Computing admission bounds"
 		admitted_bds = Array{Union{Float64,Missing},3}(undef, N, T, 2)
 		fill!(admitted_bds, missing)
 		admitted_bds[:,forecast_date_range_t,:] = forecast_admitted_bds
@@ -131,10 +145,12 @@ function package_main_data()
 		admitted_bds[:,hist_date_range_t,2] = hist_admitted
 		admitted_bds = interpolate_missing(admitted_bds)
 
+		@debug "Loading capacity"
 		beds = load_capacity(hospital_ids, bedtype, :est, :baseline)
 		capacity = load_capacity(hospital_ids, bedtype, :est, [:baseline])
 		capacity_bds = load_capacity(hospital_ids, bedtype, [:lb,:ub], [:baseline])
 
+		@debug "Loading covid capacity"
 		covid_capacity = load_covid_capacity(hospital_ids, bedtype)
 
 		capacity_names_full = ["Base Capacity"]
@@ -159,6 +175,7 @@ function package_main_data()
 			capacity_names_abbrev,
 		)
 
+		@debug "Done"
 		return data
 	end
 
