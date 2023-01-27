@@ -16,8 +16,6 @@ function main()
 end
 
 function disaggregate_forecast(forecast_date="latest"; uncertainty_type=:quantile, write_versioned=false)
-	@assert uncertainty_type == :none
-
 	forecast_date = (forecast_date == "latest") ? latest_forecast_date() : forecast_date
 	forecast_cols = [:admissions_combined, :admissions_icu, :admissions_acute, :admissions_combined_ped, :active_combined]
 	history_weeks = 12
