@@ -32,7 +32,6 @@ extract_metadata()
 extract_regions_metadata()
 
 println("Disaggregating forecast")
-convert_cases()
 disaggregate_forecast()
 
 println("Packaging main data")
