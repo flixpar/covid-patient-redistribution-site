@@ -15,12 +15,29 @@ function main()
 	return
 end
 
-function disaggregate_forecast(forecast_date="latest"; uncertainty_type=:quantile, write_versioned=false)
+function disaggregate_forecast(forecast_date="latest"; uncertainty_type=:bounds, write_versioned=false)
 	forecast_date = (forecast_date == "latest") ? latest_forecast_date() : forecast_date
 	forecast_cols = [:admissions_combined, :admissions_icu, :admissions_acute, :admissions_combined_ped, :active_combined]
 	history_weeks = 12
+	uncertainty_type_ = (uncertainty_type == :bounds) ? :quantile : uncertainty_type
 
-	forecast = compute_forecast(forecast_date, forecast_cols, history_weeks, uncertainty_type)
+	forecast = compute_forecast(forecast_date, forecast_cols, history_weeks, uncertainty_type_)
+
+	if uncertainty_type == :bounds
+		forecast_lb = filter(row -> row.quantile == 0.25, forecast)
+		forecast_ub = filter(row -> row.quantile == 0.75, forecast)
+		forecast_point = filter(row -> row.quantile == 0.5, forecast)
+
+		select!(forecast_lb, Not([:quantile, :forecast_date, :target_date]))
+		select!(forecast_ub, Not([:quantile, :forecast_date, :target_date]))
+		select!(forecast_point, Not(:quantile))
+
+		rename!(forecast_lb, forecast_cols .=> ["$(col)_lb" for col in forecast_cols])
+		rename!(forecast_ub, forecast_cols .=> ["$(col)_ub" for col in forecast_cols])
+
+		forecast = outerjoin(forecast_point, forecast_lb, on=[:hospital_id, :weeks_out])
+		forecast = outerjoin(forecast, forecast_ub, on=[:hospital_id, :weeks_out])
+	end
 
 	if write_versioned
 		forecast |> CSV.write("../data/forecasts/forecast-$(forecast_date).csv")
