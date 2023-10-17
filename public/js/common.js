@@ -38,8 +38,8 @@ function dateStr(d) {
 
 function addDays(d, t) {
 	let date = new Date(d);
-	date.setDate(d.getDate() + t);
-	return date;
+	date.setDate(date.getDate() + t);
+	return date.toISOString().slice(0, 10);
 }
 
 async function getDates() {
