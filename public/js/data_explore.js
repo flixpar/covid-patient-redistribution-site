@@ -17,7 +17,7 @@ const RootComponent = {
 	computed: {
 		hospitals_filtered() {
 			const s = this.search_term.toLowerCase();
-			return this.hospitals.filter(h => h.hospital_name.toLowerCase().includes(s));
+			return this.hospitals.filter(h => h.hospital_name !== null && h.hospital_name.toLowerCase().includes(s));
 		}
 	},
 	methods: {
@@ -300,8 +300,8 @@ class Tooltip {
 			.attr("text-anchor", "middle");
 
 		this.bubble = tmpNode.append("rect")
-			.attr("transform", "translate(-50, -65)")
-			.attr("width", 100)
+			.attr("transform", "translate(-75, -65)")
+			.attr("width", 150)
 			.attr("height", 45)
 			.attr("fill", "white")
 			.attr("stroke", "gray")
@@ -321,8 +321,8 @@ class Tooltip {
 			.attr("stroke", "gray")
 			.attr("stroke-width", 1.0);
 		this.bubbleBackground = tmpNode.append("rect")
-			.attr("transform", "translate(-50, -65)")
-			.attr("width", 100)
+			.attr("transform", "translate(-75, -65)")
+			.attr("width", 150)
 			.attr("height", 45)
 			.attr("fill", "white");
 
