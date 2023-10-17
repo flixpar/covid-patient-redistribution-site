@@ -212,18 +212,20 @@ function updateTables() {
 }
 
 common.getMetadata().then(metadata => {
-	const maxDate = new Date(metadata.dates.forecast_end);
-
-	let startDate = new Date();
+	let startDate = common.dateStr(new Date());
 	let endDate = common.addDays(startDate, 7);
 
+	const maxDate = metadata.dates.forecast_end;
 	if (endDate > maxDate) {
 		endDate = maxDate;
 		startDate = common.addDays(maxDate, -7);
 	}
 
-	document.getElementById("form-start-date").value = common.dateStr(startDate);
-	document.getElementById("form-end-date").value = common.dateStr(endDate);
+	startDate = "2021-12-15";
+	endDate = "2022-02-15";
+
+	document.getElementById("form-start-date").value = startDate;
+	document.getElementById("form-end-date").value = endDate;
 
 	document.getElementById("form-start-date").min = metadata.dates.hhsdata_start;
 	document.getElementById("form-start-date").max = metadata.dates.forecast_end;
