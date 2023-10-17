@@ -12,13 +12,10 @@ export status_report_metrics
 projectbasepath = joinpath(@__DIR__, "../")
 
 
-function status_report()
+function status_report(start_date, end_date)
 	region_types = [:state, :hrr, :hsa, :hospital_system]
 	patient_types = [:icu, :acute]
 	metric_types = [:beds, :beddays]
-
-	start_date = Date()
-	end_date = start_date + Day(7)
 
 	for rt in region_types, pt in patient_types, mt in metric_types
 		regions = regions_selection(rt, pt, mt, start_date, end_date)
@@ -29,10 +26,9 @@ function status_report()
 	return
 end
 
-function status_report_metrics()
+function status_report_metrics(date_current)
 	rawdata = deserialize(joinpath(projectbasepath, "data/data_hhs.jlser"))
 
-	date_current = Date(now())
 	date_prev = date_current - Day(6)
 	date_next = date_current + Day(6)
 	date_ind = d -> (d - rawdata.start_date).value + 1

@@ -144,9 +144,10 @@ const metrics = {
 const patientType = "icu";
 const metricType = "beds";
 
-const startDate = new Date();
-const endDate = common.addDays(startDate, 14);
-const baseParams = {"start_date": common.dateStr(startDate), "end_date": common.dateStr(endDate), "patient_type": patientType, "metric_type": metricType};
+const currentDate = "2022-01-15";
+const startDate = common.addDays(currentDate, -6);
+const endDate = common.addDays(currentDate, 6);
+const baseParams = {"start_date": startDate, "end_date": endDate, "patient_type": patientType, "metric_type": metricType};
 
 const ps = Object.keys(regionTypes).map(rt => $.getJSON("/api/region-selection", {"region_type": rt, ...baseParams}));
 Promise.all(ps).then(resultsRaw => {
@@ -181,7 +182,7 @@ Promise.all(ps).then(resultsRaw => {
 	}
 });
 
-$.getJSON("/api/status-report").then(statusReport => {
+$.getJSON("/api/status-report", {"date": currentDate}).then(statusReport => {
 	const dateStr = new Date(statusReport.date_current).toLocaleDateString('en-us', {month: "long", day: "numeric", year: "numeric", timeZone: "UTC"});
 	const risingFalling = (statusReport.arrivals_next > statusReport.arrivals_prev) ? "rising" : "falling";
 	const overCapPctPrev = (statusReport.n_shortage_prev / statusReport.n_hospitals * 100).toFixed(1);
@@ -195,11 +196,9 @@ $.getJSON("/api/status-report").then(statusReport => {
 		}
 
 		let text = `
-		As of ${dateStr} COVID-19 hospitalizations are ${risingFalling} in the US. We predict that hospitalizations will continue to rise by 3.5% on average over the next week. In surge areas, we predict that hospitalzations will rise by 10.2%. We estimate ${overCapPctPrev}% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and ${overCapPctNext}% will exceed this capacity over the coming week. This means that approximately ${statusReport.n_shortage_next} additional beds will be required over the coming week without optimal transfers. If optimal patient transfers are used, this requirement would reduce to 0 additional beds.
+		As of ${dateStr} COVID-19 hospitalizations are ${risingFalling} in the US. We estimate ${overCapPctPrev}% of hospitals exceeded their baseline COVID-19 ICU patient capacity over the past week, and ${overCapPctNext}% will exceed this capacity over the coming week. This means that approximately ${statusReport.n_shortage_next} additional beds will be required over the coming week without optimal transfers.
 		<br><br>
 		Some of the regions that are expected to have large shortages of ICU capacity for COVID-19 patients over the next two weeks are: ${topRegions[0].region_name}, ${topRegions[1].region_name}, and ${topRegions[2].region_name}. Using optimal patient transfers we can reduce the COVID-19 ICU capacity shortages in ${topRegions[0].region_name} by ${topRegions[0].benefits_pct_str}%, in ${topRegions[1].region_name} by ${topRegions[1].benefits_pct_str}%, and in ${topRegions[2].region_name} by ${topRegions[2].benefits_pct_str}%.
-		<br><br>
-		Looking at specific hospital systems, OSF Healthcare System (IL), Allina Health System (MN), and Hoag Memorial Hospital Presbyterian (CA) are expected to have the largest shortages, and these shortages could be eliminated by using optimal patient transfers.
 		`;
 
 		let textEl = document.getElementById("status-report-text");

@@ -150,7 +150,13 @@ route("/api/hospital-data") do
 end
 
 route("/api/status-report") do
-	return json(handle_status_report())
+	paramsdata = getpayload()
+	if haskey(paramsdata, :date)
+		date = Date(paramsdata[:date])
+	else
+		date = Dates.today()
+	end
+	return json(handle_status_report(date))
 end
 
 

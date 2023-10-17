@@ -187,8 +187,8 @@ function handle_region_selection(region_type, patient_type, metric_type, date)
 	regions_selection(region_type, patient_type, metric_type, date)
 end
 
-function handle_status_report()
-	status_report_metrics()
+function handle_status_report(date)
+	status_report_metrics(date)
 end
 
 end;
