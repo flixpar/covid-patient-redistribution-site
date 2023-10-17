@@ -110,10 +110,22 @@ function getParams() {
 }
 
 async function setDefaults() {
-	let start_date = new Date();
 	common.getMetadata().then(meta => {
-		document.getElementById("form-start-date").value = start_date.toISOString().slice(0, 10);
-		document.getElementById("form-end-date").value = meta.dates.forecast_end;
+		let startDateElem = document.getElementById("form-start-date");
+		let endDateElem = document.getElementById("form-end-date");
+		
+		startDateElem.value = "2021-12-15";
+		endDateElem.value = "2022-02-15";
+		
+		startDateElem.min = meta.dates.hhsdata_start;
+		startDateElem.max = common.addDays(meta.dates.forecast_end, -14);
+		
+		endDateElem.min = common.addDays(meta.dates.hhsdata_start, 14);
+		endDateElem.max = meta.dates.forecast_end;
+		
+		// let today = common.dateStr(new Date());
+		// document.getElementById("form-start-date").value = today;
+		// document.getElementById("form-end-date").value = meta.dates.forecast_end;
 
 		const pagetype = document.getElementById("form-page").value;
 		const regiontype = (pagetype == "interactive") ? meta.location_defaults.region_type : "state";
