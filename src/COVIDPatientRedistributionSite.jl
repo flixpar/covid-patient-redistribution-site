@@ -1,0 +1,2 @@
+module COVIDPatientRedistributionSite
+end

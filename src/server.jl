@@ -160,5 +160,5 @@ route("/api/status-report") do
 end
 
 
-port = (haskey(ENV, "PORT") ? parse(Int, ENV["PORT"]) : 8000)
+port = (haskey(ENV, "PORT") ? parse(Int, ENV["PORT"]) : 8021)
 up(port, async = false)
